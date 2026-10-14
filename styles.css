@@ -90,7 +90,6 @@ input {
 .summary-label,
 .bracket-heading > span,
 .hero-foot,
-.saved-note,
 .match-label,
 .page-footer {
   font-family: var(--mono);
@@ -284,6 +283,57 @@ main,
   gap: 5px;
 }
 
+.event-countdown {
+  display: grid;
+  gap: 7px;
+  margin-top: 5px;
+}
+
+.countdown-label {
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.countdown-values {
+  display: flex;
+  gap: 6px;
+}
+
+.countdown-values > span {
+  display: grid;
+  min-width: 55px;
+  gap: 2px;
+  padding: 5px 8px;
+  border: 1px solid #e2e8dd;
+  border-radius: 5px;
+  background: #f5f7f1;
+  text-align: center;
+}
+
+.countdown-values strong {
+  color: var(--green);
+  font-family: var(--display);
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.countdown-values small {
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.countdown-started {
+  color: var(--green);
+  font-family: var(--mono);
+  font-size: 11px;
+}
+
 .event-label {
   color: #78847a;
   font-family: var(--mono);
@@ -396,22 +446,6 @@ main,
   color: var(--muted);
   font-size: 12px;
   font-weight: 500;
-}
-
-.saved-note {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  margin-left: auto;
-  color: var(--muted);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0;
-}
-
-.saved-note span {
-  color: #83ae38;
-  font-size: 10px;
 }
 
 .category-section {
@@ -1030,15 +1064,6 @@ main,
 
   .tournament-summary strong {
     font-size: 17px;
-  }
-
-  .saved-note {
-    max-width: 100px;
-    justify-content: end;
-    font-size: 10px;
-    font-weight: 700;
-    line-height: 1.4;
-    text-align: right;
   }
 
   .category-heading {

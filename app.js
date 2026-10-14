@@ -1,4 +1,5 @@
 const STORAGE_KEY = "mat-ocho-tournament-v1";
+const EVENT_START = new Date("2026-11-07T15:00:00-03:00").getTime();
 const CATEGORY_IDS = ["iniciantes", "avanzados"];
 const MATCHES = [
   { id: "q1", round: "Cuartos de final", number: "01", sources: ["p0", "p1"] },
@@ -423,10 +424,35 @@ function renderSummary() {
   }
 }
 
+function updateEventCountdown() {
+  const remaining = EVENT_START - Date.now();
+  const values = document.querySelector("#countdown-values");
+  const started = document.querySelector("#countdown-started");
+  const label = document.querySelector("#countdown-label");
+
+  if (remaining <= 0) {
+    values.hidden = true;
+    started.hidden = false;
+    label.textContent = "TORNEO EN CURSO";
+    return;
+  }
+
+  const totalMinutes = Math.floor(remaining / 60_000);
+  const days = Math.floor(totalMinutes / (60 * 24));
+  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
+  const minutes = totalMinutes % 60;
+  document.querySelector('[data-countdown="days"]').textContent = String(days);
+  document.querySelector('[data-countdown="hours"]').textContent = String(hours).padStart(2, "0");
+  document.querySelector('[data-countdown="minutes"]').textContent = String(minutes).padStart(2, "0");
+}
+
 function render() {
   for (const categoryId of CATEGORY_IDS) renderBracket(categoryId);
   renderSummary();
 }
+
+updateEventCountdown();
+window.setInterval(updateEventCountdown, 1_000);
 
 document.addEventListener("input", (event) => {
   const matchField = event.target.closest("[data-match-field]");

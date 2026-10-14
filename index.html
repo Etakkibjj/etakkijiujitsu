@@ -46,7 +46,16 @@
       <section class="event-info" aria-label="Fecha, lugar y formato">
         <div class="event-detail">
           <span class="event-label">FECHA Y HORA</span>
-          <strong>Sábado 7 de noviembre · 15 hs</strong>
+          <strong>Sábado 7 de noviembre de 2026 · 15 hs</strong>
+          <div class="event-countdown" id="event-countdown" role="timer" aria-live="off">
+            <span class="countdown-label" id="countdown-label">FALTAN PARA EL TORNEO</span>
+            <div class="countdown-values" id="countdown-values">
+              <span><strong data-countdown="days">00</strong><small>DÍAS</small></span>
+              <span><strong data-countdown="hours">00</strong><small>HORAS</small></span>
+              <span><strong data-countdown="minutes">00</strong><small>MIN</small></span>
+            </div>
+            <strong class="countdown-started" id="countdown-started" hidden>EL EVENTO YA COMENZÓ</strong>
+          </div>
         </div>
         <div class="event-detail">
           <span class="event-label">LUGAR</span>
@@ -72,7 +81,6 @@
           <span class="summary-label">COMBATES CERRADOS</span>
           <strong id="match-total">0 <small>/ 14</small></strong>
         </div>
-        <span class="saved-note"><span aria-hidden="true">●</span> Guardado en este dispositivo</span>
       </div>
 
       <section class="category-section" id="iniciantes" aria-labelledby="iniciantes-title">
@@ -136,7 +144,6 @@
         <img class="footer-monogram" src="./assets/etakki-monogram.png" alt="" loading="lazy">
         <span>MAT.OCHO <span class="brand-dot">·</span> BJJ SUBMISSION ONLY</span>
       </span>
-      <span>Resultados guardados localmente en tu dispositivo.</span>
     </footer>
   </body>
 </html>
