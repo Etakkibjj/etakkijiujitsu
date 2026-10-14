@@ -32,6 +32,7 @@ const DEFAULT_PARTICIPANTS = {
     "BENJAMIN DUVOBSKY",
     "DANIEL GOLDSMAN",
     "CRISTHIAN PEREZ",
+    "AXEL FURLAN",
   ],
   avanzados: ["EZEQUIEL MURACCIOLE", "IGNACIO LEGUIZAMÓN", "FELIPE ORTIZ"],
 };
@@ -40,6 +41,7 @@ const ROSTER_MIGRATIONS = [
   { key: "danielGoldsman", categoryId: "iniciantes", participantIndex: 3 },
   { key: "felipeOrtiz", categoryId: "avanzados", participantIndex: 2 },
   { key: "cristhianPerez", categoryId: "iniciantes", participantIndex: 4 },
+  { key: "axelFurlan", categoryId: "iniciantes", participantIndex: 5 },
 ];
 
 function emptyCategory(categoryId) {
