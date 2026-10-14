@@ -936,10 +936,16 @@ main,
   }
 
   .hero {
-    min-height: 285px;
+    display: grid;
+    min-height: 0;
+    align-content: start;
     margin-top: 14px;
-    padding: 35px 23px 58px;
+    padding: 30px 23px 58px;
     border-radius: 12px;
+  }
+
+  .hero-copy {
+    width: 100%;
   }
 
   .hero h1 {
@@ -952,10 +958,12 @@ main,
   }
 
   .hero-stamp {
-    position: absolute;
-    right: 13px;
-    bottom: 47px;
-    width: 139px;
+    position: relative;
+    right: auto;
+    bottom: auto;
+    width: min(100%, 245px);
+    justify-self: end;
+    margin: 18px 0 24px;
     gap: 6px;
     padding: 9px;
     transform: none;
