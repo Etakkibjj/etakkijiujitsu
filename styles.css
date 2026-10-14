@@ -996,18 +996,35 @@ main,
   }
 
   .category-heading {
-    gap: 8px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    column-gap: 10px;
+    row-gap: 6px;
+  }
+
+  .category-heading > div {
+    grid-column: 1;
+    grid-row: 1 / span 2;
   }
 
   .category-logo {
-    width: 40px;
-    height: 40px;
-    margin-right: 0;
+    width: 36px;
+    height: 36px;
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0 auto;
   }
 
   .category-logo-monogram {
-    width: 37px;
-    height: 37px;
+    width: 34px;
+    height: 34px;
+  }
+
+  .category-heading .division-tag {
+    grid-column: 2;
+    grid-row: 2;
+    justify-self: center;
   }
 
   .division-tag {
