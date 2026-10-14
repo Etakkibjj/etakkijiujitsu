@@ -10,7 +10,7 @@ El encabezado muestra y actualiza cuántas plazas libres quedan en cada categor�
 
 ## Reglamento
 
-Los torneos submission only no tienen puntos: solo se puede ganar por sumisión o rendición del oponente en tiempo reglamentario. Los combates tienen límite de tiempo de 6 minutos, con 3 minutos de tiempo extra, en donde sí habrá puntos o decisión del referí en caso de empate. El reglamento EBI recompensa la capacidad de finalizar sobre el control posicional.
+Todas las sumisiones son legales en ambas categorías. Los torneos submission only no tienen puntos: solo se puede ganar por sumisión o rendición del oponente en tiempo reglamentario. Los combates tienen límite de tiempo de 6 minutos, con 3 minutos de tiempo extra, en donde sí habrá puntos o decisión del referí en caso de empate. El reglamento EBI recompensa la capacidad de finalizar sobre el control posicional. El apartado de reglamento aparece al final, debajo de las llaves de Iniciantes y Avanzados.
 
 La lista predeterminada de Iniciantes incluye a Gonzalo Tuñón en la plaza 6; en dispositivos con una lista guardada, una migración agrega ese nombre solo si la plaza está vacía.
 
