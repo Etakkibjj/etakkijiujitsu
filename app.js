@@ -33,6 +33,7 @@ const DEFAULT_PARTICIPANTS = {
     "BENJAMIN DUVOBSKY",
     "DANIEL GOLDSMAN",
     "CRISTHIAN PEREZ",
+    "GONZALO TUÑÓN",
   ],
   avanzados: ["EZEQUIEL MURACCIOLE", "IGNACIO LEGUIZAMÓN", "FELIPE ORTIZ"],
 };
@@ -47,6 +48,7 @@ const ROSTER_MIGRATIONS = [
     participantIndex: 5,
     removeName: "AXEL FURLAN",
   },
+  { key: "addGonzaloTunon", categoryId: "iniciantes", participantIndex: 5 },
 ];
 
 function emptyCategory(categoryId) {

@@ -369,6 +369,7 @@ main,
 
 .category-nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 8px;
   margin: 17px 0 0;
 }
@@ -399,6 +400,45 @@ main,
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 700;
+}
+
+.rules-section {
+  display: grid;
+  grid-template-columns: minmax(150px, 0.7fr) minmax(0, 1.6fr);
+  gap: 22px;
+  margin-top: 18px;
+  padding: 22px;
+  border: 1px solid #dce2d8;
+  border-left: 3px solid #e6b928;
+  border-radius: 8px;
+  background: #fff;
+  scroll-margin-top: 78px;
+}
+
+.rules-heading .eyebrow {
+  margin: 0 0 7px;
+  color: #77916f;
+}
+
+.rules-heading h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(26px, 4vw, 34px);
+  font-weight: 700;
+  letter-spacing: -0.05em;
+}
+
+.rules-copy {
+  display: grid;
+  gap: 10px;
+}
+
+.rules-copy p {
+  margin: 0;
+  color: #3e4c43;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.65;
 }
 
 .app-message {
@@ -1040,6 +1080,16 @@ main,
     grid-template-columns: 1fr;
     gap: 13px;
     padding: 15px;
+  }
+
+  .rules-section {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    padding: 17px;
+  }
+
+  .rules-copy p {
+    font-size: 14px;
   }
 
   .event-rule {
