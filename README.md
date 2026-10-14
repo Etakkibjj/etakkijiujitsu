@@ -9,3 +9,5 @@ Abre `index.html` en un navegador moderno o sirve esta carpeta desde un servidor
 El encabezado muestra y actualiza cuántas plazas libres quedan en cada categoría. Los nombres y resultados se guardan en el almacenamiento local del navegador de ese dispositivo. En cada lucha puedes marcar al ganador, anotar la sumisión y, si hubo overtime, tildarlo y registrar la puntuación final. **Reiniciar resultado de esta lucha** borra el resultado y los avances posteriores que dependan de él; **Reiniciar categoría** borra la llave completa. Los datos no se transmiten a un servidor.
 
 La app representa únicamente un formato submission only; no establece tiempos, criterios de overtime ni reglas adicionales.
+
+Los logos de Etakki Dojo se incluyen como archivos locales en `assets/` y se usan en el encabezado, las categorías y el pie de página. Las tipografías, controles y contrastes están optimizados para facilitar la lectura desde el teléfono.

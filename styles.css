@@ -71,6 +71,15 @@ input {
   font-size: 14px;
 }
 
+.brand-logo {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
 .brand-dot {
   color: #79a522;
 }
@@ -85,8 +94,9 @@ input {
 .match-label,
 .page-footer {
   font-family: var(--mono);
-  font-size: 10px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .format-badge {
@@ -184,7 +194,8 @@ main,
   max-width: 300px;
   margin: 20px 0 0;
   color: #d8eafa;
-  font-size: 14px;
+  font-size: 15px;
+  font-weight: 600;
   line-height: 1.6;
 }
 
@@ -202,8 +213,9 @@ main,
 .hero-stamp-title {
   color: #b9dcf2;
   font-family: var(--mono);
-  font-size: 8px;
-  letter-spacing: 0.09em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .hero-stamp-row {
@@ -216,7 +228,8 @@ main,
 .hero-stamp-category {
   color: #e8f2fa;
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 10px;
+  font-weight: 700;
 }
 
 .hero-stamp-row strong {
@@ -230,8 +243,8 @@ main,
 .hero-stamp-row strong small {
   color: #b9dcf2;
   font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 400;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0;
 }
 
@@ -243,7 +256,8 @@ main,
   align-items: center;
   gap: 12px;
   color: #d8eafa;
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .hero-foot-divider {
@@ -273,19 +287,21 @@ main,
 .event-label {
   color: #78847a;
   font-family: var(--mono);
-  font-size: 8px;
-  letter-spacing: 0.08em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
 }
 
 .event-detail strong {
   color: var(--ink);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .event-address {
   color: var(--muted);
-  font-size: 11px;
+  font-size: 13px;
+  font-weight: 600;
 }
 
 .event-rule {
@@ -295,8 +311,8 @@ main,
   background: #0b3978;
   color: #ffd234;
   font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 700;
   line-height: 1.6;
   text-align: center;
 }
@@ -318,7 +334,8 @@ main,
   background: rgb(255 255 255 / 65%);
   color: var(--green);
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 700;
   text-decoration: none;
   transition: border-color 150ms ease, background 150ms ease;
 }
@@ -330,7 +347,7 @@ main,
 
 .category-nav a span {
   font-family: var(--sans);
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
@@ -364,7 +381,8 @@ main,
 
 .summary-label {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .tournament-summary strong {
@@ -386,13 +404,14 @@ main,
   gap: 7px;
   margin-left: auto;
   color: var(--muted);
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 600;
   letter-spacing: 0;
 }
 
 .saved-note span {
   color: #83ae38;
-  font-size: 8px;
+  font-size: 10px;
 }
 
 .category-section {
@@ -411,10 +430,28 @@ main,
   margin-bottom: 23px;
 }
 
+.category-logo {
+  width: 48px;
+  height: 48px;
+  flex: 0 0 auto;
+  margin: 0 8px 1px auto;
+  border: 1px solid #e1e5dc;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
+.category-logo-monogram {
+  width: 43px;
+  height: 43px;
+  padding: 4px;
+}
+
 .category-heading .eyebrow {
   margin-bottom: 6px;
   color: #77916f;
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .category-heading h2 {
@@ -432,7 +469,8 @@ main,
   border: 1px solid #dce5d5;
   border-radius: 4px;
   color: var(--green);
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .roster-panel {
@@ -477,8 +515,8 @@ main,
   margin-left: auto;
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 400;
+  font-size: 12px;
+  font-weight: 700;
 }
 
 .roster-grid {
@@ -497,7 +535,8 @@ main,
 .roster-field span {
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .roster-field input {
@@ -541,7 +580,8 @@ main,
 
 .bracket-heading > span {
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
   white-space: nowrap;
 }
 
@@ -571,13 +611,15 @@ main,
   justify-content: space-between;
   color: var(--muted);
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.08em;
 }
 
 .round-title small {
   color: #a2a99f;
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .match-card {
@@ -608,14 +650,16 @@ main,
 
 .match-label {
   color: #78847a;
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.04em;
 }
 
 .match-status {
   color: #8d958d;
   font-family: var(--mono);
-  font-size: 7px;
+  font-size: 10px;
+  font-weight: 700;
   text-align: right;
 }
 
@@ -633,7 +677,8 @@ main,
   border-radius: 4px;
   background: #f5f6f2;
   color: #999f98;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 600;
   line-height: 1.3;
 }
 
@@ -661,7 +706,7 @@ main,
   background: #fff;
   color: #486a34;
   cursor: pointer;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 700;
   transition: background 150ms ease, border-color 150ms ease;
 }
@@ -682,8 +727,8 @@ main,
   background: transparent;
   color: #a0a69d;
   cursor: default;
-  font-size: 8px;
-  font-weight: 500;
+  font-size: 10px;
+  font-weight: 600;
 }
 
 .match-details {
@@ -703,7 +748,8 @@ main,
 .match-field > span {
   color: #78847a;
   font-family: var(--mono);
-  font-size: 7px;
+  font-size: 10px;
+  font-weight: 700;
   letter-spacing: 0.04em;
 }
 
@@ -717,7 +763,7 @@ main,
   outline: none;
   background: #fff;
   color: var(--ink);
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .match-field input:focus {
@@ -726,7 +772,7 @@ main,
 }
 
 .match-field input::placeholder {
-  color: #a5aaa3;
+  color: #737d73;
 }
 
 .match-field input:disabled {
@@ -742,9 +788,9 @@ main,
   gap: 7px;
   color: #344f7b;
   font-family: var(--mono);
-  font-size: 8px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
   cursor: pointer;
 }
 
@@ -765,7 +811,8 @@ main,
   background: #fff;
   color: #975144;
   cursor: pointer;
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
   line-height: 1.3;
   transition: border-color 150ms ease, background 150ms ease;
 }
@@ -784,7 +831,8 @@ main,
   background: transparent;
   color: #737d73;
   cursor: pointer;
-  font-size: 10px;
+  font-size: 12px;
+  font-weight: 700;
   transition: border-color 150ms ease, color 150ms ease;
 }
 
@@ -801,8 +849,30 @@ main,
   gap: 12px;
   border-top: 1px solid #dfe4da;
   color: var(--muted);
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 700;
   letter-spacing: 0.02em;
+}
+
+.footer-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footer-brand img {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #fff;
+  object-fit: cover;
+}
+
+.footer-brand img.footer-monogram {
+  width: 26px;
+  height: 26px;
+  padding: 2px;
+  border: 1px solid #dfe4da;
 }
 
 @media (min-width: 700px) {
@@ -840,7 +910,7 @@ main,
 
   .hero-description {
     max-width: 245px;
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .hero-stamp {
@@ -855,11 +925,11 @@ main,
   }
 
   .hero-stamp-title {
-    font-size: 7px;
+    font-size: 10px;
   }
 
   .hero-stamp-category {
-    font-size: 7px;
+    font-size: 10px;
   }
 
   .hero-stamp-row strong {
@@ -878,7 +948,7 @@ main,
     bottom: 19px;
     left: 22px;
     gap: 7px;
-    font-size: 7px;
+    font-size: 10px;
     letter-spacing: 0.04em;
   }
 
@@ -893,12 +963,12 @@ main,
   }
 
   .event-rule {
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .format-badge {
     gap: 6px;
-    font-size: 8px;
+    font-size: 10px;
   }
 
   .tournament-summary {
@@ -908,7 +978,7 @@ main,
   }
 
   .summary-label {
-    font-size: 7px;
+    font-size: 10px;
     letter-spacing: 0.04em;
   }
 
@@ -917,11 +987,33 @@ main,
   }
 
   .saved-note {
-    max-width: 85px;
+    max-width: 100px;
     justify-content: end;
-    font-size: 8px;
+    font-size: 10px;
+    font-weight: 700;
     line-height: 1.4;
     text-align: right;
+  }
+
+  .category-heading {
+    gap: 8px;
+  }
+
+  .category-logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 0;
+  }
+
+  .category-logo-monogram {
+    width: 37px;
+    height: 37px;
+  }
+
+  .division-tag {
+    padding: 7px 8px;
+    font-size: 10px;
+    white-space: nowrap;
   }
 
   .category-section {
@@ -971,12 +1063,33 @@ main,
   }
 
   .match-card {
-    padding: 9px;
+    padding: 11px;
   }
 
   .match-entrant {
-    min-height: 39px;
+    min-height: 43px;
+    font-size: 12px;
+  }
+
+  .winner-button {
+    min-height: 38px;
+    padding: 6px;
+    font-size: 11px;
+  }
+
+  .match-field input {
+    min-height: 38px;
+    font-size: 12px;
+  }
+
+  .match-reset-button {
+    min-height: 38px;
     font-size: 10px;
+  }
+
+  .roster-field input {
+    min-height: 44px;
+    font-size: 14px;
   }
 
   .page-footer {
@@ -995,11 +1108,21 @@ main,
   }
 
   .hero-foot {
-    font-size: 6px;
+    font-size: 9px;
   }
 
   .tournament-summary {
     gap: 13px;
+  }
+
+  .category-logo {
+    width: 34px;
+    height: 34px;
+  }
+
+  .category-logo-monogram {
+    width: 32px;
+    height: 32px;
   }
 }
 
