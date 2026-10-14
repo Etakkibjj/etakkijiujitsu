@@ -32,7 +32,6 @@ const DEFAULT_PARTICIPANTS = {
     "BENJAMIN DUVOBSKY",
     "DANIEL GOLDSMAN",
     "CRISTHIAN PEREZ",
-    "AXEL FURLAN",
   ],
   avanzados: ["EZEQUIEL MURACCIOLE", "IGNACIO LEGUIZAMÓN", "FELIPE ORTIZ"],
 };
@@ -41,7 +40,12 @@ const ROSTER_MIGRATIONS = [
   { key: "danielGoldsman", categoryId: "iniciantes", participantIndex: 3 },
   { key: "felipeOrtiz", categoryId: "avanzados", participantIndex: 2 },
   { key: "cristhianPerez", categoryId: "iniciantes", participantIndex: 4 },
-  { key: "axelFurlan", categoryId: "iniciantes", participantIndex: 5 },
+  {
+    key: "removeAxelFurlan",
+    categoryId: "iniciantes",
+    participantIndex: 5,
+    removeName: "AXEL FURLAN",
+  },
 ];
 
 function emptyCategory(categoryId) {
@@ -165,10 +169,14 @@ function loadState() {
     };
     let migrationApplied = false;
     let rosterUpdated = false;
-    for (const { key, categoryId, participantIndex } of ROSTER_MIGRATIONS) {
+    for (const { key, categoryId, participantIndex, removeName } of ROSTER_MIGRATIONS) {
       if (!loadedState.migrations[key]) {
         migrationApplied = true;
-        if (!loadedState[categoryId].participants[participantIndex].trim()) {
+        const participant = loadedState[categoryId].participants[participantIndex];
+        if (removeName && removeName === participant.trim()) {
+          loadedState[categoryId].participants[participantIndex] = "";
+          rosterUpdated = true;
+        } else if (!participant.trim() && DEFAULT_PARTICIPANTS[categoryId][participantIndex]) {
           loadedState[categoryId].participants[participantIndex] =
             DEFAULT_PARTICIPANTS[categoryId][participantIndex];
           rosterUpdated = true;
