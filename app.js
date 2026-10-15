@@ -1,5 +1,5 @@
 const STORAGE_KEY = "mat-ocho-tournament-v1";
-const EVENT_START = new Date("2026-11-14T15:00:00-03:00").getTime();
+const EVENT_START = new Date("2026-11-14T13:00:00-03:00").getTime();
 const CATEGORY_IDS = ["iniciantes", "avanzados"];
 const MATCHES = [
   { id: "q1", round: "Cuartos de final", number: "01", sources: ["p0", "p1"] },
