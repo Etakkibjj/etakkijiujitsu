@@ -348,6 +348,13 @@ main,
   font-weight: 700;
 }
 
+.event-fee strong {
+  color: var(--green);
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+}
+
 .event-address {
   color: var(--muted);
   font-size: 13px;
