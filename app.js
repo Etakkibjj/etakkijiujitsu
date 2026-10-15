@@ -339,9 +339,28 @@ function createMatchCard(categoryId, category, match) {
     if (name) entrant.classList.add("has-name");
     if (participantId && participantId === winnerId) entrant.classList.add("is-winner");
 
+    const entrantContent = document.createElement("span");
+    entrantContent.className = "match-entrant-content";
     const nameLabel = document.createElement("span");
     nameLabel.textContent = name || "Por definir";
-    entrant.append(nameLabel);
+    entrantContent.append(nameLabel);
+    if (
+      categoryId === "avanzados"
+      && name.localeCompare("ALEJANDRO DELGADO", "es", { sensitivity: "base" }) === 0
+    ) {
+      entrant.classList.add("is-confirmed");
+      const confirmation = document.createElement("span");
+      confirmation.className = "entrant-confirmation";
+      confirmation.setAttribute("aria-label", "Luchador confirmado");
+      confirmation.textContent = "✓";
+      entrantContent.append(confirmation);
+
+      const confirmationLabel = document.createElement("span");
+      confirmationLabel.className = "entrant-confirmation-label";
+      confirmationLabel.textContent = "LUCHADOR CONFIRMADO";
+      entrantContent.append(confirmationLabel);
+    }
+    entrant.append(entrantContent);
     card.append(entrant);
 
     const button = document.createElement("button");
