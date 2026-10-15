@@ -1,5 +1,5 @@
 const STORAGE_KEY = "mat-ocho-tournament-v1";
-const EVENT_START = new Date("2026-11-07T15:00:00-03:00").getTime();
+const EVENT_START = new Date("2026-11-14T15:00:00-03:00").getTime();
 const CATEGORY_IDS = ["iniciantes", "avanzados"];
 const MATCHES = [
   { id: "q1", round: "Cuartos de final", number: "01", sources: ["p0", "p1"] },
@@ -31,11 +31,19 @@ const DEFAULT_PARTICIPANTS = {
     "LAUTI AGUIRRE",
     "AGUS VELAZQUEZ",
     "BENJAMIN DUVOBSKY",
-    "DANIEL GOLDSMAN",
+    "",
     "CRISTHIAN PEREZ",
     "GONZALO TUÑÓN",
+    "JUAN ESPINOSA",
   ],
-  avanzados: ["EZEQUIEL MURACCIOLE", "IGNACIO LEGUIZAMÓN", "FELIPE ORTIZ"],
+  avanzados: [
+    "EZEQUIEL MURACCIOLE",
+    "IGNACIO LEGUIZAMÓN",
+    "FELIPE ORTIZ",
+    "DANIEL GOLDSMAN",
+    "ALEJANDRO DELGADO",
+    "AXEL FURLAN",
+  ],
 };
 const ROSTER_MIGRATIONS = [
   { key: "ignacioLeguizamon", categoryId: "avanzados", participantIndex: 1 },
@@ -49,6 +57,15 @@ const ROSTER_MIGRATIONS = [
     removeName: "AXEL FURLAN",
   },
   { key: "addGonzaloTunon", categoryId: "iniciantes", participantIndex: 5 },
+  { key: "addJuanEspinosa", categoryId: "iniciantes", participantIndex: 6 },
+  { key: "addAlejandroDelgado", categoryId: "avanzados", participantIndex: 4 },
+  { key: "addAxelFurlanAdvanced", categoryId: "avanzados", participantIndex: 5 },
+  {
+    key: "moveDanielGoldsmanToAdvanced",
+    categoryId: "avanzados",
+    participantIndex: 3,
+    moveFrom: { categoryId: "iniciantes", name: "DANIEL GOLDSMAN" },
+  },
 ];
 
 function emptyCategory(categoryId) {
@@ -172,17 +189,51 @@ function loadState() {
     };
     let migrationApplied = false;
     let rosterUpdated = false;
-    for (const { key, categoryId, participantIndex, removeName } of ROSTER_MIGRATIONS) {
+    for (const { key, categoryId, participantIndex, removeName, moveFrom } of ROSTER_MIGRATIONS) {
       if (!loadedState.migrations[key]) {
         migrationApplied = true;
-        const participant = loadedState[categoryId].participants[participantIndex];
+        const targetCategory = loadedState[categoryId];
+        const participant = targetCategory.participants[participantIndex];
         if (removeName && removeName === participant.trim()) {
-          loadedState[categoryId].participants[participantIndex] = "";
+          targetCategory.participants[participantIndex] = "";
           rosterUpdated = true;
-        } else if (!participant.trim() && DEFAULT_PARTICIPANTS[categoryId][participantIndex]) {
-          loadedState[categoryId].participants[participantIndex] =
-            DEFAULT_PARTICIPANTS[categoryId][participantIndex];
-          rosterUpdated = true;
+        } else if (moveFrom) {
+          const { categoryId: sourceCategoryId, name } = moveFrom;
+          const sourceCategory = loadedState[sourceCategoryId];
+          const sourceIndex = sourceCategory.participants.findIndex(
+            (savedName) => savedName.trim() === name,
+          );
+          const targetIndex = targetCategory.participants[participantIndex].trim()
+            ? targetCategory.participants.findIndex((savedName) => !savedName.trim())
+            : participantIndex;
+          const alreadyInTarget = targetCategory.participants.some(
+            (savedName) => savedName.trim() === name,
+          );
+          if (sourceIndex !== -1 && (targetIndex !== -1 || alreadyInTarget)) {
+            if (!alreadyInTarget) targetCategory.participants[targetIndex] = name;
+            sourceCategory.participants[sourceIndex] = "";
+            const affectedMatch = MATCHES.find((match) => match.sources.includes(`p${sourceIndex}`));
+            if (affectedMatch) {
+              delete sourceCategory.winners[affectedMatch.id];
+              sourceCategory.matchDetails[affectedMatch.id] = emptyMatchDetails();
+              clearDownstreamResults(sourceCategory, affectedMatch.id);
+            }
+            rosterUpdated = true;
+          } else if (sourceIndex === -1 && !alreadyInTarget && targetIndex !== -1) {
+            targetCategory.participants[targetIndex] = name;
+            rosterUpdated = true;
+          }
+        } else {
+          const defaultName = DEFAULT_PARTICIPANTS[categoryId][participantIndex]?.trim();
+          const alreadyRegistered = defaultName
+            && targetCategory.participants.some((savedName) => savedName.trim() === defaultName);
+          const targetIndex = !participant.trim()
+            ? participantIndex
+            : targetCategory.participants.findIndex((savedName) => !savedName.trim());
+          if (defaultName && !alreadyRegistered && targetIndex !== -1) {
+            targetCategory.participants[targetIndex] = defaultName;
+            rosterUpdated = true;
+          }
         }
         loadedState.migrations[key] = true;
       }
