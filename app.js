@@ -519,6 +519,26 @@ function updateEventCountdown() {
 }
 
 function render() {
+  const advancedRoster = document.querySelector("#roster-avanzados");
+  for (const field of advancedRoster.querySelectorAll(".roster-field")) {
+    field.querySelector(".roster-confirmation")?.remove();
+    const input = field.querySelector("input");
+    if (input.value.trim().localeCompare("ALEJANDRO DELGADO", "es", { sensitivity: "base" }) !== 0) {
+      continue;
+    }
+
+    const confirmation = document.createElement("span");
+    confirmation.className = "roster-confirmation";
+    const check = document.createElement("span");
+    check.className = "roster-confirmation-check";
+    check.setAttribute("aria-hidden", "true");
+    check.textContent = "✓";
+    const label = document.createElement("span");
+    label.textContent = "LUCHADOR CONFIRMADO";
+    confirmation.append(check, label);
+    field.append(confirmation);
+  }
+
   for (const categoryId of CATEGORY_IDS) renderBracket(categoryId);
   renderSummary();
 }
