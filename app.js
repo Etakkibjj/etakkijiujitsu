@@ -26,10 +26,12 @@ const ROUNDS = [
   { label: "SEMIFINALES", matchIds: ["s1", "s2"] },
   { label: "FINAL", matchIds: ["f1"] },
 ];
+
+// LISTA ACTUALIZADA DE PARTICIPANTES
 const DEFAULT_PARTICIPANTS = {
   iniciantes: [
     "LAUTI AGUIRRE",
-    "AGUS VELAZQUEZ",
+    "AGUSTIN VELAZQUEZ",
     "BENJAMIN DUVOBSKY",
     "",
     "CRISTHIAN PEREZ",
@@ -43,8 +45,10 @@ const DEFAULT_PARTICIPANTS = {
     "DANIEL GOLDSMAN",
     "ALEJANDRO DELGADO",
     "AXEL FURLAN",
+    "IAN CÉSPEDES",
   ],
 };
+
 const ROSTER_MIGRATIONS = [
   { key: "ignacioLeguizamon", categoryId: "avanzados", participantIndex: 1 },
   { key: "danielGoldsman", categoryId: "iniciantes", participantIndex: 3 },
@@ -60,6 +64,7 @@ const ROSTER_MIGRATIONS = [
   { key: "addJuanEspinosa", categoryId: "iniciantes", participantIndex: 6 },
   { key: "addAlejandroDelgado", categoryId: "avanzados", participantIndex: 4 },
   { key: "addAxelFurlanAdvanced", categoryId: "avanzados", participantIndex: 5 },
+  { key: "addIanCespedesAdvanced", categoryId: "avanzados", participantIndex: 6 },
   {
     key: "moveDanielGoldsmanToAdvanced",
     categoryId: "avanzados",
@@ -95,8 +100,10 @@ function emptyState() {
 
 function makeMessage(text) {
   const message = document.querySelector("#app-message");
-  message.textContent = text;
-  message.hidden = !text;
+  if (message) {
+    message.textContent = text;
+    message.hidden = !text;
+  }
 }
 
 function normalizeCategory(source) {
@@ -290,6 +297,7 @@ function clearDownstreamResults(category, matchId) {
 
 function createRoster(categoryId) {
   const container = document.querySelector(`#roster-${categoryId}`);
+  if (!container) return;
   for (let index = 0; index < 8; index += 1) {
     const label = document.createElement("label");
     label.className = "roster-field";
@@ -309,6 +317,19 @@ function createRoster(categoryId) {
     label.append(labelText, input);
     container.append(label);
   }
+}
+
+// Función auxiliar para verificar si un luchador debe estar confirmado
+function isConfirmedFighter(categoryId, name) {
+  if (!name) return false;
+  const normalized = name.trim().toUpperCase();
+  if (categoryId === "avanzados") {
+    return normalized === "ALEJANDRO DELGADO" || normalized === "IAN CÉSPEDES" || normalized === "IAN CESPEDES";
+  }
+  if (categoryId === "iniciantes") {
+    return normalized === "AGUSTIN VELAZQUEZ" || normalized === "AGUS VELAZQUEZ";
+  }
+  return false;
 }
 
 function createMatchCard(categoryId, category, match) {
@@ -344,10 +365,9 @@ function createMatchCard(categoryId, category, match) {
     const nameLabel = document.createElement("span");
     nameLabel.textContent = name || "Por definir";
     entrantContent.append(nameLabel);
-    if (
-      categoryId === "avanzados"
-      && name.localeCompare("ALEJANDRO DELGADO", "es", { sensitivity: "base" }) === 0
-    ) {
+    
+    // Aplicar confirmación si corresponde
+    if (isConfirmedFighter(categoryId, name)) {
       entrant.classList.add("is-confirmed");
       const confirmation = document.createElement("span");
       confirmation.className = "entrant-confirmation";
@@ -360,6 +380,7 @@ function createMatchCard(categoryId, category, match) {
       confirmationLabel.textContent = "LUCHADOR CONFIRMADO";
       entrantContent.append(confirmationLabel);
     }
+    
     entrant.append(entrantContent);
     card.append(entrant);
 
@@ -447,6 +468,7 @@ function createMatchCard(categoryId, category, match) {
 function renderBracket(categoryId) {
   const category = state[categoryId];
   const container = document.querySelector(`#bracket-${categoryId}`);
+  if (!container) return;
   container.replaceChildren();
 
   for (const round of ROUNDS) {
@@ -470,7 +492,8 @@ function renderBracket(categoryId) {
   }
 
   const registered = category.participants.filter((name) => name.trim()).length;
-  document.querySelector(`#count-${categoryId}`).textContent = `${registered} / 8`;
+  const countEl = document.querySelector(`#count-${categoryId}`);
+  if (countEl) countEl.textContent = `${registered} / 8`;
 }
 
 function renderSummary() {
@@ -482,17 +505,24 @@ function renderSummary() {
     (total, categoryId) => total + Object.keys(state[categoryId].winners).length,
     0,
   );
-  document.querySelector("#participant-total").replaceChildren(
-    document.createTextNode(`${participants} `),
-    Object.assign(document.createElement("small"), { textContent: "/ 16" }),
-  );
-  document.querySelector("#match-total").replaceChildren(
-    document.createTextNode(`${matches} `),
-    Object.assign(document.createElement("small"), { textContent: "/ 14" }),
-  );
+  const partTotalEl = document.querySelector("#participant-total");
+  if (partTotalEl) {
+    partTotalEl.replaceChildren(
+      document.createTextNode(`${participants} `),
+      Object.assign(document.createElement("small"), { textContent: "/ 16" }),
+    );
+  }
+  const matchTotalEl = document.querySelector("#match-total");
+  if (matchTotalEl) {
+    matchTotalEl.replaceChildren(
+      document.createTextNode(`${matches} `),
+      Object.assign(document.createElement("small"), { textContent: "/ 14" }),
+    );
+  }
   for (const categoryId of CATEGORY_IDS) {
     const registered = state[categoryId].participants.filter((name) => name.trim()).length;
-    document.querySelector(`#available-${categoryId}`).textContent = String(8 - registered);
+    const availEl = document.querySelector(`#available-${categoryId}`);
+    if (availEl) availEl.textContent = String(8 - registered);
   }
 }
 
@@ -501,6 +531,8 @@ function updateEventCountdown() {
   const values = document.querySelector("#countdown-values");
   const started = document.querySelector("#countdown-started");
   const label = document.querySelector("#countdown-label");
+
+  if (!values || !started || !label) return;
 
   if (remaining <= 0) {
     values.hidden = true;
@@ -513,17 +545,26 @@ function updateEventCountdown() {
   const days = Math.floor(totalMinutes / (60 * 24));
   const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
   const minutes = totalMinutes % 60;
-  document.querySelector('[data-countdown="days"]').textContent = String(days);
-  document.querySelector('[data-countdown="hours"]').textContent = String(hours).padStart(2, "0");
-  document.querySelector('[data-countdown="minutes"]').textContent = String(minutes).padStart(2, "0");
+  
+  const daysEl = document.querySelector('[data-countdown="days"]');
+  const hoursEl = document.querySelector('[data-countdown="hours"]');
+  const minsEl = document.querySelector('[data-countdown="minutes"]');
+  
+  if (daysEl) daysEl.textContent = String(days);
+  if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
+  if (minsEl) minsEl.textContent = String(minutes).padStart(2, "0");
 }
 
-function render() {
-  const advancedRoster = document.querySelector("#roster-avanzados");
-  for (const field of advancedRoster.querySelectorAll(".roster-field")) {
+function renderRosterConfirmations(categoryId) {
+  const rosterContainer = document.querySelector(`#roster-${categoryId}`);
+  if (!rosterContainer) return;
+  
+  for (const field of rosterContainer.querySelectorAll(".roster-field")) {
     field.querySelector(".roster-confirmation")?.remove();
     const input = field.querySelector("input");
-    if (input.value.trim().localeCompare("ALEJANDRO DELGADO", "es", { sensitivity: "base" }) !== 0) {
+    if (!input) continue;
+
+    if (!isConfirmedFighter(categoryId, input.value)) {
       continue;
     }
 
@@ -538,6 +579,11 @@ function render() {
     confirmation.append(check, label);
     field.append(confirmation);
   }
+}
+
+function render() {
+  renderRosterConfirmations("avanzados");
+  renderRosterConfirmations("iniciantes");
 
   for (const categoryId of CATEGORY_IDS) renderBracket(categoryId);
   renderSummary();
@@ -587,9 +633,11 @@ document.addEventListener("change", (event) => {
   const details = category.matchDetails[input.dataset.match];
   details.overtime = input.checked;
   if (!details.overtime) details.overtimeScore = "";
-  const scoreInput = input.closest(".match-card").querySelector('[data-match-field="overtimeScore"]');
-  scoreInput.disabled = !details.overtime;
-  if (!details.overtime) scoreInput.value = "";
+  const scoreInput = input.closest(".match-card")?.querySelector('[data-match-field="overtimeScore"]');
+  if (scoreInput) {
+    scoreInput.disabled = !details.overtime;
+    if (!details.overtime) scoreInput.value = "";
+  }
   saveState();
 });
 
@@ -662,9 +710,8 @@ document.addEventListener("click", (event) => {
 for (const categoryId of CATEGORY_IDS) {
   createRoster(categoryId);
   state[categoryId].participants.forEach((name, index) => {
-    document.querySelector(
-      `[data-category="${categoryId}"][data-participant="${index}"]`,
-    ).value = name;
+    const inputEl = document.querySelector(`[data-category="${categoryId}"][data-participant="${index}"]`);
+    if (inputEl) inputEl.value = name;
   });
 }
 render();
