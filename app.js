@@ -324,7 +324,7 @@ function isConfirmedFighter(categoryId, name) {
   if (!name) return false;
   const normalized = name.trim().toUpperCase();
   if (categoryId === "avanzados") {
-    return normalized === "ALEJANDRO DELGADO" || normalized === "IAN CÉSPEDES" || normalized === "IAN CESPEDES";
+    return normalized === "ALEJANDRO DELGADO"; // Ian Céspedes removido de aquí
   }
   if (categoryId === "iniciantes") {
     return normalized === "AGUSTIN VELAZQUEZ" || normalized === "AGUS VELAZQUEZ";
@@ -366,7 +366,7 @@ function createMatchCard(categoryId, category, match) {
     nameLabel.textContent = name || "Por definir";
     entrantContent.append(nameLabel);
     
-    // Aplicar confirmación si corresponde
+    // Aplicar confirmación o leyenda de pendiente de verificación
     if (isConfirmedFighter(categoryId, name)) {
       entrant.classList.add("is-confirmed");
       const confirmation = document.createElement("span");
@@ -379,6 +379,15 @@ function createMatchCard(categoryId, category, match) {
       confirmationLabel.className = "entrant-confirmation-label";
       confirmationLabel.textContent = "LUCHADOR CONFIRMADO";
       entrantContent.append(confirmationLabel);
+    } else if (name) {
+      const unverified = document.createElement("span");
+      unverified.className = "entrant-unverified";
+      unverified.style.color = "red";
+      unverified.style.display = "block";
+      unverified.style.fontSize = "0.85em";
+      unverified.style.fontWeight = "bold";
+      unverified.textContent = "❌ A ESPERA DE VERIFICACIÓN";
+      entrantContent.append(unverified);
     }
     
     entrant.append(entrantContent);
@@ -561,23 +570,31 @@ function renderRosterConfirmations(categoryId) {
   
   for (const field of rosterContainer.querySelectorAll(".roster-field")) {
     field.querySelector(".roster-confirmation")?.remove();
+    field.querySelector(".roster-unverified")?.remove();
     const input = field.querySelector("input");
-    if (!input) continue;
+    if (!input || !input.value.trim()) continue;
 
-    if (!isConfirmedFighter(categoryId, input.value)) {
-      continue;
+    if (isConfirmedFighter(categoryId, input.value)) {
+      const confirmation = document.createElement("span");
+      confirmation.className = "roster-confirmation";
+      const check = document.createElement("span");
+      check.className = "roster-confirmation-check";
+      check.setAttribute("aria-hidden", "true");
+      check.textContent = "✓";
+      const label = document.createElement("span");
+      label.textContent = "LUCHADOR CONFIRMADO";
+      confirmation.append(check, label);
+      field.append(confirmation);
+    } else {
+      const unverified = document.createElement("span");
+      unverified.className = "roster-unverified";
+      unverified.style.color = "red";
+      unverified.style.display = "block";
+      unverified.style.fontSize = "0.85em";
+      unverified.style.fontWeight = "bold";
+      unverified.textContent = "❌ A ESPERA DE VERIFICACIÓN";
+      field.append(unverified);
     }
-
-    const confirmation = document.createElement("span");
-    confirmation.className = "roster-confirmation";
-    const check = document.createElement("span");
-    check.className = "roster-confirmation-check";
-    check.setAttribute("aria-hidden", "true");
-    check.textContent = "✓";
-    const label = document.createElement("span");
-    label.textContent = "LUCHADOR CONFIRMADO";
-    confirmation.append(check, label);
-    field.append(confirmation);
   }
 }
 
@@ -696,22 +713,3 @@ document.addEventListener("click", (event) => {
     const categoryId = button.dataset.category;
     const categoryName = categoryId === "iniciantes" ? "Iniciantes" : "Avanzados";
     if (!window.confirm(`¿Reiniciar la categoría ${categoryName}? Se borrarán sus nombres y resultados.`)) {
-      return;
-    }
-    state[categoryId] = emptyCategory(categoryId);
-    document.querySelectorAll(`[data-category="${categoryId}"][data-participant]`).forEach((input) => {
-      input.value = state[categoryId].participants[Number(input.dataset.participant)];
-    });
-    saveState();
-    render();
-  }
-});
-
-for (const categoryId of CATEGORY_IDS) {
-  createRoster(categoryId);
-  state[categoryId].participants.forEach((name, index) => {
-    const inputEl = document.querySelector(`[data-category="${categoryId}"][data-participant="${index}"]`);
-    if (inputEl) inputEl.value = name;
-  });
-}
-render();
