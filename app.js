@@ -33,10 +33,11 @@ const DEFAULT_PARTICIPANTS = {
     "LAUTI AGUIRRE",
     "AGUSTIN VELAZQUEZ",
     "BENJAMIN DUVOBSKY",
-    "",
+    "VALENTINO DI ROSA",
     "CRISTHIAN PEREZ",
     "GONZALO TUÑÓN",
     "JUAN ESPINOSA",
+    "EZEQUIEL ARGÜELLO",
   ],
   avanzados: [
     "EZEQUIEL MURACCIOLE",
@@ -48,8 +49,19 @@ const DEFAULT_PARTICIPANTS = {
     "IAN CÉSPEDES",
   ],
 };
-
+const CONFIRMED_PARTICIPANTS = [
+  { categoryId: "avanzados", name: "ALEJANDRO DELGADO" },
+  { categoryId: "iniciantes", name: "AGUSTIN VELAZQUEZ" },
+  { categoryId: "iniciantes", name: "VALENTINO DI ROSA" },
+  { categoryId: "iniciantes", name: "EZEQUIEL ARGÜELLO" },
+];
 const ROSTER_MIGRATIONS = [
+  {
+    key: "renameAgusVelazquez",
+    categoryId: "iniciantes",
+    participantIndex: 1,
+    renameFrom: "AGUS VELAZQUEZ",
+  },
   { key: "ignacioLeguizamon", categoryId: "avanzados", participantIndex: 1 },
   { key: "danielGoldsman", categoryId: "iniciantes", participantIndex: 3 },
   { key: "felipeOrtiz", categoryId: "avanzados", participantIndex: 2 },
@@ -71,6 +83,8 @@ const ROSTER_MIGRATIONS = [
     participantIndex: 3,
     moveFrom: { categoryId: "iniciantes", name: "DANIEL GOLDSMAN" },
   },
+  { key: "addEzequielArguello", categoryId: "iniciantes", participantIndex: 7 },
+  { key: "addValentinoDiRosa", categoryId: "iniciantes", participantIndex: 3 },
 ];
 
 function emptyCategory(categoryId) {
@@ -196,7 +210,7 @@ function loadState() {
     };
     let migrationApplied = false;
     let rosterUpdated = false;
-    for (const { key, categoryId, participantIndex, removeName, moveFrom } of ROSTER_MIGRATIONS) {
+    for (const { key, categoryId, participantIndex, removeName, moveFrom, renameFrom } of ROSTER_MIGRATIONS) {
       if (!loadedState.migrations[key]) {
         migrationApplied = true;
         const targetCategory = loadedState[categoryId];
@@ -204,17 +218,46 @@ function loadState() {
         if (removeName && removeName === participant.trim()) {
           targetCategory.participants[participantIndex] = "";
           rosterUpdated = true;
+        } else if (renameFrom) {
+          const newName = DEFAULT_PARTICIPANTS[categoryId][participantIndex].trim();
+          const oldIndex = targetCategory.participants.findIndex(
+            (savedName) => sameParticipantName(savedName, renameFrom),
+          );
+          const alreadyRegistered = targetCategory.participants.some(
+            (savedName) => sameParticipantName(savedName, newName),
+          );
+          if (oldIndex !== -1 && !alreadyRegistered) {
+            targetCategory.participants[oldIndex] = newName;
+            rosterUpdated = true;
+          } else if (oldIndex !== -1 && alreadyRegistered) {
+            targetCategory.participants[oldIndex] = "";
+            const affectedMatch = MATCHES.find((match) => match.sources.includes(`p${oldIndex}`));
+            if (affectedMatch) {
+              delete targetCategory.winners[affectedMatch.id];
+              targetCategory.matchDetails[affectedMatch.id] = emptyMatchDetails();
+              clearDownstreamResults(targetCategory, affectedMatch.id);
+            }
+            rosterUpdated = true;
+          } else if (!alreadyRegistered) {
+            const targetIndex = !participant.trim()
+              ? participantIndex
+              : targetCategory.participants.findIndex((savedName) => !savedName.trim());
+            if (targetIndex !== -1) {
+              targetCategory.participants[targetIndex] = newName;
+              rosterUpdated = true;
+            }
+          }
         } else if (moveFrom) {
           const { categoryId: sourceCategoryId, name } = moveFrom;
           const sourceCategory = loadedState[sourceCategoryId];
           const sourceIndex = sourceCategory.participants.findIndex(
-            (savedName) => savedName.trim() === name,
+            (savedName) => sameParticipantName(savedName, name),
           );
           const targetIndex = targetCategory.participants[participantIndex].trim()
             ? targetCategory.participants.findIndex((savedName) => !savedName.trim())
             : participantIndex;
           const alreadyInTarget = targetCategory.participants.some(
-            (savedName) => savedName.trim() === name,
+            (savedName) => sameParticipantName(savedName, name),
           );
           if (sourceIndex !== -1 && (targetIndex !== -1 || alreadyInTarget)) {
             if (!alreadyInTarget) targetCategory.participants[targetIndex] = name;
@@ -233,7 +276,9 @@ function loadState() {
         } else {
           const defaultName = DEFAULT_PARTICIPANTS[categoryId][participantIndex]?.trim();
           const alreadyRegistered = defaultName
-            && targetCategory.participants.some((savedName) => savedName.trim() === defaultName);
+            && targetCategory.participants.some(
+              (savedName) => sameParticipantName(savedName, defaultName),
+            );
           const targetIndex = !participant.trim()
             ? participantIndex
             : targetCategory.participants.findIndex((savedName) => !savedName.trim());
@@ -281,6 +326,30 @@ function participantName(category, participantId) {
   return category.participants[Number(participantId.slice(1))].trim();
 }
 
+function sameParticipantName(left, right) {
+  return left.trim().localeCompare(right.trim(), "es", { sensitivity: "base" }) === 0;
+}
+
+function isConfirmedParticipant(categoryId, name) {
+  return CONFIRMED_PARTICIPANTS.some(
+    (participant) => participant.categoryId === categoryId
+      && sameParticipantName(participant.name, name),
+  );
+}
+
+function createParticipantStatus(categoryId, name) {
+  const confirmed = isConfirmedParticipant(categoryId, name);
+  const icon = document.createElement("span");
+  icon.className = `participant-status-icon ${confirmed ? "is-confirmed" : "is-pending"}`;
+  icon.setAttribute("aria-hidden", "true");
+  icon.textContent = confirmed ? "✓" : "✕";
+
+  const label = document.createElement("span");
+  label.className = `participant-status-label ${confirmed ? "is-confirmed" : "is-pending"}`;
+  label.textContent = confirmed ? "LUCHADOR CONFIRMADO" : "PENDIENTE DE APROBACIÓN";
+  return { icon, label };
+}
+
 function getEntrants(category, match) {
   return match.sources.map((sourceId) => {
     if (PARTICIPANT_IDS.has(sourceId)) return sourceId;
@@ -314,22 +383,12 @@ function createRoster(categoryId) {
     input.dataset.category = categoryId;
     input.dataset.participant = String(index);
 
-    label.append(labelText, input);
+    const nameRow = document.createElement("span");
+    nameRow.className = "roster-name-row";
+    nameRow.append(input);
+    label.append(labelText, nameRow);
     container.append(label);
   }
-}
-
-// Función auxiliar para verificar si un luchador debe estar confirmado
-function isConfirmedFighter(categoryId, name) {
-  if (!name) return false;
-  const normalized = name.trim().toUpperCase();
-  if (categoryId === "avanzados") {
-    return normalized === "ALEJANDRO DELGADO" || normalized === "IAN CÉSPEDES" || normalized === "IAN CESPEDES";
-  }
-  if (categoryId === "iniciantes") {
-    return normalized === "AGUSTIN VELAZQUEZ" || normalized === "AGUS VELAZQUEZ";
-  }
-  return false;
 }
 
 function createMatchCard(categoryId, category, match) {
@@ -365,22 +424,12 @@ function createMatchCard(categoryId, category, match) {
     const nameLabel = document.createElement("span");
     nameLabel.textContent = name || "Por definir";
     entrantContent.append(nameLabel);
-    
-    // Aplicar confirmación si corresponde
-    if (isConfirmedFighter(categoryId, name)) {
-      entrant.classList.add("is-confirmed");
-      const confirmation = document.createElement("span");
-      confirmation.className = "entrant-confirmation";
-      confirmation.setAttribute("aria-label", "Luchador confirmado");
-      confirmation.textContent = "✓";
-      entrantContent.append(confirmation);
-
-      const confirmationLabel = document.createElement("span");
-      confirmationLabel.className = "entrant-confirmation-label";
-      confirmationLabel.textContent = "LUCHADOR CONFIRMADO";
-      entrantContent.append(confirmationLabel);
+    if (name) {
+      const status = createParticipantStatus(categoryId, name);
+      entrantContent.append(status.icon);
+      status.label.classList.add("entrant-participant-status");
+      entrantContent.append(status.label);
     }
-    
     entrant.append(entrantContent);
     card.append(entrant);
 
@@ -555,35 +604,22 @@ function updateEventCountdown() {
   if (minsEl) minsEl.textContent = String(minutes).padStart(2, "0");
 }
 
-function renderRosterConfirmations(categoryId) {
-  const rosterContainer = document.querySelector(`#roster-${categoryId}`);
-  if (!rosterContainer) return;
-  
-  for (const field of rosterContainer.querySelectorAll(".roster-field")) {
-    field.querySelector(".roster-confirmation")?.remove();
-    const input = field.querySelector("input");
-    if (!input) continue;
-
-    if (!isConfirmedFighter(categoryId, input.value)) {
-      continue;
-    }
-
-    const confirmation = document.createElement("span");
-    confirmation.className = "roster-confirmation";
-    const check = document.createElement("span");
-    check.className = "roster-confirmation-check";
-    check.setAttribute("aria-hidden", "true");
-    check.textContent = "✓";
-    const label = document.createElement("span");
-    label.textContent = "LUCHADOR CONFIRMADO";
-    confirmation.append(check, label);
-    field.append(confirmation);
-  }
-}
-
 function render() {
-  renderRosterConfirmations("avanzados");
-  renderRosterConfirmations("iniciantes");
+  for (const categoryId of CATEGORY_IDS) {
+    const roster = document.querySelector(`#roster-${categoryId}`);
+    if (!roster) continue;
+    for (const field of roster.querySelectorAll(".roster-field")) {
+      field.querySelector(".participant-status-icon")?.remove();
+      field.querySelector(".participant-status-label")?.remove();
+      const input = field.querySelector("input");
+      const nameRow = field.querySelector(".roster-name-row");
+      if (input.value.trim()) {
+        const status = createParticipantStatus(categoryId, input.value);
+        nameRow.append(status.icon);
+        field.append(status.label);
+      }
+    }
+  }
 
   for (const categoryId of CATEGORY_IDS) renderBracket(categoryId);
   renderSummary();

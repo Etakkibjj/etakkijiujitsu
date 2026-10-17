@@ -660,6 +660,13 @@ main,
   gap: 6px;
 }
 
+.roster-name-row {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 5px;
+}
+
 .roster-field span {
   color: var(--muted);
   font-family: var(--mono);
@@ -667,20 +674,30 @@ main,
   font-weight: 700;
 }
 
-.roster-field .roster-confirmation {
-  display: flex;
-  align-items: center;
-  gap: 4px;
+.participant-status-icon.is-confirmed,
+.participant-status-label.is-confirmed {
   color: #25833b;
-  font-size: 10px;
+}
+
+.participant-status-icon.is-pending,
+.participant-status-label.is-pending {
+  color: #bd3434;
+}
+
+.participant-status-label {
+  display: block;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
   line-height: 1.3;
 }
 
-.roster-field .roster-confirmation-check {
-  color: #25833b;
+.participant-status-icon {
   font-family: var(--sans);
   font-size: 14px;
   font-weight: 800;
+  line-height: 1;
+  flex: 0 0 auto;
 }
 
 .roster-field input {
@@ -842,20 +859,9 @@ main,
   gap: 3px 5px;
 }
 
-.entrant-confirmation {
-  color: #25833b;
-  font-size: 16px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.entrant-confirmation-label {
+.entrant-participant-status {
   grid-column: 1 / -1;
-  color: #25833b;
-  font-family: var(--mono);
   font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 0.02em;
 }
 
 .match-entrant.is-winner {
