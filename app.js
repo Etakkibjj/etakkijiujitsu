@@ -52,13 +52,13 @@ const DEFAULT_PARTICIPANTS = {
 const CONFIRMED_PARTICIPANTS = [
   { categoryId: "avanzados", name: "ALEJANDRO DELGADO" },
   { categoryId: "avanzados", name: "EZEQUIEL MURACCIOLE" },
+  { categoryId: "avanzados", name: "DANIEL GOLDSMAN" },
   { categoryId: "iniciantes", name: "AGUSTIN VELAZQUEZ" },
   { categoryId: "iniciantes", name: "GONZALO TUÑÓN" },
   { categoryId: "iniciantes", name: "LAUTI AGUIRRE" },
   { categoryId: "iniciantes", name: "BENJAMIN DUVOBSKY" },
   { categoryId: "iniciantes", name: "VALENTINO DI ROSA" },
   { categoryId: "iniciantes", name: "EZEQUIEL ARGÜELLO" },
-  { categoryId: "avanzados", name: "DANIEL GOLDSMAN" }
 ];
 const ROSTER_MIGRATIONS = [
   {
