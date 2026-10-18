@@ -52,6 +52,7 @@ const DEFAULT_PARTICIPANTS = {
 const CONFIRMED_PARTICIPANTS = [
   { categoryId: "avanzados", name: "ALEJANDRO DELGADO" },
   { categoryId: "iniciantes", name: "AGUSTIN VELAZQUEZ" },
+  { categoryId: "iniciantes", name: "GONZALO TUÑÓN" },
   { categoryId: "iniciantes", name: "LAUTI AGUIRRE" },
   { categoryId: "iniciantes", name: "BENJAMIN DUVOBSKY" },
   { categoryId: "iniciantes", name: "VALENTINO DI ROSA" },
