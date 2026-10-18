@@ -51,6 +51,7 @@ const DEFAULT_PARTICIPANTS = {
 };
 const CONFIRMED_PARTICIPANTS = [
   { categoryId: "avanzados", name: "ALEJANDRO DELGADO" },
+  { categoryId: "avanzados", name: "EZEQUIEL MURACCIOLE" },
   { categoryId: "iniciantes", name: "AGUSTIN VELAZQUEZ" },
   { categoryId: "iniciantes", name: "GONZALO TUÑÓN" },
   { categoryId: "iniciantes", name: "LAUTI AGUIRRE" },
