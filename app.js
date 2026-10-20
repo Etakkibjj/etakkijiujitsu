@@ -1,6 +1,10 @@
-const STORAGE_KEY = "mat-ocho-tournament-v1";
+const STORAGE_KEY = "mat-ocho-tournament-v3";
+const ROSTER_VERSION = 1;
+
 const EVENT_START = new Date("2026-11-14T13:00:00-03:00").getTime();
+
 const CATEGORY_IDS = ["iniciantes", "avanzados"];
+
 const MATCHES = [
   { id: "q1", round: "Cuartos de final", number: "01", sources: ["p0", "p1"] },
   { id: "q2", round: "Cuartos de final", number: "02", sources: ["p2", "p3"] },
@@ -10,8 +14,11 @@ const MATCHES = [
   { id: "s2", round: "Semifinales", number: "02", sources: ["q3", "q4"] },
   { id: "f1", round: "Final", number: "01", sources: ["s1", "s2"] },
 ];
+
 const MATCH_BY_ID = new Map(MATCHES.map((match) => [match.id, match]));
+
 const PARTICIPANT_IDS = new Set(Array.from({ length: 8 }, (_, index) => `p${index}`));
+
 const DOWNSTREAM_MATCHES = {
   q1: ["s1", "f1"],
   q2: ["s1", "f1"],
@@ -21,23 +28,24 @@ const DOWNSTREAM_MATCHES = {
   s2: ["f1"],
   f1: [],
 };
+
 const ROUNDS = [
   { label: "CUARTOS DE FINAL", matchIds: ["q1", "q2", "q3", "q4"] },
   { label: "SEMIFINALES", matchIds: ["s1", "s2"] },
   { label: "FINAL", matchIds: ["f1"] },
 ];
 
-// LISTA ACTUALIZADA DE PARTICIPANTES
+// LISTA DE PARTICIPANTES (8 plazas por categoría)
 const DEFAULT_PARTICIPANTS = {
   iniciantes: [
     "LAUTI AGUIRRE",
     "AGUSTIN VELAZQUEZ",
     "BENJAMIN DUVOBSKY",
+    "EZEQUIEL ARGUELLO",
     "VALENTINO DI ROSA",
-    "CRISTHIAN PEREZ",
     "GONZALO TUÑÓN",
     "JUAN ESPINOSA",
-    "EZEQUIEL ARGÜELLO",
+    "",
   ],
   avanzados: [
     "EZEQUIEL MURACCIOLE",
@@ -46,50 +54,41 @@ const DEFAULT_PARTICIPANTS = {
     "DANIEL GOLDSMAN",
     "ALEJANDRO DELGADO",
     "AXEL FURLAN",
+    "CIRO CÉSPEDES",
     "IAN CÉSPEDES",
   ],
 };
-const CONFIRMED_PARTICIPANTS = [
-  { categoryId: "avanzados", name: "ALEJANDRO DELGADO" },
-  { categoryId: "avanzados", name: "EZEQUIEL MURACCIOLE" },
-  { categoryId: "iniciantes", name: "AGUSTIN VELAZQUEZ" },
-  { categoryId: "iniciantes", name: "GONZALO TUÑÓN" },
-  { categoryId: "iniciantes", name: "LAUTI AGUIRRE" },
-  { categoryId: "iniciantes", name: "BENJAMIN DUVOBSKY" },
-  { categoryId: "iniciantes", name: "VALENTINO DI ROSA" },
-  { categoryId: "iniciantes", name: "EZEQUIEL ARGÜELLO" },
-];
-const ROSTER_MIGRATIONS = [
-  {
-    key: "renameAgusVelazquez",
-    categoryId: "iniciantes",
-    participantIndex: 1,
-    renameFrom: "AGUS VELAZQUEZ",
-  },
-  { key: "ignacioLeguizamon", categoryId: "avanzados", participantIndex: 1 },
-  { key: "danielGoldsman", categoryId: "iniciantes", participantIndex: 3 },
-  { key: "felipeOrtiz", categoryId: "avanzados", participantIndex: 2 },
-  { key: "cristhianPerez", categoryId: "iniciantes", participantIndex: 4 },
-  {
-    key: "removeAxelFurlan",
-    categoryId: "iniciantes",
-    participantIndex: 5,
-    removeName: "AXEL FURLAN",
-  },
-  { key: "addGonzaloTunon", categoryId: "iniciantes", participantIndex: 5 },
-  { key: "addJuanEspinosa", categoryId: "iniciantes", participantIndex: 6 },
-  { key: "addAlejandroDelgado", categoryId: "avanzados", participantIndex: 4 },
-  { key: "addAxelFurlanAdvanced", categoryId: "avanzados", participantIndex: 5 },
-  { key: "addIanCespedesAdvanced", categoryId: "avanzados", participantIndex: 6 },
-  {
-    key: "moveDanielGoldsmanToAdvanced",
-    categoryId: "avanzados",
-    participantIndex: 3,
-    moveFrom: { categoryId: "iniciantes", name: "DANIEL GOLDSMAN" },
-  },
-  { key: "addEzequielArguello", categoryId: "iniciantes", participantIndex: 7 },
-  { key: "addValentinoDiRosa", categoryId: "iniciantes", participantIndex: 3 },
-];
+
+// LUCHADORES CONFIRMADOS (se comparan sin importar mayúsculas, tildes ni espacios extra)
+const CONFIRMED_FIGHTERS = {
+  iniciantes: [
+    "GONZALO TUÑÓN",
+    "LAUTI AGUIRRE",
+    "EZEQUIEL ARGUELLO",
+    "VALENTINO DI ROSA",
+    "BENJAMIN DUVOBSKY",
+    "AGUSTIN VELAZQUEZ",
+    "AGUS VELAZQUEZ",
+  ],
+  avanzados: [
+    "EZEQUIEL MURACCIOLE",
+    "CIRO CÉSPEDES",
+    "ALEJANDRO DELGADO",
+    "ALE DELGADO",
+  ],
+};
+
+// Poné false si no querés el cartel rojo "A ESPERA DE VERIFICACIÓN"
+const SHOW_UNVERIFIED = true;
+
+function normalizeName(name) {
+  return String(name || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .toUpperCase();
+}
 
 function emptyCategory(categoryId) {
   return {
@@ -112,7 +111,7 @@ function emptyState() {
   return {
     iniciantes: emptyCategory("iniciantes"),
     avanzados: emptyCategory("avanzados"),
-    migrations: Object.fromEntries(ROSTER_MIGRATIONS.map(({ key }) => [key, true])),
+    rosterVersion: ROSTER_VERSION,
   };
 }
 
@@ -195,6 +194,56 @@ function normalizeCategory(source) {
   return category;
 }
 
+function clearParticipantResults(category, participantIndex) {
+  const firstAffectedMatch = MATCHES.find(
+    (match) => match.sources.includes(`p${participantIndex}`),
+  );
+  if (!firstAffectedMatch) return;
+
+  delete category.winners[firstAffectedMatch.id];
+  category.matchDetails[firstAffectedMatch.id] = emptyMatchDetails();
+  clearDownstreamResults(category, firstAffectedMatch.id);
+}
+
+function removeParticipant(category, participantIndex) {
+  clearParticipantResults(category, participantIndex);
+  category.participants[participantIndex] = "";
+}
+
+function migrateSavedRoster(loadedState) {
+  const beginners = loadedState.iniciantes;
+  const oldValentinoIndex = beginners.participants.findIndex(
+    (name) => normalizeName(name) === "VALENTINO DI LOLLO",
+  );
+  const valentinoIndex = beginners.participants.findIndex(
+    (name) => normalizeName(name) === "VALENTINO DI ROSA",
+  );
+  if (oldValentinoIndex !== -1) {
+    if (valentinoIndex === -1) {
+      beginners.participants[oldValentinoIndex] = "VALENTINO DI ROSA";
+    } else {
+      removeParticipant(beginners, oldValentinoIndex);
+    }
+  }
+
+  beginners.participants.forEach((name, index) => {
+    if (normalizeName(name) === "CRISTHIAN PEREZ") {
+      removeParticipant(beginners, index);
+    }
+  });
+
+  const advanced = loadedState.avanzados;
+  const ianRegistered = advanced.participants.some(
+    (name) => normalizeName(name) === "IAN CESPEDES",
+  );
+  if (!ianRegistered) {
+    const availableIndex = advanced.participants.findIndex((name) => !name.trim());
+    if (availableIndex !== -1) {
+      advanced.participants[availableIndex] = "IAN CÉSPEDES";
+    }
+  }
+}
+
 function loadState() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -208,99 +257,15 @@ function loadState() {
     const loadedState = {
       iniciantes: normalizeCategory(parsed.iniciantes),
       avanzados: normalizeCategory(parsed.avanzados),
-      migrations: parsed.migrations && typeof parsed.migrations === "object"
-        ? parsed.migrations
-        : {},
+      rosterVersion: parsed.rosterVersion,
     };
-    let migrationApplied = false;
-    let rosterUpdated = false;
-    for (const { key, categoryId, participantIndex, removeName, moveFrom, renameFrom } of ROSTER_MIGRATIONS) {
-      if (!loadedState.migrations[key]) {
-        migrationApplied = true;
-        const targetCategory = loadedState[categoryId];
-        const participant = targetCategory.participants[participantIndex];
-        if (removeName && removeName === participant.trim()) {
-          targetCategory.participants[participantIndex] = "";
-          rosterUpdated = true;
-        } else if (renameFrom) {
-          const newName = DEFAULT_PARTICIPANTS[categoryId][participantIndex].trim();
-          const oldIndex = targetCategory.participants.findIndex(
-            (savedName) => sameParticipantName(savedName, renameFrom),
-          );
-          const alreadyRegistered = targetCategory.participants.some(
-            (savedName) => sameParticipantName(savedName, newName),
-          );
-          if (oldIndex !== -1 && !alreadyRegistered) {
-            targetCategory.participants[oldIndex] = newName;
-            rosterUpdated = true;
-          } else if (oldIndex !== -1 && alreadyRegistered) {
-            targetCategory.participants[oldIndex] = "";
-            const affectedMatch = MATCHES.find((match) => match.sources.includes(`p${oldIndex}`));
-            if (affectedMatch) {
-              delete targetCategory.winners[affectedMatch.id];
-              targetCategory.matchDetails[affectedMatch.id] = emptyMatchDetails();
-              clearDownstreamResults(targetCategory, affectedMatch.id);
-            }
-            rosterUpdated = true;
-          } else if (!alreadyRegistered) {
-            const targetIndex = !participant.trim()
-              ? participantIndex
-              : targetCategory.participants.findIndex((savedName) => !savedName.trim());
-            if (targetIndex !== -1) {
-              targetCategory.participants[targetIndex] = newName;
-              rosterUpdated = true;
-            }
-          }
-        } else if (moveFrom) {
-          const { categoryId: sourceCategoryId, name } = moveFrom;
-          const sourceCategory = loadedState[sourceCategoryId];
-          const sourceIndex = sourceCategory.participants.findIndex(
-            (savedName) => sameParticipantName(savedName, name),
-          );
-          const targetIndex = targetCategory.participants[participantIndex].trim()
-            ? targetCategory.participants.findIndex((savedName) => !savedName.trim())
-            : participantIndex;
-          const alreadyInTarget = targetCategory.participants.some(
-            (savedName) => sameParticipantName(savedName, name),
-          );
-          if (sourceIndex !== -1 && (targetIndex !== -1 || alreadyInTarget)) {
-            if (!alreadyInTarget) targetCategory.participants[targetIndex] = name;
-            sourceCategory.participants[sourceIndex] = "";
-            const affectedMatch = MATCHES.find((match) => match.sources.includes(`p${sourceIndex}`));
-            if (affectedMatch) {
-              delete sourceCategory.winners[affectedMatch.id];
-              sourceCategory.matchDetails[affectedMatch.id] = emptyMatchDetails();
-              clearDownstreamResults(sourceCategory, affectedMatch.id);
-            }
-            rosterUpdated = true;
-          } else if (sourceIndex === -1 && !alreadyInTarget && targetIndex !== -1) {
-            targetCategory.participants[targetIndex] = name;
-            rosterUpdated = true;
-          }
-        } else {
-          const defaultName = DEFAULT_PARTICIPANTS[categoryId][participantIndex]?.trim();
-          const alreadyRegistered = defaultName
-            && targetCategory.participants.some(
-              (savedName) => sameParticipantName(savedName, defaultName),
-            );
-          const targetIndex = !participant.trim()
-            ? participantIndex
-            : targetCategory.participants.findIndex((savedName) => !savedName.trim());
-          if (defaultName && !alreadyRegistered && targetIndex !== -1) {
-            targetCategory.participants[targetIndex] = defaultName;
-            rosterUpdated = true;
-          }
-        }
-        loadedState.migrations[key] = true;
-      }
-    }
-    if (migrationApplied) {
+    if (loadedState.rosterVersion !== ROSTER_VERSION) {
+      migrateSavedRoster(loadedState);
+      loadedState.rosterVersion = ROSTER_VERSION;
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(loadedState));
       } catch (error) {
-        if (rosterUpdated) {
-          makeMessage(`No se pudo guardar la nueva lista en este dispositivo. ${error.message}`);
-        }
+        makeMessage(`No se pudo guardar la lista actualizada en este dispositivo. ${error.message}`);
       }
     }
     return loadedState;
@@ -328,30 +293,6 @@ function saveState() {
 function participantName(category, participantId) {
   if (!participantId || !PARTICIPANT_IDS.has(participantId)) return "";
   return category.participants[Number(participantId.slice(1))].trim();
-}
-
-function sameParticipantName(left, right) {
-  return left.trim().localeCompare(right.trim(), "es", { sensitivity: "base" }) === 0;
-}
-
-function isConfirmedParticipant(categoryId, name) {
-  return CONFIRMED_PARTICIPANTS.some(
-    (participant) => participant.categoryId === categoryId
-      && sameParticipantName(participant.name, name),
-  );
-}
-
-function createParticipantStatus(categoryId, name) {
-  const confirmed = isConfirmedParticipant(categoryId, name);
-  const icon = document.createElement("span");
-  icon.className = `participant-status-icon ${confirmed ? "is-confirmed" : "is-pending"}`;
-  icon.setAttribute("aria-hidden", "true");
-  icon.textContent = confirmed ? "✓" : "✕";
-
-  const label = document.createElement("span");
-  label.className = `participant-status-label ${confirmed ? "is-confirmed" : "is-pending"}`;
-  label.textContent = confirmed ? "LUCHADOR CONFIRMADO" : "PENDIENTE DE APROBACIÓN";
-  return { icon, label };
 }
 
 function getEntrants(category, match) {
@@ -387,12 +328,33 @@ function createRoster(categoryId) {
     input.dataset.category = categoryId;
     input.dataset.participant = String(index);
 
-    const nameRow = document.createElement("span");
-    nameRow.className = "roster-name-row";
-    nameRow.append(input);
-    label.append(labelText, nameRow);
+    label.append(labelText, input);
     container.append(label);
   }
+}
+
+// Verifica si un luchador está en la lista de confirmados de su categoría
+function isConfirmedFighter(categoryId, name) {
+  if (!name) return false;
+  const list = CONFIRMED_FIGHTERS[categoryId] || [];
+  return list.some((confirmed) => normalizeName(confirmed) === normalizeName(name));
+}
+
+function createConfirmedBadge() {
+  const badge = document.createElement("span");
+  badge.className = "entrant-confirmation-label";
+  badge.style.cssText =
+    "display:block;color:#16a34a;font-size:0.8em;font-weight:bold;letter-spacing:0.05em;";
+  badge.textContent = "✓ LUCHADOR CONFIRMADO";
+  return badge;
+}
+
+function createUnverifiedBadge() {
+  const badge = document.createElement("span");
+  badge.className = "entrant-unverified";
+  badge.style.cssText = "display:block;color:red;font-size:0.85em;font-weight:bold;";
+  badge.textContent = "❌ A ESPERA DE VERIFICACIÓN";
+  return badge;
 }
 
 function createMatchCard(categoryId, category, match) {
@@ -425,15 +387,20 @@ function createMatchCard(categoryId, category, match) {
 
     const entrantContent = document.createElement("span");
     entrantContent.className = "match-entrant-content";
+    entrantContent.style.display = "flex";
+    entrantContent.style.flexDirection = "column";
+
     const nameLabel = document.createElement("span");
     nameLabel.textContent = name || "Por definir";
     entrantContent.append(nameLabel);
-    if (name) {
-      const status = createParticipantStatus(categoryId, name);
-      entrantContent.append(status.icon);
-      status.label.classList.add("entrant-participant-status");
-      entrantContent.append(status.label);
+
+    if (isConfirmedFighter(categoryId, name)) {
+      entrant.classList.add("is-confirmed");
+      entrantContent.append(createConfirmedBadge());
+    } else if (name && SHOW_UNVERIFIED) {
+      entrantContent.append(createUnverifiedBadge());
     }
+
     entrant.append(entrantContent);
     card.append(entrant);
 
@@ -598,32 +565,41 @@ function updateEventCountdown() {
   const days = Math.floor(totalMinutes / (60 * 24));
   const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
   const minutes = totalMinutes % 60;
-  
+
   const daysEl = document.querySelector('[data-countdown="days"]');
   const hoursEl = document.querySelector('[data-countdown="hours"]');
   const minsEl = document.querySelector('[data-countdown="minutes"]');
-  
+
   if (daysEl) daysEl.textContent = String(days);
   if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
   if (minsEl) minsEl.textContent = String(minutes).padStart(2, "0");
 }
 
-function render() {
-  for (const categoryId of CATEGORY_IDS) {
-    const roster = document.querySelector(`#roster-${categoryId}`);
-    if (!roster) continue;
-    for (const field of roster.querySelectorAll(".roster-field")) {
-      field.querySelector(".participant-status-icon")?.remove();
-      field.querySelector(".participant-status-label")?.remove();
-      const input = field.querySelector("input");
-      const nameRow = field.querySelector(".roster-name-row");
-      if (input.value.trim()) {
-        const status = createParticipantStatus(categoryId, input.value);
-        nameRow.append(status.icon);
-        field.append(status.label);
-      }
+function renderRosterConfirmations(categoryId) {
+  const rosterContainer = document.querySelector(`#roster-${categoryId}`);
+  if (!rosterContainer) return;
+
+  for (const field of rosterContainer.querySelectorAll(".roster-field")) {
+    field.querySelector(".roster-confirmation")?.remove();
+    field.querySelector(".roster-unverified")?.remove();
+    const input = field.querySelector("input");
+    if (!input || !input.value.trim()) continue;
+
+    if (isConfirmedFighter(categoryId, input.value)) {
+      const badge = createConfirmedBadge();
+      badge.classList.add("roster-confirmation");
+      field.append(badge);
+    } else if (SHOW_UNVERIFIED) {
+      const badge = createUnverifiedBadge();
+      badge.classList.add("roster-unverified");
+      field.append(badge);
     }
   }
+}
+
+function render() {
+  renderRosterConfirmations("avanzados");
+  renderRosterConfirmations("iniciantes");
 
   for (const categoryId of CATEGORY_IDS) renderBracket(categoryId);
   renderSummary();
