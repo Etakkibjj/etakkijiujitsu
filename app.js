@@ -1,4 +1,5 @@
 const STORAGE_KEY = "mat-ocho-tournament-v3";
+const ROSTER_VERSION = 1;
 
 const EVENT_START = new Date("2026-11-14T13:00:00-03:00").getTime();
 
@@ -41,7 +42,7 @@ const DEFAULT_PARTICIPANTS = {
     "AGUSTIN VELAZQUEZ",
     "BENJAMIN DUVOBSKY",
     "EZEQUIEL ARGUELLO",
-    "VALENTINO DI LOLLO",
+    "VALENTINO DI ROSA",
     "GONZALO TUÑÓN",
     "JUAN ESPINOSA",
     "",
@@ -54,7 +55,7 @@ const DEFAULT_PARTICIPANTS = {
     "ALEJANDRO DELGADO",
     "AXEL FURLAN",
     "CIRO CÉSPEDES",
-    "",
+    "IAN CÉSPEDES",
   ],
 };
 
@@ -64,7 +65,7 @@ const CONFIRMED_FIGHTERS = {
     "GONZALO TUÑÓN",
     "LAUTI AGUIRRE",
     "EZEQUIEL ARGUELLO",
-    "VALENTINO DI LOLLO",
+    "VALENTINO DI ROSA",
     "BENJAMIN DUVOBSKY",
     "AGUSTIN VELAZQUEZ",
     "AGUS VELAZQUEZ",
@@ -110,6 +111,7 @@ function emptyState() {
   return {
     iniciantes: emptyCategory("iniciantes"),
     avanzados: emptyCategory("avanzados"),
+    rosterVersion: ROSTER_VERSION,
   };
 }
 
@@ -192,6 +194,56 @@ function normalizeCategory(source) {
   return category;
 }
 
+function clearParticipantResults(category, participantIndex) {
+  const firstAffectedMatch = MATCHES.find(
+    (match) => match.sources.includes(`p${participantIndex}`),
+  );
+  if (!firstAffectedMatch) return;
+
+  delete category.winners[firstAffectedMatch.id];
+  category.matchDetails[firstAffectedMatch.id] = emptyMatchDetails();
+  clearDownstreamResults(category, firstAffectedMatch.id);
+}
+
+function removeParticipant(category, participantIndex) {
+  clearParticipantResults(category, participantIndex);
+  category.participants[participantIndex] = "";
+}
+
+function migrateSavedRoster(loadedState) {
+  const beginners = loadedState.iniciantes;
+  const oldValentinoIndex = beginners.participants.findIndex(
+    (name) => normalizeName(name) === "VALENTINO DI LOLLO",
+  );
+  const valentinoIndex = beginners.participants.findIndex(
+    (name) => normalizeName(name) === "VALENTINO DI ROSA",
+  );
+  if (oldValentinoIndex !== -1) {
+    if (valentinoIndex === -1) {
+      beginners.participants[oldValentinoIndex] = "VALENTINO DI ROSA";
+    } else {
+      removeParticipant(beginners, oldValentinoIndex);
+    }
+  }
+
+  beginners.participants.forEach((name, index) => {
+    if (normalizeName(name) === "CRISTHIAN PEREZ") {
+      removeParticipant(beginners, index);
+    }
+  });
+
+  const advanced = loadedState.avanzados;
+  const ianRegistered = advanced.participants.some(
+    (name) => normalizeName(name) === "IAN CESPEDES",
+  );
+  if (!ianRegistered) {
+    const availableIndex = advanced.participants.findIndex((name) => !name.trim());
+    if (availableIndex !== -1) {
+      advanced.participants[availableIndex] = "IAN CÉSPEDES";
+    }
+  }
+}
+
 function loadState() {
   try {
     const saved = localStorage.getItem(STORAGE_KEY);
@@ -202,10 +254,21 @@ function loadState() {
       throw new Error("Los datos guardados no tienen el formato esperado.");
     }
 
-    return {
+    const loadedState = {
       iniciantes: normalizeCategory(parsed.iniciantes),
       avanzados: normalizeCategory(parsed.avanzados),
+      rosterVersion: parsed.rosterVersion,
     };
+    if (loadedState.rosterVersion !== ROSTER_VERSION) {
+      migrateSavedRoster(loadedState);
+      loadedState.rosterVersion = ROSTER_VERSION;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(loadedState));
+      } catch (error) {
+        makeMessage(`No se pudo guardar la lista actualizada en este dispositivo. ${error.message}`);
+      }
+    }
+    return loadedState;
   } catch (error) {
     makeMessage(
       `No se pudieron cargar los datos guardados. Se inició un torneo vacío. ${error.message}`,
