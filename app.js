@@ -79,6 +79,7 @@ const CONFIRMED_FIGHTERS = {
     "IAN CÉSPEDES",
     "FELIPE ORTIZ",
     "AXEL FURLAN",
+    "IGNACIO LEGUIZAMÓN",
   ],
 };
 
