@@ -45,7 +45,7 @@ const DEFAULT_PARTICIPANTS = {
     "VALENTINO DI ROSA",
     "GONZALO TUÑÓN",
     "JUAN ESPINOSA",
-    "",
+    "FEDERICO WANG",
   ],
   avanzados: [
     "EZEQUIEL MURACCIOLE",
@@ -69,6 +69,7 @@ const CONFIRMED_FIGHTERS = {
     "BENJAMIN DUVOBSKY",
     "AGUSTIN VELAZQUEZ",
     "AGUS VELAZQUEZ",
+    "FEDERICO WANG",
   ],
   avanzados: [
     "EZEQUIEL MURACCIOLE",
