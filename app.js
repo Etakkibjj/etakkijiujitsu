@@ -76,6 +76,7 @@ const CONFIRMED_FIGHTERS = {
     "CIRO CÉSPEDES",
     "ALEJANDRO DELGADO",
     "ALE DELGADO",
+    "IAN CÉSPEDES",
   ],
 };
 
