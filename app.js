@@ -33,11 +33,10 @@ const DEFAULT_PARTICIPANTS = {
     "LAUTI AGUIRRE",
     "AGUSTIN VELAZQUEZ",
     "BENJAMIN DUVOBSKY",
-    "VALENTINO DI ROSA",
-    "CRISTHIAN PEREZ",
+    "",
+    "", // Cristhian Perez removido de aquí
     "GONZALO TUÑÓN",
     "JUAN ESPINOSA",
-    "EZEQUIEL ARGÜELLO",
   ],
   avanzados: [
     "EZEQUIEL MURACCIOLE",
@@ -46,30 +45,15 @@ const DEFAULT_PARTICIPANTS = {
     "DANIEL GOLDSMAN",
     "ALEJANDRO DELGADO",
     "AXEL FURLAN",
-    "IAN CÉSPEDES",
+    "CIRO CESPEDES", // Ciro Céspedes agregado aquí
   ],
 };
-const CONFIRMED_PARTICIPANTS = [
-  { categoryId: "avanzados", name: "ALEJANDRO DELGADO" },
-  { categoryId: "avanzados", name: "EZEQUIEL MURACCIOLE" },
-  { categoryId: "iniciantes", name: "AGUSTIN VELAZQUEZ" },
-  { categoryId: "iniciantes", name: "GONZALO TUÑÓN" },
-  { categoryId: "iniciantes", name: "LAUTI AGUIRRE" },
-  { categoryId: "iniciantes", name: "BENJAMIN DUVOBSKY" },
-  { categoryId: "iniciantes", name: "VALENTINO DI ROSA" },
-  { categoryId: "iniciantes", name: "EZEQUIEL ARGÜELLO" },
-];
+
 const ROSTER_MIGRATIONS = [
-  {
-    key: "renameAgusVelazquez",
-    categoryId: "iniciantes",
-    participantIndex: 1,
-    renameFrom: "AGUS VELAZQUEZ",
-  },
   { key: "ignacioLeguizamon", categoryId: "avanzados", participantIndex: 1 },
   { key: "danielGoldsman", categoryId: "iniciantes", participantIndex: 3 },
   { key: "felipeOrtiz", categoryId: "avanzados", participantIndex: 2 },
-  { key: "cristhianPerez", categoryId: "iniciantes", participantIndex: 4 },
+  { key: "removeCristhianPerez", categoryId: "iniciantes", participantIndex: 4, removeName: "CRISTHIAN PEREZ" },
   {
     key: "removeAxelFurlan",
     categoryId: "iniciantes",
@@ -80,15 +64,13 @@ const ROSTER_MIGRATIONS = [
   { key: "addJuanEspinosa", categoryId: "iniciantes", participantIndex: 6 },
   { key: "addAlejandroDelgado", categoryId: "avanzados", participantIndex: 4 },
   { key: "addAxelFurlanAdvanced", categoryId: "avanzados", participantIndex: 5 },
-  { key: "addIanCespedesAdvanced", categoryId: "avanzados", participantIndex: 6 },
+  { key: "addCiroCespedesAdvanced", categoryId: "avanzados", participantIndex: 6 },
   {
     key: "moveDanielGoldsmanToAdvanced",
     categoryId: "avanzados",
     participantIndex: 3,
     moveFrom: { categoryId: "iniciantes", name: "DANIEL GOLDSMAN" },
   },
-  { key: "addEzequielArguello", categoryId: "iniciantes", participantIndex: 7 },
-  { key: "addValentinoDiRosa", categoryId: "iniciantes", participantIndex: 3 },
 ];
 
 function emptyCategory(categoryId) {
@@ -214,7 +196,7 @@ function loadState() {
     };
     let migrationApplied = false;
     let rosterUpdated = false;
-    for (const { key, categoryId, participantIndex, removeName, moveFrom, renameFrom } of ROSTER_MIGRATIONS) {
+    for (const { key, categoryId, participantIndex, removeName, moveFrom } of ROSTER_MIGRATIONS) {
       if (!loadedState.migrations[key]) {
         migrationApplied = true;
         const targetCategory = loadedState[categoryId];
@@ -222,46 +204,17 @@ function loadState() {
         if (removeName && removeName === participant.trim()) {
           targetCategory.participants[participantIndex] = "";
           rosterUpdated = true;
-        } else if (renameFrom) {
-          const newName = DEFAULT_PARTICIPANTS[categoryId][participantIndex].trim();
-          const oldIndex = targetCategory.participants.findIndex(
-            (savedName) => sameParticipantName(savedName, renameFrom),
-          );
-          const alreadyRegistered = targetCategory.participants.some(
-            (savedName) => sameParticipantName(savedName, newName),
-          );
-          if (oldIndex !== -1 && !alreadyRegistered) {
-            targetCategory.participants[oldIndex] = newName;
-            rosterUpdated = true;
-          } else if (oldIndex !== -1 && alreadyRegistered) {
-            targetCategory.participants[oldIndex] = "";
-            const affectedMatch = MATCHES.find((match) => match.sources.includes(`p${oldIndex}`));
-            if (affectedMatch) {
-              delete targetCategory.winners[affectedMatch.id];
-              targetCategory.matchDetails[affectedMatch.id] = emptyMatchDetails();
-              clearDownstreamResults(targetCategory, affectedMatch.id);
-            }
-            rosterUpdated = true;
-          } else if (!alreadyRegistered) {
-            const targetIndex = !participant.trim()
-              ? participantIndex
-              : targetCategory.participants.findIndex((savedName) => !savedName.trim());
-            if (targetIndex !== -1) {
-              targetCategory.participants[targetIndex] = newName;
-              rosterUpdated = true;
-            }
-          }
         } else if (moveFrom) {
           const { categoryId: sourceCategoryId, name } = moveFrom;
           const sourceCategory = loadedState[sourceCategoryId];
           const sourceIndex = sourceCategory.participants.findIndex(
-            (savedName) => sameParticipantName(savedName, name),
+            (savedName) => savedName.trim() === name,
           );
           const targetIndex = targetCategory.participants[participantIndex].trim()
             ? targetCategory.participants.findIndex((savedName) => !savedName.trim())
             : participantIndex;
           const alreadyInTarget = targetCategory.participants.some(
-            (savedName) => sameParticipantName(savedName, name),
+            (savedName) => savedName.trim() === name,
           );
           if (sourceIndex !== -1 && (targetIndex !== -1 || alreadyInTarget)) {
             if (!alreadyInTarget) targetCategory.participants[targetIndex] = name;
@@ -280,9 +233,7 @@ function loadState() {
         } else {
           const defaultName = DEFAULT_PARTICIPANTS[categoryId][participantIndex]?.trim();
           const alreadyRegistered = defaultName
-            && targetCategory.participants.some(
-              (savedName) => sameParticipantName(savedName, defaultName),
-            );
+            && targetCategory.participants.some((savedName) => savedName.trim() === defaultName);
           const targetIndex = !participant.trim()
             ? participantIndex
             : targetCategory.participants.findIndex((savedName) => !savedName.trim());
@@ -330,30 +281,6 @@ function participantName(category, participantId) {
   return category.participants[Number(participantId.slice(1))].trim();
 }
 
-function sameParticipantName(left, right) {
-  return left.trim().localeCompare(right.trim(), "es", { sensitivity: "base" }) === 0;
-}
-
-function isConfirmedParticipant(categoryId, name) {
-  return CONFIRMED_PARTICIPANTS.some(
-    (participant) => participant.categoryId === categoryId
-      && sameParticipantName(participant.name, name),
-  );
-}
-
-function createParticipantStatus(categoryId, name) {
-  const confirmed = isConfirmedParticipant(categoryId, name);
-  const icon = document.createElement("span");
-  icon.className = `participant-status-icon ${confirmed ? "is-confirmed" : "is-pending"}`;
-  icon.setAttribute("aria-hidden", "true");
-  icon.textContent = confirmed ? "✓" : "✕";
-
-  const label = document.createElement("span");
-  label.className = `participant-status-label ${confirmed ? "is-confirmed" : "is-pending"}`;
-  label.textContent = confirmed ? "LUCHADOR CONFIRMADO" : "PENDIENTE DE APROBACIÓN";
-  return { icon, label };
-}
-
 function getEntrants(category, match) {
   return match.sources.map((sourceId) => {
     if (PARTICIPANT_IDS.has(sourceId)) return sourceId;
@@ -387,12 +314,22 @@ function createRoster(categoryId) {
     input.dataset.category = categoryId;
     input.dataset.participant = String(index);
 
-    const nameRow = document.createElement("span");
-    nameRow.className = "roster-name-row";
-    nameRow.append(input);
-    label.append(labelText, nameRow);
+    label.append(labelText, input);
     container.append(label);
   }
+}
+
+// Función auxiliar para verificar si un luchador debe estar confirmado
+function isConfirmedFighter(categoryId, name) {
+  if (!name) return false;
+  const normalized = name.trim().toUpperCase();
+  if (categoryId === "avanzados") {
+    return normalized === "ALEJANDRO DELGADO" || normalized === "CIRO CESPEDES" || normalized === "CIRO CÉSPEDES";
+  }
+  if (categoryId === "iniciantes") {
+    return normalized === "AGUSTIN VELAZQUEZ" || normalized === "AGUS VELAZQUEZ";
+  }
+  return false;
 }
 
 function createMatchCard(categoryId, category, match) {
@@ -428,12 +365,31 @@ function createMatchCard(categoryId, category, match) {
     const nameLabel = document.createElement("span");
     nameLabel.textContent = name || "Por definir";
     entrantContent.append(nameLabel);
-    if (name) {
-      const status = createParticipantStatus(categoryId, name);
-      entrantContent.append(status.icon);
-      status.label.classList.add("entrant-participant-status");
-      entrantContent.append(status.label);
+    
+    // Aplicar confirmación o leyenda de pendiente de verificación
+    if (isConfirmedFighter(categoryId, name)) {
+      entrant.classList.add("is-confirmed");
+      const confirmation = document.createElement("span");
+      confirmation.className = "entrant-confirmation";
+      confirmation.setAttribute("aria-label", "Luchador confirmado");
+      confirmation.textContent = "✓";
+      entrantContent.append(confirmation);
+
+      const confirmationLabel = document.createElement("span");
+      confirmationLabel.className = "entrant-confirmation-label";
+      confirmationLabel.textContent = "LUCHADOR CONFIRMADO";
+      entrantContent.append(confirmationLabel);
+    } else if (name) {
+      const unverified = document.createElement("span");
+      unverified.className = "entrant-unverified";
+      unverified.style.color = "red";
+      unverified.style.display = "block";
+      unverified.style.fontSize = "0.85em";
+      unverified.style.fontWeight = "bold";
+      unverified.textContent = "❌ A ESPERA DE VERIFICACIÓN";
+      entrantContent.append(unverified);
     }
+    
     entrant.append(entrantContent);
     card.append(entrant);
 
@@ -462,296 +418,3 @@ function createMatchCard(categoryId, category, match) {
   const submissionLabel = document.createElement("label");
   submissionLabel.className = "match-field";
   const submissionTitle = document.createElement("span");
-  submissionTitle.textContent = "SUMISIÓN";
-  const submissionInput = document.createElement("input");
-  submissionInput.type = "text";
-  submissionInput.maxLength = 80;
-  submissionInput.placeholder = "Tipo de sumisión";
-  submissionInput.value = details.submission;
-  submissionInput.dataset.category = categoryId;
-  submissionInput.dataset.match = match.id;
-  submissionInput.dataset.matchField = "submission";
-  submissionInput.setAttribute("aria-label", `Sumisión del combate ${match.number}, ${match.round}`);
-  submissionLabel.append(submissionTitle, submissionInput);
-
-  const overtimeLabel = document.createElement("label");
-  overtimeLabel.className = "overtime-toggle";
-  const overtimeInput = document.createElement("input");
-  overtimeInput.type = "checkbox";
-  overtimeInput.checked = details.overtime;
-  overtimeInput.dataset.category = categoryId;
-  overtimeInput.dataset.match = match.id;
-  overtimeInput.dataset.matchField = "overtime";
-  overtimeInput.setAttribute("aria-label", `Combate ${match.number} fue a overtime`);
-  const overtimeTitle = document.createElement("span");
-  overtimeTitle.textContent = "OVERTIME";
-  overtimeLabel.append(overtimeInput, overtimeTitle);
-
-  const scoreLabel = document.createElement("label");
-  scoreLabel.className = "match-field overtime-score";
-  const scoreTitle = document.createElement("span");
-  scoreTitle.textContent = "PUNTUACIÓN FINAL OVERTIME";
-  const scoreInput = document.createElement("input");
-  scoreInput.type = "text";
-  scoreInput.maxLength = 30;
-  scoreInput.placeholder = "Puntuación";
-  scoreInput.value = details.overtimeScore;
-  scoreInput.disabled = !details.overtime;
-  scoreInput.dataset.category = categoryId;
-  scoreInput.dataset.match = match.id;
-  scoreInput.dataset.matchField = "overtimeScore";
-  scoreInput.setAttribute("aria-label", `Puntuación final overtime del combate ${match.number}, ${match.round}`);
-  scoreLabel.append(scoreTitle, scoreInput);
-
-  detailFields.append(submissionLabel, overtimeLabel, scoreLabel);
-  card.append(detailFields);
-
-  const resetButton = document.createElement("button");
-  resetButton.className = "match-reset-button";
-  resetButton.type = "button";
-  resetButton.dataset.action = "reset-match";
-  resetButton.dataset.category = categoryId;
-  resetButton.dataset.match = match.id;
-  resetButton.textContent = "Reiniciar resultado de esta lucha";
-  card.append(resetButton);
-
-  return card;
-}
-
-function renderBracket(categoryId) {
-  const category = state[categoryId];
-  const container = document.querySelector(`#bracket-${categoryId}`);
-  if (!container) return;
-  container.replaceChildren();
-
-  for (const round of ROUNDS) {
-    const column = document.createElement("div");
-    column.className = "round-column";
-
-    const title = document.createElement("div");
-    title.className = "round-title";
-    const label = document.createElement("span");
-    label.textContent = round.label;
-    const count = document.createElement("small");
-    const completed = round.matchIds.filter((matchId) => category.winners[matchId]).length;
-    count.textContent = `${completed}/${round.matchIds.length}`;
-    title.append(label, count);
-    column.append(title);
-
-    for (const matchId of round.matchIds) {
-      column.append(createMatchCard(categoryId, category, MATCH_BY_ID.get(matchId)));
-    }
-    container.append(column);
-  }
-
-  const registered = category.participants.filter((name) => name.trim()).length;
-  const countEl = document.querySelector(`#count-${categoryId}`);
-  if (countEl) countEl.textContent = `${registered} / 8`;
-}
-
-function renderSummary() {
-  const participants = CATEGORY_IDS.reduce(
-    (total, categoryId) => total + state[categoryId].participants.filter((name) => name.trim()).length,
-    0,
-  );
-  const matches = CATEGORY_IDS.reduce(
-    (total, categoryId) => total + Object.keys(state[categoryId].winners).length,
-    0,
-  );
-  const partTotalEl = document.querySelector("#participant-total");
-  if (partTotalEl) {
-    partTotalEl.replaceChildren(
-      document.createTextNode(`${participants} `),
-      Object.assign(document.createElement("small"), { textContent: "/ 16" }),
-    );
-  }
-  const matchTotalEl = document.querySelector("#match-total");
-  if (matchTotalEl) {
-    matchTotalEl.replaceChildren(
-      document.createTextNode(`${matches} `),
-      Object.assign(document.createElement("small"), { textContent: "/ 14" }),
-    );
-  }
-  for (const categoryId of CATEGORY_IDS) {
-    const registered = state[categoryId].participants.filter((name) => name.trim()).length;
-    const availEl = document.querySelector(`#available-${categoryId}`);
-    if (availEl) availEl.textContent = String(8 - registered);
-  }
-}
-
-function updateEventCountdown() {
-  const remaining = EVENT_START - Date.now();
-  const values = document.querySelector("#countdown-values");
-  const started = document.querySelector("#countdown-started");
-  const label = document.querySelector("#countdown-label");
-
-  if (!values || !started || !label) return;
-
-  if (remaining <= 0) {
-    values.hidden = true;
-    started.hidden = false;
-    label.textContent = "TORNEO EN CURSO";
-    return;
-  }
-
-  const totalMinutes = Math.floor(remaining / 60_000);
-  const days = Math.floor(totalMinutes / (60 * 24));
-  const hours = Math.floor((totalMinutes % (60 * 24)) / 60);
-  const minutes = totalMinutes % 60;
-  
-  const daysEl = document.querySelector('[data-countdown="days"]');
-  const hoursEl = document.querySelector('[data-countdown="hours"]');
-  const minsEl = document.querySelector('[data-countdown="minutes"]');
-  
-  if (daysEl) daysEl.textContent = String(days);
-  if (hoursEl) hoursEl.textContent = String(hours).padStart(2, "0");
-  if (minsEl) minsEl.textContent = String(minutes).padStart(2, "0");
-}
-
-function render() {
-  for (const categoryId of CATEGORY_IDS) {
-    const roster = document.querySelector(`#roster-${categoryId}`);
-    if (!roster) continue;
-    for (const field of roster.querySelectorAll(".roster-field")) {
-      field.querySelector(".participant-status-icon")?.remove();
-      field.querySelector(".participant-status-label")?.remove();
-      const input = field.querySelector("input");
-      const nameRow = field.querySelector(".roster-name-row");
-      if (input.value.trim()) {
-        const status = createParticipantStatus(categoryId, input.value);
-        nameRow.append(status.icon);
-        field.append(status.label);
-      }
-    }
-  }
-
-  for (const categoryId of CATEGORY_IDS) renderBracket(categoryId);
-  renderSummary();
-}
-
-updateEventCountdown();
-window.setInterval(updateEventCountdown, 1_000);
-
-document.addEventListener("input", (event) => {
-  const matchField = event.target.closest("[data-match-field]");
-  if (matchField && matchField.dataset.matchField !== "overtime") {
-    const category = state[matchField.dataset.category];
-    const details = category.matchDetails[matchField.dataset.match];
-    const field = matchField.dataset.matchField;
-    details[field] = matchField.value.slice(0, field === "submission" ? 80 : 30);
-    saveState();
-    return;
-  }
-
-  const input = event.target.closest("[data-participant]");
-  if (!input) return;
-
-  const category = state[input.dataset.category];
-  const index = Number(input.dataset.participant);
-  const previousName = category.participants[index].trim();
-  const nextName = input.value.slice(0, 60);
-  category.participants[index] = nextName;
-
-  if (previousName && previousName !== nextName.trim()) {
-    const firstAffectedMatch = MATCHES.find((match) => match.sources.includes(`p${index}`));
-    if (firstAffectedMatch) {
-      clearDownstreamResults(category, firstAffectedMatch.id);
-      delete category.winners[firstAffectedMatch.id];
-      category.matchDetails[firstAffectedMatch.id] = emptyMatchDetails();
-    }
-  }
-
-  saveState();
-  render();
-});
-
-document.addEventListener("change", (event) => {
-  const input = event.target.closest('[data-match-field="overtime"]');
-  if (!input) return;
-
-  const category = state[input.dataset.category];
-  const details = category.matchDetails[input.dataset.match];
-  details.overtime = input.checked;
-  if (!details.overtime) details.overtimeScore = "";
-  const scoreInput = input.closest(".match-card")?.querySelector('[data-match-field="overtimeScore"]');
-  if (scoreInput) {
-    scoreInput.disabled = !details.overtime;
-    if (!details.overtime) scoreInput.value = "";
-  }
-  saveState();
-});
-
-document.addEventListener("click", (event) => {
-  const button = event.target.closest("[data-action]");
-  if (!button) return;
-
-  const category = state[button.dataset.category];
-  if (button.dataset.action === "winner") {
-    const { match: matchId, participant: participantId } = button.dataset;
-    const match = MATCH_BY_ID.get(matchId);
-    const entrants = getEntrants(category, match);
-    if (
-      !participantId
-      || !entrants.includes(participantId)
-      || entrants.some((entrantId) => !participantName(category, entrantId))
-    ) {
-      return;
-    }
-    if (category.winners[matchId] !== participantId) {
-      clearDownstreamResults(category, matchId);
-      category.winners[matchId] = participantId;
-      category.matchDetails[matchId] = emptyMatchDetails();
-      saveState();
-      render();
-    }
-    return;
-  }
-
-  if (button.dataset.action === "reset-match") {
-    const { match: matchId, category: categoryId } = button.dataset;
-    const categoryName = categoryId === "iniciantes" ? "Iniciantes" : "Avanzados";
-    const match = MATCH_BY_ID.get(matchId);
-    const details = category.matchDetails[matchId];
-    const hasDetails = category.winners[matchId]
-      || details.submission
-      || details.overtime
-      || details.overtimeScore;
-    if (
-      hasDetails
-      && !window.confirm(
-        `¿Reiniciar el resultado de ${match.round.toLowerCase()} ${match.number} de ${categoryName}? También se borrarán los resultados de las luchas posteriores.`,
-      )
-    ) {
-      return;
-    }
-    clearDownstreamResults(category, matchId);
-    delete category.winners[matchId];
-    category.matchDetails[matchId] = emptyMatchDetails();
-    saveState();
-    render();
-    return;
-  }
-
-  if (button.dataset.action === "reset") {
-    const categoryId = button.dataset.category;
-    const categoryName = categoryId === "iniciantes" ? "Iniciantes" : "Avanzados";
-    if (!window.confirm(`¿Reiniciar la categoría ${categoryName}? Se borrarán sus nombres y resultados.`)) {
-      return;
-    }
-    state[categoryId] = emptyCategory(categoryId);
-    document.querySelectorAll(`[data-category="${categoryId}"][data-participant]`).forEach((input) => {
-      input.value = state[categoryId].participants[Number(input.dataset.participant)];
-    });
-    saveState();
-    render();
-  }
-});
-
-for (const categoryId of CATEGORY_IDS) {
-  createRoster(categoryId);
-  state[categoryId].participants.forEach((name, index) => {
-    const inputEl = document.querySelector(`[data-category="${categoryId}"][data-participant="${index}"]`);
-    if (inputEl) inputEl.value = name;
-  });
-}
-render();
