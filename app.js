@@ -78,6 +78,7 @@ const CONFIRMED_FIGHTERS = {
     "ALE DELGADO",
     "IAN CÉSPEDES",
     "FELIPE ORTIZ",
+    "AXEL FURLAN",
   ],
 };
 
