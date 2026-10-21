@@ -70,6 +70,7 @@ const CONFIRMED_FIGHTERS = {
     "AGUSTIN VELAZQUEZ",
     "AGUS VELAZQUEZ",
     "FEDERICO WANG",
+    "JUAN ESPINOSA",
   ],
   avanzados: [
     "EZEQUIEL MURACCIOLE",
