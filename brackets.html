@@ -33,6 +33,7 @@
                         electricBlue: '#0066ff',
                         deepBlue: '#030b1e',
                         cardBg: 'rgba(5, 18, 48, 0.9)',
+                        whatsappGreen: '#25D366',
                     },
                     fontFamily: {
                         heading: ['Orbitron', 'sans-serif'],
@@ -75,6 +76,11 @@
         .neon-glow-box {
             box-shadow: 0 0 15px rgba(0, 102, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
             border: 1px solid rgba(0, 240, 255, 0.5);
+        }
+
+        .whatsapp-glow-box {
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5), inset 0 0 10px rgba(37, 211, 102, 0.2);
+            border: 1px solid rgba(37, 211, 102, 0.7);
         }
 
         .champion-glow {
@@ -442,14 +448,27 @@
         </div>
 
         <!-- PIE DE PÁGINA E INFORMACIÓN GENERAL -->
-        <footer class="w-full text-center mt-12 space-y-4">
+        <footer class="w-full text-center mt-12 space-y-4 flex flex-col items-center">
+            
+            <!-- Entradas disponibles card -->
             <div class="bg-blue-950/90 border border-cyan-400/50 rounded-2xl py-3 px-8 inline-block shadow-2xl">
                 <p class="font-heading text-lg sm:text-2xl text-white font-bold tracking-wide">
                     Entradas disponibles al público <span class="text-cyan-300 font-extrabold">10k</span>
                 </p>
             </div>
 
-            <div class="text-sm sm:text-base text-cyan-200 font-semibold tracking-wide">
+            <!-- Botón / Enlace directo de WhatsApp para conseguir entradas -->
+            <a href="https://wa.me/5491131977287?text=Hola!%20Quiero%20conseguir%20mis%20entradas%20para%20el%20torneo%20de%20Jiu%20Jitsu" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-500 text-emerald-300 hover:text-white rounded-2xl py-3 px-6 sm:px-8 flex items-center justify-center gap-3 shadow-lg hover:shadow-emerald-500/50 transition-all duration-300 transform hover:-translate-y-0.5 whatsapp-glow-box group max-w-lg w-full">
+                <i class="fa-brands fa-whatsapp text-emerald-400 text-2xl sm:text-3xl group-hover:scale-110 transition-transform"></i>
+                <span class="font-body text-xs sm:text-sm md:text-base font-bold tracking-wide text-center">
+                    Conseguí tus entradas por WhatsApp al <span class="text-white font-extrabold underline underline-offset-2">113 197 7287</span>
+                </span>
+            </a>
+
+            <div class="text-sm sm:text-base text-cyan-200 font-semibold tracking-wide pt-2">
                 <span>Inicio 13:00 hs</span>
                 <span class="mx-3 text-cyan-500">|</span>
                 <span>Puertas abren 12:15 hs</span>
