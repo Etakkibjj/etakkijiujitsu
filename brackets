@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Only Jiu Jitsu Tournament</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Montserrat:ital,wght@0,400;0,700;0,900;1,800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neonBlue: '#00f0ff',
+                        electricBlue: '#0066ff',
+                        deepBlue: '#030b1e',
+                        cardBg: 'rgba(5, 18, 48, 0.85)',
+                    },
+                    fontFamily: {
+                        heading: ['Orbitron', 'sans-serif'],
+                        subheading: ['Teko', 'sans-serif'],
+                        body: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Electric & Neon Backgrounds */
+        body {
+            background-color: #020612;
+            background-image: 
+                radial-gradient(circle at 50% 15%, rgba(0, 102, 255, 0.35), transparent 60%),
+                radial-gradient(circle at 50% 65%, rgba(0, 240, 255, 0.25), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(2, 6, 18, 0.95), #020612);
+            background-attachment: fixed;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Lightning Canvas Overlay */
+        #lightning-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.6;
+        }
+
+        /* Glow effects */
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.6), 0 0 30px rgba(0, 102, 255, 0.4);
+        }
+
+        .neon-glow-box {
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.3);
+            border: 1px solid rgba(0, 240, 255, 0.6);
+        }
+
+        .neon-glow-box-winner {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 12px rgba(255, 215, 0, 0.5);
+            border: 2px solid #ffd700;
+        }
+
+        /* Bracket connecting lines */
+        .bracket-connector {
+            position: relative;
+        }
+        
+        @media (min-width: 1024px) {
+            .bracket-connector-left::after {
+                content: '';
+                position: absolute;
+                right: -20px;
+                top: 50%;
+                width: 20px;
+                height: 2px;
+                background-color: rgba(0, 240, 255, 0.6);
+                box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+            }
+            .bracket-connector-right::before {
+                content: '';
+                position: absolute;
+                left: -20px;
+                top: 50%;
+                width: 20px;
+                height: 2px;
+                background-color: rgba(0, 240, 255, 0.6);
+                box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
+            }
+        }
+
+        /* Metallic Text Effect */
+        .metallic-title {
+            background: linear-gradient(180deg, #ffffff 0%, #b0dfff 50%, #0088ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
+        }
+
+        .script-title {
+            font-family: 'Teko', sans-serif;
+            letter-spacing: 1px;
+            background: linear-gradient(180deg, #66d9ff 0%, #0099ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020612;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0066ff;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f0ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center relative py-6 px-2 sm:px-4">
+
+    <!-- Background Lightning Simulation Canvas -->
+    <canvas id="lightning-canvas"></canvas>
+
+    <!-- App Container -->
+    <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
+
+        <!-- Control Bar -->
+        <div class="w-full flex justify-between items-center mb-4 px-2 text-xs sm:text-sm text-cyan-300 font-mono">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-yellow-400 animate-pulse"></i> INTERACTIVE MODE</span>
+            <button onclick="resetBrackets()" class="bg-blue-900/60 hover:bg-cyan-500 hover:text-black border border-cyan-400 px-3 py-1 rounded transition duration-300 flex items-center gap-1">
+                <i class="fa-solid fa-rotate-right"></i> Reiniciar Llaves
+            </button>
+        </div>
+
+        <!-- HEADER SECTION -->
+        <header class="text-center w-full mb-6">
+            <h1 class="font-heading text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase metallic-title leading-none mb-1">
+                SUBMISSION ONLY JIU JITSU TOURNAMENT
+            </h1>
+            <p class="font-subheading text-3xl sm:text-5xl md:text-6xl text-cyan-300 italic font-bold leading-none uppercase drop-shadow-[0_0_10px_rgba(0,240,255,0.6)]">
+                Sábado 14 de noviembre
+            </p>
+            <p class="font-body text-sm sm:text-lg md:text-xl text-white font-semibold tracking-wide uppercase mt-1">
+                dos torneos super 8, dos títulos en juego.
+            </p>
+        </header>
+
+        <!-- MAIN CONTENT: BRACKETS CONTAINER -->
+        <main class="w-full space-y-10">
+
+            <!-- ================= SECTION 1: INICIANTES (FAIXA BLANCA) ================= -->
+            <section class="w-full bg-deepBlue/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-cyan-500/30 shadow-2xl relative overflow-hidden">
+                <!-- Header Category -->
+                <div class="text-center mb-6">
+                    <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
+                        INICIANTES
+                    </h2>
+                    <span class="bg-cyan-900/60 text-cyan-200 border border-cyan-400/50 text-xs sm:text-sm font-bold tracking-widest px-4 py-0.5 rounded-full uppercase">
+                        FAIXA BLANCA
+                    </span>
+                </div>
+
+                <!-- Super 8 Layout Container -->
+                <div class="grid grid-cols-1 lg:grid-cols-11 gap-4 items-center">
+                    
+                    <!-- Left Bracket (Matches 1 & 2) -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <!-- Match 1 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE A1</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('iniciantes', 0, 'Lautaro Aguirre')" id="init-0-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>LAUTARO AGUIRRE</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('iniciantes', 0, 'Juan Espinoza')" id="init-0-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>JUAN ESPINOZA</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Match 2 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE A2</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('iniciantes', 1, 'Gonzalo Tuñon')" id="init-1-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>GONZALO TUÑON</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('iniciantes', 1, 'Valentino Di Rosa')" id="init-1-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>VALENTINO DI ROSA</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Logo / Semis & Final Display -->
+                    <div class="lg:col-span-3 flex flex-col items-center justify-center my-4 lg:my-0 text-center">
+                        <!-- EBI Rules Emblem -->
+                        <div class="relative group cursor-pointer p-4">
+                            <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/70 shadow-[0_0_25px_rgba(0,240,255,0.4)] group-hover:scale-105 transition duration-300">
+                                <i class="fa-solid fa-shield-halved text-3xl sm:text-4xl text-cyan-300 mb-1"></i>
+                                <span class="font-heading font-black text-xl text-white tracking-widest leading-none">EBI</span>
+                                <span class="font-subheading text-lg text-cyan-400 tracking-wider leading-none">RULES</span>
+                            </div>
+                        </div>
+
+                        <!-- Semi/Final Live Result Banner -->
+                        <div id="iniciantes-status" class="mt-2 text-xs font-mono text-cyan-300 bg-blue-950/80 border border-cyan-500/50 px-3 py-1.5 rounded-lg w-full max-w-xs min-h-[38px] flex items-center justify-center">
+                            Haz clic en un atleta para avanzar
+                        </div>
+                    </div>
+
+                    <!-- Right Bracket (Matches 3 & 4) -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <!-- Match 3 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE B1</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('iniciantes', 2, 'Agustin Velazquez')" id="init-2-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>AGUSTIN VELAZQUEZ</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('iniciantes', 2, 'Federico Wang')" id="init-2-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>FEDERICO WANG</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Match 4 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE B2</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('iniciantes', 3, 'Benjamin Duvobsky')" id="init-3-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>BENJAMIN DUVOBSKY</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('iniciantes', 3, 'Ezequiel Argüello')" id="init-3-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>EZEQUIEL ARGÜELLO</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- ================= SECTION 2: AVANZADOS (AZUL-ROXA) ================= -->
+            <section class="w-full bg-deepBlue/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
+                <!-- Header Category -->
+                <div class="text-center mb-6">
+                    <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
+                        AVANZADOS
+                    </h2>
+                    <span class="bg-blue-900/60 text-cyan-200 border border-blue-400/50 text-xs sm:text-sm font-bold tracking-widest px-4 py-0.5 rounded-full uppercase">
+                        AZUL – ROXA
+                    </span>
+                </div>
+
+                <!-- Super 8 Layout Container -->
+                <div class="grid grid-cols-1 lg:grid-cols-11 gap-4 items-center">
+                    
+                    <!-- Left Bracket (Matches 1 & 2) -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <!-- Match 1 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE A1</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('avanzados', 0, 'Ezequiel Muracciole')" id="av-0-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>EZEQUIEL MURACCIOLE</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('avanzados', 0, 'Daniel Goldsman')" id="av-0-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>DANIEL GOLDSMAN</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Match 2 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE A2</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('avanzados', 1, 'Ciro Cespedes')" id="av-1-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>CIRO CESPEDES</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('avanzados', 1, 'Ignacio Leguizamon')" id="av-1-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>IGNACIO LEGUIZAMON</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Center Logo Emblem -->
+                    <div class="lg:col-span-3 flex flex-col items-center justify-center my-4 lg:my-0 text-center">
+                        <div class="relative group cursor-pointer p-2">
+                            <!-- Etakki Dojo Emblem Circular Badge -->
+                            <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/90 shadow-[0_0_25px_rgba(0,102,255,0.6)] p-2 group-hover:scale-105 transition duration-300">
+                                <div class="text-[8px] sm:text-[9px] font-bold tracking-tighter text-cyan-300 uppercase">ETAKKI DOJO JIU JITSU TEAM</div>
+                                <i class="fa-solid fa-gem text-2xl text-cyan-200 my-1"></i>
+                                <div class="text-[8px] sm:text-[9px] font-bold tracking-widest text-white uppercase">BUENOS AIRES - ARGENTINA</div>
+                            </div>
+                        </div>
+
+                        <!-- Semi/Final Live Result Banner -->
+                        <div id="avanzados-status" class="mt-2 text-xs font-mono text-cyan-300 bg-blue-950/80 border border-cyan-500/50 px-3 py-1.5 rounded-lg w-full max-w-xs min-h-[38px] flex items-center justify-center">
+                            Haz clic en un atleta para avanzar
+                        </div>
+                    </div>
+
+                    <!-- Right Bracket (Matches 3 & 4) -->
+                    <div class="lg:col-span-4 space-y-4">
+                        <!-- Match 3 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE B1</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('avanzados', 2, 'Felipe Ortiz')" id="av-2-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>FELIPE ORTIZ</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('avanzados', 2, 'Ian Cespedes')" id="av-2-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>IAN CESPEDES</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Match 4 -->
+                        <div class="bracket-card bg-cardBg rounded-xl p-2 sm:p-3 neon-glow-box transition duration-300">
+                            <div class="text-[10px] text-cyan-400 font-mono mb-1 flex justify-between">
+                                <span>LLAVE B2</span><span class="text-gray-400">CUARTOS</span>
+                            </div>
+                            <div class="space-y-1.5">
+                                <button onclick="selectWinner('avanzados', 3, 'Alejandro Delgado')" id="av-3-m1" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>ALEJANDRO DELGADO</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                                <button onclick="selectWinner('avanzados', 3, 'Axel Furlan')" id="av-3-m2" class="fighter-btn w-full text-left bg-blue-950/80 hover:bg-blue-800/90 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 hover:border-cyan-400 transition flex justify-between items-center text-sm sm:text-base">
+                                    <span>AXEL FURLAN</span>
+                                    <i class="fa-solid fa-trophy text-yellow-400 opacity-0 transition-opacity"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <!-- FOOTER INFO SECTION -->
+        <footer class="w-full text-center mt-10 space-y-3">
+            <!-- Ticket Info -->
+            <div class="bg-blue-950/80 border border-cyan-400/40 rounded-xl py-3 px-6 inline-block shadow-lg">
+                <p class="font-heading text-xl sm:text-3xl text-white font-bold tracking-wide">
+                    Entradas disponibles al público <span class="text-cyan-300">10k</span>
+                </p>
+            </div>
+
+            <!-- Schedule -->
+            <div class="text-sm sm:text-lg text-cyan-200 font-semibold tracking-wide">
+                <span>Inicio 13:00 hs</span>
+                <span class="mx-2 text-cyan-500">|</span>
+                <span>Puertas abren 12:15 hs</span>
+            </div>
+
+            <!-- Location Badge -->
+            <div class="pt-2">
+                <h3 class="font-subheading text-3xl sm:text-5xl font-black italic metallic-title uppercase tracking-wider">
+                    AMBROSETTI 826 - CABALLITO
+                </h3>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- JAVASCRIPT: BRACKET INTERACTIVITY & LIGHTNING CANVAS -->
+    <script>
+        // Bracket State Management
+        const brackets = {
+            iniciantes: [null, null, null, null],
+            avanzados: [null, null, null, null]
+        };
+
+        function selectWinner(category, matchIndex, name) {
+            const prefix = category === 'iniciantes' ? 'init' : 'av';
+            
+            // Set match winner
+            brackets[category][matchIndex] = name;
+
+            // Highlight match elements
+            const btn1 = document.getElementById(`${prefix}-${matchIndex}-m1`);
+            const btn2 = document.getElementById(`${prefix}-${matchIndex}-m2`);
+
+            [btn1, btn2].forEach(btn => {
+                if (btn.innerText.trim().startsWith(name)) {
+                    btn.classList.add('bg-cyan-500', 'text-black', 'border-yellow-400');
+                    btn.classList.remove('bg-blue-950/80', 'text-white');
+                    btn.querySelector('.fa-trophy').classList.remove('opacity-0');
+                } else {
+                    btn.classList.remove('bg-cyan-500', 'text-black', 'border-yellow-400');
+                    btn.classList.add('bg-blue-950/80', 'text-white');
+                    btn.querySelector('.fa-trophy').classList.add('opacity-0');
+                }
+            });
+
+            updateCategoryStatus(category);
+        }
+
+        function updateCategoryStatus(category) {
+            const statusElem = document.getElementById(`${category}-status`);
+            const winners = brackets[category];
+            const selectedCount = winners.filter(Boolean).length;
+
+            if (selectedCount < 4) {
+                statusElem.innerHTML = `<span class="text-cyan-300">Cuartos: ${selectedCount}/4 Ganadores clasificados</span>`;
+            } else {
+                statusElem.innerHTML = `
+                    <div class="text-yellow-300 font-bold">
+                        <i class="fa-solid fa-crown mr-1"></i> Semifinales listas
+                    </div>
+                `;
+            }
+        }
+
+        function resetBrackets() {
+            brackets.iniciantes = [null, null, null, null];
+            brackets.avanzados = [null, null, null, null];
+
+            document.querySelectorAll('.fighter-btn').forEach(btn => {
+                btn.classList.remove('bg-cyan-500', 'text-black', 'border-yellow-400');
+                btn.classList.add('bg-blue-950/80', 'text-white');
+                btn.querySelector('.fa-trophy').classList.add('opacity-0');
+            });
+
+            document.getElementById('iniciantes-status').innerText = 'Haz clic en un atleta para avanzar';
+            document.getElementById('avanzados-status').innerText = 'Haz clic en un atleta para avanzar';
+        }
+
+        /* Ambient Electric Lightning Visual Effect Canvas */
+        const canvas = document.getElementById('lightning-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function createLightning() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (Math.random() < 0.25) {
+                const startX = Math.random() * canvas.width;
+                let currentX = startX;
+                let currentY = 0;
+
+                ctx.beginPath();
+                ctx.moveTo(currentX, currentY);
+                ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#0066ff';
+                ctx.lineWidth = Math.random() * 2 + 1;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = '#00f0ff';
+
+                while (currentY < canvas.height) {
+                    currentX += (Math.random() - 0.5) * 40;
+                    currentY += Math.random() * 30 + 10;
+                    ctx.lineTo(currentX, currentY);
+                }
+                ctx.stroke();
+            }
+
+            setTimeout(() => {
+                requestAnimationFrame(createLightning);
+            }, Math.random() * 400 + 100);
+        }
+
+        window.onload = function() {
+            createLightning();
+        }
+    </script>
+</body>
+</html>
