@@ -1,9 +1,23 @@
+<!-- =================================================================
+     GUÍA DE INTEGRACIÓN RÁPIDA EN TU PROYECTO O GITHUB PAGES
+     =================================================================
+     1. Si vas a incrustar este componente en tu 'index.html' existente:
+        - Asegúrate de incluir las fuentes de Google y Font Awesome en el <head> de tu página.
+        - Copia la sección completa `<section id="brackets">...</section>` dentro de tu HTML.
+        - Copia el bloque `<style>` en la cabecera o en tu archivo CSS global.
+        - Copia el bloque `<script>` justo antes del cierre de `</body>`.
+     
+     2. Si deseas usar este archivo completo como tu página principal:
+        - Simplemente sube este archivo 'index.html' a tu repositorio de GitHub Pages.
+================================================================== -->
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Only Jiu Jitsu Tournament</title>
+    <title>Submission Only Jiu Jitsu Tournament - Brackets</title>
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -34,7 +48,7 @@
     </script>
 
     <style>
-        /* Electric & Neon Backgrounds */
+        /* Base styles & Electric theme styling */
         body {
             background-color: #020612;
             background-image: 
@@ -47,7 +61,7 @@
             overflow-x: hidden;
         }
 
-        /* Lightning Canvas Overlay */
+        /* Ambient Lightning Canvas */
         #lightning-canvas {
             position: fixed;
             top: 0;
@@ -69,53 +83,12 @@
             border: 1px solid rgba(0, 240, 255, 0.6);
         }
 
-        .neon-glow-box-winner {
-            box-shadow: 0 0 20px rgba(255, 215, 0, 0.8), inset 0 0 12px rgba(255, 215, 0, 0.5);
-            border: 2px solid #ffd700;
-        }
-
-        /* Bracket connecting lines */
-        .bracket-connector {
-            position: relative;
-        }
-        
-        @media (min-width: 1024px) {
-            .bracket-connector-left::after {
-                content: '';
-                position: absolute;
-                right: -20px;
-                top: 50%;
-                width: 20px;
-                height: 2px;
-                background-color: rgba(0, 240, 255, 0.6);
-                box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
-            }
-            .bracket-connector-right::before {
-                content: '';
-                position: absolute;
-                left: -20px;
-                top: 50%;
-                width: 20px;
-                height: 2px;
-                background-color: rgba(0, 240, 255, 0.6);
-                box-shadow: 0 0 8px rgba(0, 240, 255, 0.8);
-            }
-        }
-
         /* Metallic Text Effect */
         .metallic-title {
             background: linear-gradient(180deg, #ffffff 0%, #b0dfff 50%, #0088ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
-        }
-
-        .script-title {
-            font-family: 'Teko', sans-serif;
-            letter-spacing: 1px;
-            background: linear-gradient(180deg, #66d9ff 0%, #0099ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
         }
 
         /* Custom Scrollbar */
@@ -139,19 +112,19 @@
     <!-- Background Lightning Simulation Canvas -->
     <canvas id="lightning-canvas"></canvas>
 
-    <!-- App Container -->
-    <div class="relative z-10 w-full max-w-6xl mx-auto flex flex-col items-center">
+    <!-- MAIN INTERACTIVE BRACKETS SECTION (Copy this section into your existing site) -->
+    <section id="brackets" class="relative z-10 w-full max-w-6xl mx-auto my-4 scroll-mt-10">
 
         <!-- Control Bar -->
         <div class="w-full flex justify-between items-center mb-4 px-2 text-xs sm:text-sm text-cyan-300 font-mono">
-            <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-yellow-400 animate-pulse"></i> INTERACTIVE MODE</span>
-            <button onclick="resetBrackets()" class="bg-blue-900/60 hover:bg-cyan-500 hover:text-black border border-cyan-400 px-3 py-1 rounded transition duration-300 flex items-center gap-1">
+            <span class="flex items-center gap-2"><i class="fa-solid fa-bolt text-yellow-400 animate-pulse"></i> MODO INTERACTIVO DE LLAVES</span>
+            <button onclick="resetBrackets()" class="bg-blue-900/60 hover:bg-cyan-500 hover:text-black border border-cyan-400 px-3 py-1 rounded transition duration-300 flex items-center gap-1 shadow-lg">
                 <i class="fa-solid fa-rotate-right"></i> Reiniciar Llaves
             </button>
         </div>
 
         <!-- HEADER SECTION -->
-        <header class="text-center w-full mb-6">
+        <header class="text-center w-full mb-8">
             <h1 class="font-heading text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase metallic-title leading-none mb-1">
                 SUBMISSION ONLY JIU JITSU TOURNAMENT
             </h1>
@@ -163,11 +136,11 @@
             </p>
         </header>
 
-        <!-- MAIN CONTENT: BRACKETS CONTAINER -->
-        <main class="w-full space-y-10">
+        <!-- BRACKETS CONTAINER -->
+        <div class="w-full space-y-10">
 
             <!-- ================= SECTION 1: INICIANTES (FAIXA BLANCA) ================= -->
-            <section class="w-full bg-deepBlue/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-cyan-500/30 shadow-2xl relative overflow-hidden">
+            <div class="w-full bg-deepBlue/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-cyan-500/30 shadow-2xl relative overflow-hidden">
                 <!-- Header Category -->
                 <div class="text-center mb-6">
                     <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
@@ -218,10 +191,9 @@
                         </div>
                     </div>
 
-                    <!-- Center Logo / Semis & Final Display -->
+                    <!-- Center Emblem & Status -->
                     <div class="lg:col-span-3 flex flex-col items-center justify-center my-4 lg:my-0 text-center">
-                        <!-- EBI Rules Emblem -->
-                        <div class="relative group cursor-pointer p-4">
+                        <div class="relative group p-4">
                             <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/70 shadow-[0_0_25px_rgba(0,240,255,0.4)] group-hover:scale-105 transition duration-300">
                                 <i class="fa-solid fa-shield-halved text-3xl sm:text-4xl text-cyan-300 mb-1"></i>
                                 <span class="font-heading font-black text-xl text-white tracking-widest leading-none">EBI</span>
@@ -273,10 +245,10 @@
                     </div>
 
                 </div>
-            </section>
+            </div>
 
             <!-- ================= SECTION 2: AVANZADOS (AZUL-ROXA) ================= -->
-            <section class="w-full bg-deepBlue/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
+            <div class="w-full bg-deepBlue/40 backdrop-blur-md p-4 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
                 <!-- Header Category -->
                 <div class="text-center mb-6">
                     <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
@@ -329,8 +301,7 @@
 
                     <!-- Center Logo Emblem -->
                     <div class="lg:col-span-3 flex flex-col items-center justify-center my-4 lg:my-0 text-center">
-                        <div class="relative group cursor-pointer p-2">
-                            <!-- Etakki Dojo Emblem Circular Badge -->
+                        <div class="relative group p-2">
                             <div class="w-32 h-32 sm:w-36 sm:h-36 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/90 shadow-[0_0_25px_rgba(0,102,255,0.6)] p-2 group-hover:scale-105 transition duration-300">
                                 <div class="text-[8px] sm:text-[9px] font-bold tracking-tighter text-cyan-300 uppercase">ETAKKI DOJO JIU JITSU TEAM</div>
                                 <i class="fa-solid fa-gem text-2xl text-cyan-200 my-1"></i>
@@ -382,9 +353,9 @@
                     </div>
 
                 </div>
-            </section>
+            </div>
 
-        </main>
+        </div>
 
         <!-- FOOTER INFO SECTION -->
         <footer class="w-full text-center mt-10 space-y-3">
@@ -410,9 +381,9 @@
             </div>
         </footer>
 
-    </div>
+    </section>
 
-    <!-- JAVASCRIPT: BRACKET INTERACTIVITY & LIGHTNING CANVAS -->
+    <!-- JAVASCRIPT LOGIC -->
     <script>
         // Bracket State Management
         const brackets = {
@@ -477,45 +448,47 @@
 
         /* Ambient Electric Lightning Visual Effect Canvas */
         const canvas = document.getElementById('lightning-canvas');
-        const ctx = canvas.getContext('2d');
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
 
-        function createLightning() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            function createLightning() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            if (Math.random() < 0.25) {
-                const startX = Math.random() * canvas.width;
-                let currentX = startX;
-                let currentY = 0;
+                if (Math.random() < 0.25) {
+                    const startX = Math.random() * canvas.width;
+                    let currentX = startX;
+                    let currentY = 0;
 
-                ctx.beginPath();
-                ctx.moveTo(currentX, currentY);
-                ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#0066ff';
-                ctx.lineWidth = Math.random() * 2 + 1;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = '#00f0ff';
+                    ctx.beginPath();
+                    ctx.moveTo(currentX, currentY);
+                    ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#0066ff';
+                    ctx.lineWidth = Math.random() * 2 + 1;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00f0ff';
 
-                while (currentY < canvas.height) {
-                    currentX += (Math.random() - 0.5) * 40;
-                    currentY += Math.random() * 30 + 10;
-                    ctx.lineTo(currentX, currentY);
+                    while (currentY < canvas.height) {
+                        currentX += (Math.random() - 0.5) * 40;
+                        currentY += Math.random() * 30 + 10;
+                        ctx.lineTo(currentX, currentY);
+                    }
+                    ctx.stroke();
                 }
-                ctx.stroke();
+
+                setTimeout(() => {
+                    requestAnimationFrame(createLightning);
+                }, Math.random() * 400 + 100);
             }
 
-            setTimeout(() => {
-                requestAnimationFrame(createLightning);
-            }, Math.random() * 400 + 100);
-        }
-
-        window.onload = function() {
-            createLightning();
+            window.onload = function() {
+                createLightning();
+            }
         }
     </script>
 </body>
