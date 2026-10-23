@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Entradas - Submission Only Jiu Jitsu Tournament</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,800&family=Orbitron:wght@700;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neonBlue: '#00f0ff',
+                        electricBlue: '#0066ff',
+                        deepBlue: '#020612',
+                        cardBg: 'rgba(5, 18, 48, 0.9)',
+                    },
+                    fontFamily: {
+                        heading: ['Orbitron', 'sans-serif'],
+                        subheading: ['Teko', 'sans-serif'],
+                        body: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #020612;
+            background-image: 
+                radial-gradient(circle at 50% 15%, rgba(0, 102, 255, 0.4), transparent 60%),
+                radial-gradient(circle at 50% 65%, rgba(0, 240, 255, 0.25), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(2, 6, 18, 0.95), #020612);
+            background-attachment: fixed;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+        }
+
+        #lightning-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.5;
+        }
+
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.6);
+        }
+
+        .neon-glow-box {
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.5);
+        }
+
+        .metallic-title {
+            background: linear-gradient(180deg, #ffffff 0%, #b0dfff 50%, #0088ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
+        }
+
+        /* Pulsing Glow Animation */
+        @keyframes neonPulse {
+            0%, 100% {
+                box-shadow: 0 0 15px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2);
+            }
+            50% {
+                box-shadow: 0 0 30px rgba(0, 240, 255, 0.9), inset 0 0 15px rgba(0, 240, 255, 0.4);
+            }
+        }
+
+        .btn-neon-active {
+            animation: neonPulse 2s infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between items-center relative py-8 px-3 sm:px-6">
+
+    <!-- Canvas de rayos/relámpagos de fondo -->
+    <canvas id="lightning-canvas"></canvas>
+
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="relative z-10 w-full max-w-4xl mx-auto space-y-8">
+
+        <!-- ENCABEZADO -->
+        <header class="text-center w-full">
+            <h1 class="font-heading text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase metallic-title leading-none mb-2">
+                GENERADOR DE ENTRADAS DIGITALES
+            </h1>
+            <p class="font-subheading text-2xl sm:text-4xl text-cyan-300 italic font-bold leading-none uppercase drop-shadow-[0_0_12px_rgba(0,240,255,0.7)]">
+                Submission Only Jiu Jitsu Tournament
+            </p>
+            <p class="font-body text-xs sm:text-sm text-gray-300 mt-1">
+                Sábado 14 de Noviembre | Ambrosetti 826 - Caballito
+            </p>
+        </header>
+
+        <!-- FORMULARIO DE EMISIÓN DE TICKET -->
+        <section class="bg-cardBg border border-cyan-500/50 rounded-2xl p-4 sm:p-6 shadow-2xl backdrop-blur-md neon-glow-box">
+            <form id="ticket-form" class="space-y-4" onsubmit="event.preventDefault(); generateNewTicket();">
+                <div>
+                    <label for="buyer-name" class="block font-heading text-xs sm:text-sm font-bold text-cyan-300 uppercase tracking-wider mb-2">
+                        <i class="fa-solid fa-user-ninja mr-1.5 text-cyan-400"></i> Nombre y Apellido del Comprador
+                    </label>
+                    <input 
+                        type="text" 
+                        id="buyer-name" 
+                        placeholder="Ej: LAUTARO AGUIRRE" 
+                        required
+                        maxlength="32"
+                        class="w-full bg-slate-950/80 border-2 border-cyan-500/60 focus:border-cyan-300 rounded-xl px-4 py-3 text-white font-bold placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-cyan-400/50 text-sm sm:text-base tracking-wide transition-all"
+                    />
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3 pt-2">
+                    <button 
+                        type="submit" 
+                        class="w-full bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-heading font-black py-3.5 px-6 rounded-xl text-sm sm:text-base tracking-wider uppercase transition-all transform hover:-translate-y-0.5 shadow-lg flex items-center justify-center gap-2 cursor-pointer btn-neon-active">
+                        <i class="fa-solid fa-ticket text-lg"></i> GENERAR TICKET
+                    </button>
+                    <button 
+                        type="button" 
+                        onclick="randomizeFighterName()"
+                        class="w-full sm:w-auto bg-blue-950/80 hover:bg-blue-900 border border-cyan-400/60 text-cyan-300 font-bold py-3.5 px-5 rounded-xl text-xs sm:text-sm tracking-wider uppercase transition-all flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-dice"></i> Nombre Aleatorio
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- SECCIÓN DE VISTA PREVIA Y DESCARGA -->
+        <section class="space-y-4">
+            <div class="flex items-center justify-between px-1">
+                <h2 class="font-heading text-lg sm:text-xl font-bold text-cyan-400 uppercase tracking-wide flex items-center gap-2">
+                    <i class="fa-solid fa-qrcode text-cyan-300"></i> Ticket Digital Generado
+                </h2>
+                <span id="ticket-badge" class="bg-cyan-950 text-cyan-300 border border-cyan-400/50 text-xs px-3 py-1 rounded-full font-mono font-bold hidden">
+                    Listo para descargar
+                </span>
+            </div>
+
+            <!-- VISUALIZADOR DEL TICKET (CANVAS NATIVO) -->
+            <div class="w-full bg-slate-950/90 rounded-2xl p-2 sm:p-4 border border-cyan-500/30 flex justify-center items-center shadow-2xl overflow-hidden">
+                <canvas id="ticket-canvas" class="max-w-full h-auto rounded-xl shadow-2xl border border-cyan-500/40"></canvas>
+            </div>
+
+            <!-- BOTÓN DE DESCARGA JPG -->
+            <div class="pt-2 flex justify-center">
+                <button 
+                    id="download-btn"
+                    onclick="downloadTicketJPG()" 
+                    disabled
+                    class="w-full sm:w-2/3 bg-emerald-500 hover:bg-emerald-400 disabled:opacity-40 disabled:cursor-not-allowed text-black font-heading font-black py-4 px-6 rounded-xl text-base sm:text-lg tracking-wider uppercase transition-all shadow-[0_0_20px_rgba(16,185,129,0.5)] flex items-center justify-center gap-3">
+                    <i class="fa-solid fa-file-arrow-down text-xl"></i> DESCARGAR TICKET (JPG)
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="relative z-10 text-center text-xs text-gray-400 py-6 mt-8">
+        <p>SUBMISSION ONLY JIU JITSU TOURNAMENT &copy; 2026 - Pase Oficial Digital</p>
+    </footer>
+
+    <!-- LÓGICA DE GENERACIÓN Y DESCARGA -->
+    <script>
+        // Nombres de luchadores para la función de prueba rápida
+        const sampleNames = [
+            "LAUTARO AGUIRRE", "JUAN ESPINOZA", "GONZALO TUÑON", "VALENTINO DI ROSA",
+            "AGUSTIN VELAZQUEZ", "FEDERICO WANG", "BENJAMIN DUVOBSKY", "EZEQUIEL ARGÜELLO",
+            "EZEQUIEL MURACCIOLE", "DANIEL GOLDSMAN", "CIRO CESPEDES", "IGNACIO LEGUIZAMON",
+            "FELIPE ORTIZ", "IAN CESPEDES", "ALEJANDRO DELGADO", "AXEL FURLAN"
+        ];
+
+        let currentTicketData = null;
+
+        // Cargar fuentes antes de renderizar
+        window.addEventListener('load', () => {
+            document.fonts.ready.then(() => {
+                // Generar un ticket inicial de demostración
+                document.getElementById('buyer-name').value = "LAUTARO AGUIRRE";
+                generateNewTicket();
+            });
+        });
+
+        // Generar valores aleatorios requeridos
+        function getRandomTicketNumber() {
+            const num = Math.floor(Math.random() * 50) + 1;
+            return `#${num.toString().padStart(3, '0')}`;
+        }
+
+        function getRandomCode() {
+            const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            let code = "";
+            for (let i = 0; i < 3; i++) {
+                code += letters.charAt(Math.floor(Math.random() * letters.length));
+            }
+            return code;
+        }
+
+        function randomizeFighterName() {
+            const randomName = sampleNames[Math.floor(Math.random() * sampleNames.length)];
+            document.getElementById('buyer-name').value = randomName;
+            generateNewTicket();
+        }
+
+        // Renderizado nativo en HTML5 Canvas (1200 x 600 px alta resolución)
+        function generateNewTicket() {
+            const nameInput = document.getElementById('buyer-name').value.trim().toUpperCase();
+            if (!nameInput) return;
+
+            const ticketNumber = getRandomTicketNumber();
+            const verificationCode = getRandomCode();
+
+            currentTicketData = {
+                name: nameInput,
+                number: ticketNumber,
+                code: verificationCode
+            };
+
+            const canvas = document.getElementById('ticket-canvas');
+            const ctx = canvas.getContext('2d');
+
+            // Dimensiones canvas de alta definición
+            canvas.width = 1200;
+            canvas.height = 600;
+
+            const w = canvas.width;
+            const h = canvas.height;
+
+            // 1. Fondo Oscuro Neón
+            const bgGrad = ctx.createRadialGradient(w / 2, h / 2, 50, w / 2, h / 2, 700);
+            bgGrad.addColorStop(0, '#0a2356');
+            bgGrad.addColorStop(0.6, '#030b1e');
+            bgGrad.addColorStop(1, '#01040b');
+            ctx.fillStyle = bgGrad;
+            ctx.fillRect(0, 0, w, h);
+
+            // 2. Patrón de Rayos en Fondo Canvas
+            ctx.save();
+            ctx.strokeStyle = 'rgba(0, 240, 255, 0.15)';
+            ctx.lineWidth = 2;
+            for (let i = 0; i < 5; i++) {
+                ctx.beginPath();
+                let x = Math.random() * w;
+                let y = 0;
+                ctx.moveTo(x, y);
+                while (y < h) {
+                    x += (Math.random() - 0.5) * 60;
+                    y += Math.random() * 40 + 20;
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+            }
+            ctx.restore();
+
+            // 3. Marco Neón Exterior
+            ctx.save();
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 6;
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 25;
+            ctx.strokeRect(20, 20, w - 40, h - 40);
+            ctx.restore();
+
+            // Marco interior secundario
+            ctx.strokeStyle = 'rgba(0, 102, 255, 0.6)';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(32, 32, w - 64, h - 64);
+
+            // 4. Línea de corte / talón VIP (Lado Derecho)
+            const stubX = w - 280;
+            ctx.save();
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 3;
+            ctx.setLineDash([12, 10]);
+            ctx.beginPath();
+            ctx.moveTo(stubX, 32);
+            ctx.lineTo(stubX, h - 32);
+            ctx.stroke();
+            ctx.restore();
+
+            // Recortes circulares estéticos estilo ticket
+            ctx.fillStyle = '#020612';
+            ctx.beginPath();
+            ctx.arc(stubX, 20, 18, 0, Math.PI * 2);
+            ctx.arc(stubX, h - 20, 18, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            // 5. TEXTOS SECCIÓN PRINCIPAL (IZQUIERDA / CENTRO)
+
+            // Encabezado Categoría VIP
+            ctx.fillStyle = '#00f0ff';
+            ctx.font = '700 24px Orbitron';
+            ctx.letterSpacing = '3px';
+            ctx.fillText('PASE OFICIAL DE ACCESO', 60, 80);
+
+            // Título Principal
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 48px Orbitron';
+            ctx.shadowColor = 'rgba(0, 240, 255, 0.8)';
+            ctx.shadowBlur = 15;
+            ctx.fillText('SUBMISSION ONLY', 60, 140);
+
+            ctx.fillStyle = '#00f0ff';
+            ctx.font = '900 42px Orbitron';
+            ctx.fillText('JIU JITSU TOURNAMENT', 60, 190);
+            ctx.shadowBlur = 0;
+
+            // Fecha y Lugar
+            ctx.fillStyle = '#b0dfff';
+            ctx.font = '700 26px Montserrat';
+            ctx.fillText('SÁBADO 14 DE NOVIEMBRE', 60, 240);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '600 22px Montserrat';
+            ctx.fillText('AMBROSETTI 826 - CABALLITO', 60, 275);
+
+            // Caja Destacada con Nombre del Comprador
+            const boxY = 320;
+            const boxH = 140;
+            const boxW = stubX - 120;
+
+            ctx.fillStyle = 'rgba(3, 16, 48, 0.85)';
+            ctx.strokeStyle = '#00f0ff';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.roundRect(60, boxY, boxW, boxH, 16);
+            ctx.fill();
+            ctx.stroke();
+
+            // Etiqueta Nombre
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 18px Orbitron';
+            ctx.fillText('TITULAR DEL TICKET', 85, boxY + 40);
+
+            // Nombre Comprador
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 36px Montserrat';
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 10;
+            ctx.fillText(nameInput, 85, boxY + 92);
+            ctx.shadowBlur = 0;
+
+            // Horarios Pie
+            ctx.fillStyle = '#00f0ff';
+            ctx.font = '700 20px Montserrat';
+            ctx.fillText('INICIO: 13:00 HS  |  PUERTAS ABREN: 12:15 HS', 60, 520);
+
+            // 6. TEXTOS Y DATOS TALÓN DERECHO (STUB)
+
+            // Número de Ticket
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 16px Orbitron';
+            ctx.textAlign = 'center';
+            ctx.fillText('ENTRADA N°', stubX + 140, 120);
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = '900 46px Orbitron';
+            ctx.shadowColor = '#00f0ff';
+            ctx.shadowBlur = 15;
+            ctx.fillText(ticketNumber, stubX + 140, 175);
+            ctx.shadowBlur = 0;
+
+            // Código de Verificación
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '700 16px Orbitron';
+            ctx.fillText('CÓDIGO VERIFICACIÓN', stubX + 140, 250);
+
+            ctx.fillStyle = '#facc15';
+            ctx.font = '900 36px Orbitron';
+            ctx.fillText(`COD: ${verificationCode}`, stubX + 140, 300);
+
+            // Simulación Código de Barras
+            const barY = 360;
+            ctx.fillStyle = '#ffffff';
+            for (let b = 0; b < 28; b++) {
+                const barWidth = Math.random() > 0.4 ? 6 : 2;
+                const barGap = 8;
+                ctx.fillRect(stubX + 35 + (b * barGap), barY, barWidth, 100);
+            }
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '600 14px monospace';
+            ctx.fillText(`*${verificationCode}${ticketNumber.replace('#','')}-2026*`, stubX + 140, 485);
+
+            ctx.textAlign = 'left'; // Reset alignment
+
+            // Habilitar botón de descarga
+            const downloadBtn = document.getElementById('download-btn');
+            downloadBtn.disabled = false;
+
+            const badge = document.getElementById('ticket-badge');
+            badge.classList.remove('hidden');
+        }
+
+        // Descargar ticket directo como archivo JPG
+        function downloadTicketJPG() {
+            if (!currentTicketData) return;
+
+            const canvas = document.getElementById('ticket-canvas');
+            
+            // Crear enlace dinámico para descarga en formato JPEG
+            const imageURI = canvas.toDataURL('image/jpeg', 0.95);
+            const link = document.createElement('a');
+            
+            // Nombre de archivo sanitizado: ticket-[nombre]-[codigo].jpg
+            const cleanName = currentTicketData.name.replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+            const fileName = `ticket-${cleanName}-${currentTicketData.code.toLowerCase()}.jpg`;
+            
+            link.download = fileName;
+            link.href = imageURI;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        /* Canvas de Relámpagos de Fondo */
+        const lightningCanvas = document.getElementById('lightning-canvas');
+        if (lightningCanvas) {
+            const ctx = lightningCanvas.getContext('2d');
+            function resizeLightning() {
+                lightningCanvas.width = window.innerWidth;
+                lightningCanvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeLightning);
+            resizeLightning();
+
+            function drawLightning() {
+                ctx.clearRect(0, 0, lightningCanvas.width, lightningCanvas.height);
+                if (Math.random() < 0.25) {
+                    let currentX = Math.random() * lightningCanvas.width;
+                    let currentY = 0;
+
+                    ctx.beginPath();
+                    ctx.moveTo(currentX, currentY);
+                    ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#0066ff';
+                    ctx.lineWidth = Math.random() * 2 + 1;
+                    ctx.shadowBlur = 10;
+                    ctx.shadowColor = '#00f0ff';
+
+                    while (currentY < lightningCanvas.height) {
+                        currentX += (Math.random() - 0.5) * 30;
+                        currentY += Math.random() * 25 + 10;
+                        ctx.lineTo(currentX, currentY);
+                    }
+                    ctx.stroke();
+                }
+                setTimeout(() => requestAnimationFrame(drawLightning), Math.random() * 400 + 150);
+            }
+            drawLightning();
+        }
+    </script>
+</body>
+</html>
