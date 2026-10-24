@@ -111,23 +111,23 @@
         }
     </style>
 </head>
-<body class="min-h-screen pb-24 text-slate-100 flex flex-col items-center">
+<body class="min-h-screen pb-24 text-slate-100 flex flex-col items-center w-full overflow-x-hidden">
 
     <!-- Header Navigation -->
-    <header class="w-full max-w-2xl sticky top-0 z-30 bg-appbg/95 backdrop-blur-md border-b border-slate-800 p-3 sm:p-4 shadow-xl">
-        <div class="flex flex-col gap-2 mb-2">
+    <header class="w-full sticky top-0 z-30 bg-appbg/95 backdrop-blur-md border-b border-slate-800 p-2.5 sm:p-4 shadow-xl">
+        <div class="max-w-3xl mx-auto flex flex-col gap-2">
             <!-- Header Top Bar with Title & Profile Badge -->
             <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-3 h-10 bg-brand-500 rounded-full shrink-0"></div>
+                <div class="flex items-center gap-2">
+                    <div class="w-2.5 h-9 bg-brand-500 rounded-full shrink-0"></div>
                     <div>
-                        <h1 class="font-black text-base sm:text-xl tracking-tight text-white leading-tight uppercase">Strength & Combat</h1>
-                        <p class="text-[10px] sm:text-xs font-semibold text-slate-400 uppercase tracking-widest">Plan de Fuerza para Artes Marciales</p>
+                        <h1 class="font-black text-sm sm:text-xl tracking-tight text-white leading-none uppercase">Strength & Combat</h1>
+                        <p class="text-[9px] sm:text-xs font-semibold text-slate-400 uppercase tracking-wider mt-0.5">Plan de Fuerza para Artes Marciales</p>
                     </div>
                 </div>
 
                 <!-- Day Select Dropdown -->
-                <select id="dayDropdown" onchange="switchDay(parseInt(this.value))" class="bg-slate-900 border border-brand-500/40 text-brand-400 font-extrabold text-xs sm:text-sm rounded-xl px-2.5 py-1.5 outline-none focus:ring-2 focus:ring-brand-500 shrink-0">
+                <select id="dayDropdown" onchange="switchDay(parseInt(this.value))" class="bg-slate-900 border border-brand-500/40 text-brand-400 font-extrabold text-xs sm:text-sm rounded-xl px-2 py-1.5 outline-none focus:ring-2 focus:ring-brand-500 shrink-0">
                     <option value="1">DÍA 1: Zercher & Fuerza</option>
                     <option value="2">DÍA 2: Press Pausa & PM</option>
                     <option value="3">DÍA 3: Sentadilla & Landmine</option>
@@ -138,11 +138,11 @@
             </div>
 
             <!-- Profile Info Badge (MATIAS MAGENTA) -->
-            <div class="bg-slate-900/90 border border-slate-800 rounded-xl px-3 py-1.5 flex items-center justify-between text-[10px] sm:text-xs font-bold text-slate-300">
+            <div class="bg-slate-900/90 border border-slate-800 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-[10px] sm:text-xs font-bold text-slate-300 w-full">
                 <div class="flex items-center gap-1.5 truncate">
                     <span class="text-brand-400 font-black truncate">MATIAS MAGENTA</span>
                     <span class="text-slate-600">•</span>
-                    <span class="bg-slate-800 text-slate-300 px-1.5 py-0.5 rounded text-[9px] font-extrabold border border-slate-700/60 uppercase">BJJ BLACK BELT</span>
+                    <span class="bg-slate-800 text-slate-300 px-1 py-0.5 rounded text-[9px] font-extrabold border border-slate-700/60 uppercase">BJJ BLACK BELT</span>
                     <span class="text-slate-600 hidden sm:inline">•</span>
                     <span class="text-slate-400 hidden sm:inline">84 KG - 183 CM</span>
                     <span class="text-slate-600 hidden sm:inline">•</span>
@@ -160,11 +160,11 @@
             </div>
 
             <!-- Session Stopwatch Bar -->
-            <div class="bg-slate-900 border border-brand-500/30 rounded-xl p-2 flex items-center justify-between">
+            <div class="bg-slate-900 border border-brand-500/30 rounded-xl p-2 flex items-center justify-between w-full">
                 <div class="flex items-center gap-2">
                     <div id="stopwatchPulse" class="w-2 h-2 rounded-full bg-slate-500"></div>
                     <span class="text-[10px] sm:text-xs font-extrabold uppercase text-slate-400">Tiempo de Sesión:</span>
-                    <span id="sessionTimerDisplay" class="font-mono font-black text-sm sm:text-base text-brand-400">00:00:00</span>
+                    <span id="sessionTimerDisplay" class="font-mono font-black text-xs sm:text-base text-brand-400">00:00:00</span>
                 </div>
                 <div class="flex items-center gap-1">
                     <button id="toggleStopwatchBtn" onclick="toggleSessionStopwatch()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-black text-[10px] sm:text-xs px-2.5 py-1 rounded-lg transition-all shadow-md">
@@ -175,27 +175,27 @@
                     </button>
                 </div>
             </div>
-        </div>
 
-        <!-- Day Navigation Tabs -->
-        <div class="flex gap-1.5 overflow-x-auto no-scrollbar pb-0.5">
-            <button onclick="switchDay(1)" class="day-tab flex-1 min-w-[55px] py-1.5 px-2 rounded-lg font-black text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 1</button>
-            <button onclick="switchDay(2)" class="day-tab flex-1 min-w-[55px] py-1.5 px-2 rounded-lg font-black text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 2</button>
-            <button onclick="switchDay(3)" class="day-tab flex-1 min-w-[55px] py-1.5 px-2 rounded-lg font-black text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 3</button>
-            <button onclick="switchDay(4)" class="day-tab flex-1 min-w-[55px] py-1.5 px-2 rounded-lg font-black text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 4</button>
-            <button onclick="switchDay(5)" class="day-tab flex-1 min-w-[55px] py-1.5 px-2 rounded-lg font-black text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 5</button>
-            <button onclick="switchDay(6)" class="day-tab flex-1 min-w-[55px] py-1.5 px-2 rounded-lg font-black text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 6</button>
+            <!-- Day Navigation Tabs -->
+            <div class="flex gap-1 overflow-x-auto no-scrollbar pb-0.5 w-full">
+                <button onclick="switchDay(1)" class="day-tab flex-1 min-w-[50px] py-1.5 px-1 rounded-lg font-black text-[11px] sm:text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 1</button>
+                <button onclick="switchDay(2)" class="day-tab flex-1 min-w-[50px] py-1.5 px-1 rounded-lg font-black text-[11px] sm:text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 2</button>
+                <button onclick="switchDay(3)" class="day-tab flex-1 min-w-[50px] py-1.5 px-1 rounded-lg font-black text-[11px] sm:text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 3</button>
+                <button onclick="switchDay(4)" class="day-tab flex-1 min-w-[50px] py-1.5 px-1 rounded-lg font-black text-[11px] sm:text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 4</button>
+                <button onclick="switchDay(5)" class="day-tab flex-1 min-w-[50px] py-1.5 px-1 rounded-lg font-black text-[11px] sm:text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 5</button>
+                <button onclick="switchDay(6)" class="day-tab flex-1 min-w-[50px] py-1.5 px-1 rounded-lg font-black text-[11px] sm:text-xs tracking-wider transition-all uppercase text-center bg-slate-800 text-slate-400">DÍA 6</button>
+            </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <main class="w-full max-w-2xl p-3 sm:p-5 space-y-4">
+    <!-- Main Content Container (Full mobile width up to 3xl max on desktop) -->
+    <main class="w-full max-w-3xl p-2.5 sm:p-5 space-y-3.5">
 
         <!-- Banner Info Dia -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3.5 sm:p-5 flex items-center justify-between shadow-lg">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-3 sm:p-5 flex items-center justify-between shadow-lg">
             <div>
                 <span id="currentDayTitle" class="text-xs font-black tracking-widest text-brand-400 uppercase">DÍA 1</span>
-                <h2 id="currentDaySubtitle" class="text-sm sm:text-lg font-black text-white uppercase tracking-tight mt-0.5">Cargando rutina...</h2>
+                <h2 id="currentDaySubtitle" class="text-xs sm:text-lg font-black text-white uppercase tracking-tight mt-0.5">Cargando rutina...</h2>
             </div>
             <button onclick="resetCurrentDay()" class="bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 hover:text-white font-bold text-xs px-2.5 py-1.5 rounded-xl transition-all flex items-center gap-1 shrink-0">
                 <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
@@ -215,32 +215,32 @@
         </div>
 
         <!-- Exercises List -->
-        <div id="workoutContainer" class="space-y-4">
+        <div id="workoutContainer" class="space-y-3.5 w-full">
             <!-- Dynamic Content -->
         </div>
 
         <!-- Banner de Instalación PWA Mejora con instrucciones alternativas -->
-        <div id="pwaInstallCard" class="bg-gradient-to-r from-brand-500/20 to-slate-900 border border-brand-500/40 rounded-2xl p-4 space-y-3 shadow-xl">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-10 h-10 rounded-xl bg-brand-500 text-slate-950 flex items-center justify-center font-black text-xl shrink-0">
+        <div id="pwaInstallCard" class="bg-gradient-to-r from-brand-500/20 to-slate-900 border border-brand-500/40 rounded-2xl p-3.5 space-y-2.5 shadow-xl">
+            <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-9 h-9 rounded-xl bg-brand-500 text-slate-950 flex items-center justify-center font-black text-lg shrink-0">
                         📲
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-sm text-white">Instalar App en tu Pantalla de Inicio</h3>
-                        <p class="text-[11px] text-slate-400">Acceso directo como aplicación independiente</p>
+                        <h3 class="font-extrabold text-xs sm:text-sm text-white leading-snug">Instalar App en tu Pantalla de Inicio</h3>
+                        <p class="text-[10px] text-slate-400">Acceso directo como aplicación independiente</p>
                     </div>
                 </div>
                 <button id="pwaInstallBtn" onclick="triggerPWAInstall()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-black text-xs px-3 py-2 rounded-xl transition-all shadow-md shrink-0">
                     Instalar
                 </button>
             </div>
-            <!-- Instrucciones paso a paso para cuando se abre desde vista previa o navegadores que bloquean prompts -->
-            <div id="manualInstallInstructions" class="text-[11px] text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 space-y-1">
+            <!-- Instrucciones paso a paso -->
+            <div id="manualInstallInstructions" class="text-[10px] sm:text-[11px] text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 space-y-1">
                 <p class="font-bold text-brand-400">¿No aparece la ventana emergente de instalación?</p>
                 <ul class="list-disc list-inside text-slate-400 space-y-0.5">
-                    <li><strong class="text-slate-200">En Chrome (Android/PC):</strong> Toca los 3 puntos arriba a la derecha (⋮) y selecciona <strong>"Agregar a la pantalla de inicio"</strong> o <strong>"Instalar aplicación"</strong>.</li>
-                    <li><strong class="text-slate-200">En Safari (iOS/iPhone):</strong> Toca el botón <strong>Compartir (⎋)</strong> y elige <strong>"Agregar al inicio"</strong>.</li>
+                    <li><strong class="text-slate-200">En Chrome (Android/PC):</strong> Toca los 3 puntos (⋮) y elige <strong>"Agregar a la pantalla de inicio"</strong> o <strong>"Instalar aplicación"</strong>.</li>
+                    <li><strong class="text-slate-200">En Safari (iOS/iPhone):</strong> Toca <strong>Compartir (⎋)</strong> y elige <strong>"Agregar al inicio"</strong>.</li>
                 </ul>
             </div>
         </div>
