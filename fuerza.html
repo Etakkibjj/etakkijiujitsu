@@ -1,1 +1,710 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entrenamiento de Fuerza - Artes Marciales</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            glow: '#ff6b00'
+                        },
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
+                        cardborder: '#334155'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f8fafc;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        .completed-row {
+            background-color: rgba(34, 197, 94, 0.08) !important;
+            border-color: rgba(34, 197, 94, 0.4) !important;
+        }
+        .completed-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #f97316;
+        }
+        /* Pulse glow effect */
+        .timer-glow {
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.4);
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen flex flex-col justify-between pb-24 md:pb-12">
 
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3 shadow-lg">
+        <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
+            <!-- App Logo / Title -->
+            <div class="flex items-center gap-3 w-full md:w-auto justify-between md:justify-start">
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center text-white shadow-lg shadow-brand-500/30">
+                        <i class="fa-solid font-black text-xl fa-hand-fist"></i>
+                    </div>
+                    <div>
+                        <h1 class="font-extrabold text-lg leading-tight tracking-tight text-white flex items-center gap-2">
+                            COMBAT <span class="text-brand-500">STRENGTH</span>
+                        </h1>
+                        <p class="text-xs text-slate-400 font-medium">Entrenamiento para Artes Marciales</p>
+                    </div>
+                </div>
+
+                <!-- Reset Day Progress Button -->
+                <button onclick="resetCurrentDayProgress()" class="text-slate-400 hover:text-red-400 transition-colors p-2 text-xs flex items-center gap-1 bg-slate-800/80 hover:bg-slate-800 rounded-lg border border-slate-700" title="Reiniciar día actual">
+                    <i class="fa-solid fa-rotate-right"></i>
+                    <span class="hidden sm:inline">Reiniciar</span>
+                </button>
+            </div>
+
+            <!-- Day Selector (Dropdown for mobile/quick access) & Tabs -->
+            <div class="w-full md:w-auto flex items-center gap-2">
+                <div class="relative w-full md:w-64">
+                    <select id="daySelect" onchange="switchDay(this.value)" class="w-full bg-slate-800 text-white font-bold text-sm rounded-xl px-4 py-2.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-brand-500 appearance-none cursor-pointer">
+                        <option value="1">Día 1: Fuerza Máxima & Tracción</option>
+                        <option value="2">Día 2: Potencia Explosiva & Empuje</option>
+                        <option value="3">Día 3: Cadena Posterior & Grip</option>
+                        <option value="4">Día 4: Hipertrofia Funcional Combat</option>
+                        <option value="5">Día 5: Fuerza Rotacional & Núcleo</option>
+                        <option value="6">Día 6: Acondicionamiento Específico</option>
+                    </select>
+                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-brand-500">
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Day Navigation Tabs (Desktop Scrollable) -->
+        <div class="max-w-4xl mx-auto mt-3 hidden md:flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar">
+            <button onclick="switchDay(1)" id="tab-1" class="day-tab px-4 py-2 text-xs font-bold rounded-lg border whitespace-nowrap transition-all">Día 1</button>
+            <button onclick="switchDay(2)" id="tab-2" class="day-tab px-4 py-2 text-xs font-bold rounded-lg border whitespace-nowrap transition-all">Día 2</button>
+            <button onclick="switchDay(3)" id="tab-3" class="day-tab px-4 py-2 text-xs font-bold rounded-lg border whitespace-nowrap transition-all">Día 3</button>
+            <button onclick="switchDay(4)" id="tab-4" class="day-tab px-4 py-2 text-xs font-bold rounded-lg border whitespace-nowrap transition-all">Día 4</button>
+            <button onclick="switchDay(5)" id="tab-5" class="day-tab px-4 py-2 text-xs font-bold rounded-lg border whitespace-nowrap transition-all">Día 5</button>
+            <button onclick="switchDay(6)" id="tab-6" class="day-tab px-4 py-2 text-xs font-bold rounded-lg border whitespace-nowrap transition-all">Día 6</button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 py-6 w-full flex-1">
+
+        <!-- Routine Header Card & Progress -->
+        <div class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-5 mb-6 shadow-md relative overflow-hidden backdrop-blur-sm">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
+                <div>
+                    <span id="dayBadge" class="inline-block bg-brand-500/20 text-brand-500 font-extrabold text-xs px-2.5 py-1 rounded-full border border-brand-500/30 uppercase tracking-wider mb-2">
+                        DÍA 1
+                    </span>
+                    <h2 id="dayTitle" class="text-2xl font-black text-white tracking-tight">Fuerza Máxima & Tracción</h2>
+                    <p id="dayDesc" class="text-xs text-slate-400 mt-1">Enfoque en transferencia de fuerza de piernas, espalda y estabilidad de tronco para combate.</p>
+                </div>
+
+                <div class="bg-slate-900/80 rounded-xl p-3 border border-slate-700/60 flex items-center justify-between md:justify-end gap-4 min-w-[180px]">
+                    <div class="text-left md:text-right">
+                        <div class="text-[10px] uppercase tracking-wider text-slate-400 font-bold">Progreso Total</div>
+                        <div id="progressText" class="text-xl font-black text-brand-500">0 / 0 (0%)</div>
+                    </div>
+                    <div class="w-12 h-12 rounded-full border-4 border-slate-700 flex items-center justify-center relative">
+                        <i class="fa-solid fa-trophy text-brand-500 text-base"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-900 rounded-full h-3 overflow-hidden p-0.5 border border-slate-700/50">
+                <div id="progressBar" class="bg-gradient-to-r from-brand-600 to-brand-500 h-full rounded-full transition-all duration-500 w-0 shadow-lg shadow-brand-500/50"></div>
+            </div>
+        </div>
+
+        <!-- Exercises List Container -->
+        <div id="exercisesContainer" class="space-y-6">
+            <!-- Dynamic Exercise Content injected via JS -->
+        </div>
+
+    </main>
+
+    <!-- Sticky Rest Timer Bottom Bar -->
+    <div id="timerWidget" class="fixed bottom-0 left-0 right-0 z-40 bg-slate-900/95 backdrop-blur-lg border-t border-slate-800 p-3 shadow-2xl transition-transform duration-300">
+        <div class="max-w-4xl mx-auto flex flex-row items-center justify-between gap-3">
+            <!-- Timer Info -->
+            <div class="flex items-center gap-3">
+                <div id="timerIcon" class="w-10 h-10 rounded-xl bg-slate-800 border border-slate-700 flex items-center justify-center text-slate-300">
+                    <i class="fa-solid fa-stopwatch text-lg"></i>
+                </div>
+                <div>
+                    <div class="text-[10px] uppercase font-bold text-slate-400">Descanso</div>
+                    <div id="timerDisplay" class="text-2xl font-black tracking-mono text-white">01:30</div>
+                </div>
+            </div>
+
+            <!-- Preset Buttons & Controls -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <button onclick="setTimerPreset(60)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 transition-colors">60s</button>
+                <button onclick="setTimerPreset(90)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 transition-colors">90s</button>
+                <button onclick="setTimerPreset(120)" class="px-2.5 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-xs font-bold text-slate-300 transition-colors">120s</button>
+                
+                <button id="timerToggleBtn" onclick="toggleTimer()" class="ml-1 sm:ml-2 px-4 py-2 bg-brand-500 hover:bg-brand-600 active:scale-95 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition-all flex items-center gap-1.5">
+                    <i id="timerToggleIcon" class="fa-solid fa-play"></i>
+                    <span id="timerToggleText">Iniciar</span>
+                </button>
+                <button onclick="resetTimer()" class="p-2 text-slate-400 hover:text-white rounded-lg">
+                    <i class="fa-solid fa-rotate-left text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Logic Script -->
+    <script>
+        // Database of Training Days
+        const workoutData = {
+            1: {
+                title: "Día 1: Fuerza Máxima & Tracción",
+                desc: "Enfoque en sentadilla Zercher pesada, dominadas y remos para dominancia en grappling y clinch.",
+                exercises: [
+                    {
+                        id: "d1_e1",
+                        name: "SENTADILLA ZERCHER",
+                        notes: "Sostener la barra en la sangradura del codo. Espalda recta y núcleo comprimido.",
+                        sets: [
+                            { reps: 5, weight: "32.5 kg" },
+                            { reps: 4, weight: "45 kg" },
+                            { reps: 3, weight: "52.5 kg" },
+                            { reps: 3, weight: "55 kg" },
+                            { reps: 3, weight: "55 kg" },
+                            { reps: 3, weight: "55 kg" },
+                            { reps: 3, weight: "55 kg" },
+                            { reps: 5, weight: "32.5 kg" },
+                            { reps: 4, weight: "45 kg" },
+                            { reps: 3, weight: "52.5 kg" },
+                            { reps: 2, weight: "60 kg" },
+                            { reps: 2, weight: "60 kg" },
+                            { reps: 2, weight: "60 kg" },
+                            { reps: 2, weight: "60 kg" }
+                        ]
+                    },
+                    {
+                        id: "d1_e2",
+                        name: "DOMINADAS (PULL-UPS)",
+                        notes: "Rango completo de movimiento. Agarre estricto.",
+                        sets: [
+                            { reps: 6, weight: "Peso Corporal" },
+                            { reps: 6, weight: "Peso Corporal" },
+                            { reps: 6, weight: "Peso Corporal" },
+                            { reps: 6, weight: "Peso Corporal" },
+                            { reps: 6, weight: "Peso Corporal" }
+                        ]
+                    },
+                    {
+                        id: "d1_e3",
+                        name: "REMO CON BARRA",
+                        notes: "Inclinación de torso estable (Ps). Control en la fase excéntrica.",
+                        sets: [
+                            { reps: 5, weight: "35 kg (Ps)" },
+                            { reps: 4, weight: "40 kg (Ps)" },
+                            { reps: 3, weight: "45 kg (Ps)" },
+                            { reps: 2, weight: "55 kg (Ps)" },
+                            { reps: 2, weight: "55 kg (Ps)" },
+                            { reps: 2, weight: "55 kg (Ps)" },
+                            { reps: 2, weight: "55 kg (Ps)" }
+                        ]
+                    },
+                    {
+                        id: "d1_e4",
+                        name: "TRÍCEPS CON MANCUERNA",
+                        notes: "Extensión sobre la cabeza o copa a 2 manos.",
+                        sets: [
+                            { reps: 8, weight: "Ajustable" },
+                            { reps: 8, weight: "Ajustable" },
+                            { reps: 8, weight: "Ajustable" }
+                        ]
+                    },
+                    {
+                        id: "d1_e5",
+                        name: "REMO CON KETTLEBELL",
+                        notes: "Enfoque en estabilidad unipedal/unilateral.",
+                        sets: [
+                            { reps: 6, weight: "21 kg" },
+                            { reps: 6, weight: "21 kg" },
+                            { reps: 6, weight: "21 kg" },
+                            { reps: 6, weight: "21 kg" }
+                        ]
+                    }
+                ]
+            },
+            2: {
+                title: "Día 2: Potencia Explosiva & Empuje",
+                desc: "Desarrollo de potencia de golpeo y empuje horizontal/vertical.",
+                exercises: [
+                    {
+                        id: "d2_e1",
+                        name: "PRESS MILITAR CON BARRA",
+                        notes: "Bloqueo firme arriba. Núcleo tenso.",
+                        sets: [
+                            { reps: 5, weight: "30 kg" },
+                            { reps: 5, weight: "40 kg" },
+                            { reps: 3, weight: "50 kg" },
+                            { reps: 3, weight: "50 kg" },
+                            { reps: 3, weight: "50 kg" }
+                        ]
+                    },
+                    {
+                        id: "d2_e2",
+                        name: "LANDMINE PUNCH (PRESS LANDMINE)",
+                        notes: "Traspaso de energía desde la cadera. Explosivo.",
+                        sets: [
+                            { reps: 8, weight: "15 kg + barra" },
+                            { reps: 8, weight: "20 kg + barra" },
+                            { reps: 6, weight: "25 kg + barra" },
+                            { reps: 6, weight: "25 kg + barra" }
+                        ]
+                    },
+                    {
+                        id: "d2_e3",
+                        name: "FLEXIONES DE BRAZO EXPLOSIVAS",
+                        notes: "Despegando las manos del suelo o sobre banco.",
+                        sets: [
+                            { reps: 8, weight: "Corporal" },
+                            { reps: 8, weight: "Corporal" },
+                            { reps: 8, weight: "Corporal" },
+                            { reps: 8, weight: "Corporal" }
+                        ]
+                    }
+                ]
+            },
+            3: {
+                title: "Día 3: Cadena Posterior & Grip",
+                desc: "Fortalecimiento de isquios, glúteos y fuerza de agarre para derribos.",
+                exercises: [
+                    {
+                        id: "d3_e1",
+                        name: "PESO MUERTO TRAP BAR / CON BARRA",
+                        notes: "Tracción constante, extensión de cadera completa.",
+                        sets: [
+                            { reps: 5, weight: "60 kg" },
+                            { reps: 5, weight: "80 kg" },
+                            { reps: 3, weight: "100 kg" },
+                            { reps: 3, weight: "110 kg" },
+                            { reps: 2, weight: "120 kg" }
+                        ]
+                    },
+                    {
+                        id: "d3_e2",
+                        name: "KETTLEBELL SWINGS",
+                        notes: "Bisagra de cadera explosiva. Mantener cuello neutro.",
+                        sets: [
+                            { reps: 15, weight: "24 kg" },
+                            { reps: 15, weight: "24 kg" },
+                            { reps: 15, weight: "24 kg" },
+                            { reps: 15, weight: "24 kg" }
+                        ]
+                    },
+                    {
+                        id: "d3_e3",
+                        name: "FARMER CARRIES (PASEO DEL GRANGER)",
+                        notes: "Caminar 30 metros manteniendo postura erguida.",
+                        sets: [
+                            { reps: 1, weight: "24 kg / mano" },
+                            { reps: 1, weight: "28 kg / mano" },
+                            { reps: 1, weight: "28 kg / mano" },
+                            { reps: 1, weight: "32 kg / mano" }
+                        ]
+                    }
+                ]
+            },
+            4: {
+                title: "Día 4: Hipertrofia Funcional Combat",
+                desc: "Trabajo volumétrico para resistencia muscular y acondicionamiento estructural.",
+                exercises: [
+                    {
+                        id: "d4_e1",
+                        name: "SENTADILLA BÚLGARA",
+                        notes: "Enfoque en estabilidad de rodilla y tobillo.",
+                        sets: [
+                            { reps: 8, weight: "12 kg / mano" },
+                            { reps: 8, weight: "16 kg / mano" },
+                            { reps: 8, weight: "16 kg / mano" },
+                            { reps: 8, weight: "16 kg / mano" }
+                        ]
+                    },
+                    {
+                        id: "d4_e2",
+                        name: "PRESS BANCA CON MANCUERNAS",
+                        notes: "Agarre neutro para proteger hombros.",
+                        sets: [
+                            { reps: 10, weight: "20 kg / mano" },
+                            { reps: 10, weight: "24 kg / mano" },
+                            { reps: 8, weight: "28 kg / mano" },
+                            { reps: 8, weight: "28 kg / mano" }
+                        ]
+                    },
+                    {
+                        id: "d4_e3",
+                        name: "CARGAS ZERCHER (ZERCHER CARRIES)",
+                        notes: "Caminar 25 metros manteniendo barra apretada.",
+                        sets: [
+                            { reps: 1, weight: "40 kg" },
+                            { reps: 1, weight: "50 kg" },
+                            { reps: 1, weight: "50 kg" }
+                        ]
+                    }
+                ]
+            },
+            5: {
+                title: "Día 5: Fuerza Rotacional & Núcleo",
+                desc: "Antirrotación y potencia de torsión para patadas y giros.",
+                exercises: [
+                    {
+                        id: "d5_e1",
+                        name: "ROTACIONES DE LANDMINE (TWISTS)",
+                        notes: "Mantener brazos extendidos. Rotación de cadera.",
+                        sets: [
+                            { reps: 10, weight: "10 kg + barra" },
+                            { reps: 10, weight: "15 kg + barra" },
+                            { reps: 10, weight: "15 kg + barra" },
+                            { reps: 10, weight: "15 kg + barra" }
+                        ]
+                    },
+                    {
+                        id: "d5_e2",
+                        name: "PALLOF PRESS EN POLEA / BANDA",
+                        notes: "Pausa de 2 segundos en extensión.",
+                        sets: [
+                            { reps: 12, weight: "Resistencia Alta" },
+                            { reps: 12, weight: "Resistencia Alta" },
+                            { reps: 12, weight: "Resistencia Alta" }
+                        ]
+                    },
+                    {
+                        id: "d5_e3",
+                        name: "CRAWLS (GATEO DE OSO) CON CARGA",
+                        notes: "15 metros de avance continuo sin elevar cadera.",
+                        sets: [
+                            { reps: 1, weight: "10 kg disco" },
+                            { reps: 1, weight: "15 kg disco" },
+                            { reps: 1, weight: "15 kg disco" }
+                        ]
+                    }
+                ]
+            },
+            6: {
+                title: "Día 6: Acondicionamiento Específico",
+                desc: "Circuitos de resistencia de alta intensidad y transferencia rápida.",
+                exercises: [
+                    {
+                        id: "d6_e1",
+                        name: "THRUSTERS CON KETTLEBELLS",
+                        notes: "Sentadilla profunda directa a press militar.",
+                        sets: [
+                            { reps: 10, weight: "16 kg x2" },
+                            { reps: 10, weight: "16 kg x2" },
+                            { reps: 10, weight: "20 kg x2" },
+                            { reps: 10, weight: "20 kg x2" }
+                        ]
+                    },
+                    {
+                        id: "d6_e2",
+                        name: "BURPEES CON SALTO AL CAJÓN",
+                        notes: "Explosividad continua.",
+                        sets: [
+                            { reps: 10, weight: "Corporal" },
+                            { reps: 10, weight: "Corporal" },
+                            { reps: 10, weight: "Corporal" }
+                        ]
+                    },
+                    {
+                        id: "d6_e3",
+                        name: "Cuerdas de Batalla (Battle Ropes)",
+                        notes: "30 segundos de oleaje alternado a máxima intensidad.",
+                        sets: [
+                            { reps: 1, weight: "30 Segundos" },
+                            { reps: 1, weight: "30 Segundos" },
+                            { reps: 1, weight: "30 Segundos" },
+                            { reps: 1, weight: "30 Segundos" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // Current App State
+        let currentDay = 1;
+        let completedSets = JSON.parse(localStorage.getItem('mma_completed_sets') || '{}');
+
+        // Timer Variables
+        let timerSeconds = 90;
+        let defaultPreset = 90;
+        let timerInterval = null;
+        let isTimerRunning = false;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderApp();
+            updateTimerDisplay();
+        });
+
+        // Render routine for selected day
+        function renderApp() {
+            const data = workoutData[currentDay];
+
+            // Update Header Info
+            document.getElementById('daySelect').value = currentDay;
+            document.getElementById('dayBadge').innerText = `DÍA ${currentDay}`;
+            document.getElementById('dayTitle').innerText = data.title;
+            document.getElementById('dayDesc').innerText = data.desc;
+
+            // Update Tab Active UI
+            document.querySelectorAll('.day-tab').forEach((tab, index) => {
+                const dayNum = index + 1;
+                if (dayNum === currentDay) {
+                    tab.className = "day-tab px-4 py-2 text-xs font-bold rounded-lg bg-brand-500 text-white border-brand-500 shadow-md shadow-brand-500/20 whitespace-nowrap transition-all";
+                } else {
+                    tab.className = "day-tab px-4 py-2 text-xs font-bold rounded-lg bg-slate-800 text-slate-400 border-slate-700 hover:text-white whitespace-nowrap transition-all";
+                }
+            });
+
+            // Container Ref
+            const container = document.getElementById('exercisesContainer');
+            container.innerHTML = '';
+
+            let totalSetsCount = 0;
+            let completedSetsCount = 0;
+
+            // Build Exercise Cards
+            data.exercises.forEach((ex, exIdx) => {
+                const exCard = document.createElement('div');
+                exCard.className = "bg-slate-800/80 border border-slate-700/80 rounded-2xl overflow-hidden shadow-lg backdrop-blur-sm";
+
+                let setsHtml = '';
+                ex.sets.forEach((s, sIdx) => {
+                    totalSetsCount++;
+                    const setKey = `d${currentDay}_e${exIdx}_s${sIdx}`;
+                    const isDone = !!completedSets[setKey];
+                    if (isDone) completedSetsCount++;
+
+                    setsHtml += `
+                        <div id="row-${setKey}" class="set-row flex items-center justify-between p-3.5 sm:p-5 rounded-2xl border transition-all duration-200 ${isDone ? 'completed-row border-emerald-500/40 bg-emerald-950/20' : 'bg-slate-900/80 border-slate-800 hover:border-slate-700'}">
+                            <div class="flex items-center gap-3 sm:gap-4 flex-wrap sm:flex-nowrap">
+                                <span class="text-xs sm:text-sm font-black px-3 py-1.5 bg-slate-800 rounded-xl text-slate-300 text-center border border-slate-700 shadow-inner uppercase tracking-wider">
+                                    SERIE ${sIdx + 1}
+                                </span>
+                                <div class="flex items-center gap-2.5 sm:gap-3 ${isDone ? 'completed-text' : ''}">
+                                    <span class="text-xl sm:text-2xl font-black text-white tracking-tight">${s.reps} <span class="text-sm font-extrabold text-slate-400">REPS</span></span>
+                                    ${s.weight ? `<span class="text-lg sm:text-xl font-black text-brand-500 bg-brand-500/15 border-2 border-brand-500/30 px-3 py-1 rounded-xl shadow-sm">${s.weight}</span>` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Touch-friendly check button -->
+                            <button onclick="toggleSet('${setKey}')" class="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center transition-all ${isDone ? 'bg-emerald-500 text-slate-950 shadow-lg shadow-emerald-500/30' : 'bg-slate-800 hover:bg-slate-700 text-slate-500 border-2 border-slate-700'} active:scale-90">
+                                <i class="fa-solid fa-check text-xl sm:text-2xl font-black"></i>
+                            </button>
+                        </div>
+                    `;
+                });
+
+                exCard.innerHTML = `
+                    <div class="p-4 sm:p-5 border-b border-slate-700/60 bg-slate-800/40 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                        <div>
+                            <h3 class="font-black text-lg text-white flex items-center gap-2">
+                                <span class="text-brand-500">#${exIdx + 1}</span> ${ex.name}
+                            </h3>
+                            ${ex.notes ? `<p class="text-xs text-slate-400 mt-1"><i class="fa-solid fa-circle-info mr-1 text-brand-500"></i>${ex.notes}</p>` : ''}
+                        </div>
+                        <span class="text-xs font-bold text-slate-400 bg-slate-900 px-3 py-1 rounded-full border border-slate-700 w-fit">
+                            ${ex.sets.length} Series
+                        </span>
+                    </div>
+                    <div class="p-3 sm:p-4 space-y-2.5">
+                        ${setsHtml}
+                    </div>
+                `;
+
+                container.appendChild(exCard);
+            });
+
+            // Update Progress UI
+            const pct = totalSetsCount > 0 ? Math.round((completedSetsCount / totalSetsCount) * 100) : 0;
+            document.getElementById('progressText').innerText = `${completedSetsCount} / ${totalSetsCount} (${pct}%)`;
+            document.getElementById('progressBar').style.width = `${pct}%`;
+        }
+
+        // Switch active day
+        function switchDay(dayNum) {
+            currentDay = parseInt(dayNum);
+            renderApp();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Toggle a single set complete / incomplete
+        function toggleSet(setKey) {
+            const wasCompleted = !!completedSets[setKey];
+            completedSets[setKey] = !wasCompleted;
+
+            // Save to LocalStorage
+            localStorage.setItem('mma_completed_sets', JSON.stringify(completedSets));
+
+            // Re-render
+            renderApp();
+
+            // Trigger timer if checked as done
+            if (!wasCompleted) {
+                startRestTimer();
+                scrollToNextUnchecked(setKey);
+            }
+        }
+
+        // Auto scroll to next incomplete set for seamless flow
+        function scrollToNextUnchecked(currentKey) {
+            setTimeout(() => {
+                const rows = Array.from(document.querySelectorAll('.set-row'));
+                const currentIndex = rows.findIndex(row => row.id === `row-${currentKey}`);
+                
+                if (currentIndex !== -1 && currentIndex + 1 < rows.length) {
+                    const nextRow = rows[currentIndex + 1];
+                    nextRow.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 100);
+        }
+
+        // Reset all progress for current day
+        function resetCurrentDayProgress() {
+            if (confirm(`¿Deseas reiniciar todo el progreso del Día ${currentDay}?`)) {
+                Object.keys(completedSets).forEach(key => {
+                    if (key.startsWith(`d${currentDay}_`)) {
+                        delete completedSets[key];
+                    }
+                });
+                localStorage.setItem('mma_completed_sets', JSON.stringify(completedSets));
+                renderApp();
+            }
+        }
+
+        // === Timer Controls ===
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60);
+            const secs = timerSeconds % 60;
+            document.getElementById('timerDisplay').innerText = 
+                `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function setTimerPreset(seconds) {
+            defaultPreset = seconds;
+            timerSeconds = seconds;
+            updateTimerDisplay();
+            if (isTimerRunning) {
+                stopTimer();
+                startRestTimer();
+            }
+        }
+
+        function toggleTimer() {
+            if (isTimerRunning) {
+                stopTimer();
+            } else {
+                startRestTimer();
+            }
+        }
+
+        function startRestTimer() {
+            stopTimer();
+            if (timerSeconds <= 0) timerSeconds = defaultPreset;
+            isTimerRunning = true;
+
+            const widget = document.getElementById('timerWidget');
+            widget.classList.add('timer-glow', 'border-brand-500/50');
+
+            document.getElementById('timerToggleIcon').className = 'fa-solid fa-pause';
+            document.getElementById('timerToggleText').innerText = 'Pausar';
+
+            timerInterval = setInterval(() => {
+                timerSeconds--;
+                updateTimerDisplay();
+
+                if (timerSeconds <= 0) {
+                    stopTimer();
+                    playTimerBeep();
+                }
+            }, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+            isTimerRunning = false;
+            
+            const widget = document.getElementById('timerWidget');
+            widget.classList.remove('timer-glow', 'border-brand-500/50');
+
+            document.getElementById('timerToggleIcon').className = 'fa-solid fa-play';
+            document.getElementById('timerToggleText').innerText = 'Iniciar';
+        }
+
+        function resetTimer() {
+            stopTimer();
+            timerSeconds = defaultPreset;
+            updateTimerDisplay();
+        }
+
+        // Web Audio API beep for timer end
+        function playTimerBeep() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(880, ctx.currentTime); // A5 note
+                gain.gain.setValueAtTime(0.3, ctx.currentTime);
+
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                osc.start();
+                osc.stop(ctx.currentTime + 0.6);
+            } catch (e) {
+                console.log("Audio not supported or blocked");
+            }
+        }
+    </script>
+</body>
+</html>
