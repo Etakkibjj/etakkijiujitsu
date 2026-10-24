@@ -1,36 +1,66 @@
-<!DOCTYPE html>
-<html lang="es" class="dark">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Martial Arts Strength Training</title>
+<!-- Web App Manifest embedded via Data URI con iconos PNG y campos de compatibilidad -->
+    <link rel="manifest" id="manifestPlaceholder">
+    <script>
+        // Generar un icono PNG real de 512x512 en Canvas para que Chrome PWA reconozca las dimensiones exactas
+        function createPWAIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Fondo
+            ctx.fillStyle = '#0a0d12';
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, size * 0.2);
+            ctx.fill();
 
-    <!-- PWA & Mobile Web App Meta Tags -->
-    <meta name="theme-color" content="#0a0d12">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Strength & Combat">
-    <meta name="application-name" content="Strength & Combat">
+            // Borde Naranja
+            ctx.strokeStyle = '#ff6600';
+            ctx.lineWidth = size * 0.04;
+            ctx.stroke();
 
-    <!-- Web App Manifest embedded via Data URI -->
-    <link rel="manifest" href='data:application/manifest+json,{
-        "name": "Strength & Combat Training",
-        "short_name": "Strength & Combat",
-        "description": "Plan de Fuerza para Artes Marciales - Matias Magenta",
-        "start_url": "./",
-        "display": "standalone",
-        "background_color": "#0a0d12",
-        "theme_color": "#0a0d12",
-        "orientation": "portrait",
-        "icons": [
-            {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%230a0d12%22/><text y=%22.9em%22 font-size=%2280%22>🥋</text></svg>",
-                "sizes": "192x192 512x512",
-                "type": "image/svg+xml"
-            }
-        ]
-    }'>
+            // Texto Emoji
+            ctx.font = `${size * 0.5}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🥋', size / 2, size / 2);
+
+            return canvas.toDataURL('image/png');
+        }
+
+        const icon192 = createPWAIcon(192);
+        const icon512 = createPWAIcon(512);
+
+        const manifestObj = {
+            "id": "strength-combat-app-matias",
+            "name": "Strength & Combat Training",
+            "short_name": "Strength&Combat",
+            "description": "Plan de Fuerza para Artes Marciales - Matias Magenta",
+            "start_url": window.location.href,
+            "scope": "./",
+            "display": "standalone",
+            "background_color": "#0a0d12",
+            "theme_color": "#0a0d12",
+            "orientation": "portrait",
+            "icons": [
+                {
+                    "src": icon192,
+                    "sizes": "192x192",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                },
+                {
+                    "src": icon512,
+                    "sizes": "512x512",
+                    "type": "image/png",
+                    "purpose": "any maskable"
+                }
+            ]
+        };
+
+        const manifestBlob = new Blob([JSON.stringify(manifestObj)], {type: 'application/manifest+json'});
+        document.getElementById('manifestPlaceholder').setAttribute('href', URL.createObjectURL(manifestBlob));
+    </script>
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -189,20 +219,30 @@
             <!-- Dynamic Content -->
         </div>
 
-        <!-- Banner Banner de Instalación PWA -->
-        <div id="pwaInstallCard" class="bg-gradient-to-r from-brand-500/20 to-slate-900 border border-brand-500/40 rounded-2xl p-4 flex items-center justify-between shadow-xl hidden">
-            <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-brand-500 text-slate-950 flex items-center justify-center font-black text-xl shrink-0">
-                    📲
+        <!-- Banner de Instalación PWA Mejora con instrucciones alternativas -->
+        <div id="pwaInstallCard" class="bg-gradient-to-r from-brand-500/20 to-slate-900 border border-brand-500/40 rounded-2xl p-4 space-y-3 shadow-xl">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-brand-500 text-slate-950 flex items-center justify-center font-black text-xl shrink-0">
+                        📲
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-sm text-white">Instalar App en tu Pantalla de Inicio</h3>
+                        <p class="text-[11px] text-slate-400">Acceso directo como aplicación independiente</p>
+                    </div>
                 </div>
-                <div>
-                    <h3 class="font-extrabold text-sm text-white">Instalar App en tu Teléfono</h3>
-                    <p class="text-[11px] text-slate-400">Acceso rápido desde tu pantalla de inicio</p>
-                </div>
+                <button id="pwaInstallBtn" onclick="triggerPWAInstall()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-black text-xs px-3 py-2 rounded-xl transition-all shadow-md shrink-0">
+                    Instalar
+                </button>
             </div>
-            <button id="pwaInstallBtn" onclick="installPWA()" class="bg-brand-500 hover:bg-brand-600 text-slate-950 font-black text-xs px-3 py-2 rounded-xl transition-all shadow-md shrink-0">
-                Instalar
-            </button>
+            <!-- Instrucciones paso a paso para cuando se abre desde vista previa o navegadores que bloquean prompts -->
+            <div id="manualInstallInstructions" class="text-[11px] text-slate-300 bg-slate-950/60 p-2.5 rounded-xl border border-slate-800 space-y-1">
+                <p class="font-bold text-brand-400">¿No aparece la ventana emergente de instalación?</p>
+                <ul class="list-disc list-inside text-slate-400 space-y-0.5">
+                    <li><strong class="text-slate-200">En Chrome (Android/PC):</strong> Toca los 3 puntos arriba a la derecha (⋮) y selecciona <strong>"Agregar a la pantalla de inicio"</strong> o <strong>"Instalar aplicación"</strong>.</li>
+                    <li><strong class="text-slate-200">En Safari (iOS/iPhone):</strong> Toca el botón <strong>Compartir (⎋)</strong> y elige <strong>"Agregar al inicio"</strong>.</li>
+                </ul>
+            </div>
         </div>
 
     </main>
@@ -625,27 +665,37 @@
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
-            const installCard = document.getElementById('pwaInstallCard');
-            if (installCard) installCard.classList.remove('hidden');
+            const installBtn = document.getElementById('pwaInstallBtn');
+            if (installBtn) {
+                installBtn.classList.remove('opacity-50');
+                installBtn.innerText = '¡Instalar Ahora!';
+            }
         });
 
-        function installPWA() {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then((choiceResult) => {
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('Usuario aceptó la instalación');
+        function triggerPWAInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('El usuario aceptó la instalación');
+                        document.getElementById('pwaInstallCard').classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Si la app está en un iFrame o no ha saltado el prompt nativo, desplegar foco en las instrucciones
+                const manualBox = document.getElementById('manualInstallInstructions');
+                if (manualBox) {
+                    manualBox.classList.add('ring-2', 'ring-brand-500');
+                    setTimeout(() => manualBox.classList.remove('ring-2', 'ring-brand-500'), 2000);
                 }
-                deferredPrompt = null;
-                const installCard = document.getElementById('pwaInstallCard');
-                if (installCard) installCard.classList.add('hidden');
-            });
+            }
         }
 
-        // Register Service Worker from Inline Blob
-        if ('serviceWorker' in navigator) {
+        // Register Service Worker de forma segura reconociendo el protocolo
+        if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
             const swCode = `
-                const CACHE_NAME = 'strength-app-v1';
+                const CACHE_NAME = 'strength-app-v2';
                 self.addEventListener('install', (e) => {
                     e.waitUntil(self.skipWaiting());
                 });
@@ -658,9 +708,13 @@
                     );
                 });
             `;
-            const blob = new Blob([swCode], { type: 'text/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-            navigator.serviceWorker.register(swUrl).catch(err => console.log('SW Error:', err));
+            try {
+                const blob = new Blob([swCode], { type: 'text/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+                navigator.serviceWorker.register(swUrl).catch(err => console.log('SW Registration skipped/failed:', err));
+            } catch(e) {
+                console.log('Inline SW creation failed:', e);
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
