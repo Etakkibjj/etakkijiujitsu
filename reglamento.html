@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reglamento Oficial - Torneo de Jiu Jitsu EBI NoGi</title>
+    
+    <!-- Fuentes tipográficas originales (Orbitron, Teko, Montserrat) y FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,400;0,700;0,900;1,800&family=Orbitron:wght@700;900&family=Teko:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="all.min.css">
+
+    <!-- Tailwind CSS CDN (versión de soporte completo) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            gold: '#D4AF37',
+                            yellow: '#FFD700',
+                            dark: '#0A0A0B',
+                            card: '#121216',
+                            border: '#2A2A35',
+                            accent: '#FF4500'
+                        }
+                    },
+                    fontFamily: {
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        teko: ['Teko', 'sans-serif'],
+                        montserrat: ['Montserrat', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #0A0A0B;
+            color: #E2E8F0;
+            font-family: 'Montserrat', sans-serif;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 60%),
+                radial-gradient(circle at 100% 50%, rgba(255, 69, 0, 0.05) 0%, transparent 50%);
+            background-attachment: fixed;
+        }
+
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF5C0 0%, #D4AF37 50%, #AA7C11 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .gold-border-glow {
+            box-shadow: 0 0 15px rgba(212, 175, 55, 0.15);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .rule-card {
+            background: rgba(18, 18, 22, 0.85);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .rule-card:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .custom-table th {
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 0.05em;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-yellow-500 selection:text-black">
+
+    <!-- HEADER / NAVIGATION -->
+    <header class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-brand-border">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            <a href="index.html" class="flex items-center gap-3 group">
+                <i class="fa-solid fa-trophy text-2xl text-brand-gold group-hover:scale-110 transition-transform"></i>
+                <span class="font-orbitron font-black text-xl tracking-wider gold-gradient-text uppercase">
+                    TORNEO EBI
+                </span>
+            </a>
+            
+            <a href="index.html" class="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-white/5 hover:bg-brand-gold/20 text-gray-300 hover:text-brand-gold border border-white/10 hover:border-brand-gold/40 transition-all text-sm font-semibold">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Volver al inicio</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex-grow w-full">
+        
+        <!-- TITLE BANNER -->
+        <div class="text-center mb-16 relative">
+            <div class="inline-block mb-3 px-4 py-1 rounded-full bg-brand-gold/10 border border-brand-gold/30">
+                <span class="font-teko text-2xl tracking-widest text-brand-yellow uppercase">
+                    Normativa de Competición
+                </span>
+            </div>
+            <h1 class="font-orbitron text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight gold-gradient-text mb-4">
+                REGLAMENTO OFICIAL
+            </h1>
+            <p class="font-teko text-2xl sm:text-3xl text-gray-400 tracking-wider uppercase">
+                TORNEO DE JIU JITSU EBI — NO GI
+            </p>
+            <div class="w-32 h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent mx-auto mt-6"></div>
+        </div>
+
+        <!-- RULES GRID -->
+        <div class="space-y-8">
+
+            <!-- 1. MODALIDAD DE COMPETENCIA -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">01</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-hand-fist text-brand-gold text-lg"></i>
+                            1. MODALIDAD DE COMPETENCIA
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            El torneo se disputará bajo la modalidad <strong class="text-white font-semibold">NoGi (jiu-jitsu sin kimono)</strong>, con énfasis en las técnicas de sumisión, el control posicional, las transiciones, la defensa y la iniciativa ofensiva.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Todos los competidores deberán respetar las reglas de competencia, las indicaciones del árbitro y las normas de seguridad establecidas por la organización.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. TIEMPO REGLAMENTARIO -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-l-4 border-l-brand-gold">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">02</span>
+                    <div class="space-y-4 w-full">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-stopwatch text-brand-gold text-lg"></i>
+                            2. TIEMPO REGLAMENTARIO — SUBMISSION ONLY
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Cada combate tendrá una duración inicial de <strong class="text-brand-yellow font-bold">6 minutos</strong> bajo la modalidad Submission Only. Durante este período, el objetivo será conseguir la sumisión del oponente.
+                        </p>
+                        
+                        <div class="bg-black/40 rounded-xl p-4 border border-white/5 space-y-2">
+                            <div class="flex items-center gap-2 text-red-400 text-sm sm:text-base font-semibold">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                <span>No se otorgarán puntos por derribos, raspajes, pasajes de guardia, montadas ni tomas de espalda.</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-red-400 text-sm sm:text-base font-semibold">
+                                <i class="fa-solid fa-circle-xmark"></i>
+                                <span>No se otorgarán ventajas.</span>
+                            </div>
+                            <div class="flex items-center gap-2 text-green-400 text-sm sm:text-base font-semibold">
+                                <i class="fa-solid fa-circle-check"></i>
+                                <span>El combate finalizará inmediatamente si uno de los competidores consigue la sumisión mediante tapeo físico o verbal.</span>
+                            </div>
+                        </div>
+
+                        <p class="text-gray-400 italic text-xs sm:text-sm">
+                            Si al finalizar los 6 minutos ninguno de los competidores consigue la sumisión, el combate pasará a la instancia de overtime.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. PRIMER OVERTIME -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">03</span>
+                    <div class="space-y-4 w-full">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-hourglass-half text-brand-gold text-lg"></i>
+                            3. PRIMER OVERTIME — SISTEMA DE PUNTUACIÓN
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Si no hay sumisión durante los 6 minutos reglamentarios, se disputará un primer overtime de <strong class="text-brand-yellow">3 minutos</strong>, durante el cual se aplicará exclusivamente el sistema de puntuación establecido en este reglamento.
+                        </p>
+
+                        <!-- TABLA DE PUNTOS -->
+                        <div class="overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60">
+                            <table class="w-full text-left border-collapse custom-table">
+                                <thead>
+                                    <tr class="bg-brand-gold/10 text-brand-gold border-b border-brand-border text-xs sm:text-sm">
+                                        <th class="p-3 sm:p-4 font-bold uppercase">Acción Técnica</th>
+                                        <th class="p-3 sm:p-4 font-bold uppercase text-right">Puntuación</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/5 text-sm sm:text-base">
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="p-3 sm:p-4 font-medium text-gray-200">Derribo</td>
+                                        <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">2 PUNTOS</td>
+                                    </tr>
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="p-3 sm:p-4 font-medium text-gray-200">Pasaje de guardia</td>
+                                        <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">3 PUNTOS</td>
+                                    </tr>
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="p-3 sm:p-4 font-medium text-gray-200">Raspaje</td>
+                                        <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">2 PUNTOS</td>
+                                    </tr>
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="p-3 sm:p-4 font-medium text-gray-200">Montada</td>
+                                        <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">4 PUNTOS</td>
+                                    </tr>
+                                    <tr class="hover:bg-white/5 transition-colors">
+                                        <td class="p-3 sm:p-4 font-medium text-gray-200">Toma de espalda</td>
+                                        <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">4 PUNTOS</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <ul class="list-disc list-inside space-y-2 text-gray-300 text-sm sm:text-base">
+                            <li>Durante el overtime se contabilizarán exclusivamente los puntos. No se otorgarán ventajas bajo ninguna circunstancia.</li>
+                            <li>Al finalizar los 3 minutos, ganará el competidor que haya obtenido la mayor cantidad de puntos durante ese período.</li>
+                            <li><strong class="text-white">Los puntos obtenidos durante los 6 minutos iniciales de Submission Only no se contabilizarán ni se trasladarán al overtime.</strong></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. SEGUNDO OVERTIME -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">04</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-rotate text-brand-gold text-lg"></i>
+                            4. SEGUNDO OVERTIME
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Si al finalizar el primer overtime ambos competidores terminan empatados en puntos, se podrá disputar un segundo overtime de <strong>3 minutos</strong>, previa decisión de la organización arbitral.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Durante este segundo período se mantendrán las mismas reglas:
+                        </p>
+                        <ul class="list-disc list-inside space-y-1 text-gray-300 text-sm sm:text-base pl-2">
+                            <li>Se contabilizarán exclusivamente los puntos.</li>
+                            <li>No se otorgarán ventajas.</li>
+                            <li>Solo se tendrán en cuenta los puntos obtenidos durante este período para determinar el resultado.</li>
+                        </ul>
+                        <p class="text-brand-yellow font-semibold text-sm sm:text-base pt-2">
+                            Al finalizar el segundo overtime, ganará el competidor que haya obtenido más puntos durante ese período.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. DESEMPATE POR DECISIÓN ARBITRAL -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">05</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-gavel text-brand-gold text-lg"></i>
+                            5. DESEMPATE POR DECISIÓN ARBITRAL
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Si al finalizar el segundo overtime ambos competidores continúan empatados en puntos, el árbitro declarará al vencedor por decisión, basándose en la proactividad demostrada durante el combate y en la iniciativa de cada competidor para buscar la victoria.
+                        </p>
+                        <p class="text-gray-400 font-medium text-sm sm:text-base">
+                            Para tomar su decisión, el árbitro podrá considerar:
+                        </p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/5 text-xs sm:text-sm text-gray-300 flex items-center gap-2">
+                                <i class="fa-solid fa-bullseye text-brand-gold"></i>
+                                La búsqueda activa de la finalización mediante técnicas de sumisión.
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/5 text-xs sm:text-sm text-gray-300 flex items-center gap-2">
+                                <i class="fa-solid fa-gauge-high text-brand-gold"></i>
+                                La iniciativa ofensiva y la presión ejercida sobre el oponente.
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/5 text-xs sm:text-sm text-gray-300 flex items-center gap-2">
+                                <i class="fa-solid fa-arrow-up-right-dots text-brand-gold"></i>
+                                Los intentos de progresión y mejora de la posición.
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/5 text-xs sm:text-sm text-gray-300 flex items-center gap-2">
+                                <i class="fa-solid fa-fire text-brand-gold"></i>
+                                La actividad y la intención de imponer el propio juego.
+                            </div>
+                            <div class="bg-white/5 p-3 rounded-lg border border-white/5 text-xs sm:text-sm text-gray-300 flex items-center gap-2 md:col-span-2">
+                                <i class="fa-solid fa-trophy text-brand-gold"></i>
+                                La búsqueda efectiva de acciones que permitan obtener la victoria.
+                            </div>
+                        </div>
+                        <p class="text-white font-bold text-xs sm:text-sm uppercase tracking-wider pt-2">
+                            La decisión arbitral será definitiva.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. TÉCNICAS ILEGALES Y SEGURIDAD -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-l-4 border-l-red-500">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-red-500/40 leading-none select-none">06</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-triangle-exclamation text-red-500 text-lg"></i>
+                            6. TÉCNICAS ILEGALES Y SEGURIDAD
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Quedan prohibidas las acciones que la organización determine como ilegales o peligrosas para la integridad física de los competidores.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            El árbitro podrá detener el combate, advertir a los competidores o aplicar las sanciones correspondientes ante una infracción.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Los competidores deberán detener inmediatamente cualquier acción cuando el árbitro lo indique o cuando su oponente manifieste rendición mediante tapeo físico o verbal.
+                        </p>
+                        <div class="p-4 bg-red-950/30 border border-red-500/20 rounded-xl text-xs sm:text-sm text-red-200">
+                            La lista definitiva de técnicas permitidas y prohibidas será comunicada por la organización antes del comienzo de la competencia, teniendo en cuenta la categoría, la edad y el nivel de los participantes.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. ASISTENCIA MÉDICA Y SEGURIDAD DE LOS COMPETIDORES -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">07</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-kit-medical text-brand-gold text-lg"></i>
+                            7. ASISTENCIA MÉDICA Y SEGURIDAD DE LOS COMPETIDORES
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            La organización contará con personal médico profesional presente durante todo el evento, encargado de supervisar y brindar asistencia ante cualquier necesidad médica que pueda surgir durante la competencia.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            El personal médico estará disponible para evaluar y atender a los participantes en caso de lesión, malestar físico o cualquier otra situación que requiera atención sanitaria.
+                        </p>
+                        <p class="text-brand-yellow font-semibold text-sm sm:text-base">
+                            La seguridad y la integridad física de los competidores serán una prioridad durante todo el torneo.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            El árbitro podrá detener o suspender un combate cuando lo considere necesario por razones de seguridad o ante la indicación del personal médico.
+                        </p>
+                        <p class="text-gray-400 text-xs sm:text-sm italic">
+                            Todos los participantes deberán respetar las indicaciones del personal médico y arbitral en todo momento.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. AUTORIDAD ARBITRAL -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">08</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-shield-halved text-brand-gold text-lg"></i>
+                            8. AUTORIDAD ARBITRAL
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            El árbitro será responsable de supervisar el combate, validar las acciones puntuables, controlar el desarrollo de la competencia y garantizar el cumplimiento del reglamento.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Sus decisiones durante el combate deberán ser respetadas por los competidores y sus respectivos equipos.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            La organización podrá intervenir para resolver situaciones no contempladas expresamente en este documento, priorizando la equidad deportiva, el cumplimiento de las reglas y la seguridad de todos los participantes.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. ACEPTACIÓN DEL REGLAMENTO -->
+            <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border border-brand-gold/30">
+                <div class="flex items-start gap-4">
+                    <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">09</span>
+                    <div class="space-y-3">
+                        <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                            <i class="fa-solid fa-file-contract text-brand-gold text-lg"></i>
+                            9. ACEPTACIÓN DEL REGLAMENTO
+                        </h2>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            La inscripción y participación en el torneo implican el conocimiento y la aceptación de las reglas de competencia establecidas por la organización.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            Todos los competidores serán responsables de conocer el reglamento antes de ingresar al área de combate y deberán cumplir con las disposiciones establecidas durante todo el evento.
+                        </p>
+                        <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                            La organización se reserva el derecho de aclarar cualquier situación reglamentaria que pudiera surgir durante el torneo, procurando garantizar una competencia justa, segura y deportiva para todos los participantes.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- FOOTER BACK BUTTON -->
+        <div class="mt-12 text-center">
+            <a href="index.html" class="inline-flex items-center gap-3 px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-600 text-black font-orbitron font-bold text-base hover:opacity-90 transition-opacity shadow-lg shadow-brand-gold/20 uppercase tracking-wider">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>Volver al Sitio Principal</span>
+            </a>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black border-t border-brand-border py-6 mt-16">
+        <div class="max-w-6xl mx-auto px-4 text-center text-gray-500 text-xs sm:text-sm">
+            <p>&copy; Torneo de Jiu Jitsu EBI — NoGi. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
