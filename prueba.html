@@ -1,13 +1,3 @@
-<!-- =================================================================
-     GUÍA DE INTEGRACIÓN EN TU INDEX.HTML DE GITHUB PAGES
-     =================================================================
-     1. Copia las fuentes (Google Fonts) y Font Awesome a la etiqueta <head> de tu index.html.
-     2. Copia todo el contenido de `<section id="brackets">` en el lugar exacto 
-        donde quieras mostrar los torneos en tu página principal.
-     3. Copia el bloque `<style>` a tu archivo CSS o dentro del `<head>`.
-     4. Copia el bloque `<script>` antes de la etiqueta de cierre `</body>`.
-================================================================== -->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -143,10 +133,10 @@
     <!-- Canvas de rayos/relámpagos de fondo -->
     <canvas id="lightning-canvas"></canvas>
 
-    <!-- SECTION PRINCIPAL INTERACTIVA (Insertar esta etiqueta en tu index.html principal) -->
+    <!-- SECTION PRINCIPAL INTERACTIVA -->
     <section id="brackets" class="relative z-10 w-full max-w-7xl mx-auto my-4 scroll-mt-10">
 
-        <!-- Barra de Control y Restablecimiento con el BOTÓN GRANDE DE REGLAMENTO -->
+        <!-- Barra de Control y Restablecimiento con el Botón Grande de Reglamento -->
         <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
             <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
                 <i class="fa-solid fa-bolt text-yellow-400 animate-pulse text-base"></i> 
@@ -154,7 +144,7 @@
             </span>
 
             <div class="flex flex-wrap items-center gap-3">
-                <!-- BOTÓN GRANDE PARA IR AL REGLAMENTO -->
+                <!-- Botón Grande de Reglamento -->
                 <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
                    class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-6 py-3 rounded-xl transition duration-300 flex items-center gap-3 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-sm sm:text-base uppercase tracking-wider transform hover:scale-105">
                     <i class="fa-solid fa-book-open text-lg"></i> Ver Reglamento Oficial
@@ -178,6 +168,21 @@
                 dos torneos super 8, dos títulos en juego.
             </p>
         </header>
+
+        <!-- REPRODUCTOR DE SOUNDCLOUD INTEGRADO CON AUTOPLAY -->
+        <div class="w-full max-w-xl mx-auto mb-10 bg-cardBg/90 border border-cyan-500/50 rounded-2xl p-3 shadow-[0_0_25px_rgba(0,102,255,0.3)] backdrop-blur-md">
+            <div class="flex items-center gap-2 mb-2 px-1 text-cyan-300 text-xs font-mono">
+                <i class="fa-solid fa-music animate-spin text-brand-gold"></i>
+                <span>SOUNDTRACK OFICIAL DEL EVENTO</span>
+            </div>
+            <div class="rounded-xl overflow-hidden border border-cyan-500/30">
+                <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
+            </div>
+            <div class="mt-2 text-[10px] text-gray-400 text-center truncate font-sans">
+                <a href="https://soundcloud.com/extra_shard" title="Shard" target="_blank" style="color: #00f0ff; text-decoration: none;">Shard</a> · 
+                <a href="https://soundcloud.com/extra_shard/alan-parsons-project-sirius" title="- Alan Parsons Project - Sirius -" target="_blank" style="color: #cccccc; text-decoration: none;">- Alan Parsons Project - Sirius -</a>
+            </div>
+        </div>
 
         <!-- CONTENEDOR DE TORNEOS -->
         <div class="w-full space-y-12">
@@ -494,7 +499,6 @@
 
     <!-- LÓGICA INTERACTIVA DEL TORNEO -->
     <script>
-        // Estructura de estado inicial para ambos torneos
         const tournamentState = {
             iniciantes: {
                 prefix: 'init',
@@ -522,9 +526,8 @@
             }
         };
 
-        // Función general para hacer avanzar a un competidor al hacer click
         function advanceFighter(category, stage, matchIdx, playerIdx) {
-            // Lógica interna o script de avance aquí
+            // Lógica del bracket
         }
     </script>
 </body>
