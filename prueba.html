@@ -169,21 +169,6 @@
             </p>
         </header>
 
-        <!-- REPRODUCTOR DE SOUNDCLOUD INTEGRADO CON AUTOPLAY -->
-        <div class="w-full max-w-xl mx-auto mb-10 bg-cardBg/90 border border-cyan-500/50 rounded-2xl p-3 shadow-[0_0_25px_rgba(0,102,255,0.3)] backdrop-blur-md">
-            <div class="flex items-center gap-2 mb-2 px-1 text-cyan-300 text-xs font-mono">
-                <i class="fa-solid fa-music animate-spin text-brand-gold"></i>
-                <span>SOUNDTRACK OFICIAL DEL EVENTO</span>
-            </div>
-            <div class="rounded-xl overflow-hidden border border-cyan-500/30">
-                <iframe width="100%" height="166" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=false"></iframe>
-            </div>
-            <div class="mt-2 text-[10px] text-gray-400 text-center truncate font-sans">
-                <a href="https://soundcloud.com/extra_shard" title="Shard" target="_blank" style="color: #00f0ff; text-decoration: none;">Shard</a> · 
-                <a href="https://soundcloud.com/extra_shard/alan-parsons-project-sirius" title="- Alan Parsons Project - Sirius -" target="_blank" style="color: #cccccc; text-decoration: none;">- Alan Parsons Project - Sirius -</a>
-            </div>
-        </div>
-
         <!-- CONTENEDOR DE TORNEOS -->
         <div class="w-full space-y-12">
 
@@ -493,6 +478,18 @@
                     AMBROSETTI 826 - CABALLITO
                 </h3>
             </div>
+
+            <!-- REPRODUCTOR DE SOUNDCLOUD PEQUEÑO Y DEBAJO DE TODO -->
+            <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
+                <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
+                    <i class="fa-solid fa-music text-cyan-400"></i>
+                    <span>Soundtrack - Sirius</span>
+                </div>
+                <div class="rounded-lg overflow-hidden border border-cyan-500/20">
+                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
+                </div>
+            </div>
+
         </footer>
 
     </section>
