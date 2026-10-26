@@ -57,11 +57,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        .gold-glow-box {
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.12);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-        }
-
         .rule-card {
             background: rgba(19, 19, 26, 0.85);
             backdrop-filter: blur(12px);
@@ -72,12 +67,6 @@
         .rule-card:hover {
             border-color: rgba(212, 175, 55, 0.4);
             transform: translateY(-2px);
-        }
-
-        .nav-tab.active {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.2) 0%, rgba(212, 175, 55, 0.05) 100%);
-            border-color: #D4AF37;
-            color: #FFD700;
         }
 
         /* Custom Scrollbar */
@@ -103,7 +92,6 @@
     <header class="sticky top-0 z-50 bg-black/90 backdrop-blur-md border-b border-brand-border">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             
-            <!-- BRANDING SOLICITADO -->
             <a href="#rules-section" class="flex items-center gap-3 group">
                 <i class="fa-solid fa-trophy text-2xl text-brand-gold group-hover:scale-110 transition-transform"></i>
                 <div class="flex flex-col">
@@ -114,7 +102,6 @@
                 </div>
             </a>
             
-            <!-- NAVIGATION BUTTONS (Solo Reglamento) -->
             <div class="flex items-center gap-2 sm:gap-3">
                 <button class="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-brand-gold/20 text-brand-yellow border border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all">
                     <i class="fa-solid fa-book-open"></i>
@@ -127,9 +114,6 @@
     <!-- MAIN CONTAINER -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
         
-        <!-- ========================================== -->
-        <!-- VIEW 1: REGLAMENTO OFICIAL -->
-        <!-- ========================================== -->
         <div id="view-rules" class="space-y-8">
             
             <!-- HERO BANNER -->
@@ -160,12 +144,12 @@
             <div class="grid grid-cols-1 gap-6" id="rules-container">
 
                 <!-- 1. MODALIDAD DE COMPETENCIA -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad">
-                    <div class="flex items-start gap-4">
-                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">01</span>
+                <section class="rule-card rounded-2xl p-5 sm:p-8 relative overflow-hidden" data-category="modalidad">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <span class="font-teko text-4xl sm:text-5xl font-bold text-brand-gold/40 leading-none select-none">01</span>
                         <div class="space-y-3 w-full">
-                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
-                                <i class="fa-solid fa-hand-fist text-brand-gold text-lg"></i>
+                            <h2 class="font-orbitron text-lg sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-hand-fist text-brand-gold text-base sm:text-lg"></i>
                                 1. MODALIDAD DE COMPETENCIA
                             </h2>
                             <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
@@ -179,12 +163,12 @@
                 </section>
 
                 <!-- 2. TIEMPO REGLAMENTARIO -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-l-4 border-l-brand-gold" data-category="modalidad overtime">
-                    <div class="flex items-start gap-4">
-                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">02</span>
+                <section class="rule-card rounded-2xl p-5 sm:p-8 relative overflow-hidden border-l-4 border-l-brand-gold" data-category="modalidad overtime">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <span class="font-teko text-4xl sm:text-5xl font-bold text-brand-gold/40 leading-none select-none">02</span>
                         <div class="space-y-4 w-full">
-                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
-                                <i class="fa-solid fa-stopwatch text-brand-gold text-lg"></i>
+                            <h2 class="font-orbitron text-lg sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-stopwatch text-brand-gold text-base sm:text-lg"></i>
                                 2. TIEMPO REGLAMENTARIO — SUBMISSION ONLY
                             </h2>
                             <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
@@ -192,16 +176,16 @@
                             </p>
                             
                             <div class="bg-black/50 rounded-xl p-4 border border-white/5 space-y-2">
-                                <div class="flex items-center gap-2 text-red-400 text-sm sm:text-base font-semibold">
-                                    <i class="fa-solid fa-circle-xmark"></i>
+                                <div class="flex items-center gap-2 text-red-400 text-xs sm:text-base font-semibold">
+                                    <i class="fa-solid fa-circle-xmark shrink-0"></i>
                                     <span>Sin puntos por derribos, raspajes, pasajes, montadas ni espalda en los 6 min iniciales.</span>
                                 </div>
-                                <div class="flex items-center gap-2 text-red-400 text-sm sm:text-base font-semibold">
-                                    <i class="fa-solid fa-circle-xmark"></i>
+                                <div class="flex items-center gap-2 text-red-400 text-xs sm:text-base font-semibold">
+                                    <i class="fa-solid fa-circle-xmark shrink-0"></i>
                                     <span>No existen las ventajas en ninguna etapa.</span>
                                 </div>
-                                <div class="flex items-center gap-2 text-green-400 text-sm sm:text-base font-semibold">
-                                    <i class="fa-solid fa-circle-check"></i>
+                                <div class="flex items-center gap-2 text-green-400 text-xs sm:text-base font-semibold">
+                                    <i class="fa-solid fa-circle-check shrink-0"></i>
                                     <span>Finalización inmediata por tapeo físico o verbal.</span>
                                 </div>
                             </div>
@@ -214,47 +198,50 @@
                 </section>
 
                 <!-- 3. OVERTIMES Y SISTEMA DE PUNTOS -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="overtime">
-                    <div class="flex items-start gap-4">
-                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">03</span>
-                        <div class="space-y-4 w-full">
-                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
-                                <i class="fa-solid fa-hourglass-half text-brand-gold text-lg"></i>
-                                3. OVERTIME Y SISTEMA DE PUNTUACIÓN (1° y 2° OVERTIME)
+                <section class="rule-card rounded-2xl p-5 sm:p-8 relative overflow-hidden" data-category="overtime">
+                    <div class="flex flex-col sm:flex-row items-start gap-4">
+                        <span class="font-teko text-4xl sm:text-5xl font-bold text-brand-gold/40 leading-none select-none shrink-0">03</span>
+                        <div class="space-y-4 w-full min-w-0">
+                            <h2 class="font-orbitron text-lg sm:text-2xl font-bold text-white flex items-center gap-3 flex-wrap">
+                                <i class="fa-solid fa-hourglass-half text-brand-gold text-base sm:text-lg"></i>
+                                <span>3. OVERTIME Y SISTEMA DE PUNTUACIÓN (1° y 2° OVERTIME)</span>
                             </h2>
                             <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
                                 Si no hay sumisión en los 6 minutos iniciales, se disputará un <strong class="text-brand-yellow font-bold">1° Overtime de 3 minutos</strong> con puntuación. Si persiste empate, se disputará un <strong class="text-brand-yellow font-bold">2° Overtime de 3 minutos</strong> adicional.
                             </p>
 
-                            <!-- TABLA DE PUNTOS (Mejorada para móviles) -->
-                            <div class="overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60 shadow-lg">
-                                <table class="w-full text-left border-collapse min-w-[280px]">
+                            <!-- TABLA DE PUNTOS COMPACTA Y ALINEADA -->
+                            <div class="w-full overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60 shadow-lg">
+                                <table class="w-full border-collapse">
                                     <thead>
                                         <tr class="bg-brand-gold/10 text-brand-gold border-b border-brand-border text-xs sm:text-sm">
-                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron">Acción Técnica Posicional</th>
-                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-center sm:text-right whitespace-nowrap">Puntuación Oficial</th>
+                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-left">Acción Técnica Posicional</th>
+                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-right leading-tight whitespace-nowrap w-36">
+                                                <span>PUNTUACIÓN</span><br>
+                                                <span class="text-[10px] tracking-widest text-brand-yellow/80">OFICIAL</span>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-white/5 text-xs sm:text-base">
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Derribo (Takedown)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">2 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Derribo (Takedown)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">2 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">3 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">3 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Raspaje (Sweep)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">2 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Raspaje (Sweep)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">2 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Montada (Mount)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">4 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Montada (Mount)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">4 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Toma de espalda (Back Control con ganchos/triángulo)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">4 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Toma de espalda <span class="block text-[11px] text-gray-400 font-normal sm:inline sm:text-xs">(con ganchos/triángulo)</span></td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">4 PUNTOS</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -268,77 +255,77 @@
                     </div>
                 </section>
 
-                <!-- 4. REGLAS ESPECÍFICAS DE TÉCNICAS (PERMITIDAS Y PROHIBIDAS) -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-2 border-brand-gold/40" data-category="tecnicas">
-                    <div class="flex items-start gap-4">
-                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">04</span>
-                        <div class="space-y-6 w-full">
+                <!-- 4. REGLAS ESPECÍFICAS DE TÉCNICAS -->
+                <section class="rule-card rounded-2xl p-5 sm:p-8 relative overflow-hidden border-2 border-brand-gold/40" data-category="tecnicas">
+                    <div class="flex flex-col sm:flex-row items-start gap-4">
+                        <span class="font-teko text-4xl sm:text-5xl font-bold text-brand-gold/40 leading-none select-none shrink-0">04</span>
+                        <div class="space-y-6 w-full min-w-0">
                             <div class="border-b border-brand-border pb-3">
-                                <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
-                                    <i class="fa-solid fa-list-check text-brand-gold text-lg"></i>
-                                    4. REGLAMENTO DE TÉCNICAS PERMITIDAS Y PROHIBIDAS
+                                <h2 class="font-orbitron text-lg sm:text-2xl font-bold text-white flex items-center gap-3 flex-wrap">
+                                    <i class="fa-solid fa-list-check text-brand-gold text-base sm:text-lg"></i>
+                                    <span>4. REGLAMENTO DE TÉCNICAS PERMITIDAS Y PROHIBIDAS</span>
                                 </h2>
                                 <p class="text-xs sm:text-sm text-gray-400 mt-1">Normativa estricta de finalizaciones, agarres y seguridad en el mat.</p>
                             </div>
 
                             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                                 
-                                <!-- TÉCNICAS PROHIBIDAS (ILEGALES) -->
-                                <div class="bg-red-950/20 border border-red-500/30 rounded-xl p-5 space-y-3">
-                                    <h3 class="font-orbitron font-bold text-red-400 flex items-center gap-2 text-base sm:text-lg border-b border-red-500/20 pb-2">
+                                <!-- TÉCNICAS PROHIBIDAS -->
+                                <div class="bg-red-950/20 border border-red-500/30 rounded-xl p-4 sm:p-5 space-y-3">
+                                    <h3 class="font-orbitron font-bold text-red-400 flex items-center gap-2 text-sm sm:text-lg border-b border-red-500/20 pb-2">
                                         <i class="fa-solid fa-ban text-red-500"></i>
                                         TÉCNICAS PROHIBIDAS (DESCALIFICACIÓN)
                                     </h3>
                                     <ul class="space-y-2 text-xs sm:text-sm text-gray-200">
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5 shrink-0"></i>
                                             <span><strong>Golpes y patadas:</strong> Prohibido todo tipo de golpe de puño, patada, codazo, rodillazo o cabezazo.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5 shrink-0"></i>
                                             <span><strong>Ataques a los ojos:</strong> Prohibido meter dedos en los ojos o cara.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5 shrink-0"></i>
                                             <span><strong>Slameos (Slam):</strong> Prohibido proyectar o azotar contra el mat desde altura a un oponente que está cerrado en guardia o buscando una sumisión.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
-                                            <span><strong>Llaves cervicales puras:</strong> Prohibida la hiperflexión o torsión cervical sin estrangulación (Neck cranks puros).</span>
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5 shrink-0"></i>
+                                            <span><strong>Llaves cervicales puras:</strong> Prohibida la hiperflexión o torsión cervical sin estrangulación.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5 shrink-0"></i>
                                             <span><strong>Agarres pequeños:</strong> Prohibido manipular o agarrar menos de 3 dedos de la mano o pie.</span>
                                         </li>
                                     </ul>
                                 </div>
 
                                 <!-- TÉCNICAS PERMITIDAS -->
-                                <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 space-y-3">
-                                    <h3 class="font-orbitron font-bold text-emerald-400 flex items-center gap-2 text-base sm:text-lg border-b border-emerald-500/20 pb-2">
+                                <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-4 sm:p-5 space-y-3">
+                                    <h3 class="font-orbitron font-bold text-emerald-400 flex items-center gap-2 text-sm sm:text-lg border-b border-emerald-500/20 pb-2">
                                         <i class="fa-solid fa-circle-check text-emerald-500"></i>
                                         TÉCNICAS PERMITIDAS (100% EBI VALIDATED)
                                     </h3>
                                     <ul class="space-y-2 text-xs sm:text-sm text-gray-200">
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0"></i>
                                             <span><strong>Obstrucción respiratoria:</strong> PERMITIDO tapar la boca y tapar la nariz.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
-                                            <span><strong>Estrangulaciones a mano abierta:</strong> PERMITIDAS las estrangulaciones de cuello a mano abierta (vocal cord/front choke).</span>
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <span><strong>Estrangulaciones a mano abierta:</strong> PERMITIDAS las estrangulaciones de cuello a mano abierta.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
-                                            <span><strong>Leglocks completas:</strong> TODAS las leglocks permitidas (Heel hooks/Talones, Knee bars, Toe holds, Calf slicers, Ankle locks).</span>
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <span><strong>Leglocks completas:</strong> TODAS las leglocks permitidas (Heel hooks, Knee bars, Toe holds, etc.).</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0"></i>
                                             <span><strong>Twister:</strong> PERMITIDO Twister tradicional y Twister Escocés.</span>
                                         </li>
                                         <li class="flex items-start gap-2">
-                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
-                                            <span><strong>Wristlocks & Finalizaciones:</strong> PERMITIDA Mano de vaca (wristlock) y TODAS las finalizaciones conocidas en Jiujitsu NoGi.</span>
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5 shrink-0"></i>
+                                            <span><strong>Wristlocks & Finalizaciones:</strong> PERMITIDA Mano de vaca y TODAS las finalizaciones conocidas NoGi.</span>
                                         </li>
                                     </ul>
                                 </div>
@@ -349,12 +336,12 @@
                 </section>
 
                 <!-- 5. DESEMPATE POR DECISIÓN ARBITRAL Y SEGURIDAD -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad">
-                    <div class="flex items-start gap-4">
-                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">05</span>
+                <section class="rule-card rounded-2xl p-5 sm:p-8 relative overflow-hidden" data-category="modalidad">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                        <span class="font-teko text-4xl sm:text-5xl font-bold text-brand-gold/40 leading-none select-none">05</span>
                         <div class="space-y-3 w-full">
-                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
-                                <i class="fa-solid fa-gavel text-brand-gold text-lg"></i>
+                            <h2 class="font-orbitron text-lg sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-gavel text-brand-gold text-base sm:text-lg"></i>
                                 5. DECISIÓN ARBITRAL Y SEGURIDAD MÉDICA
                             </h2>
                             <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
