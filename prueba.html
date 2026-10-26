@@ -1,3 +1,6 @@
+Aquí tienes el código HTML completo con el botón de "Brackets (Llaves)" eliminado de la navegación superior y sin las vistas interactivas de las llaves, manteniendo todo lo demás exactamente igual:
+
+```html
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -154,4 +157,254 @@
                     <!-- Search Box -->
                     <div class="relative w-full md:w-1/2">
                         <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" id="rule-search
+                        <input type="text" id="rule-search" onkeyup="filterRules()" placeholder="Buscar regla o técnica (ej: leglocks, twister, slameos, overtime)..." class="w-full bg-black/60 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
+                    </div>
+                    <!-- Direct Navigation Tabs -->
+                    <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
+                        <button onclick="filterCategory('all')" class="nav-tab active px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Todos</button>
+                        <button onclick="filterCategory('modalidad')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Modalidad</button>
+                        <button onclick="filterCategory('overtime')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Overtime/Puntos</button>
+                        <button onclick="filterCategory('tecnicas')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Técnicas Perm/Proh</button>
+                        <button onclick="filterCategory('simuladores')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all text-brand-yellow">Simuladores</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RULES LIST -->
+            <div class="grid grid-cols-1 gap-6" id="rules-container">
+
+                <!-- 1. MODALIDAD DE COMPETENCIA -->
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad" data-keywords="nogi gi sumision tapeo tiempo 6 minutos">
+                    <div class="flex items-start gap-4">
+                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">01</span>
+                        <div class="space-y-3 w-full">
+                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-hand-fist text-brand-gold text-lg"></i>
+                                1. MODALIDAD DE COMPETENCIA
+                            </h2>
+                            <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                                El torneo se disputará bajo la modalidad <strong class="text-white font-semibold">NoGi (jiu-jitsu sin kimono)</strong>, con énfasis en las técnicas de sumisión, el control posicional, las transiciones, la defensa y la iniciativa ofensiva.
+                            </p>
+                            <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                                Todos los competidores deberán respetar las reglas de competencia, las indicaciones del árbitro y las normas de seguridad establecidas por la organización.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. TIEMPO REGLAMENTARIO -->
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-l-4 border-l-brand-gold" data-category="modalidad overtime" data-keywords="tiempo 6 minutos submission only puntos ventajas tapeo">
+                    <div class="flex items-start gap-4">
+                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">02</span>
+                        <div class="space-y-4 w-full">
+                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-stopwatch text-brand-gold text-lg"></i>
+                                2. TIEMPO REGLAMENTARIO — SUBMISSION ONLY
+                            </h2>
+                            <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                                Cada combate tendrá una duración inicial de <strong class="text-brand-yellow font-bold">6 minutos</strong> bajo la modalidad Submission Only. Durante este período, el objetivo único será conseguir la sumisión del oponente.
+                            </p>
+                            
+                            <div class="bg-black/50 rounded-xl p-4 border border-white/5 space-y-2">
+                                <div class="flex items-center gap-2 text-red-400 text-sm sm:text-base font-semibold">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>Sin puntos por derribos, raspajes, pasajes, montadas ni espalda en los 6 min iniciales.</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-red-400 text-sm sm:text-base font-semibold">
+                                    <i class="fa-solid fa-circle-xmark"></i>
+                                    <span>No existen las ventajas en ninguna etapa.</span>
+                                </div>
+                                <div class="flex items-center gap-2 text-green-400 text-sm sm:text-base font-semibold">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                    <span>Finalización inmediata por tapeo físico o verbal.</span>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-400 italic text-xs sm:text-sm">
+                                Si al finalizar los 6 minutos ninguno consigue la sumisión, el combate pasará al sistema de overtime por puntos.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. OVERTIMES Y SISTEMA DE PUNTOS -->
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="overtime" data-keywords="overtime primer segundo tiempo 3 minutos derribo pasaje raspaje montada espalda puntos">
+                    <div class="flex items-start gap-4">
+                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">03</span>
+                        <div class="space-y-4 w-full">
+                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-hourglass-half text-brand-gold text-lg"></i>
+                                3. OVERTIME Y SISTEMA DE PUNTUACIÓN (1° y 2° OVERTIME)
+                            </h2>
+                            <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                                Si no hay sumisión en los 6 minutos iniciales, se disputará un <strong class="text-brand-yellow font-bold">1° Overtime de 3 minutos</strong> con puntuación. Si persiste empate, se disputará un <strong class="text-brand-yellow font-bold">2° Overtime de 3 minutos</strong> adicional.
+                            </p>
+
+                            <!-- TABLA DE PUNTOS -->
+                            <div class="overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60">
+                                <table class="w-full text-left border-collapse">
+                                    <thead>
+                                        <tr class="bg-brand-gold/10 text-brand-gold border-b border-brand-border text-xs sm:text-sm">
+                                            <th class="p-3 sm:p-4 font-bold uppercase font-orbitron">Acción Técnica Posicional</th>
+                                            <th class="p-3 sm:p-4 font-bold uppercase font-orbitron text-right">Puntuación Oficial</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-white/5 text-sm sm:text-base">
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Derribo (Takedown)</td>
+                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">2 PUNTOS</td>
+                                        </tr>
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
+                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">3 PUNTOS</td>
+                                        </tr>
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Raspaje (Sweep)</td>
+                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">2 PUNTOS</td>
+                                        </tr>
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Montada (Mount)</td>
+                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">4 PUNTOS</td>
+                                        </tr>
+                                        <tr class="hover:bg-white/5 transition-colors">
+                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Toma de espalda (Back Control con ganchos/triángulo)</td>
+                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">4 PUNTOS</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <ul class="list-disc list-inside space-y-1.5 text-gray-300 text-sm sm:text-base">
+                                <li>Los puntos <strong class="text-white">NO</strong> se trasladan de un período a otro (cada Overtime inicia 0 a 0).</li>
+                                <li>No existen las ventajas. En caso de empate de puntos al finalizar el 2° Overtime, la victoria se define por <strong class="text-brand-yellow">Decisión Arbitral</strong>.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. REGLAS ESPECÍFICAS DE TÉCNICAS (PERMITIDAS Y PROHIBIDAS) -->
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-2 border-brand-gold/40" data-category="tecnicas" data-keywords="tecnicas ilegales prohibidas permitidas golpes patadas ojos slameos cervicales dedos tapar boca nariz estrangulaciones mano abierta leglocks twister twister escoces mano de vaca finalizaciones">
+                    <div class="flex items-start gap-4">
+                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">04</span>
+                        <div class="space-y-6 w-full">
+                            <div class="border-b border-brand-border pb-3">
+                                <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                                    <i class="fa-solid fa-list-check text-brand-gold text-lg"></i>
+                                    4. REGLAMENTO DE TÉCNICAS PERMITIDAS Y PROHIBIDAS
+                                </h2>
+                                <p class="text-xs sm:text-sm text-gray-400 mt-1">Normativa estricta de finalizaciones, agarres y seguridad en el mat.</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                
+                                <!-- TÉCNICAS PROHIBIDAS (ILEGALES) -->
+                                <div class="bg-red-950/20 border border-red-500/30 rounded-xl p-5 space-y-3">
+                                    <h3 class="font-orbitron font-bold text-red-400 flex items-center gap-2 text-base sm:text-lg border-b border-red-500/20 pb-2">
+                                        <i class="fa-solid fa-ban text-red-500"></i>
+                                        TÉCNICAS PROHIBIDAS (DESCALIFICACIÓN)
+                                    </h3>
+                                    <ul class="space-y-2 text-xs sm:text-sm text-gray-200">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <span><strong>Golpes y patadas:</strong> Prohibido todo tipo de golpe de puño, patada, codazo, rodillazo o cabezazo.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <span><strong>Ataques a los ojos:</strong> Prohibido meter dedos en los ojos o cara.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <span><strong>Slameos (Slam):</strong> Prohibido proyectar o azotar contra el mat desde altura a un oponente que está cerrado en guardia o buscando una sumisión.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <span><strong>Llaves cervicales puras:</strong> Prohibida la hiperflexión o torsión cervical sin estrangulación (Neck cranks puros).</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-xmark text-red-500 mt-0.5"></i>
+                                            <span><strong>Agarres pequeños:</strong> Prohibido manipular o agarrar menos de 3 dedos de la mano o pie.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                <!-- TÉCNICAS PERMITIDAS -->
+                                <div class="bg-emerald-950/20 border border-emerald-500/30 rounded-xl p-5 space-y-3">
+                                    <h3 class="font-orbitron font-bold text-emerald-400 flex items-center gap-2 text-base sm:text-lg border-b border-emerald-500/20 pb-2">
+                                        <i class="fa-solid fa-circle-check text-emerald-500"></i>
+                                        TÉCNICAS PERMITIDAS (100% EBI VALIDATED)
+                                    </h3>
+                                    <ul class="space-y-2 text-xs sm:text-sm text-gray-200">
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <span><strong>Obstrucción respiratoria:</strong> PERMITIDO tapar la boca y tapar la nariz.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <span><strong>Estrangulaciones a mano abierta:</strong> PERMITIDAS las estrangulaciones de cuello a mano abierta (vocal cord/front choke).</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <span><strong>Leglocks completas:</strong> TODAS las leglocks permitidas (Heel hooks/Talones, Knee bars, Toe holds, Calf slicers, Ankle locks).</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <span><strong>Twister:</strong> PERMITIDO Twister tradicional y Twister Escocés.</span>
+                                        </li>
+                                        <li class="flex items-start gap-2">
+                                            <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+                                            <span><strong>Wristlocks & Finalizaciones:</strong> PERMITIDA Mano de vaca (wristlock) y TODAS las finalizaciones conocidas en Jiujitsu NoGi.</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 5. DESEMPATE POR DECISIÓN ARBITRAL Y SEGURIDAD -->
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad" data-keywords="decision arbitral arbitro proactividad iniciativa seguridad medico">
+                    <div class="flex items-start gap-4">
+                        <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">05</span>
+                        <div class="space-y-3 w-full">
+                            <h2 class="font-orbitron text-xl sm:text-2xl font-bold text-white flex items-center gap-3">
+                                <i class="fa-solid fa-gavel text-brand-gold text-lg"></i>
+                                5. DECISIÓN ARBITRAL Y SEGURIDAD MÉDICA
+                            </h2>
+                            <p class="text-gray-300 leading-relaxed text-sm sm:text-base">
+                                En caso de igualdad de puntos tras el 2° Overtime, el árbitro declarará al ganador considerando:
+                            </p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 my-3">
+                                <div class="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                                    <i class="fa-solid fa-crosshairs text-brand-gold mb-1 block text-lg"></i>
+                                    <span class="text-xs text-gray-300 font-semibold">Búsqueda activa de sumisión</span>
+                                </div>
+                                <div class="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                                    <i class="fa-solid fa-gauge-high text-brand-gold mb-1 block text-lg"></i>
+                                    <span class="text-xs text-gray-300 font-semibold">Presión e iniciativa en de pie / suelo</span>
+                                </div>
+                                <div class="bg-black/40 p-3 rounded-lg border border-white/5 text-center">
+                                    <i class="fa-solid fa-shield-cat text-brand-gold mb-1 block text-lg"></i>
+                                    <span class="text-xs text-gray-300 font-semibold">Dominio posicional y progresiones</span>
+                                </div>
+                            </div>
+                            <p class="text-gray-400 text-xs sm:text-sm">
+                                Se cuenta con asistencia médica constante en Etakki Dojo. El árbitro o médico podrán detener cualquier combate de manera preventiva.
+                            </p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-black/90 border-t border-brand-border py-6 text-center text-xs text-gray-400">
+        <p>ETAKKI JIU JITSU NO-GI — AMBROSETTI 826 CABALLITO</p>
+    </footer>
+
+</body>
+</html>
+
+```
