@@ -146,18 +146,21 @@
     <!-- SECTION PRINCIPAL INTERACTIVA (Insertar esta etiqueta en tu index.html principal) -->
     <section id="brackets" class="relative z-10 w-full max-w-7xl mx-auto my-4 scroll-mt-10">
 
-        <!-- Barra de Control y Restablecimiento -->
-        <div class="w-full flex flex-wrap justify-between items-center gap-2 mb-6 px-2 text-xs sm:text-sm text-cyan-300 font-mono">
-            <span class="flex items-center gap-2">
+        <!-- Barra de Control y Restablecimiento con el BOTÓN GRANDE DE REGLAMENTO -->
+        <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
+            <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
                 <i class="fa-solid fa-bolt text-yellow-400 animate-pulse text-base"></i> 
                 <span>SISTEMA DE ARBOLES SUPER 8 ( HAZ CLICK PARA AVANZAR )</span>
             </span>
-            <div class="flex items-center gap-2">
-                <!-- Botón de Reglamento añadido -->
-                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" class="bg-cyan-950/80 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-3 py-1.5 rounded-lg transition duration-300 flex items-center gap-2 shadow-lg font-sans font-bold text-cyan-300">
-                    <i class="fa-solid fa-book-open"></i> Ver Reglamento
+
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- BOTÓN GRANDE PARA IR AL REGLAMENTO -->
+                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
+                   class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-6 py-3 rounded-xl transition duration-300 flex items-center gap-3 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-sm sm:text-base uppercase tracking-wider transform hover:scale-105">
+                    <i class="fa-solid fa-book-open text-lg"></i> Ver Reglamento Oficial
                 </a>
-                <button onclick="resetAllBrackets()" class="bg-blue-900/80 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-3 py-1.5 rounded-lg transition duration-300 flex items-center gap-2 shadow-lg font-sans font-bold">
+
+                <button onclick="resetAllBrackets()" class="bg-blue-950/90 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-4 py-3 rounded-xl transition duration-300 flex items-center gap-2 shadow-lg font-sans font-bold text-xs sm:text-sm">
                     <i class="fa-solid fa-rotate-right"></i> Reiniciar Torneos
                 </button>
             </div>
