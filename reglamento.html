@@ -80,18 +80,6 @@
             color: #FFD700;
         }
 
-        /* Bracket Styles for Interactive View */
-        .bracket-node {
-            background: rgba(20, 20, 28, 0.9);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.2s ease;
-        }
-
-        .bracket-node.winner-active {
-            border-color: #D4AF37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-        }
-
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -116,7 +104,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
             
             <!-- BRANDING SOLICITADO -->
-            <a href="#rules-section" onclick="switchMainView('rules')" class="flex items-center gap-3 group">
+            <a href="#rules-section" class="flex items-center gap-3 group">
                 <i class="fa-solid fa-trophy text-2xl text-brand-gold group-hover:scale-110 transition-transform"></i>
                 <div class="flex flex-col">
                     <span class="font-orbitron font-black text-xs sm:text-sm md:text-base tracking-wider gold-gradient-text uppercase leading-tight">
@@ -126,15 +114,11 @@
                 </div>
             </a>
             
-            <!-- NAVIGATION BUTTONS -->
+            <!-- NAVIGATION BUTTONS (Solo Reglamento) -->
             <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="switchMainView('rules')" id="btn-nav-rules" class="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-brand-gold/20 text-brand-yellow border border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all">
+                <button class="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-brand-gold/20 text-brand-yellow border border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all">
                     <i class="fa-solid fa-book-open"></i>
                     <span class="hidden sm:inline">Reglamento</span>
-                </button>
-                <button onclick="switchMainView('brackets')" id="btn-nav-brackets" class="px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-white/5 hover:bg-brand-gold/20 text-gray-300 hover:text-brand-gold border border-white/10 hover:border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all">
-                    <i class="fa-solid fa-sitemap"></i>
-                    <span>Brackets (Llaves)</span>
                 </button>
             </div>
         </div>
@@ -164,30 +148,19 @@
                 <div class="w-32 h-1 bg-gradient-to-r from-transparent via-brand-gold to-transparent mx-auto mt-4"></div>
             </div>
 
-            <!-- SEARCH AND QUICK FILTER BAR -->
-            <div class="bg-brand-card/90 border border-brand-border rounded-2xl p-4 sm:p-6 backdrop-blur-md shadow-xl space-y-4">
-                <div class="flex flex-col md:flex-row gap-4 items-center justify-between">
-                    <!-- Search Box -->
-                    <div class="relative w-full md:w-1/2">
-                        <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                        <input type="text" id="rule-search" onkeyup="filterRules()" placeholder="Buscar regla o técnica (ej: leglocks, twister, slameos, overtime)..." class="w-full bg-black/60 border border-white/10 rounded-xl pl-11 pr-4 py-3 text-sm text-white focus:outline-none focus:border-brand-gold transition-colors">
-                    </div>
-                    <!-- Direct Navigation Tabs -->
-                    <div class="flex flex-wrap gap-2 w-full md:w-auto justify-start md:justify-end">
-                        <button onclick="filterCategory('all')" class="nav-tab active px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Todos</button>
-                        <button onclick="filterCategory('modalidad')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Modalidad</button>
-                        <button onclick="filterCategory('overtime')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Overtime/Puntos</button>
-                        <button onclick="filterCategory('tecnicas')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all">Técnicas Perm/Proh</button>
-                        <button onclick="filterCategory('simuladores')" class="nav-tab px-3 py-1.5 rounded-lg border border-white/10 text-xs font-semibold uppercase tracking-wider transition-all text-brand-yellow">Simuladores</button>
-                    </div>
-                </div>
+            <!-- BOTÓN GRANDE PARA IR A BRACKETS -->
+            <div class="text-center">
+                <a href="http://etakkibjj.github.io/etakkijiujitsu/brackets.html" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-3 w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-r from-brand-gold via-brand-yellow to-brand-gold text-black font-orbitron font-black text-base sm:text-lg uppercase tracking-wider shadow-lg hover:scale-105 hover:shadow-brand-gold/30 transition-all duration-300">
+                    <i class="fa-solid fa-sitemap text-xl"></i>
+                    Ir a brackets del torneo
+                </a>
             </div>
 
             <!-- RULES LIST -->
             <div class="grid grid-cols-1 gap-6" id="rules-container">
 
                 <!-- 1. MODALIDAD DE COMPETENCIA -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad" data-keywords="nogi gi sumision tapeo tiempo 6 minutos">
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad">
                     <div class="flex items-start gap-4">
                         <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">01</span>
                         <div class="space-y-3 w-full">
@@ -206,7 +179,7 @@
                 </section>
 
                 <!-- 2. TIEMPO REGLAMENTARIO -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-l-4 border-l-brand-gold" data-category="modalidad overtime" data-keywords="tiempo 6 minutos submission only puntos ventajas tapeo">
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-l-4 border-l-brand-gold" data-category="modalidad overtime">
                     <div class="flex items-start gap-4">
                         <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">02</span>
                         <div class="space-y-4 w-full">
@@ -241,7 +214,7 @@
                 </section>
 
                 <!-- 3. OVERTIMES Y SISTEMA DE PUNTOS -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="overtime" data-keywords="overtime primer segundo tiempo 3 minutos derribo pasaje raspaje montada espalda puntos">
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="overtime">
                     <div class="flex items-start gap-4">
                         <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">03</span>
                         <div class="space-y-4 w-full">
@@ -253,35 +226,35 @@
                                 Si no hay sumisión en los 6 minutos iniciales, se disputará un <strong class="text-brand-yellow font-bold">1° Overtime de 3 minutos</strong> con puntuación. Si persiste empate, se disputará un <strong class="text-brand-yellow font-bold">2° Overtime de 3 minutos</strong> adicional.
                             </p>
 
-                            <!-- TABLA DE PUNTOS -->
-                            <div class="overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60">
-                                <table class="w-full text-left border-collapse">
+                            <!-- TABLA DE PUNTOS (Mejorada para móviles) -->
+                            <div class="overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60 shadow-lg">
+                                <table class="w-full text-left border-collapse min-w-[280px]">
                                     <thead>
                                         <tr class="bg-brand-gold/10 text-brand-gold border-b border-brand-border text-xs sm:text-sm">
-                                            <th class="p-3 sm:p-4 font-bold uppercase font-orbitron">Acción Técnica Posicional</th>
-                                            <th class="p-3 sm:p-4 font-bold uppercase font-orbitron text-right">Puntuación Oficial</th>
+                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron">Acción Técnica Posicional</th>
+                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-center sm:text-right whitespace-nowrap">Puntuación Oficial</th>
                                         </tr>
                                     </thead>
-                                    <tbody class="divide-y divide-white/5 text-sm sm:text-base">
+                                    <tbody class="divide-y divide-white/5 text-xs sm:text-base">
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Derribo (Takedown)</td>
-                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">2 PUNTOS</td>
+                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Derribo (Takedown)</td>
+                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">2 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
-                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">3 PUNTOS</td>
+                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
+                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">3 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Raspaje (Sweep)</td>
-                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">2 PUNTOS</td>
+                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Raspaje (Sweep)</td>
+                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">2 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Montada (Mount)</td>
-                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">4 PUNTOS</td>
+                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Montada (Mount)</td>
+                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">4 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="p-3 sm:p-4 font-medium text-gray-200">Toma de espalda (Back Control con ganchos/triángulo)</td>
-                                            <td class="p-3 sm:p-4 text-right font-orbitron font-bold text-brand-yellow">4 PUNTOS</td>
+                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Toma de espalda (Back Control con ganchos/triángulo)</td>
+                                            <td class="py-3 px-3 sm:px-4 text-center sm:text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">4 PUNTOS</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -296,7 +269,7 @@
                 </section>
 
                 <!-- 4. REGLAS ESPECÍFICAS DE TÉCNICAS (PERMITIDAS Y PROHIBIDAS) -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-2 border-brand-gold/40" data-category="tecnicas" data-keywords="tecnicas ilegales prohibidas permitidas golpes patadas ojos slameos cervicales dedos tapar boca nariz estrangulaciones mano abierta leglocks twister twister escoces mano de vaca finalizaciones">
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden border-2 border-brand-gold/40" data-category="tecnicas">
                     <div class="flex items-start gap-4">
                         <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">04</span>
                         <div class="space-y-6 w-full">
@@ -376,7 +349,7 @@
                 </section>
 
                 <!-- 5. DESEMPATE POR DECISIÓN ARBITRAL Y SEGURIDAD -->
-                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad" data-keywords="decision arbitral arbitro proactividad iniciativa seguridad medico">
+                <section class="rule-card rounded-2xl p-6 sm:p-8 relative overflow-hidden" data-category="modalidad">
                     <div class="flex items-start gap-4">
                         <span class="font-teko text-5xl font-bold text-brand-gold/40 leading-none select-none">05</span>
                         <div class="space-y-3 w-full">
@@ -407,473 +380,15 @@
                         </div>
                     </div>
                 </section>
-
-                <!-- ========================================== -->
-                <!-- INTERACTIVE SIMULATORS SECTION -->
-                <!-- ========================================== -->
-                <div data-category="simulators" class="pt-6 space-y-8">
-                    
-                    <div class="text-center">
-                        <span class="text-brand-gold font-orbitron font-bold text-lg uppercase tracking-wider">HERRAMIENTAS EN VIVO</span>
-                        <h2 class="text-2xl sm:text-3xl font-orbitron font-black text-white gold-gradient-text uppercase">SIMULADORES DE PUNTOS Y DECISIÓN</h2>
-                    </div>
-
-                    <!-- SIMULADOR 1: TABLERO DE OVERTIME Y MARCADOR -->
-                    <div class="bg-brand-card border border-brand-gold/30 rounded-2xl p-6 gold-glow-box">
-                        <div class="flex items-center justify-between border-b border-brand-border pb-4 mb-6">
-                            <div class="flex items-center gap-3">
-                                <i class="fa-solid fa-calculator text-brand-gold text-2xl"></i>
-                                <div>
-                                    <h3 class="font-orbitron font-bold text-lg text-white">Calculadora Interactiva de Overtime</h3>
-                                    <p class="text-xs text-gray-400">Prueba puntuaciones oficiales para determinar al ganador instantáneamente</p>
-                                </div>
-                            </div>
-                            <button onclick="resetOvertimeSim()" class="px-3 py-1 rounded bg-white/10 hover:bg-white/20 text-xs text-gray-300 font-medium">Reiniciar Marcador</button>
-                        </div>
-
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                            
-                            <!-- ATLETA 1 -->
-                            <div class="bg-black/50 p-5 rounded-xl border border-white/10 space-y-4">
-                                <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                                    <input type="text" id="p1-name" value="Competidor Rojo" class="bg-transparent font-orbitron font-bold text-red-400 text-base focus:outline-none focus:border-b focus:border-red-400">
-                                    <span class="font-orbitron text-3xl font-black text-red-500" id="p1-score">0 PTS</span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2 text-xs">
-                                    <button onclick="addPoints(1, 2, 'Derribo')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+2 Derribo</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(1, 2, 'Raspaje')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+2 Raspaje</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(1, 3, 'Pasaje')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+3 Pasaje</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(1, 4, 'Montada')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+4 Montada</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(1, 4, 'Espalda')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between col-span-2">
-                                        <span>+4 Toma de Espalda</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                            <!-- ATLETA 2 -->
-                            <div class="bg-black/50 p-5 rounded-xl border border-white/10 space-y-4">
-                                <div class="flex items-center justify-between border-b border-white/10 pb-2">
-                                    <input type="text" id="p2-name" value="Competidor Azul" class="bg-transparent font-orbitron font-bold text-blue-400 text-base focus:outline-none focus:border-b focus:border-blue-400">
-                                    <span class="font-orbitron text-3xl font-black text-blue-500" id="p2-score">0 PTS</span>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2 text-xs">
-                                    <button onclick="addPoints(2, 2, 'Derribo')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+2 Derribo</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(2, 2, 'Raspaje')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+2 Raspaje</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(2, 3, 'Pasaje')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+3 Pasaje</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(2, 4, 'Montada')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between">
-                                        <span>+4 Montada</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                    <button onclick="addPoints(2, 4, 'Espalda')" class="p-2 bg-white/5 hover:bg-white/15 rounded border border-white/5 text-gray-200 text-left flex justify-between col-span-2">
-                                        <span>+4 Toma de Espalda</span> <i class="fa-solid fa-plus text-brand-gold"></i>
-                                    </button>
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <!-- RESULTADO DEL SIMULADOR -->
-                        <div class="mt-6 p-4 rounded-xl bg-black/80 border border-brand-gold/40 text-center" id="sim-result-box">
-                            <span class="text-xs text-gray-400 uppercase tracking-widest font-bold">Estado del Overtime</span>
-                            <div class="text-lg font-orbitron font-bold text-brand-yellow mt-1" id="sim-result-text">
-                                Combate Empatado 0 - 0 (En espera de acciones)
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
             </div>
-
-        </div>
-
-        <!-- ========================================== -->
-        <!-- VIEW 2: INTERACTIVE BRACKETS (SISTEMA DE LLAVES) -->
-        <!-- ========================================== -->
-        <div id="view-brackets" class="space-y-6 hidden">
-            
-            <div class="bg-brand-card/90 border border-brand-border rounded-2xl p-6 backdrop-blur-md">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-brand-border pb-6">
-                    <div>
-                        <div class="inline-block mb-1 px-3 py-0.5 rounded-full bg-brand-gold/10 border border-brand-gold/30 text-xs text-brand-yellow uppercase tracking-wider font-semibold">
-                            Interactive Tournament Engine
-                        </div>
-                        <h2 class="text-2xl sm:text-3xl font-orbitron font-black text-white gold-gradient-text uppercase">
-                            Submission Only Jiu Jitsu Tournament - Interactive Brackets
-                        </h2>
-                        <p class="text-xs sm:text-sm text-gray-400 mt-1">Gestión completa de llaves de eliminación directa EBI NoGi</p>
-                    </div>
-
-                    <div class="flex items-center gap-3">
-                        <button onclick="resetBracketTree()" class="px-4 py-2 rounded-lg bg-red-950/40 border border-red-500/30 text-red-300 hover:bg-red-900/50 text-xs font-semibold">
-                            <i class="fa-solid fa-rotate-right mr-1"></i> Reiniciar Llave
-                        </button>
-                        <button onclick="window.print()" class="px-4 py-2 rounded-lg bg-brand-gold/20 border border-brand-gold/40 text-brand-yellow hover:bg-brand-gold/30 text-xs font-semibold">
-                            <i class="fa-solid fa-print mr-1"></i> Imprimir Llaves
-                        </button>
-                    </div>
-                </div>
-
-                <!-- CONTROLES Y REGISTRO RÁPIDO DE PARTICIPANTES -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-gray-300 uppercase tracking-wider">Categoría de Peso / Absoluto</label>
-                        <select id="bracket-category" onchange="renderBracket()" class="w-full bg-black/60 border border-white/10 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold">
-                            <option value="absoluto">Absoluto NoGi Masculino / Femenino</option>
-                            <option value="hasta-77">Hasta 77 kg (Welterweight)</option>
-                            <option value="hasta-88">Hasta 88 kg (Middleweight)</option>
-                            <option value="mas-88">Más de 88 kg (Heavyweight)</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-gray-300 uppercase tracking-wider">Formato de Llave</label>
-                        <select id="bracket-size" onchange="initBrackets()" class="w-full bg-black/60 border border-white/10 rounded-lg p-2.5 text-xs text-white focus:outline-none focus:border-brand-gold">
-                            <option value="4">4 Competidores (Semifinal Directa)</option>
-                            <option value="8" selected>8 Competidores (Cuartos de Final)</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="text-xs font-bold text-gray-300 uppercase tracking-wider">Agregar Competidor Rápido</label>
-                        <div class="flex gap-2">
-                            <input type="text" id="new-fighter-name" placeholder="Nombre y Academia" class="w-full bg-black/60 border border-white/10 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-brand-gold">
-                            <button onclick="addFighterToNextSlot()" class="px-3 py-2 rounded-lg bg-brand-gold text-black font-bold text-xs hover:opacity-90 transition-opacity">
-                                Añadir
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- VISUALIZADOR INTERACTIVO DE ARBOL DE LLAVES (CANVAS BRACKET) -->
-            <div class="bg-black/60 border border-brand-border rounded-2xl p-6 overflow-x-auto min-h-[500px]">
-                <div id="bracket-tree-container" class="flex justify-around items-center min-w-[800px] gap-8 py-4">
-                    <!-- Generado dinámicamente mediante JS -->
-                </div>
-            </div>
-
-            <!-- PODIO FINAL AUTOMÁTICO -->
-            <div id="podium-section" class="bg-brand-card/90 border border-brand-gold/40 rounded-2xl p-6 text-center space-y-4 hidden">
-                <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full bg-brand-gold/20 text-brand-yellow font-bold text-xs uppercase tracking-widest">
-                    <i class="fa-solid fa-crown text-brand-gold"></i> PODIO OFICIAL DEL TORNEO EBI ETAKKI DOJO
-                </div>
-                <div class="grid grid-cols-3 gap-4 max-w-xl mx-auto pt-4 items-end">
-                    <!-- Segundo Lugar -->
-                    <div class="bg-black/50 p-4 rounded-t-xl border border-gray-400/30 space-y-2">
-                        <i class="fa-solid fa-medal text-gray-300 text-3xl"></i>
-                        <div class="font-orbitron font-bold text-xs text-gray-300">2° LUGAR</div>
-                        <div id="podium-2" class="font-bold text-sm text-white">---</div>
-                    </div>
-                    <!-- Primer Lugar -->
-                    <div class="bg-black/70 p-6 rounded-t-xl border-2 border-brand-gold space-y-2 -mt-4 gold-glow-box">
-                        <i class="fa-solid fa-trophy text-brand-gold text-4xl"></i>
-                        <div class="font-orbitron font-black text-sm text-brand-yellow">1° CAMPEÓN</div>
-                        <div id="podium-1" class="font-black text-base text-white gold-gradient-text">---</div>
-                    </div>
-                    <!-- Tercer Lugar -->
-                    <div class="bg-black/50 p-4 rounded-t-xl border border-amber-700/30 space-y-2">
-                        <i class="fa-solid fa-medal text-amber-600 text-3xl"></i>
-                        <div class="font-orbitron font-bold text-xs text-amber-600">3° LUGAR</div>
-                        <div id="podium-3" class="font-bold text-sm text-white">---</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- BOTÓN DE RETORNO A PAGINA PRINCIPAL/BRACKETS DE ACCESO RÁPIDO -->
-            <div class="text-center pt-4">
-                <button onclick="switchMainView('brackets')" class="inline-flex items-center gap-3 px-8 py-3.5 rounded-xl bg-gradient-to-r from-brand-gold to-yellow-600 text-black font-orbitron font-bold text-sm hover:opacity-90 transition-all shadow-lg shadow-brand-gold/20 uppercase tracking-wider">
-                    <i class="fa-solid fa-sitemap"></i>
-                    <span>Ir a Brackets Interactivas</span>
-                </button>
-            </div>
-
         </div>
 
     </main>
 
-    <!-- FOOTER OFICIAL REQUERIDO EXACTO -->
-    <footer class="bg-black border-t border-brand-border py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-3">
-            <p class="font-orbitron font-bold text-brand-gold text-sm sm:text-base tracking-widest uppercase">
-                TORNEO DE JIU JITSU EBI - NO GI - ETAKKI DOJO - AMBROSETTI 826 CABALLITO
-            </p>
-            <p class="text-gray-500 text-xs font-medium">
-                &copy; 2026 EBI Rules Engine — Etakki Dojo Jiujitsu. Buenos Aires, Argentina. Todos los derechos reservados.
-            </p>
-        </div>
+    <!-- FOOTER -->
+    <footer class="bg-black/90 border-t border-brand-border py-6 text-center text-xs text-gray-400">
+        <p>ETAKKI JIU JITSU NO-GI — AMBROSETTI 826 CABALLITO</p>
     </footer>
 
-    <!-- LOGIC & INTERACTION SCRIPTS -->
-    <script>
-        /* ====================================================
-           1. NAVIGATION AND VIEW SWITCHING
-           ==================================================== */
-        function switchMainView(view) {
-            const rulesView = document.getElementById('view-rules');
-            const bracketsView = document.getElementById('view-brackets');
-            const btnRules = document.getElementById('btn-nav-rules');
-            const btnBrackets = document.getElementById('btn-nav-brackets');
-
-            if (view === 'rules') {
-                rulesView.classList.remove('hidden');
-                bracketsView.classList.add('hidden');
-                
-                btnRules.className = "px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-brand-gold/20 text-brand-yellow border border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all";
-                btnBrackets.className = "px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-white/5 hover:bg-brand-gold/20 text-gray-300 hover:text-brand-gold border border-white/10 hover:border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-            } else if (view === 'brackets') {
-                rulesView.classList.add('hidden');
-                bracketsView.classList.remove('hidden');
-
-                btnBrackets.className = "px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-brand-gold/20 text-brand-yellow border border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all";
-                btnRules.className = "px-3 py-2 sm:px-4 sm:py-2 rounded-lg bg-white/5 hover:bg-brand-gold/20 text-gray-300 hover:text-brand-gold border border-white/10 hover:border-brand-gold/40 text-xs sm:text-sm font-semibold flex items-center gap-2 transition-all";
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-                renderBracket();
-            }
-        }
-
-        /* ====================================================
-           2. RULE SEARCH & FILTERING
-           ==================================================== */
-        function filterRules() {
-            const query = document.getElementById('rule-search').value.toLowerCase();
-            const sections = document.querySelectorAll('#rules-container section');
-
-            sections.forEach(sec => {
-                const keywords = sec.getAttribute('data-keywords') || '';
-                const text = sec.innerText.toLowerCase();
-                
-                if (text.includes(query) || keywords.includes(query)) {
-                    sec.style.display = "block";
-                } else {
-                    sec.style.display = "none";
-                }
-            });
-        }
-
-        function filterCategory(cat) {
-            const tabs = document.querySelectorAll('.nav-tab');
-            tabs.forEach(t => t.classList.remove('active'));
-            event.target.classList.add('active');
-
-            const sections = document.querySelectorAll('#rules-container section');
-            sections.forEach(sec => {
-                const categories = sec.getAttribute('data-category') || '';
-                if (cat === 'all' || categories.includes(cat)) {
-                    sec.style.display = "block";
-                } else {
-                    sec.style.display = "none";
-                }
-            });
-        }
-
-        /* ====================================================
-           3. OVERTIME SCORE SIMULATOR
-           ==================================================== */
-        let p1Score = 0;
-        let p2Score = 0;
-
-        function addPoints(player, pts, action) {
-            if (player === 1) {
-                p1Score += pts;
-                document.getElementById('p1-score').innerText = p1Score + " PTS";
-            } else {
-                p2Score += pts;
-                document.getElementById('p2-score').innerText = p2Score + " PTS";
-            }
-            updateSimResult();
-        }
-
-        function resetOvertimeSim() {
-            p1Score = 0;
-            p2Score = 0;
-            document.getElementById('p1-score').innerText = "0 PTS";
-            document.getElementById('p2-score').innerText = "0 PTS";
-            updateSimResult();
-        }
-
-        function updateSimResult() {
-            const p1Name = document.getElementById('p1-name').value;
-            const p2Name = document.getElementById('p2-name').value;
-            const resultText = document.getElementById('sim-result-text');
-
-            if (p1Score > p2Score) {
-                resultText.innerHTML = `<span class="text-red-400 font-bold">${p1Name}</span> va ganando el Overtime (${p1Score} vs ${p2Score})`;
-            } else if (p2Score > p1Score) {
-                resultText.innerHTML = `<span class="text-blue-400 font-bold">${p2Name}</span> va ganando el Overtime (${p2Score} vs ${p1Score})`;
-            } else {
-                resultText.innerHTML = `Empate en Overtime (${p1Score} - ${p2Score}). Si termina así, pasa a 2° Overtime o Decisión Arbitral.`;
-            }
-        }
-
-        /* ====================================================
-           4. INTERACTIVE BRACKETS ENGINE
-           ==================================================== */
-        let bracketData = {
-            size: 8,
-            matches: []
-        };
-
-        function initBrackets() {
-            const size = parseInt(document.getElementById('bracket-size').value);
-            bracketData.size = size;
-            
-            if (size === 8) {
-                bracketData.matches = [
-                    // Quarterfinals (1-4)
-                    { id: 1, round: 1, p1: 'Lanza (Etakki)', p2: 'Gomez (BJJ)', winner: null },
-                    { id: 2, round: 1, p1: 'Silva (Checkmat)', p2: 'Perez (Lotus)', winner: null },
-                    { id: 3, round: 1, p1: 'Fernandez (Nova)', p2: 'Diaz (Alliance)', winner: null },
-                    { id: 4, round: 1, p1: 'Rios (Atos)', p2: 'Romero (Etakki)', winner: null },
-                    // Semifinals (5-6)
-                    { id: 5, round: 2, p1: 'Ganador QF1', p2: 'Ganador QF2', winner: null },
-                    { id: 6, round: 2, p1: 'Ganador QF3', p2: 'Ganador QF4', winner: null },
-                    // Final (7)
-                    { id: 7, round: 3, p1: 'Ganador SF1', p2: 'Ganador SF2', winner: null }
-                ];
-            } else {
-                bracketData.matches = [
-                    // Semifinals (1-2)
-                    { id: 1, round: 1, p1: 'Lanza (Etakki)', p2: 'Silva (Checkmat)', winner: null },
-                    { id: 2, round: 1, p1: 'Fernandez (Nova)', p2: 'Romero (Etakki)', winner: null },
-                    // Final (3)
-                    { id: 3, round: 2, p1: 'Ganador SF1', p2: 'Ganador SF2', winner: null }
-                ];
-            }
-            renderBracket();
-        }
-
-        function addFighterToNextSlot() {
-            const input = document.getElementById('new-fighter-name');
-            const name = input.value.trim();
-            if (!name) return;
-
-            for (let match of bracketData.matches.filter(m => m.round === 1)) {
-                if (match.p1.includes('Ganador') || match.p1.includes('Competidor')) {
-                    match.p1 = name;
-                    input.value = '';
-                    renderBracket();
-                    return;
-                }
-                if (match.p2.includes('Ganador') || match.p2.includes('Competidor')) {
-                    match.p2 = name;
-                    input.value = '';
-                    renderBracket();
-                    return;
-                }
-            }
-            alert('Todos los slots de la primera ronda están ocupados. Reinicia la llave si deseas reorganizar.');
-        }
-
-        function setWinner(matchId, winnerNum) {
-            const match = bracketData.matches.find(m => m.id === matchId);
-            if (!match) return;
-
-            const winningName = winnerNum === 1 ? match.p1 : match.p2;
-            if (!winningName || winningName.includes('Ganador')) return;
-
-            match.winner = winningName;
-
-            // Propagation logic
-            if (bracketData.size === 8) {
-                if (matchId === 1) bracketData.matches[4].p1 = winningName;
-                if (matchId === 2) bracketData.matches[4].p2 = winningName;
-                if (matchId === 3) bracketData.matches[5].p1 = winningName;
-                if (matchId === 4) bracketData.matches[5].p2 = winningName;
-                if (matchId === 5) bracketData.matches[6].p1 = winningName;
-                if (matchId === 6) bracketData.matches[6].p2 = winningName;
-            } else {
-                if (matchId === 1) bracketData.matches[2].p1 = winningName;
-                if (matchId === 2) bracketData.matches[2].p2 = winningName;
-            }
-
-            renderBracket();
-            checkPodium();
-        }
-
-        function renderBracket() {
-            const container = document.getElementById('bracket-tree-container');
-            if (!container) return;
-
-            const roundsCount = bracketData.size === 8 ? 3 : 2;
-            let html = '';
-
-            for (let r = 1; r <= roundsCount; r++) {
-                const roundMatches = bracketData.matches.filter(m => m.round === r);
-                let roundTitle = r === roundsCount ? 'GRAN FINAL' : (r === roundsCount - 1 ? 'SEMIFINALES' : 'CUARTOS DE FINAL');
-
-                html += `
-                    <div class="flex flex-col space-y-6 w-64">
-                        <div class="text-center font-orbitron font-bold text-xs text-brand-gold border-b border-brand-border pb-2 uppercase tracking-wider">
-                            ${roundTitle}
-                        </div>
-                        <div class="flex flex-col justify-around flex-grow space-y-4">
-                `;
-
-                roundMatches.forEach(m => {
-                    const isWinnerP1 = m.winner === m.p1 && m.p1;
-                    const isWinnerP2 = m.winner === m.p2 && m.p2;
-
-                    html += `
-                        <div class="bracket-node p-3 rounded-xl border ${m.winner ? 'border-brand-gold/40' : 'border-white/10'} space-y-2">
-                            <div class="flex items-center justify-between text-xs p-1.5 rounded ${isWinnerP1 ? 'bg-brand-gold/20 font-bold text-brand-yellow' : 'bg-black/40 text-gray-300'}">
-                                <span class="truncate pr-2">${m.p1}</span>
-                                <button onclick="setWinner(${m.id}, 1)" class="px-2 py-0.5 bg-white/10 hover:bg-brand-gold hover:text-black rounded text-[10px] uppercase font-bold transition-colors">Gana</button>
-                            </div>
-                            <div class="flex items-center justify-between text-xs p-1.5 rounded ${isWinnerP2 ? 'bg-brand-gold/20 font-bold text-brand-yellow' : 'bg-black/40 text-gray-300'}">
-                                <span class="truncate pr-2">${m.p2}</span>
-                                <button onclick="setWinner(${m.id}, 2)" class="px-2 py-0.5 bg-white/10 hover:bg-brand-gold hover:text-black rounded text-[10px] uppercase font-bold transition-colors">Gana</button>
-                            </div>
-                        </div>
-                    `;
-                });
-
-                html += `
-                        </div>
-                    </div>
-                `;
-            }
-
-            container.innerHTML = html;
-        }
-
-        function checkPodium() {
-            const finalMatch = bracketData.matches[bracketData.matches.length - 1];
-            const podiumSection = document.getElementById('podium-section');
-
-            if (finalMatch && finalMatch.winner) {
-                podiumSection.classList.remove('hidden');
-                document.getElementById('podium-1').innerText = finalMatch.winner;
-                
-                const runnerUp = finalMatch.winner === finalMatch.p1 ? finalMatch.p2 : finalMatch.p1;
-                document.getElementById('podium-2').innerText = runnerUp || 'Runner Up';
-                document.getElementById('podium-3').innerText = 'Semi-Finalist EBI';
-            }
-        }
-
-        function resetBracketTree() {
-            initBrackets();
-            document.getElementById('podium-section').classList.add('hidden');
-        }
-
-        // Initialize default bracket state on load
-        window.addEventListener('DOMContentLoaded', () => {
-            initBrackets();
-        });
-    </script>
 </body>
 </html>
