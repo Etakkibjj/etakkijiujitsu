@@ -197,7 +197,7 @@
                     </div>
                 </section>
 
-                <!-- 3. OVERTIMES Y SISTEMA DE PUNTOS (CORREGIDO PARA MÓVIL) -->
+                <!-- 3. OVERTIMES Y SISTEMA DE PUNTOS -->
                 <section class="rule-card rounded-2xl p-5 sm:p-8 relative overflow-hidden" data-category="overtime">
                     <div class="flex flex-col sm:flex-row items-start gap-4">
                         <span class="font-teko text-4xl sm:text-5xl font-bold text-brand-gold/40 leading-none select-none shrink-0">03</span>
@@ -210,35 +210,38 @@
                                 Si no hay sumisión en los 6 minutos iniciales, se disputará un <strong class="text-brand-yellow font-bold">1° Overtime de 3 minutos</strong> con puntuación. Si persiste empate, se disputará un <strong class="text-brand-yellow font-bold">2° Overtime de 3 minutos</strong> adicional.
                             </p>
 
-                            <!-- TABLA DE PUNTOS OPTIMIZADA PARA EVITAR CORTES -->
+                            <!-- TABLA DE PUNTOS COMPACTA Y ALINEADA -->
                             <div class="w-full overflow-x-auto my-4 rounded-xl border border-brand-border bg-black/60 shadow-lg">
-                                <table class="w-full text-left border-collapse min-w-[320px]">
+                                <table class="w-full border-collapse">
                                     <thead>
                                         <tr class="bg-brand-gold/10 text-brand-gold border-b border-brand-border text-xs sm:text-sm">
-                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron">Acción Técnica Posicional</th>
-                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-right whitespace-nowrap">Puntuación Oficial</th>
+                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-left">Acción Técnica Posicional</th>
+                                            <th class="py-3 px-3 sm:px-4 font-bold uppercase font-orbitron text-right leading-tight whitespace-nowrap w-36">
+                                                <span>PUNTUACIÓN</span><br>
+                                                <span class="text-[10px] tracking-widest text-brand-yellow/80">OFICIAL</span>
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-white/5 text-xs sm:text-base">
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Derribo (Takedown)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">2 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Derribo (Takedown)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">2 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">3 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Pasaje de guardia (Guard Pass)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">3 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Raspaje (Sweep)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">2 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Raspaje (Sweep)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">2 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Montada (Mount)</td>
-                                            <td class="py-3 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">4 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Montada (Mount)</td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">4 PUNTOS</td>
                                         </tr>
                                         <tr class="hover:bg-white/5 transition-colors">
-                                            <td class="py-3 px-3 sm:px-4 font-medium text-gray-200">Toma de espalda <span class="block text-[11px] text-gray-400 font-normal sm:inline sm:text-xs">(con ganchos/triángulo)</span></td>
-                                            <td class="py-3 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap">4 PUNTOS</td>
+                                            <td class="py-2.5 px-3 sm:px-4 font-medium text-gray-200">Toma de espalda <span class="block text-[11px] text-gray-400 font-normal sm:inline sm:text-xs">(con ganchos/triángulo)</span></td>
+                                            <td class="py-2.5 px-3 sm:px-4 text-right font-orbitron font-bold text-brand-yellow whitespace-nowrap w-36">4 PUNTOS</td>
                                         </tr>
                                     </tbody>
                                 </table>
