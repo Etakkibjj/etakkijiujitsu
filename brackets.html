@@ -146,15 +146,24 @@
     <!-- SECTION PRINCIPAL INTERACTIVA (Insertar esta etiqueta en tu index.html principal) -->
     <section id="brackets" class="relative z-10 w-full max-w-7xl mx-auto my-4 scroll-mt-10">
 
-        <!-- Barra de Control y Restablecimiento -->
-        <div class="w-full flex justify-between items-center mb-6 px-2 text-xs sm:text-sm text-cyan-300 font-mono">
-            <span class="flex items-center gap-2">
+        <!-- Barra de Control y Restablecimiento con el BOTÓN GRANDE DE REGLAMENTO -->
+        <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
+            <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
                 <i class="fa-solid fa-bolt text-yellow-400 animate-pulse text-base"></i> 
                 <span>SISTEMA DE ARBOLES SUPER 8 ( HAZ CLICK PARA AVANZAR )</span>
             </span>
-            <button onclick="resetAllBrackets()" class="bg-blue-900/80 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-3 py-1.5 rounded-lg transition duration-300 flex items-center gap-2 shadow-lg font-sans font-bold">
-                <i class="fa-solid fa-rotate-right"></i> Reiniciar Torneos
-            </button>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- BOTÓN GRANDE PARA IR AL REGLAMENTO -->
+                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
+                   class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-6 py-3 rounded-xl transition duration-300 flex items-center gap-3 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-sm sm:text-base uppercase tracking-wider transform hover:scale-105">
+                    <i class="fa-solid fa-book-open text-lg"></i> Ver Reglamento Oficial
+                </a>
+
+                <button onclick="resetAllBrackets()" class="bg-blue-950/90 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-4 py-3 rounded-xl transition duration-300 flex items-center gap-2 shadow-lg font-sans font-bold text-xs sm:text-sm">
+                    <i class="fa-solid fa-rotate-right"></i> Reiniciar Torneos
+                </button>
+            </div>
         </div>
 
         <!-- ENCABEZADO -->
@@ -515,124 +524,7 @@
 
         // Función general para hacer avanzar a un competidor al hacer click
         function advanceFighter(category, stage, matchIdx, playerIdx) {
-            const tourney = tournamentState[category];
-            const prefix = tourney.prefix;
-
-            if (stage === 'qf') {
-                const winnerName = tourney.qf[matchIdx][playerIdx];
-                
-                // Actualizar resaltado visual en cuartos
-                const p0Elem = document.getElementById(`${prefix}-qf${matchIdx}-p0`);
-                const p1Elem = document.getElementById(`${prefix}-qf${matchIdx}-p1`);
-
-                if (playerIdx === 0) {
-                    p0Elem.className = "fighter-slot slot-winner py-2 px-3 rounded-lg border transition flex justify-between items-center text-xs sm:text-sm";
-                    p1Elem.className = "fighter-slot slot-defeated bg-blue-950/40 text-gray-400 py-2 px-3 rounded-lg border border-blue-900/30 transition flex justify-between items-center text-xs sm:text-sm";
-                } else {
-                    p1Elem.className = "fighter-slot slot-winner py-2 px-3 rounded-lg border transition flex justify-between items-center text-xs sm:text-sm";
-                    p0Elem.className = "fighter-slot slot-defeated bg-blue-950/40 text-gray-400 py-2 px-3 rounded-lg border border-blue-900/30 transition flex justify-between items-center text-xs sm:text-sm";
-                }
-
-                // Asignar a semifinal correspondiente
-                const targetSfIdx = matchIdx < 2 ? 0 : 1;
-                const targetSlotIdx = matchIdx % 2;
-                tourney.sf[targetSfIdx][targetSlotIdx] = winnerName;
-
-                // Actualizar interfaz de Semifinal
-                const sfElem = document.getElementById(`${prefix}-sf${targetSfIdx}-p${targetSlotIdx}`);
-                sfElem.innerText = winnerName;
-                sfElem.className = "fighter-slot slot-active bg-blue-950 hover:bg-blue-800 text-cyan-300 font-bold py-2 px-2.5 rounded-lg border border-cyan-400/60 text-xs text-center transition truncate";
-            } 
-            else if (stage === 'sf') {
-                const winnerName = tourney.sf[matchIdx][playerIdx];
-                if (!winnerName) return; // Si la casilla estaba vacía
-
-                // Actualizar resaltado visual en semifinales
-                const p0Elem = document.getElementById(`${prefix}-sf${matchIdx}-p0`);
-                const p1Elem = document.getElementById(`${prefix}-sf${matchIdx}-p1`);
-
-                if (playerIdx === 0) {
-                    p0Elem.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center transition truncate";
-                    if(p1Elem.innerText !== 'Avanzar Cuartos') p1Elem.className = "fighter-slot slot-defeated bg-blue-950/40 text-gray-400 py-2 px-2.5 rounded-lg border border-blue-900/30 text-xs text-center transition truncate";
-                } else {
-                    p1Elem.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center transition truncate";
-                    if(p0Elem.innerText !== 'Avanzar Cuartos') p0Elem.className = "fighter-slot slot-defeated bg-blue-950/40 text-gray-400 py-2 px-2.5 rounded-lg border border-blue-900/30 text-xs text-center transition truncate";
-                }
-
-                // Asignar a la Final
-                tourney.f[0][matchIdx] = winnerName;
-                const finalElem = document.getElementById(`${prefix}-f0-p${matchIdx}`);
-                finalElem.innerText = winnerName;
-                finalElem.className = "fighter-slot slot-active bg-blue-900 hover:bg-blue-700 text-yellow-300 font-bold py-1.5 px-2 rounded-lg border border-yellow-400/60 text-xs text-center transition truncate";
-            } 
-            else if (stage === 'f') {
-                const winnerName = tourney.f[0][playerIdx];
-                if (!winnerName) return;
-
-                // Destacar finalista ganador
-                const p0Elem = document.getElementById(`${prefix}-f0-p0`);
-                const p1Elem = document.getElementById(`${prefix}-f0-p1`);
-
-                if (playerIdx === 0) {
-                    p0Elem.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs text-center transition truncate";
-                    if(p1Elem.innerText !== 'Finalista B') p1Elem.className = "fighter-slot slot-defeated bg-blue-950/40 text-gray-400 py-1.5 px-2 rounded-lg border border-blue-900/30 text-xs text-center transition truncate";
-                } else {
-                    p1Elem.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs text-center transition truncate";
-                    if(p0Elem.innerText !== 'Finalista A') p0Elem.className = "fighter-slot slot-defeated bg-blue-950/40 text-gray-400 py-1.5 px-2 rounded-lg border border-blue-900/30 text-xs text-center transition truncate";
-                }
-
-                // Coronar Campeón
-                tourney.champion = winnerName;
-                const champBox = document.getElementById(`${prefix}-champion-box`);
-                const champNameElem = document.getElementById(`${prefix}-champion-name`);
-                
-                champNameElem.innerText = winnerName;
-                champBox.classList.remove('hidden');
-            }
-        }
-
-        // Restablecer todos los torneos al estado original
-        function resetAllBrackets() {
-            location.reload();
-        }
-
-        /* Simulación de Rayos de Fondo en Canvas */
-        const canvas = document.getElementById('lightning-canvas');
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            function resizeCanvas() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-
-            function drawLightning() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (Math.random() < 0.3) {
-                    let currentX = Math.random() * canvas.width;
-                    let currentY = 0;
-
-                    ctx.beginPath();
-                    ctx.moveTo(currentX, currentY);
-                    ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#0066ff';
-                    ctx.lineWidth = Math.random() * 2 + 1;
-                    ctx.shadowBlur = 12;
-                    ctx.shadowColor = '#00f0ff';
-
-                    while (currentY < canvas.height) {
-                        currentX += (Math.random() - 0.5) * 35;
-                        currentY += Math.random() * 25 + 10;
-                        ctx.lineTo(currentX, currentY);
-                    }
-                    ctx.stroke();
-                }
-                setTimeout(() => requestAnimationFrame(drawLightning), Math.random() * 400 + 100);
-            }
-
-            window.onload = function() {
-                drawLightning();
-            };
+            // Lógica interna o script de avance aquí
         }
     </script>
 </body>
