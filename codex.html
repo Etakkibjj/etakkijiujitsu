@@ -2,18 +2,14 @@
 <html lang="es" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aquello que Fue Antes - PAPINHO BJJ</title>
-
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts: Quicksand -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -21,736 +17,581 @@
                 extend: {
                     fontFamily: {
                         sans: ['Quicksand', 'sans-serif'],
-                        body: ['Quicksand', 'sans-serif'],
-                        heading: ['Quicksand', 'sans-serif']
+                        serif: ['Quicksand', 'sans-serif']
                     }
                 }
             }
         }
     </script>
-
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Base typography setup */
-        body, button, input, select, textarea {
+        body {
             font-family: 'Quicksand', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
-
-        /* CSS 3D PAGE FLIP ENGINE */
-        .book-viewport {
-            perspective: 2000px;
-            perspective-origin: 50% 50%;
-        }
-
-        .book-stage {
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.6s ease;
-        }
-
-        /* Page styling & 3D Layering */
-        .paper-page {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transform-style: preserve-3d;
-            transform-origin: left center;
-            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), z-index 0s 0.3s;
-            backface-visibility: hidden;
-            box-sizing: border-box;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: pan-y;
-        }
-
-        /* Dual Page Spread for Desktop */
-        @media (min-width: 1024px) {
-            .paper-page {
-                width: 50%;
-                left: 50%;
-            }
-            .paper-page.left-page {
-                left: 0;
-                transform-origin: right center;
-            }
-        }
-
-        /* Flipped state animation */
-        .paper-page.flipped {
-            transform: rotateY(-180deg);
-        }
-
-        /* Realist Book Spine Shadow & Crease Effects */
-        .spine-shadow-left {
-            background: linear-gradient(to left, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 8%, rgba(0,0,0,0) 20%);
-        }
-        .spine-shadow-right {
-            background: linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 8%, rgba(0,0,0,0) 20%);
-        }
-
-        /* Page Shadow on Flip */
-        .page-shadow {
-            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.25), 0 0 10px rgba(0, 0, 0, 0.08);
-        }
-
-        /* Content Typography Specifics */
-        .page-content p {
-            margin-bottom: 1.2em;
-            line-height: 1.75;
-            text-align: justify;
-            font-weight: 400;
-        }
-        .page-content p:first-of-type::first-letter {
-            font-size: 3em;
-            float: left;
-            line-height: 0.85;
-            margin-right: 0.15em;
-            font-weight: 700;
-            color: #d97706;
-        }
-
-        .page-content blockquote {
-            border-left: 3px solid #d97706;
-            opacity: 0.9;
-            padding-left: 1rem;
-            margin: 1.25rem 0;
-            font-style: italic;
-            font-weight: 500;
-        }
-
-        /* Custom Scrollbar inside pages */
-        .page-body-scroll::-webkit-scrollbar {
-            width: 4px;
-        }
-        .page-body-scroll::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.15);
-            border-radius: 4px;
-        }
-
-        /* Color Themes */
-        .theme-parchment { background-color: #f7f1e3; color: #2c2c2c; border-color: #e5d8be; }
-        .theme-sepia { background-color: #f4ecd8; color: #3e2723; border-color: #e0d0b0; }
-        .theme-light { background-color: #ffffff; color: #1e293b; border-color: #f1f5f9; }
-        .theme-dark { background-color: #18181b; color: #f1f5f9; border-color: #27272a; }
-
-        /* Dark Mode Specific Styles for Visual Comfort */
-        .dark-reading-mode {
-            background-color: #09090b !important;
-            color: #f8fafc !important;
-        }
-
-        .dark-reading-mode .paper-page {
-            background-color: #18181b !important;
-            color: #f1f5f9 !important;
-            border-color: #27272a !important;
-            box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), 0 0 15px rgba(217, 119, 6, 0.08) !important;
-        }
-
-        .dark-reading-mode .page-content p {
-            color: #e2e8f0 !important;
-        }
-
-        .dark-reading-mode .page-content blockquote {
-            border-left-color: #f59e0b !important;
-            color: #f1f5f9 !important;
-            background: rgba(245, 158, 11, 0.05);
-        }
-
-        /* Enhanced Widescreen Desktop Landscape View (Apaisado) */
-        @media (min-width: 1024px) {
-            .book-viewport {
-                perspective: 2500px;
-                max-width: 1280px;
-                height: 82vh;
-            }
-
-            .book-stage {
-                box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.7);
-                border-radius: 12px;
-            }
-
-            .paper-page {
-                border-radius: 8px 0 0 8px;
-            }
-
-            .paper-page:nth-child(even) {
-                border-radius: 0 8px 8px 0;
-            }
-
-            /* Realistic Center Spine Effect for Desktop Open Book */
-            .book-stage::after {
-                content: '';
-                position: absolute;
-                top: 0;
-                bottom: 0;
-                left: 50%;
-                width: 4px;
-                transform: translateX(-50%);
-                background: linear-gradient(to right, rgba(0,0,0,0.3), rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.3));
-                z-index: 99;
-                pointer-events: none;
-                box-shadow: 0 0 10px rgba(0,0,0,0.5);
-            }
-        }
-    </style>
-</head>
-<body class="h-full bg-slate-950 font-sans text-slate-100 antialiased select-none overflow-hidden transition-colors duration-300">
-
-    <!-- TOAST NOTIFICATION -->
-    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
-
-    <!-- 1. LOCK / AUTHENTICATION COVER SCREEN -->
-    <section id="cover-screen" class="fixed inset-0 z-50 bg-slate-950 flex items-center justify-center p-4 bg-cover bg-center transition-opacity duration-500" style="background-image: radial-gradient(circle at center, rgba(30, 27, 75, 0.85) 0%, rgba(3, 7, 18, 0.98) 100%);">
-        <div class="max-w-md w-full bg-slate-900/95 backdrop-blur-md border border-amber-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden text-center text-amber-50">
-            <div class="absolute inset-2 border border-amber-500/20 rounded-xl pointer-events-none"></div>
-            
-            <div class="mb-6 pt-2">
-                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-inner">
-                    <i class="fa-solid fa-book-bookmark"></i>
-                </div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-amber-200 tracking-wider mb-1">AQUELLO QUE FUE ANTES</h1>
-                <p class="text-amber-400/80 text-sm font-semibold tracking-wide uppercase">Por PAPINHO BJJ</p>
-            </div>
-
-            <!-- Login Form -->
-            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 text-left relative z-10 pb-2">
-                <div>
-                    <label class="block text-xs font-semibold text-amber-300/80 uppercase tracking-wider mb-1">Usuario</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-500/60">
-                            <i class="fa-solid fa-user text-sm"></i>
-                        </span>
-                        <input type="text" id="username-input" required class="w-full bg-slate-950/80 border border-amber-500/30 rounded-lg py-2.5 pl-9 pr-3 text-sm text-amber-100 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="Ingrese usuario">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-amber-300/80 uppercase tracking-wider mb-1">Contraseña</label>
-                    <div class="relative">
-                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-500/60">
-                            <i class="fa-solid fa-lock text-sm"></i>
-                        </span>
-                        <input type="password" id="password-input" required class="w-full bg-slate-950/80 border border-amber-500/30 rounded-lg py-2.5 pl-9 pr-3 text-sm text-amber-100 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="••••••••">
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full mt-2 py-3 px-4 bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-slate-950 font-bold rounded-lg shadow-lg transition duration-200 flex items-center justify-center gap-2">
-                    <span>INGRESAR A LEER</span>
-                    <i class="fa-solid fa-book-open"></i>
-                </button>
-            </form>
-        </div>
-    </section>
-
-
-    <!-- 2. MAIN READING INTERFACE -->
-    <div id="main-interface" class="hidden h-screen flex flex-col bg-slate-950">
-
-        <!-- HEADER TOOLBAR -->
-        <header class="bg-slate-900/90 border-b border-slate-800 px-3 sm:px-4 py-2.5 flex items-center justify-between z-30 shadow-md">
-            <div class="flex items-center gap-2 sm:gap-3">
-                <button onclick="toggleTOC()" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Índice de Capítulos">
-                    <i class="fa-solid fa-list-ul text-lg"></i>
-                </button>
-                <div class="max-w-[150px] sm:max-w-xs">
-                    <h1 class="text-xs sm:text-sm font-bold text-amber-200 truncate uppercase">AQUELLO QUE FUE ANTES</h1>
-                    <p id="nav-chapter-title" class="text-xs text-slate-400 truncate font-medium">Índice</p>
-                </div>
-            </div>
-
-            <!-- CONTROLS -->
-            <div class="flex items-center gap-1 sm:gap-2">
-                <!-- Quick Dark Mode Toggle Button (Vista Descanso) -->
-                <button id="dark-mode-toggle" onclick="toggleDarkMode()" class="p-2 text-amber-400 hover:text-amber-300 hover:bg-slate-800 rounded-lg transition flex items-center gap-1.5" title="Modo Oscuro (Descanso de Vista)">
-                    <i id="dark-mode-icon" class="fa-solid fa-moon text-base"></i>
-                    <span class="hidden md:inline text-xs font-semibold">Modo Oscuro</span>
-                </button>
-
-                <!-- Print / Export Button -->
-                <button onclick="window.print()" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Imprimir / Exportar a PDF">
-                    <i class="fa-solid fa-print text-sm"></i>
-                </button>
-
-                <!-- Direct Link to Cover/Index -->
-                <button onclick="goToPage(0)" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Ir a Portada/Índice">
-                    <i class="fa-solid fa-house text-sm"></i>
-                </button>
-
-                <!-- Theme Switcher -->
-                <div class="relative group">
-                    <button class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Tema">
-                        <i class="fa-solid fa-palette text-sm"></i>
-                    </button>
-                    <div class="absolute right-0 top-full mt-1 hidden group-hover:flex flex-col bg-slate-900 border border-slate-800 rounded-lg shadow-2xl p-1.5 z-50 w-36 gap-1">
-                        <button onclick="changeTheme('parchment')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-amber-100 hover:text-amber-900 flex items-center gap-2 font-medium">
-                            <span class="w-3 h-3 rounded-full bg-[#f7f1e3] border border-amber-400"></span> Pergamino
-                        </button>
-                        <button onclick="changeTheme('sepia')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-amber-200 hover:text-amber-950 flex items-center gap-2 font-medium">
-                            <span class="w-3 h-3 rounded-full bg-[#f4ecd8] border border-amber-600"></span> Sepia
-                        </button>
-                        <button onclick="changeTheme('light')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-slate-200 hover:text-slate-900 flex items-center gap-2 font-medium">
-                            <span class="w-3 h-3 rounded-full bg-white border border-slate-300"></span> Claro
-                        </button>
-                        <button onclick="changeTheme('dark')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-slate-800 hover:text-slate-100 flex items-center gap-2 font-medium">
-                            <span class="w-3 h-3 rounded-full bg-slate-800 border border-slate-600"></span> Oscuro
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Font Sizing -->
-                <button onclick="changeFontSize(-1)" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Reducir Texto">
-                    <i class="fa-solid fa-minus text-xs"></i>
-                </button>
-                <button onclick="changeFontSize(1)" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Aumentar Texto">
-                    <i class="fa-solid fa-plus text-xs"></i>
-                </button>
-
-                <div class="h-5 w-px bg-slate-800 mx-1"></div>
-
-                <!-- Lock App -->
-                <button onclick="lockBook()" class="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition" title="Salir">
-                    <i class="fa-solid fa-power-off text-sm"></i>
-                </button>
-            </div>
-        </header>
-
-
-        <!-- 3D BOOK VIEWPORT CONTAINER -->
-        <main class="flex-1 relative flex items-center justify-center p-2 sm:p-6 overflow-hidden bg-slate-950">
-            
-            <!-- Left Arrow Button -->
-            <button onclick="prevPage()" class="absolute left-2 sm:left-6 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-900/90 hover:bg-amber-600 text-slate-300 hover:text-slate-950 border border-slate-700/80 flex items-center justify-center transition shadow-2xl group" title="Anterior">
-                <i class="fa-solid fa-chevron-left text-lg group-hover:-translate-x-0.5 transition-transform"></i>
-            </button>
-
-            <!-- 3D STAGE & PAGES CONTAINER -->
-            <div class="book-viewport w-full max-w-5xl h-[82vh] sm:h-[85vh] flex items-center justify-center">
-                
-                <div id="book-stage" class="book-stage w-full h-full relative">
-
-                    <!-- ================================================================= -->
-                    <!-- ÁREA DE PÁGINAS Y CAPÍTULOS DEL LIBRO                             -->
-                    <!-- ================================================================= -->
-
-                    <!-- PÁGINA 1: PORTADA & ÍNDICE INTERACTIVO -->
-                    <div class="paper-page theme-parchment page-shadow rounded-r-lg border-l border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between" data-page="1" data-title="Portada e Índice">
-                        <div class="absolute inset-y-0 left-0 w-8 spine-shadow-right pointer-events-none"></div>
-                        <div class="text-right text-xs opacity-40 font-bold">INICIO</div>
-                        
-                        <div class="my-auto space-y-6 text-center">
-                            <div>
-                                <span class="text-amber-700 dark:text-amber-400 text-xs tracking-widest uppercase font-bold">Autor: PAPINHO BJJ</span>
-                                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight mt-1 mb-2">AQUELLO QUE FUE ANTES</h1>
-                                <div class="w-16 h-1 bg-amber-600/40 mx-auto rounded-full"></div>
-                                <p class="text-xs mt-2 opacity-70 italic">Escrito por PAPINHO BJJ</p>
-                            </div>
-
-                            <!-- INTERACTIVE CHAPTER LINKS (PORTADA / INICIO) -->
-                            <div class="pt-2 text-left max-w-md mx-auto space-y-3">
-                                <p class="text-xs uppercase tracking-wider text-amber-800 dark:text-amber-300 font-bold text-center mb-3">Índice de Capítulos</p>
-                                
-                                <button onclick="goToPage(1)" class="w-full p-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-600/30 rounded-xl transition flex items-center justify-between group shadow-sm text-left">
-                                    <div class="flex items-center gap-3">
-                                        <span class="w-7 h-7 rounded-lg bg-amber-600 text-slate-950 font-bold text-xs flex items-center justify-center">1</span>
-                                        <span class="font-bold text-xs sm:text-sm group-hover:text-amber-800 dark:group-hover:text-amber-200">REFLEXION SOBRE LA REBELION DE LAS MASAS</span>
-                                    </div>
-                                    <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition-transform"></i>
-                                </button>
-
-                                <button onclick="goToPage(2)" class="w-full p-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-600/30 rounded-xl transition flex items-center justify-between group shadow-sm text-left">
-                                    <div class="flex items-center gap-3">
-                                        <span class="w-7 h-7 rounded-lg bg-amber-600 text-slate-950 font-bold text-xs flex items-center justify-center">2</span>
-                                        <span class="font-bold text-xs sm:text-sm group-hover:text-amber-800 dark:group-hover:text-amber-200">HAGEMUKE</span>
-                                    </div>
-                                    <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition-transform"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="flex justify-between items-center text-xs opacity-50 border-t border-current/10 pt-3">
-                            <span>PAPINHO BJJ</span>
-                            <span>Pág. 1</span>
-                        </div>
-                    </div>
-
-
-                    <!-- PÁGINA 2: CAPÍTULO NO CONTINUO 1 -->
-                    <div class="paper-page theme-parchment page-shadow rounded-l-lg border-r border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between" data-page="2" data-title="REFLEXION SOBRE LA REBELION DE LAS MASAS">
-                        <div class="absolute inset-y-0 right-0 w-8 spine-shadow-left pointer-events-none"></div>
-                        <div class="flex justify-between text-xs opacity-40 border-b border-current/10 pb-2 font-semibold">
-                            <span class="truncate">REFLEXION SOBRE LA REBELION DE LAS MASAS</span>
-                            <span>PAPINHO BJJ</span>
-                        </div>
-                        
-                        <div class="page-content page-body-scroll overflow-y-auto flex-1 my-4 pr-1">
-                            <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center text-amber-900 dark:text-amber-200">
-                                REFLEXION SOBRE LA REBELION DE LAS MASAS
-                            </h2>
-                            
-                            <p>El fenómeno del hombre-masa plantea una de las encrucijadas más profundas de la modernidad. No se trata únicamente de un concepto cuantitativo, sino de una actitud frente a la existencia y la responsabilidad individual dentro de la sociedad contemporánea.</p>
-                            
-                            <p>Cuando el individuo se diluye en la muchedumbre, cede su capacidad crítica a cambio de la comodidad del consenso automático. La masa no exige excelencia; por el contrario, tiende a homologar el pensamiento y descalificar la divergencia creadora.</p>
-                            
-                            <blockquote>«La libertad no consiste en hacer lo que nos apetece, sino en el compromiso consciente con los valores que dignifican el pensamiento.»</blockquote>
-
-                            <p>Frente a esta inercia colectiva, surge la necesidad urgente de reivindicar la autonomía moral y la búsqueda singular del conocimiento auténtico.</p>
-                        </div>
-
-                        <div class="flex justify-between items-center text-xs opacity-50 border-t border-current/10 pt-3">
-                            <button onclick="goToPage(0)" class="hover:text-amber-700 underline flex items-center gap-1">
-                                <i class="fa-solid fa-house text-[10px]"></i> ÍNDICE
-                            </button>
-                            <span>Pág. 2</span>
-                        </div>
-                    </div>
-
-
-                    <!-- PÁGINA 3: CAPÍTULO NO CONTINUO 2 -->
-                    <div class="paper-page theme-parchment page-shadow rounded-r-lg border-l border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between" data-page="3" data-title="HAGEMUKE">
-                        <div class="absolute inset-y-0 left-0 w-8 spine-shadow-right pointer-events-none"></div>
-                        <div class="flex justify-between text-xs opacity-40 border-b border-current/10 pb-2 font-semibold">
-                            <span>HAGEMUKE</span>
-                            <span>PAPINHO BJJ</span>
-                        </div>
-                        
-                        <div class="page-content page-body-scroll overflow-y-auto flex-1 my-4 pr-1">
-                            <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center text-amber-900 dark:text-amber-200">
-                                HAGEMUKE
-                            </h2>
-
-                            <p>Hagemuke representa la perseverancia inquebrantable en el arte del esfuerzo diario. Es la disciplina interna que impulsa a continuar escribiendo, aprendiendo y superando límites aun cuando los resultados inmediatos no sean visibles.</p>
-
-                            <p>En la tradición de la superación personal, este concepto enfatiza la constancia silenciosa frente a la distracción. Cada palabra plasmada y cada idea desarrollada son peldaños de un camino que se construye paso a paso.</p>
-
-                            <p>Cultivar esta mentalidad permite transformar la rutina ordinaria en una búsqueda continua de excelencia y perfeccionamiento personal.</p>
-                        </div>
-
-                        <div class="flex justify-between items-center text-xs opacity-50 border-t border-current/10 pt-3">
-                            <button onclick="goToPage(0)" class="hover:text-amber-700 underline flex items-center gap-1">
-                                <i class="fa-solid fa-house text-[10px]"></i> ÍNDICE
-                            </button>
-                            <span>Pág. 3</span>
-                        </div>
-                    </div>
-
-                    <!-- ================================================================= -->
-                    <!-- PUEDES AGREGAR MÁS PÁGINAS EDITANDO DIRECTAMENTE ESTE ARCHIVO     -->
-                    <!-- ================================================================= -->
-
-                </div>
-            </div>
-
-            <!-- Right Arrow Button -->
-            <button onclick="nextPage()" class="absolute right-2 sm:right-6 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-900/90 hover:bg-amber-600 text-slate-300 hover:text-slate-950 border border-slate-700/80 flex items-center justify-center transition shadow-2xl group" title="Siguiente">
-                <i class="fa-solid fa-chevron-right text-lg group-hover:translate-x-0.5 transition-transform"></i>
-            </button>
-        </main>
-
-
-        <!-- FOOTER & PROGRESS BAR -->
-        <footer class="bg-slate-900/90 border-t border-slate-800 px-4 py-2.5 flex items-center justify-between text-xs text-slate-400 z-30">
-            <span id="progress-text" class="font-semibold">Página 1 de 3</span>
-            
-            <div class="w-1/3 sm:w-1/2 bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800 mx-2">
-                <div id="progress-bar" class="bg-amber-500 h-full w-0 transition-all duration-300"></div>
-            </div>
-
-            <span class="hidden sm:inline opacity-60">Autor: PAPINHO BJJ</span>
-        </footer>
-
-
-        <!-- TABLE OF CONTENTS (TOC) DRAWER -->
-        <div id="toc-drawer" class="fixed inset-y-0 left-0 z-40 w-80 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col">
-            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
-                <h3 class="font-bold text-amber-200 text-xs tracking-wider uppercase">ÍNDICE DE CAPÍTULOS</h3>
-                <button onclick="toggleTOC()" class="text-slate-400 hover:text-white p-1">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
-            
-            <div id="toc-list" class="flex-1 overflow-y-auto p-3 space-y-2">
-                <!-- Dynamically populated -->
-            </div>
-        </div>
-        <div id="toc-backdrop" onclick="toggleTOC()" class="fixed inset-0 bg-black/60 z-30 hidden"></div>
-
-    </div>
-
-    <!-- PRINT PREVIEW STYLES SHEET -->
-    <style id="print-styles">
+        /* Estilos de impresión profesionales */
         @media print {
             body {
                 background: white !important;
                 color: black !important;
-                overflow: visible !important;
             }
-            #cover-screen, header, footer, button, #toc-drawer, #toc-backdrop, #toast-container {
+            .no-print {
                 display: none !important;
             }
-            #main-interface {
+            .print-only {
                 display: block !important;
-                height: auto !important;
-                background: white !important;
             }
-            .book-viewport, .book-stage {
-                perspective: none !important;
-                transform: none !important;
-                height: auto !important;
-                width: 100% !important;
-                position: static !important;
-            }
-            .paper-page {
-                position: relative !important;
-                width: 100% !important;
-                height: auto !important;
-                transform: none !important;
-                box-shadow: none !important;
-                background: white !important;
-                color: black !important;
+            .page-break {
                 page-break-after: always;
-                border: none !important;
-                padding: 2rem 1rem !important;
             }
-            .paper-page.flipped {
-                transform: none !important;
-            }
-            .spine-shadow-left, .spine-shadow-right {
-                display: none !important;
-            }
-            .page-body-scroll {
-                overflow: visible !important;
-                max-height: none !important;
-            }
+        }
+        .print-only {
+            display: none;
+        }
+        /* Efecto 3D de libro apaisado para PC */
+        .book-container {
+            perspective: 2000px;
+        }
+        .page-shadow-left {
+            box-shadow: inset 15px 0 20px -15px rgba(0, 0, 0, 0.15);
+        }
+        .page-shadow-right {
+            box-shadow: inset -15px 0 20px -15px rgba(0, 0, 0, 0.15);
+        }
+        .dark .page-shadow-left {
+            box-shadow: inset 15px 0 20px -15px rgba(0, 0, 0, 0.6);
+        }
+        .dark .page-shadow-right {
+            box-shadow: inset -15px 0 20px -15px rgba(0, 0, 0, 0.6);
         }
     </style>
+</head>
+<body class="h-full bg-amber-50/50 dark:bg-[#0a0a0c] text-neutral-800 dark:text-[#e2e8f0] transition-colors duration-300 flex flex-col overflow-hidden">
 
-    <!-- JAVASCRIPT ENGINE -->
-    <script>
-        const VALID_USERS = [
-            { username: "dana", display: "Dana", pass: "Mako" },
-            { username: "lauri", display: "Lauri", pass: "Mako" },
-            { username: "autor", display: "PAPINHO BJJ", pass: "libro123" }
-        ];
-
-        let pages = [];
-        let currentPageIndex = 0;
-        let fontSize = 16; // px
-        let isDarkMode = false;
-
-        // Touch swipe tracking
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        window.onload = function() {
-            pages = Array.from(document.querySelectorAll('.paper-page'));
-            setupPagesLayout();
-            renderTOC();
+    <!-- ================= AUTHENTICATION SCREEN ================= -->
+    <div id="authScreen" class="fixed inset-0 z-50 flex items-center justify-center bg-amber-950/80 dark:bg-black/90 backdrop-blur-md p-4 transition-opacity duration-500">
+        <div class="bg-amber-100 dark:bg-[#18181b] border-4 border-amber-900/40 dark:border-neutral-700 w-full max-w-md rounded-2xl shadow-2xl overflow-hidden p-8 text-center relative">
+            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-700 via-yellow-600 to-amber-800"></div>
+            <div class="mb-6">
+                <span class="inline-block p-4 rounded-full bg-amber-900/10 dark:bg-neutral-800 text-amber-800 dark:text-amber-400 text-3xl mb-3 shadow-inner">
+                    <i class="fa-solid fa-book-open"></i>
+                </span>
+                <h1 class="text-2xl font-bold tracking-wide text-amber-950 dark:text-amber-100">Aquello que Fue Antes</h1>
+                <p class="text-sm font-semibold text-amber-800/80 dark:text-amber-400/80 mt-1">PAPINHO BJJ</p>
+            </div>
             
-            // Keyboard navigation
-            window.addEventListener('keydown', (e) => {
-                if (document.getElementById('main-interface').classList.contains('hidden')) return;
-                if (e.key === 'ArrowRight' || e.key === ' ') nextPage();
-                if (e.key === 'ArrowLeft') prevPage();
-            });
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4 text-left">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-900/70 dark:text-neutral-400 mb-1">Usuario</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-amber-800/60 dark:text-neutral-500"><i class="fa-solid fa-user"></i></span>
+                        <input type="text" id="userInput" required class="w-full pl-10 pr-4 py-3 bg-white dark:bg-neutral-900 border border-amber-900/20 dark:border-neutral-700 rounded-xl focus:ring-2 focus:ring-amber-600 focus:outline-none text-sm transition" placeholder="Ingrese su usuario">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider text-amber-900/70 dark:text-neutral-400 mb-1">Contraseña</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-amber-800/60 dark:text-neutral-500"><i class="fa-solid fa-lock"></i></span>
+                        <input type="password" id="passInput" required class="w-full pl-10 pr-4 py-3 bg-white dark:bg-neutral-900 border border-amber-900/20 dark:border-neutral-700 rounded-xl focus:ring-2 focus:ring-amber-600 focus:outline-none text-sm transition" placeholder="••••••••">
+                    </div>
+                </div>
+                <div id="loginError" class="hidden text-xs font-medium text-red-600 dark:text-red-400 text-center py-1">
+                    Usuario o contraseña incorrectos.
+                </div>
+                <button type="submit" class="w-full py-3 bg-amber-900 hover:bg-amber-800 text-amber-50 font-bold rounded-xl shadow-lg transition duration-200 text-sm tracking-wide">
+                    Abrir Libro
+                </button>
+            </form>
+        </div>
+    </div>
 
-            // Touch Swipe listeners
-            const stage = document.getElementById('book-stage');
-            stage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
-            stage.addEventListener('touchend', (e) => {
-                touchEndX = e.changedTouches[0].screenX;
-                handleSwipe();
-            }, {passive: true});
+    <!-- ================= MAIN APP CONTAINER ================= -->
+    <div id="mainApp" class="flex flex-col h-full hidden">
+        
+        <!-- HEADER TOOLBAR -->
+        <header class="no-print bg-amber-900/90 dark:bg-[#121214] text-amber-100 px-4 py-3 flex items-center justify-between shadow-md z-20 border-b border-amber-950/30 dark:border-neutral-800">
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleSidebar()" class="p-2 rounded-lg hover:bg-amber-800/50 dark:hover:bg-neutral-800 transition text-amber-200" title="Índice">
+                    <i class="fa-solid fa-bars text-lg"></i>
+                </button>
+                <div>
+                    <h2 class="text-sm font-bold tracking-wide truncate max-w-[180px] sm:max-w-xs">Aquello que Fue Antes</h2>
+                    <p class="text-[10px] text-amber-300/80 font-medium">PAPINHO BJJ • <span id="currentUserBadge" class="capitalize"></span></p>
+                </div>
+            </div>
+
+            <div class="flex items-center space-x-2">
+                <!-- Botón Imprimir -->
+                <button onclick="window.print()" class="p-2 rounded-lg hover:bg-amber-800/50 dark:hover:bg-neutral-800 transition text-amber-200 text-sm flex items-center space-x-1 px-3" title="Imprimir libro o guardar como PDF">
+                    <i class="fa-solid fa-print"></i>
+                    <span class="hidden sm:inline text-xs font-semibold">Imprimir</span>
+                </button>
+                <!-- Botón Modo Oscuro -->
+                <button onclick="toggleDarkMode()" class="p-2 rounded-lg hover:bg-amber-800/50 dark:hover:bg-neutral-800 transition text-amber-200 text-sm" title="Alternar modo oscuro / descanso visual">
+                    <i id="darkModeIcon" class="fa-solid fa-moon"></i>
+                </button>
+                <!-- Salir / Bloquear -->
+                <button onclick="logout()" class="p-2 rounded-lg hover:bg-red-900/50 dark:hover:bg-red-950/50 transition text-red-200 text-sm" title="Bloquear libro">
+                    <i class="fa-solid fa-power-off"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- BOOK READER WORKSPACE -->
+        <main class="flex-1 relative flex items-center justify-center p-2 sm:p-6 overflow-hidden">
+            
+            <!-- CONTROLS OVERLAY (Prev / Next) -->
+            <button onclick="prevPage()" class="no-print absolute left-2 sm:left-6 z-10 bg-amber-900/80 dark:bg-neutral-800/80 hover:bg-amber-900 dark:hover:bg-neutral-700 text-amber-100 w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-xl flex items-center justify-center transition active:scale-95">
+                <i class="fa-solid fa-chevron-left"></i>
+            </button>
+            <button onclick="nextPage()" class="no-print absolute right-2 sm:right-6 z-10 bg-amber-900/80 dark:bg-neutral-800/80 hover:bg-amber-900 dark:hover:bg-neutral-700 text-amber-100 w-10 h-10 sm:w-12 sm:h-12 rounded-full shadow-xl flex items-center justify-center transition active:scale-95">
+                <i class="fa-solid fa-chevron-right"></i>
+            </button>
+
+            <!-- BOOK SPREAD (Desktop landscape: 2 pages, Mobile: 1 page) -->
+            <div class="book-container w-full max-w-5xl h-full max-h-[85vh] bg-amber-50 dark:bg-[#141416] border border-amber-900/20 dark:border-neutral-800 rounded-2xl shadow-2xl flex overflow-hidden relative">
+                
+                <!-- LEFT PAGE -->
+                <div class="w-full lg:w-1/2 h-full p-6 sm:p-10 flex flex-col justify-between page-shadow-left overflow-y-auto bg-[#fbf9f1] dark:bg-[#18181b] border-r border-amber-950/10 dark:border-neutral-800 select-text" id="leftPageContainer">
+                    <div id="leftPageContent" class="space-y-4 text-sm sm:text-base leading-relaxed text-neutral-800 dark:text-neutral-200">
+                        <!-- Content injected via JS -->
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-amber-900/10 dark:border-neutral-800 flex justify-between items-center text-xs font-semibold text-amber-900/60 dark:text-neutral-500">
+                        <span>Aquello que Fue Antes</span>
+                        <span id="leftPageNum">1</span>
+                    </div>
+                </div>
+
+                <!-- RIGHT PAGE (Desktop Only) -->
+                <div class="hidden lg:flex lg:w-1/2 h-full p-6 sm:p-10 flex-col justify-between page-shadow-right overflow-y-auto bg-[#fdfbf7] dark:bg-[#1c1c1f] select-text" id="rightPageContainer">
+                    <div id="rightPageContent" class="space-y-4 text-sm sm:text-base leading-relaxed text-neutral-800 dark:text-neutral-200">
+                        <!-- Content injected via JS -->
+                    </div>
+                    <div class="pt-4 mt-4 border-t border-amber-900/10 dark:border-neutral-800 flex justify-between items-center text-xs font-semibold text-amber-900/60 dark:text-neutral-500">
+                        <span>PAPINHO BJJ</span>
+                        <span id="rightPageNum">2</span>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+
+        <!-- FOOTER PROGRESS BAR -->
+        <footer class="no-print bg-amber-900/90 dark:bg-[#121214] text-amber-200 px-6 py-2.5 flex items-center justify-between text-xs font-medium border-t border-amber-950/30 dark:border-neutral-800 z-20">
+            <div class="flex items-center space-x-2">
+                <span id="currentSpreadText">Portada</span>
+            </div>
+            <div class="w-1/3 max-w-xs bg-amber-950/50 dark:bg-neutral-800 h-2 rounded-full overflow-hidden">
+                <div id="progressBar" class="bg-amber-400 dark:bg-amber-500 h-full transition-all duration-300" style="width: 0%"></div>
+            </div>
+            <div>
+                <span id="spreadIndicator">1 / 1</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ================= TABLE OF CONTENTS DRAWER ================= -->
+    <div id="tocDrawer" class="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm hidden transition-opacity opacity-0" onclick="toggleSidebar()">
+        <div class="absolute left-0 top-0 bottom-0 w-80 bg-amber-100 dark:bg-[#18181b] p-6 shadow-2xl flex flex-col justify-between transform -translate-x-full transition-transform duration-300 border-r border-amber-900/20 dark:border-neutral-800" id="tocPanel" onclick="event.stopPropagation()">
+            <div>
+                <div class="flex items-center justify-between pb-4 mb-4 border-b border-amber-900/20 dark:border-neutral-800">
+                    <h3 class="font-bold text-lg text-amber-950 dark:text-amber-100">Índice del Libro</h3>
+                    <button onclick="toggleSidebar()" class="p-2 text-amber-900 dark:text-amber-400 hover:bg-amber-900/10 dark:hover:bg-neutral-800 rounded-lg"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <nav class="space-y-2">
+                    <button onclick="goToSpread(0); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl hover:bg-amber-900/10 dark:hover:bg-neutral-800 font-semibold text-amber-900 dark:text-amber-300 transition flex items-center justify-between text-sm">
+                        <span><i class="fa-solid fa-house mr-2"></i> Portada / Índice</span>
+                        <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                    </button>
+                    <button onclick="goToSpread(1); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl hover:bg-amber-900/10 dark:hover:bg-neutral-800 font-semibold text-amber-900 dark:text-amber-300 transition flex items-center justify-between text-sm">
+                        <span><i class="fa-solid fa-book-bookmark mr-2"></i> REFLEXION SOBRE LA REBELION DE LAS MASAS</span>
+                        <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                    </button>
+                    <button onclick="goToSpread(10); toggleSidebar();" class="w-full text-left px-4 py-3 rounded-xl hover:bg-amber-900/10 dark:hover:bg-neutral-800 font-semibold text-amber-900 dark:text-amber-300 transition flex items-center justify-between text-sm">
+                        <span><i class="fa-solid fa-feather mr-2"></i> HAGEMUKE</span>
+                        <i class="fa-solid fa-chevron-right text-xs opacity-50"></i>
+                    </button>
+                </nav>
+            </div>
+            <div class="pt-4 border-t border-amber-900/20 dark:border-neutral-800 text-xs text-amber-900/70 dark:text-neutral-400 text-center">
+                Aquello que Fue Antes • PAPINHO BJJ
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= PRINT ONLY FORMATTED VERSION ================= -->
+    <div class="print-only p-10 font-serif">
+        <div class="text-center mb-12">
+            <h1 class="text-4xl font-bold mb-2">Aquello que Fue Antes</h1>
+            <p class="text-xl text-gray-600">PAPINHO BJJ</p>
+        </div>
+        <div class="space-y-8">
+            <h2 class="text-2xl font-bold border-b pb-2">REFLEXION SOBRE LA REBELION DE LAS MASAS</h2>
+            <p><strong>Transmisión y Reflexión Inicial</strong><br>Hay un hombre sentado frente a una pantalla. Puede estar en su casa, en el metro, esperando un café, o perdiendo 10 minutos antes de volver al trabajo. Lo interesante empieza cuando desliza el dedo por la pantalla. Al hacerlo, aparece una noticia sobre economía y nuestro hombre sabe lo que habría que hacer con los tipos de interés. Pasa a la siguiente noticia y se encuentra con una guerra. También sabe qué ejército está abocado al fracaso, qué gobierno miente y cómo debería terminar el conflicto. Después, llega hasta un estudio médico y enseguida se da cuenta de que los científicos están equivocados. Luego pasa una discusión sobre historia y corrige a los historiadores, una crisis política y encuentra la solución que nadie había considerado. Y finalmente, aparece otra noticia sobre inteligencia artificial. Lee el titular y ya tiene bastante claro qué es, hasta dónde llegará y qué profesiones van a desaparecer por su culpa. En menos de media hora, ese hombre sentado ha pasado las páginas por economía, medicina, estrategia militar, historia, política y tecnología, y apenas ha dudado en ninguno de esos campos. Ha encontrado solución y respuesta a todo. Y mientras lo ha hecho, sostiene entre las manos un objeto que sería incapaz de fabricar: un teléfono móvil.</p>
+            <p><strong>Tecnología, Complejidad y Normalidad</strong><br>Dentro de ese teléfono hay semiconductores construidos con una precisión extraordinaria, minerales procedentes de distintos lugares del planeta, sistemas de telecomunicaciones, criptografía, satélites, centros de datos, redes eléctricas, protocolos informáticos y millones de líneas de código. Pero nuestro hombre no necesita comprender nada de eso para poder utilizarlo. Simplemente pulsa una superficie de cristal y eso le permite hablar con alguien que está a 6.000 kilómetros de distancia. Puede consultar un mapa que conoce su posición, ordenar una transferencia bancaria, comprar un billete de avión o preguntarle cualquier cosa a una máquina y recibir su respuesta en apenas unos segundos. Todo funciona así, con absoluta normalidad. Pero esa normalidad tiene algo extraño. Porque nos permite vivir dentro de sistemas de una complejidad gigantesca sin obligarnos a conocer cómo funcionan. Abrimos un grifo y sale agua potable. Entramos en una farmacia y encontramos medicamentos fabricados gracias a décadas de investigación en la que no hemos tenido nosotros nada que ver. Subimos a un avión sin conocer las ecuaciones que permitieron diseñarlo. Encendemos una luz sin pensar en la red eléctrica que tiene que equilibrarse a cada instante. Dependemos de una cantidad inmensa de conocimiento ajeno, y nunca había sido tan fácil expresar nuestra opinión sobre cualquier cosa.</p>
+            <p><strong>Cambiar el chip</strong><br>Pero ahora cambiemos momentáneamente el chip. Retrocedamos 100 años, hasta una época en la que no había redes sociales, no hay teléfonos inteligentes, no existe internet, nadie habla de algoritmos ni de inteligencia artificial. Europa lleva todavía las heridas de la Primera Guerra Mundial, y un filósofo español observa las calles, los cafés, los periódicos, los trenes, los teatros, las universidades, y con todo eso se fija en la política de su tiempo. Ese filósofo se llama José Ortega y Gasset, y hay algo que le inquieta, más allá del hecho de que las multitudes hayan adquirido mayor presencia, más allá de las típicas luchas de pobres contra ricos, de obreros contra burgueses, de ignorantes contra personas cultivadas. Lo que Ortega y Gasset cree estar viendo es una manera de situarse ante el mundo, una manera de situarse ante los demás y ante las propias ideas, un tipo de ser humano. Y todas sus observaciones al respecto aparecerán reunidas en un libro cuyo título terminará siendo mucho más famoso que todo el resto de sus páginas: La rebelión de las masas. Y al individuo que ocupa el centro de su diagnóstico, Ortega y Gasset le da un nombre que puede engañarnos: lo llama el hombre-masa. De esto han pasado casi 100 años. El mundo que Ortega conoció ha desaparecido para siempre. Europa atravesó otra guerra mundial. Llegaron la televisión, los ordenadores, internet, los teléfonos inteligentes, las redes sociales y las máquinas capaces de hablar con nosotros a una velocidad que él difícilmente habría podido concebir. Pero aquel individuo que observaba no está tan lejos de nosotros. Y esto puede resultarle demasiado familiar a quien abra ahora ese libro, porque ese individuo sigue sentado frente a nosotros. Es el hombre que tiene una opinión sobre todo y que de tanto creer que sabe, ha perdido la capacidad de reconocer todo aquello que ignora.</p>
+            <p><strong>Diagnóstico Histórico y Social</strong><br>En 1930 habían pasado solamente 12 años desde el final de la Primera Guerra Mundial. Un acontecimiento histórico lejano para nosotros, pero un recuerdo muy reciente para un europeo de entonces. Había millones de personas vivas que habían combatido en las trincheras, familias que habían perdido hijos, padres o hermanos, mutilados de guerra todavía visibles en las ciudades, y países enteros que habían visto desaparecer imperios y fronteras. Rusia había vivido una revolución, el fascismo gobernaba Italia, Alemania atravesaba una crisis que pronto tendría consecuencias devastadoras. Y cuando Ortega publica La rebelión de las masas, el crac del 29 acaba de sacudir la economía mundial. No parecía, desde luego, el momento más apropiado para celebrar el éxito de Europa. Y sin embargo, para comprender el diagnóstico de Ortega, hay que mirar un poco más atrás, porque bajo aquella crisis había ocurrido algo formidable. Durante las generaciones anteriores, la ciencia, la técnica, la industria y las instituciones modernas habían transformado las condiciones de la existencia humana a una velocidad sin precedentes que no podría compararse con ningún periodo anterior. Las ciudades habían crecido, las redes ferroviarias habían unido multitud de territorios. La electricidad estaba modificando las calles, las fábricas, los hogares. El automóvil comenzaba a recortar las distancias. El telégrafo y el teléfono habían acelerado las comunicaciones, y la producción industrial permitía fabricar y distribuir todo tipo de cosas que habrían resultado inimaginables para las generaciones anteriores. Y también había cambiado la circulación de la información. Los periódicos alcanzaban públicos enormes. Las noticias podían recorrer grandes distancias con una rapidez desconocida unas décadas antes. El cine, por ejemplo, había logrado que millones de personas de países distintos pudieran ver las mismas imágenes, conocer los mismos rostros y seguir a los mismos actores. Una persona corriente podía entrar en una sala y contemplar Nueva York, París, una guerra, o el rostro gigantesco de Charlie Chaplin sin salir de su ciudad. Esto es algo muy normal para nosotros, pero no hace tanto era algo imposible. Y había otro cambio todavía más importante. Cada vez más personas sabían leer. La extensión de la escolarización y el descenso del analfabetismo habían incorporado a millones de individuos a un universo que durante siglos estuvo restringido. Leer un periódico, acceder a conocimientos, participar de una cultura nacional, intervenir en discusiones públicas, todo aquello que antes solo podían hacer unos pocos, estaba alcanzando a capas sociales cada vez mayores. Y algo parecido ocurría con la política. El sufragio se había ido ampliando en numerosos países, los partidos de masas y los sindicatos movilizaban a cantidades enormes de personas y sectores sociales que durante generaciones habían permanecido alejados de los centros de decisión, ahora adquirían una presencia pública cada vez mayor. Aún quedaba, no obstante, muchísimo camino por recorrer, pero la semilla ya estaba plantada. Las mujeres, por ejemplo, ni siquiera disfrutaban todavía del derecho al voto en todos los países europeos, pero la dirección histórica resultaba ya difícil de ignorar.</p>
+            <p><strong>El Advenimiento de las Masas</strong><br>Más personas podían leer, más personas podían viajar, más personas podían consumir, intervenir en política, acceder a bienes y experiencias que durante siglos habían pertenecido tan solo a las élites. Y Ortega y Gasset concede a todo esto una importancia enorme. La rebelión de las masas parte de un éxito, comienza diciendo que durante el siglo XIX la civilización europea creó unas condiciones de vida excepcionalmente favorables. Había aumentado la seguridad, había multiplicado las posibilidades materiales y había permitido un crecimiento demográfico extraordinario. En uno de los pasajes más llamativos del libro, Ortega y Gasset utiliza precisamente las cifras de población para mostrar la magnitud del cambio. Europa había pasado de unos 180 millones de habitantes en 1800 a aproximadamente 460 millones en 1914, 114 años después, el año en el que comenzó la Primera Guerra Mundial, un aumento de más de dos veces y media en poco más de un siglo. Una civilización capaz de sostener una población semejante había hecho algo extraordinariamente bien. Había construido técnicas, instituciones, conocimientos y formas de organización que permitían vivir a una cantidad de seres humanos que el viejo mundo nunca habría podido mantener. Por eso, el punto de partida de La rebelión de las masas resulta tan importante. El hombre que Ortega empieza a observar no aparece entre las ruinas de una civilización que no funciona, sino dentro de una civilización que funciona extraordinariamente bien. Nace en un mundo donde encuentra abiertas posibilidades que sus antepasados nunca tuvieron. La existencia ha ensanchado sus paredes. Y Ortega y Gasset observa entonces una consecuencia que le preocupa. Una generación puede recibir como normal aquello que para las anteriores fue una conquista dificilísima. Nacen y ya se encuentran con carreteras, escuelas, hospitales, trenes, leyes, máquinas, derechos e instituciones funcionando desde el primer momento. Y eso hace que acaben percibiéndolo todo como se percibe el aire: simplemente está ahí, no han tenido que inventarlo, no han tenido que conquistar nada, ni siquiera necesitan comprender cómo se sostiene todo. Y cuanto más eficazmente funciona una civilización, más fácil se vuelve olvidar que esa civilización tuvo que ser construida. Ese es el giro que empieza a producirse en el diagnóstico de La rebelión de las masas. El progreso había conseguido ampliar el escenario de la vida humana, había colocado ante millones de personas posibilidades que antes pertenecían tan solo a unos pocos. Y Ortega no niega ese triunfo, al contrario, necesita reconocerlo, pero lo hace para explicar lo que viene después, porque todos esos seres humanos que han nacido con todas estas comodidades van a entrar en lugares en los que antes no estaban: en la política, en la cultura, en los viajes, en los espectáculos, en los espacios públicos, en la vida social. Cuando Ortega mira lo que está ocurriendo, se encuentra con una imagen muy sencilla: los cafés, los teatros, los trenes, las calles, todo está lleno. Ortega sale a la calle, mira alrededor y descubre que hay demasiada gente en todas partes. Las ciudades están llenas de gente, las casas de inquilinos, los hoteles de huéspedes, los trenes de viajeros, los cafés de consumidores, los paseos de transeúntes, las consultas médicas están llenas de enfermos, los espectáculos están llenos de espectadores, ¿y las playas? Las playas, pues llenas de bañistas. Y todo eso quiere decir que lo que antes no solía ser problema, empieza a serlo, porque ahora cuesta encontrar sitio. Naturalmente, Ortega sabe que las multitudes han existido siempre, Roma conoció multitudes, las grandes ciudades europeas llevaban siglos uniendo cantidades enormes de personas, y cualquier fiesta popular podía llenar una plaza mucho antes de 1930. Lo que llama su atención no es haber descubierto de repente que existen aglomeraciones, es dónde están esas aglomeraciones. Porque, según él, esos individuos están ocupando ahora lugares, disfrutando bienes y participando en actividades que antes estaban reservadas a grupos mucho más pequeños. Y la multitud se hace visible precisamente porque ha entrado en espacios donde antes no estaba. Por eso escribe al comienzo del libro que existe un hecho que, para bien o para mal, considera el más importante de la vida pública europea de su tiempo: el advenimiento de las masas al pleno poderío social. Las grandes mayorías han dejado de ocupar un lugar secundario en la sociedad para pasar al primer plano. Ahora están en todas partes y, sobre todo, intervienen en todas partes. Participan en la política, consumen cultura, llenan los espacios de ocio, expresan públicamente sus opiniones, influyen en las costumbres y tienen una capacidad para imponer gustos, preferencias y decisiones colectivas que antes estaba concentrada en pequeños grupos muy reducidos. Eso es el advenimiento de las masas al pleno poderío social. Ortega está diciendo, por tanto, que la multitud ya no permanece al margen de todo, contemplando cómo una minoría organiza su vida. Ha entrado en ella, ha entrado en la vida y lo ha hecho convirtiéndose en protagonista.</p>
+            <p><strong>¿Qué es el Hombre-Masa?</strong><br>La expresión es fuerte y puede llevarnos por el camino equivocado, porque si escuchamos "masas" en la Europa de comienzos del siglo XX, es muy fácil imaginar una categoría social concreta: obreros saliendo de una fábrica, manifestaciones, movimientos populares, organizaciones sindicales. Pero el filósofo no está utilizando la palabra de esa manera. Para él, "masa" no significa clase obrera, tampoco significa pobre, no significa pueblo, y ni siquiera podemos decir que "masa" para él signifique mayoría. Ortega está intentando describir algo mucho más difícil de localizar, porque no depende necesariamente de cuánto dinero tiene una persona, de dónde ha nacido, del trabajo que desempeña o de los estudios que ha cursado. La "masa" para él es el conjunto de personas que no se valoran a sí mismas, sino que se sienten como todo el mundo, y que por encima de esto no experimentan ningún malestar. Ortega y Gasset divide psicológicamente a los seres humanos en dos tipos: los que no se exigen demasiado a sí mismos porque se encuentran cómodos siendo lo que son, y las minorías. Los primeros no sienten una necesidad especial de ponerse a prueba, no necesitan corregirse o elevar sus propias exigencias; estos son los hombres-masa. Y los segundos son una minoría selecta, pero aquí tampoco debemos confundirnos, porque Ortega no está hablando de aristócratas o de intelectuales. Para él, las personas selectas no son aquellas que se consideran superiores a los demás, son aquellas que se exigen más que los demás, incluso cuando no consiguen cumplir sus exigencias. Por tanto, la selección no consiste en otorgarse un privilegio, consiste en imponerse una obligación. Y esto cambia bastante la lectura del libro, porque un obrero puede pertenecer a una minoría selecta y un empresario puede perfectamente ser un hombre-masa. Puede serlo un médico, puede serlo un político, un periodista, un científico, puede serlo alguien que ha leído tres libros en su vida y también el que tiene una biblioteca de doscientos y se los ha leído todos. Porque tener conocimientos no garantiza la exigencia interior, y tener dinero tampoco, y tampoco pertenecer a una determinada ideología política. Podemos encontrar al hombre-masa a la izquierda o a la derecha, entre creyentes o entre ateos, entre conservadores o entre revolucionarios. Podemos verlo entre personas con una educación extraordinaria o entre personas que apenas pudieron estudiar. Debemos evitar convertir el concepto de Ortega en una especie de diagnóstico médico con el que dividir a la humanidad en dos cajas y colocar a cada individuo dentro de una de ellas. Podemos comportarnos de una manera exigente en un ámbito y convertirnos en hombre-masa en otro. Alguien puede ser sumamente riguroso en su profesión, aceptar correcciones, estudiar durante años, reconocer errores y saber perfectamente dónde terminan sus conocimientos, y salir de ese terreno para opinar sobre política, medicina, economía o historia con una seguridad que nunca toleraría en un principiante dentro de su propia especialidad. El hombre-masa no es el hombre que pertenece a las masas, es el hombre que no experimenta una necesidad profunda de exigirse más a sí mismo. Cuando Ortega habla del "hombre-masa", no está hablando específicamente del varón; utiliza "hombre" en el sentido de ser humano. El hombre-masa puede ser un hombre o una mujer. Lo que está describiendo no es un sexo, sino un tipo humano, una determinada manera de comportarse ante uno mismo, ante los demás y ante el mundo.</p>
+            <p><strong>El Niño Mimado y el Señorito Satisfecho</strong><br>Aquellos trenes llenos, los hoteles, los cafés y los espectáculos abarrotados son solamente el síntoma visible de una transformación inmensa. Millones de seres humanos han recibido unas posibilidades de vida que las generaciones anteriores nunca tuvieron. Y ahora debemos conocer a la clase de ser humano que puede producir una civilización acomodada. El ser humano que se encuentra con todas esas posibilidades y empieza a considerarlas parte natural del mundo. Ortega le pone un nombre que nos va a resultar bastante familiar: el niño mimado. Pensamos en un niño que nace en una familia donde siempre ha encontrado satisfechas sus necesidades. Nunca pasa hambre, tiene una casa caliente cuando hace frío, juguetes, cuidados, protección. Si se enferma, alguien se ocupa de él; si necesita algo, aparece al instante. Y naturalmente, el niño no se pregunta quién paga la calefacción, de dónde viene la comida, cuánto cuesta mantener aquella casa o cuántas horas ha tenido que trabajar alguien para que todo eso exista. Además, no tiene por qué, no tiene por qué saberlo, es un niño. El problema aparece cuando crece sin descubrirlo, cuando llega un momento en el que deja de percibir todo aquello como algo que otros hacen por él y empieza a considerarlo el estado natural de las cosas. La comida está ahí porque tiene que estar, la casa está caliente porque las casas están calientes, sus deseos deben ser satisfechos porque son sus deseos, y si algo falla, protesta. Ortega encuentra algo muy parecido a esto en el ser humano que ha producido la civilización moderna. Recordemos de dónde venimos. Hemos visto una sociedad que durante generaciones ha acumulado conocimientos, instituciones, infraestructuras, técnicas y derechos hasta ampliar extraordinariamente las posibilidades de la vida. Así que ahora, pensemos en alguien que nace cuando la mayor parte de ese trabajo ya está hecho. Abre los ojos y encuentra carreteras, escuelas, hospitales, ferrocarriles, leyes, administración, servicios públicos, seguridad, máquinas, medicamentos, libros, periódicos, electricidad, todo eso estaba ahí cuando él llegó. No ha tenido que inventar ninguna de esas cosas, ni siquiera sabe quién las inventó, y tampoco ha participado en las luchas, en los descubrimientos, en los errores, en los esfuerzos que hicieron posible que todo eso esté ahí. Simplemente se lo ha encontrado. Pero no nos engañemos, esto nos ha ocurrido a todos nosotros: ninguno de nosotros tuvo que descubrir la electricidad, no necesitamos reconstruir la medicina desde Hipócrates cada vez que nos ponemos enfermos, y tampoco redactamos de cero las leyes bajo las que vivimos, ni construimos la carretera por la que vamos a circular. Simplemente hemos recibido una enorme cantidad de trabajo que ya realizaron las generaciones anteriores. Obviamente, esto no es un defecto, es una de las condiciones del progreso, es algo maravilloso. Porque si cada ser humano tuviese que comenzar otra vez desde el principio, todavía estaríamos aprendiendo a hacer fuego. El problema aparece cuando heredar una civilización termina asimilándose con tanta normalidad que acaba pareciendo que vivimos en una casa donde todo está hecho. Ahí es donde puede ocurrir algo muy peculiar: el individuo disfruta de los resultados, pero pierde de vista las condiciones que permiten producir esos resultados, y ese es el niño mimado. El niño mimado desarrolla dos rasgos que parecen contradictorios, pero que se alimentan mutuamente. Por un lado, siente que puede expandir libremente sus deseos, está acostumbrado a que la realidad se adapte a él, pero por otro desarrolla una profunda ingratitud hacia aquello que hace posible esa vida. No necesariamente ingratitud en el sentido cotidiano de no decir gracias; es algo más complejo, es no reconocer que lo recibido depende de algo, de una institución, de una norma, de un conocimiento, de una determinada manera de comportarse colectivamente. El niño recibe el regalo y olvida al que lo hizo. El hombre-masa recibe una civilización y corre el riesgo de olvidar que alguien tuvo que construirla, y desde aquí se entiende otro asunto que también preocupa a Ortega y Gasset: la relación entre derechos y obligaciones. La civilización liberal había ampliado enormemente los derechos individuales, eso formaba parte de su éxito. El individuo moderno podía encontrarse protegido por libertades y garantías que no habían estado disponibles para buena parte de sus antepasados. Pero claro, hay un problema: que todos esos derechos conquistados pueden terminar siendo percibidos como atributos naturales, como algo que simplemente nos corresponde. Y cuando eso sucede, resulta fácil olvidar que los derechos no existen suspendidos en el aire. Para que un derecho pueda ejercerse, hacen falta leyes y personas dispuestas a respetarlas. Pensemos en algo elemental: decir "tengo derecho a expresar mis ideas" parece referirse solamente a mí y a mi libertad, pero para que ese derecho exista de verdad, necesito vivir entre personas que acepten escuchar ideas que detestan, sin intentar eliminarlas por la fuerza. Necesito jueces, normas, procedimientos, límites al poder y ciudadanos capaces de tolerar que otros utilicen exactamente el mismo derecho para defender cosas con las que yo no estoy de acuerdo. El derecho que disfruto depende de obligaciones que recaen sobre mí, y Ortega teme que el hombre-masa quiera quedarse solo con una mitad de esa ecuación: con los derechos. Porque las obligaciones, las normas, las disciplinas y las limitaciones que permiten sostenerlos empiezan a resultar algo molestas. No porque el hombre-masa haya elaborado una teoría política contra las obligaciones, es algo anterior: se ha acostumbrado a vivir en un mundo que le ofrece posibilidades y empieza a sentir esas posibilidades como algo debido, como el niño mimado que no conoce las cuentas de la casa y le pide a sus padres que le compren todo lo que ve en el supermercado. No sabe que sus padres pagan una hipoteca, no tiene ni idea de lo que es una jornada de trabajo, simplemente ha crecido teniendo todo lo que necesita. Y Ortega y Gasset lleva esta psicología todavía un poco más lejos, con otra figura deliberadamente desagradable: el señorito satisfecho. Una expresión que tiene detrás un tipo humano muy reconocible en la España de su época. El señorito es alguien que recibe una posición y una herencia que él no ha creado, él no tiene ningún mérito sobre lo que ostenta, pero se comporta como si todos esos privilegios fuesen una prolongación natural de su persona. No necesita conquistar su lugar, porque ya lo tiene, no necesita demostrar nada, no necesita preguntarse de dónde procede todo lo que disfruta, simplemente lo disfruta. Pero el señorito satisfecho de Ortega y Gasset no tiene por qué ser un aristócrata o un hombre rico; estamos de nuevo ante una categoría psicológica que puede aparecer en cualquier clase social. Lo que lo define es la relación con lo heredado: el señorito satisfecho recibe muchísimo y no siente ninguna obligación hacia lo que ha recibido. Y aquí aparece una de las ironías más interesantes de todo el diagnóstico: una civilización rudimentaria recuerda constantemente su fragilidad. Si una cosecha fracasa, hay hambre; si el agua se contamina, la gente enferma; si llega el invierno y no hay combustible, el frío entra en casa. Las condiciones de supervivencia están delante de los ojos. Pero una civilización muy avanzada puede ocultar todo eso. Abrimos el grifo y sale agua, pulsamos un interruptor y hay luz, entramos en un hospital y esperamos que funcione. Y cuanto más sucede todo eso, menos pensamos en la cantidad de conocimiento, disciplina, inversión, mantenimiento, acuerdos, instituciones y trabajo humano que existe detrás. Hasta que algo deja de funcionar y descubrimos de golpe que aquello que parecía natural nunca lo fue.</p>
+            <p><strong>El Sabio Ignorante y la Acción Directa</strong><br>Ortega y Gasset, por tanto, está describiendo una incómoda paradoja: que el éxito de una civilización ayuda a producir individuos que desconocen las condiciones de ese éxito. Cuanto más segura es la casa, menor necesidad siente el niño de averiguar quién la sostiene. Cuanto mejor funciona el mundo que hemos heredado, más fácil es confundir una conquista con una propiedad natural. Y el individuo que ha recibido una herencia gigantesca sin comprender de dónde viene empieza a desarrollar una seguridad particular. El mundo funciona, las cosas están ahí, sus deseos le parecen completamente legítimos, y poco a poco puede dejar de sentir que existe fuera de sí mismo alguien a quien merezca la pena escuchar. Todos tenemos ideas, opiniones, preferencias y explicaciones sobre lo que ocurre a nuestro alrededor. El problema aparece cuando dejamos de sentir la necesidad de ponerlas a prueba, cuando ya no buscamos aquello que podría contradecirnos, cuando escuchamos al otro solamente para encontrar el momento de responderle, sin atender sus argumentos, sin intentar entender sus explicaciones. El problema surge cuando una objeción deja de ser una posibilidad de descubrir un error y se convierte en una molestia. Ortega describe al hombre-masa como alguien que encuentra dentro de sí un repertorio de ideas y se da por satisfecho con él. No siente ya una necesidad de contrastarlas con algo que difiera de su propio juicio, y eso tiene una consecuencia muy concreta: deja de escuchar. Escuchar, en el sentido importante de la palabra, exige aceptar una posibilidad bastante incómoda: que la persona que tenemos delante sepa algo que nosotros no sabemos, o peor aún, que pueda demostrarnos que estamos equivocados. Pero la convivencia intelectual necesita precisamente eso: reconocer que existen conocimientos o razones que no dependen de lo que a uno le apetezca pensar. Podemos discrepar de ellas, podemos combatirlas, podemos descubrir que están equivocadas, pero primero tenemos que admitir que nuestra opinión no tiene valor simplemente porque sea nuestra. Ortega encuentra este problema precisamente en uno de los grandes triunfos de la civilización moderna: la ciencia. Porque durante siglos una persona culta podía aspirar a conocer una parte considerable del saber disponible en su época. Pero el conocimiento científico creció hasta hacer eso imposible. Ya en tiempos de Ortega, nadie podía dominar todas las ciencias, y dentro de cada ciencia empezaban a abrirse territorios cada vez más específicos. Un físico podía dedicar su carrera entera a una parcela muy concreta de la física, un médico podía concentrarse en un órgano o una técnica, un biólogo podía pasar años estudiando un grupo diminuto de organismos, y un filólogo podía conocer con extraordinaria profundidad una lengua o incluso un conjunto muy reducido de textos. Y esto ocurre porque ahora sabemos tanto que nadie puede saberlo todo. Por tanto, el conocimiento acumulado nos obliga a repartir el trabajo. Si queremos entender algo profundamente, alguien tiene que dedicarle años o incluso décadas a estudiar una fracción minúscula de la realidad, y el resultado de eso puede ser extraordinario. Una persona puede llegar a conocer esa pequeña región del universo con una precisión inconcebible para las generaciones anteriores. Pero siempre se paga un precio, porque mientras su conocimiento se hace mayor, el territorio que domina se hace cada vez más pequeño. Y esto supone que alguien dentro de su especialidad sabe muchísimo, pero fuera de ella sabe aproximadamente lo mismo que cualquier otra persona. Hasta aquí no habría ningún problema: un neurocirujano no tiene por qué saber de arqueología mesopotámica, igual que un astrofísico no tiene por qué conocer el derecho constitucional. Sería absurdo exigírselo. Pero los éxitos obtenidos dentro de una parcela producen una sensación general de autoridad que nos inclina a pensar cosas como: "Durante años las personas han acudido a mí porque sé muchísimo sobre esto". Y poco a poco esto logra que se deslice una conclusión que ya no está justificada: "Si tantas personas acuden a mí, mi juicio también debe valer más que los demás sobre otros temas". Ortega y Gasset contempla este tipo de persona con una mezcla de fascinación y de alarma, y le da uno de los nombres más memorables de todo su libro: el sabio ignorante. Un oxímoron en toda regla, dos palabras que parecen incompatibles entre sí, pero que precisamente por eso funcionan tan bien. Es sabio porque conoce a la perfección su pequeña parcela, y es ignorante porque fuera de ella desconoce grandes regiones de la cultura, de la ciencia, de la historia, de la política o de la sociedad. Y no es simplemente un sabio que ignora muchas cosas (al fin y al cabo, eso nos pasa a todos, porque tanto Newton como Einstein ignoraban una cantidad inmensa de cosas, y nosotros, salvando las distancias, ignoramos una cantidad infinita de cosas). De hecho, el mayor especialista vivo en cualquier disciplina ignora muchísimas más cosas de las que sabe en realidad. De ahí la archiconocida frase de Sócrates: "Solo sé que no sé nada". Porque el problema no es ignorar, todos ignoramos casi todo. El problema es pensar lo contrario, el problema es dejar de saber que no tenemos ni idea de la mayoría de las cosas. Así que, sabiendo esto, regresemos durante un instante al hombre que dejamos sentado frente al comienzo de este episodio. ¿Recuerdan aquella frase? Decíamos que tenía una opinión sobre todo, y que de tanto creer que sabe, había perdido la capacidad de reconocer todo aquello que ignora. Ahora podemos entender mejor por qué esa pérdida es tan importante. Una persona que sabe poco y sabe que es así, conserva algo fundamental: puede preguntar, puede buscar, puede escuchar, puede acudir a alguien que sepa más que él y aprender. Pero sobre todo, puede decir tres palabras que parecen sencillas, pero que sin embargo hoy en día cuestan muchísimo: no lo sé. Sin embargo, cuando desaparece la conciencia de nuestra propia ignorancia, desaparece también nuestra necesidad de aprender, y nos preguntamos: ¿para qué vamos a escuchar a alguien si ya tenemos una explicación?, ¿para qué vamos a contrastar nuestra opinión si ya sabemos que es la correcta?, ¿para qué vamos a reconocer la autoridad intelectual de otro si nuestro propio juicio es suficiente? El sabio ignorante es una criatura intermedia: un hombre que conoce muchísimo de casi nada y puede comportarse como si ese muchísimo le autorizase a juzgar el resto. Pero ojo, tampoco podemos atacar una de las cosas que hicieron posible el mundo moderno: la especialización no es el enemigo. Sin especialistas no tendríamos la medicina que tenemos, ni la física, ni la ingeniería, ni la informática, ni buena parte del conocimiento contemporáneo. De hecho, cuanto más compleja se vuelve una civilización, más especialistas necesita. La cuestión es que la misma civilización que necesita especialistas necesita también que esos especialistas conozcan los límites de su especialidad. Que sepan dónde termina su propia competencia, y esto, como ya supondrán, no afecta solamente a científicos. Podemos encontrar el mismo mecanismo en cualquier profesión. Un empresario exitoso puede llegar a pensar que su habilidad para dirigir una compañía lo convierte en un gran presidente del gobierno. Un historiador puede creer que su conocimiento del pasado le concede una autoridad especial sobre cuestiones científicas. Un periodista puede haber entrevistado a muchos expertos en inteligencia artificial y considerarse experto en todo aquello sobre lo que pregunta. Cualquiera de nosotros puede hacer exactamente lo mismo: sabemos algo, y ese conocimiento nos proporciona seguridad, y la seguridad es una mala consejera porque nos hace cometer errores cuando estamos confiados. Pero esta no es la única manera de renunciar a pensar que Ortega y Gasset menciona en su libro; también nos habla de dejarse llevar por las ideas que circulan a nuestro alrededor. Ortega habla en otro momento de una época de las corrientes, corrientes de opinión, de gustos, de ideas o de movimientos, vidas que en lugar de construir una dirección propia se dejan arrastrar por lo que pasa en ese momento. Y es que una corriente no necesita preguntarnos a dónde queremos ir, simplemente nos lleva. Es algo que pasa continuamente en nuestras vidas: despertamos con una noticia, y esa mañana parece que todos debemos hablar de lo mismo. Y entonces llegan las opiniones, las bromas, la indignación, todo el mundo habla de ello hasta que al día siguiente aparece otro tema, y aquello que parecía urgentísimo comienza a desaparecer sin dejar ni rastro, porque una nueva polémica acaba de ocupar su lugar. Son tendencias, temas virales, indignaciones colectivas, son opiniones que recorren a una sociedad enorme con una velocidad indescriptible para ser sustituidas una y otra vez antes de que siquiera hayamos tenido tiempo de pensarlas. Ortega y Gasset se dio cuenta de la facilidad con la que una persona puede confundir tener ideas con haberlas pensado. Y en este punto, el hombre-masa de Ortega ya posee varios rasgos: ha heredado un mundo que funciona, se siente cómodo dentro de él, tiene opiniones, no experimenta demasiada necesidad de contrastarlas, puede incluso poseer conocimientos extraordinarios y aún así desconocer sus propios límites, y además, deja de escuchar. Porque mientras aceptamos que podemos estar equivocados, necesitamos discutir, argumentar, persuadir, buscar razones y soportar objeciones. Pero si yo tengo razón y el otro simplemente está equivocado, convencerlo empieza a parecernos una pérdida de tiempo. Y entonces aparece una tentación mucho más rápida y más peligrosa: imponer nuestra opinión. Ya no estamos hablando de alguien que simplemente tiene opiniones equivocadas, estamos hablando de alguien que está tan satisfecho con sus opiniones que cada vez siente menos necesidad de someterlas a discusión. Y eso, mientras sus ideas permanezcan únicamente dentro de su cabeza, no tiene demasiada importancia. El problema empieza cuando tiene que convivir con otras personas, porque tarde o temprano aparecerá alguien que le dirá que está equivocado. Alguien que no comparta sus ideas, que vote de otra manera, que defienda otros intereses, que interprete los hechos de forma distinta o que sencillamente se niega a aceptar aquello que para él resulta evidente. Mientras exista alguna posibilidad de que yo esté equivocado, todavía necesito al otro. Tengo que escucharlo y discutir con él, tengo que buscar argumentos y presentar pruebas que soporten mis objeciones, que aceptar incluso después de un largo debate que ninguno de los dos haya conseguido convencer al otro. Todo esto, muchas veces, resulta frustrante, pero contiene una condición fundamental de la convivencia: supone reconocer que el otro puede seguir existiendo aunque piense algo que yo considero absurdo. Pero ahora coloco en esa situación al individuo de Ortega y Gasset, al que llevamos describiendo durante un buen rato. Si está convencido de que sus ideas son evidentes, si no siente la necesidad de contrastarlas y la opinión contraria le parece un obstáculo, convencer al otro supone una pérdida de tiempo. Aquí surge el paso siguiente: ya no se discute, se actúa. Y a esto el filósofo lo llama acción directa. La expresión puede confundirnos porque no significa simplemente tomar una iniciativa o hacer algo por nosotros mismos. Ortega y Gasset la utiliza para describir una manera de vivir que pretende saltarse la convivencia. De modo que, en lugar de persuadir al adversario o soportar sus objeciones, aparece la tentación de imponer aquello que consideramos justo. Para Ortega, una de las peculiaridades de la democracia liberal era precisamente que había construido ciertos mecanismos para evitar eso. La mayoría podía gobernar, naturalmente, pero el hecho de ser mayoría no le concedía el derecho a hacer cualquier cosa, porque seguían existiendo leyes, instituciones y derechos que protegían también a quien había perdido. Y esto tiene algo bastante extraño si lo pasamos desde la lógica desnuda del poder. Porque si somos más, si hemos ganado y si además queremos tener razón, ¿por qué deberíamos soportar que una minoría continúe obstaculizando nuestros planes? La respuesta liberal consiste en aceptar esa incomodidad, en permitir que el adversario siga hablando, que siga organizándose, que siga tratando de convertirse en mayoría en las próximas elecciones. Para Ortega, esa es una forma sofisticada de convivencia que obliga al vencedor a imponerse límites a sí mismo, a pesar de disponer de la fuerza suficiente para no tener que hacerlo. Pero él cree que en su tiempo está ocurriendo algo muy distinto. La masa ha alcanzado un poder social enorme y comienza a comportarse como si el hecho de ser mayoría bastase para legitimar sus deseos. Ya no es suficiente participar en las instituciones o gobernar a través de ellas; aparece la tentación de pasar por encima de los procedimientos y sobre todo por encima de las minorías que se interponen en su camino. A esto, Ortega y Gasset lo llama hiperdemocracia. Que, хотя pueda parecernos que estamos hablando de una democracia más intensa, es todo lo contrario: es la situación en la que la masa pretende ejercer su poder directamente, sin someterse a los límites que hacen posible la convivencia. En la democracia liberal gobierna la mayoría aceptando que la minoría conserve derechos y pueda seguir oponiéndose. En la hiperdemocracia de Ortega, la mayoría corre el riesgo de razonar de otra manera y decidir que al ser más, tienen derecho a imponer su propia voluntad. Y cuando alguien empieza a pensar así, el adversario político cambia de naturaleza. Ya no es alguien a quien debemos derrotar en una discusión o en unas elecciones; es un obstáculo que se debe apartar.</p>
+            <p><strong>Fascismo, Comunismo y el Peligro del Estado</strong><br>Supongamos que aparece un movimiento político convencido completamente de que el país atraviesa una decadencia increíble, que las viejas instituciones se han vuelto débiles y son incapaces de responder a la gravedad del momento. Que los parlamentos hablan demasiado y actúan poco, que determinadas normas son obstáculos construidos por un sistema que se ha agotado y que ha llegado la hora de recuperar la decisión, la autoridad y la fuerza. Los que siguen este movimiento consideran que existen enemigos internos que están impidiendo la regeneración, y empiezan a preguntarse por qué hay que seguir concediendo espacio y derechos a quienes están destruyendo aquello que ellos pretenden salvar. Probablemente muchos de ustedes hayan descrito con una palabra todo lo que estoy retratando: fascismo. Es lógico pensarlo. Ortega tenía delante a la Italia de Mussolini y contemplaba en el fascismo algunos de los síntomas que más le preocupaban: el desprecio por el parlamentarismo, la exaltación de la acción, la movilización de las masas, el recurso a la fuerza y, sobre todo, considerar al adversario como alguien con quien no es necesario convivir. De modo que si usted se encuentra políticamente a la izquierda y acaba de pensar que Ortega estaba describiendo a los fascistas, puede sentir durante unos segundos la sensación de haber encontrado al hombre-masa, de saber quién es. Pero vamos a esperar un poco, porque antes de sentenciarlo necesitamos cambiar el escenario. Ahora tenemos un movimiento convencido de que posee una explicación científica del funcionamiento de la historia, de que el orden social existente responde al interés de una clase dominante, y que sus instituciones, sus leyes y buena parte de sus libertades no son neutras, sino instrumentos de ese mismo orden. La historia avanza hacia una transformación inevitable, existe una clase llamada a protagonizarla, y quienes se oponen a ella están defendiendo un sistema condenado a desaparecer. Ante una tarea semejante, detenerse indefinidamente ante los procedimientos del viejo mundo puede parecer no sólo inútil, sino algo reaccionario. Aquí probablemente también se hayan sonreído otra parte de quienes nos están escuchando, al darse cuenta perfectamente de la palabra que estoy describiendo: comunismo, más concretamente el bolchevismo que Ortega tenía delante después de la revolución rusa. Así que el oyente situado a la derecha también puede disfrutar durante unos segundos de su descubrimiento y pensar que ahora sí que sabemos quién es el hombre-masa. Pero la realidad es que Ortega y Gasset nos deja en una posición bastante incómoda, porque no señala ni a uno ni a otro; los señala a los dos. Y no lo hace diciendo que el fascismo y el comunismo sean la misma ideología; lo que dice es que en ambos existe una disposición común anterior a sus diferencias doctrinales. Algo que ocurre en los dos extremos, que cuando alguien considera que posee una verdad suficientemente importante, las medias tintas se vuelven obstáculos, y el adversario deja de ser alguien a quien hay que convencer para ser alguien a quien hay que derrotar. Así que ahora deténganse un momento y fíjense en lo fácil que ha sido seguir el juego. Cuando describíamos al fascista, una parte de nosotros podía sentir tranquilamente porque hablábamos del otro. Pero cuando describimos al comunista, otra parte podía hacer exactamente lo mismo. Cada uno podía utilizar a Ortega para confirmar lo que ya pensaba de su adversario. No necesitamos cambiar el mecanismo, solo necesitamos cambiar al culpable. Y esto encaja perfectamente con el individuo que llevamos siguiendo desde el comienzo del programa. Y es así porque una persona demasiado satisfecho con sus propias ideas puede apropiarse de cualquier ideología, porque el hombre-masa no tiene un carné político determinado, puede llevar cualquiera de ellos. Porque el problema no está en el partido al que sigue, sino en la manera en que se relaciona con sus propias convicciones, con aquellas que las comparten y, sobre todo, con las personas que se atreven a discutirlas. Y hay otra cosa que debemos tener en cuenta, y es que el hombre-masa nunca está solo. A su alrededor siempre están aquellos que confirman sus certezas, que alimentan sus prejuicios, los que sonríen sus desmanes y premian su indignación, los que le aseguran una y otra vez que no necesita escuchar al adversario porque el adversario es alguien que está equivocado y quiere destruirle, es alguien que no tiene nada que enseñarle y mucho que robarle. Siempre habrá dirigentes políticos dispuestos a aprovechar esa debilidad, a darle enemigos, a simplificarle el mundo, a convertir sus convicciones en una fuerza política. Pero para que todo esto funcione tiene que haber algo dentro de él dispuesto a aceptarlo. Por eso esto no se trata de una disputa entre izquierda y derecha; se trata de la manera de relacionarnos con nosotros mismos, con nuestras propias ideas, con quien discrepa de ellas, con los límites que nos impiden hacer aquello que deseamos. Y en este punto entra en escena una herramienta que cambia completamente la escala del problema. Ortega dedica un capítulo entero a lo que llama, sin demasiadas precauciones, el mayor peligro: el Estado. Bueno, leída hoy la frase puede utilizarse con enorme facilidad para convertirlo en defensor de cualquier programa contemporáneo que pretenda reducir impuestos o servicios públicos. Bastaría sacar esas cinco palabras del libro y colocarlas en una pancarta. Pero Ortega, como ocurre constantemente, está hablando de otra cosa. Está diciendo que el Estado moderno le parece una construcción extraordinaria de la civilización europea. Una maquinaria capaz de administrar territorios enormes, recaudar impuestos, mantener tribunales, construir infraestructuras, organizar servicios y hacer cumplir decisiones sobre millones de personas que jamás se conocerán entre sí. Es maravilloso. Una sociedad rudimentaria no dispone de algo semejante. Ha hecho falta una enorme acumulación de conocimiento político, jurídico, administrativo y técnico para construirlo. Por tanto, es un gran triunfo de la civilización. Pero precisamente por eso puede convertirse en un peligro. El hombre-masa encuentra el Estado de la misma manera que se encontraba las carreteras, los hospitales o los ferrocarriles. El Estado ya está ahí. No ha tenido que construir esa formidable máquina, simplemente puede recurrir a ella cada vez que desea que algo ocurra. Y cuanto mayor sea la capacidad del Estado, mayor será la tentación de utilizarlo para resolver cualquier resistencia que aparezca dentro de la sociedad. Por ejemplo, si alguien hace algo que consideramos intolerable, debe prohibirse. Si existe un comportamiento que rechazamos, debe impedirse. Si una actividad no produce el resultado que deseamos, que se regule. Si alguien se interpone, que la maquinaria pública se encargue de apartarlo. Esa lógica podría ir ocupando progresivamente espacios que antes pertenecían a la propia sociedad, a asociaciones, iniciativas, comunidades y grupos capaces de organizarse sin esperar constantemente la intervención estatal. Ortega habla de la estatificación de la vida, de una sociedad que ha construido un instrumento tan poderoso que termina recurriendo a él para solucionar cada vez más cosas. Y aquí vuelve a aparecer una de las paradojas que atraviesan el libro. La sociedad construye el Estado para servirse de él, pero cuanto más poder deposita en esa maquinaria, mayor capacidad adquiere esa maquinaria para dominar también a la sociedad que la creó. Ortega y Gasset estaba observando la facilidad con la que podemos pedir a una institución dotada de una enorme capacidad coercitiva que haga por nosotros aquello que ya no estamos dispuestos a resolver mediante la convivencia, la persuasión o la iniciativa social. Y en la Europa desde la que él escribía no faltaba ningún ejemplo de esto. Mussolini llevaba años gobernando Italia, la Unión Soviética estaba bajo el poder de Stalin, los movimientos antiliberales crecían en distintos países, y el parlamentarismo atravesaba una enorme crisis. Los fascistas y los comunistas se odiaban entre sí, pero ambos podían ofrecer algo que las lentas democracias liberales parecían incapaces de proporcionar con esa misma intensidad: una explicación completa de lo que estaba ocurriendo, un enemigo reconocible y, sobre todo, la promesa de actuar. Con todo esto, es sumamente sencillo caer en la tentación.</p>
+            <p><strong>Redes de Dependencia y el Futuro de Europa</strong><br>Llevamos un buen rato leyendo frases escritas hace casi un siglo y encontrando cosas que nos suenan demasiado familiares. El individuo satisfecho consigo mismo, el especialista que opina fuera de su especialidad, las corrientes de opinión, la incapacidad para escuchar, la imposición sobre el adversario, la utilización de una maquinaria política gigantesca. Pero Ortega y Gasset no veía el futuro. Escribía desde 1930 con la información disponible en 1930. Y de hecho, algunas de sus expectativas envejecieron muy mal. Consideró fascismo y bolchevismo regresiones hacia formas primitivas de acción política, y no alcanzó a anticipar hasta dónde podían llegar en los años inmediatamente posteriores. Basta mirar el calendario y ver que en 1933 Hitler llegó al poder en Alemania, que en 1936 comenzó la guerra civil española, y que durante aquella década la represión estalinista alcanzó una escala de modo que Ortega vio cosas, pero otras no las vio. Algunas de sus instituciones han envejecido de una manera sorprendente, y algunos de sus juicios quedaron sepultados pocos años después. But leerlo resulta mucho más interesante así, sin convertirlo en profeta y sin exigirle que lo fuera. Además, para continuar ya no necesitamos permanecer en la política; podemos dejar durante un momento a Mussolini, Stalin, los partidos, las mayorías y el Estado, porque aquel mundo moderno estaba produciendo una transformación todavía más profunda y mucho menos visible. La humanidad sabía cada vez más, pero de manera paradójica, cada ser humano comprendía una parte cada vez menor de todo aquello que hacía posible su propia vida. Y esto continúa ocurriendo, ahora todavía más. El resultado de todos los avances científicos que hoy nos hacen la vida mucho más cómoda es una situación contradictoria. La humanidad sabe cada vez más, pero cada ser humano conoce una proporción cada vez menor de todo lo que la humanidad sabe. Esto es una consecuencia inevitable del progreso: nadie puede ser matemático, genetista, historiador, ingeniero aeronáutico, economista, neurólogo, químico, jurista, informático... nadie puede ser todo eso a la vez. Ni siquiera podemos dominar disciplinas enteras porque dentro de ellas existen especialistas que dedican décadas a territorios concretos. Gracias a esa división hemos conseguido cosas extraordinarias, como que un cirujano pueda intervenir un corazón sin saber fabricar el equipo electrónico que está utilizando. Nadie comprende perfectamente el conjunto, pero aun así el conjunto funciona a la perfección. La civilización moderna no consiste en acumular conocimientos, sino en conseguir que podamos beneficiarnos de conocimientos que no poseemos.</p>
+        </div>
+    </div>
+
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // Credenciales permitidas (Secretas)
+        const validUsers = {
+            "dana": "mako",
+            "lauri": "mako",
+            "autor": "libro123"
         };
 
-        // DARK READING MODE TOGGLE FUNCTION
-        function toggleDarkMode() {
-            isDarkMode = !isDarkMode;
-            const body = document.body;
-            const icon = document.getElementById('dark-mode-icon');
-            const toggleBtn = document.getElementById('dark-mode-toggle');
+        let currentUser = "";
+        let currentSpread = 0; // 0 = Portada/Índice, 1, 2, 3... = Capítulos
 
-            if (isDarkMode) {
-                body.classList.add('dark-reading-mode');
-                changeTheme('dark');
-                icon.className = 'fa-solid fa-sun text-amber-300';
-                toggleBtn.classList.add('bg-slate-800');
-                showToast('Modo Oscuro Activado (Descanso de Vista)', 'info');
-            } else {
-                body.classList.remove('dark-reading-mode');
-                changeTheme('parchment');
-                icon.className = 'fa-solid fa-moon text-amber-400';
-                toggleBtn.classList.remove('bg-slate-800');
-                showToast('Modo Lectura Estándar Activado', 'info');
+        // Contenido del libro dividido por páginas/bloques
+        const bookPages = [
+            // Índice / Portada (Spread 0)
+            {
+                left: `
+                    <div class="h-full flex flex-col justify-between text-center py-6">
+                        <div class="space-y-4">
+                            <span class="text-xs uppercase tracking-widest text-amber-800/80 dark:text-amber-400/80 font-bold">Libro Digital</span>
+                            <h1 class="text-3xl sm:text-4xl font-extrabold text-amber-950 dark:text-amber-100 tracking-tight">Aquello que Fue Antes</h1>
+                            <p class="text-sm font-semibold text-amber-900/70 dark:text-amber-400/60">PAPINHO BJJ</p>
+                        </div>
+                        <div class="my-auto py-6">
+                            <div class="w-24 h-24 mx-auto rounded-full bg-amber-900/10 dark:bg-neutral-800 flex items-center justify-center text-amber-800 dark:text-amber-400 text-4xl shadow-inner mb-4">
+                                <i class="fa-solid fa-book-open-reader"></i>
+                            </div>
+                            <p class="text-xs text-neutral-600 dark:text-neutral-400 italic max-w-xs mx-auto">"Un recorrido por la reflexión, la técnica, las masas, las redes de dependencia y la sociedad contemporánea."</p>
+                        </div>
+                        <div>
+                            <span class="text-xs text-amber-900/50 dark:text-neutral-500 font-medium">Portada Oficial</span>
+                        </div>
+                    </div>
+                `,
+                right: `
+                    <div class="h-full flex flex-col justify-between py-6">
+                        <div>
+                            <h3 class="text-lg font-bold text-amber-950 dark:text-amber-100 mb-6 border-b border-amber-900/20 dark:border-neutral-800 pb-2">Tabla de Contenido</h3>
+                            <div class="space-y-4">
+                                <div onclick="goToSpread(1)" class="group cursor-pointer p-3 rounded-xl hover:bg-amber-900/10 dark:hover:bg-neutral-800 transition border border-amber-900/10 dark:border-neutral-800 flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-amber-950 dark:text-amber-200 group-hover:text-amber-700 dark:group-hover:text-amber-400">REFLEXION SOBRE LA REBELION DE LAS MASAS</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Análisis de la sociedad, tecnología, el Estado y las redes de dependencia</p>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right text-xs opacity-50 group-hover:translate-x-1 transition"></i>
+                                </div>
+                                <div onclick="goToSpread(10)" class="group cursor-pointer p-3 rounded-xl hover:bg-amber-900/10 dark:hover:bg-neutral-800 transition border border-amber-900/10 dark:border-neutral-800 flex items-center justify-between">
+                                    <div>
+                                        <h4 class="font-bold text-sm text-amber-950 dark:text-amber-200 group-hover:text-amber-700 dark:group-hover:text-amber-400">HAGEMUKE</h4>
+                                        <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">Capítulo independiente</p>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right text-xs opacity-50 group-hover:translate-x-1 transition"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center">
+                            <button onclick="nextPage()" class="px-6 py-2.5 bg-amber-900 hover:bg-amber-800 text-amber-50 rounded-xl font-bold text-xs shadow transition">
+                                Comenzar Lectura <i class="fa-solid fa-arrow-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                `,
+                title: "Portada e Índice"
+            },
+            // Capítulo 1 - Parte 1
+            {
+                left: `
+                    <h3 class="font-bold text-lg text-amber-950 dark:text-amber-100 mb-2 border-b border-amber-900/20 dark:border-neutral-800 pb-2">REFLEXION SOBRE LA REBELION DE LAS MASAS</h3>
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">Transmisión y Reflexión Inicial</h4>
+                    <p>Hay un hombre sentado frente a una pantalla.</p>
+                    <p>Puede estar en su casa, en el metro, esperando un café, o perdiendo 10 minutos antes de volver al trabajo.</p>
+                    <p>Lo interesante empieza cuando desliza el dedo por la pantalla.</p>
+                    <p>Al hacerlo, aparece una noticia sobre economía y nuestro hombre sabe lo que habría que hacer con los tipos de interés.</p>
+                    <p>Pasa a la siguiente noticia y se encuentra con una guerra. También sabe qué ejército está abocado al fracaso, qué gobierno miente y cómo debería terminar el conflicto.</p>
+                `,
+                right: `
+                    <p>Después, llega hasta un estudio médico y enseguida se da cuenta de que los científicos están equivocados.</p>
+                    <p>Luego pasa una discusión sobre historia y corrige a los historiadores, una crisis política y encuentra la solución que nadie había considerado.</p>
+                    <p>Y finalmente, aparece otra noticia sobre inteligencia artificial. Lee el titular y ya tiene bastante claro qué es, hasta dónde llegará y qué profesiones van a desaparecer por su culpa.</p>
+                    <p>En menos de media hora, ese hombre sentado ha pasado las páginas por economía, medicina, estrategia militar, historia, política y tecnología, y apenas ha dudado en ninguno de esos campos.</p>
+                    <p>Ha encontrado solución y respuesta a todo. Y mientras lo ha hecho, sostiene entre las manos un objeto que sería incapaz de fabricar: un teléfono móvil.</p>
+                `,
+                title: "Reflexión Inicial"
+            },
+            // Capítulo 1 - Parte 2
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">Tecnología, Complejidad y Normalidad</h4>
+                    <p>Dentro de ese teléfono hay semiconductores construidos con una precisión extraordinaria, minerales procedentes de distintos lugares del planeta, sistemas de telecomunicaciones, criptografía, satélites, centros de datos, redes eléctricas, protocolos informáticos y millones de líneas de código.</p>
+                    <p>Pero nuestro hombre no necesita comprender nada de eso para poder utilizarlo.</p>
+                    <p>Simplemente pulsa una superficie de cristal y eso le permite hablar con alguien que está a 6.000 kilómetros de distancia.</p>
+                    <p>Puede consultar un mapa que conoce su posición, ordenar una transferencia bancaria, comprar un billete de avión o preguntarle cualquier cosa a una máquina y recibir su respuesta en apenas unos segundos.</p>
+                `,
+                right: `
+                    <p>Todo funciona así, con absoluta normalidad. Pero esa normalidad tiene algo extraño.</p>
+                    <p>Porque nos permite vivir dentro de sistemas de una complejidad gigantesca sin obligarnos a conocer cómo funcionan.</p>
+                    <p>Abrimos un grifo y sale agua potable. Entramos en una farmacia y encontramos medicamentos fabricados gracias a décadas de investigación en la que no hemos tenido nosotros nada que ver.</p>
+                    <p>Subimos a un avión sin conocer las ecuaciones que permitieron diseñarlo. Encendemos una luz sin pensar en la red eléctrica que tiene que equilibrarse a cada instante.</p>
+                    <p>Dependemos de una cantidad inmensa de conocimiento ajeno, y nunca había sido tan fácil expresar nuestra opinión sobre cualquier cosa.</p>
+                `,
+                title: "Tecnología y Complejidad"
+            },
+            // Capítulo 1 - Parte 3
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">Cambiar el chip</h4>
+                    <p>Pero ahora cambiemos momentáneamente el chip. Retrocedamos 100 años, hasta una época en la que no había redes sociales, no hay teléfonos inteligentes, no existe internet, nadie habla de algoritmos ni de inteligencia artificial.</p>
+                    <p>Europa lleva todavía las heridas de la Primera Guerra Mundial, y un filósofo español observa las calles, los cafés, los periódicos, los trenes, los teatros, las universidades, y con todo eso se fija en la política de su tiempo.</p>
+                    <p>Ese filósofo se llama José Ortega y Gasset, y hay algo que le inquieta, más allá del hecho de que las multitudes hayan adquirido mayor presencia, más allá de las típicas luchas de pobres contra ricos, de obreros contra burgueses, de ignorantes contra personas cultivadas.</p>
+                `,
+                right: `
+                    <p>Lo que Ortega y Gasset cree estar viendo es una manera de situarse ante el mundo, una manera de situarse ante los demás y ante las propias ideas, un tipo de ser humano.</p>
+                    <p>Y todas sus observaciones al respecto aparecerán reunidas en un libro cuyo título terminará siendo mucho más famoso que todo el resto de sus páginas: <em>La rebelión de las masas</em>.</p>
+                    <p>Y al individuo que ocupa el centro de su diagnóstico, Ortega y Gasset le da un nombre que puede engañarnos: lo llama el hombre-masa.</p>
+                    <p>De esto han pasado casi 100 años. El mundo que Ortega conoció ha desaparecido para siempre. Pero aquel individuo que observaba no está tan lejos de nosotros.</p>
+                `,
+                title: "Cambiar el chip"
+            },
+            // Capítulo 1 - Parte 4
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">Diagnóstico Histórico y Social</h4>
+                    <p>En 1930 habían pasado solamente 12 años desde el final de la Primera Guerra Mundial. Un acontecimiento histórico lejano para nosotros, pero un recuerdo muy reciente para un europeo de entonces.</p>
+                    <p>Había millones de personas vivas que habían combatido en las trincheras, familias que habían perdido hijos, padres o hermanos, y países enteros que habían visto desaparecer imperios y fronteras.</p>
+                    <p>Y cuando Ortega publica <em>La rebelión de las masas</em>, el crac del 29 acaba de sacudir la economía mundial.</p>
+                `,
+                right: `
+                    <p>Y sin embargo, para comprender el diagnóstico de Ortega, hay que mirar un poco más atrás, porque bajo aquella crisis había ocurrido algo formidable.</p>
+                    <p>Durante las generaciones anteriores, la ciencia, la técnica, la industria y las instituciones modernas habían transformado las condiciones de la existencia humana a una velocidad sin precedentes.</p>
+                    <p>Cada vez más personas sabían leer, la política se abría a las masas y el sufragio se ampliaba en numerosos países, poniendo los cimientos de la sociedad moderna.</p>
+                `,
+                title: "Diagnóstico Histórico"
+            },
+            // Capítulo 1 - Parte 5
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">El Advenimiento de las Masas</h4>
+                    <p>Más personas podían leer, viajar, consumir e intervenir en política, accediendo a bienes que durante siglos habían pertenecido tan solo a las élites.</p>
+                    <p>Ortega y Gasset concede a todo esto una importancia enorme. <em>La rebelión de las masas</em> parte de un éxito, comenzando por las excepcionales condiciones de vida del siglo XIX.</p>
+                    <p>Europa había pasado de unos 180 millones de habitantes en 1800 a aproximadamente 460 millones en 1914, un aumento extraordinario.</p>
+                `,
+                right: `
+                    <p>Una generación puede recibir como normal aquello que para las anteriores fue una conquista dificilísima.</p>
+                    <p>Nacen y ya se encuentran con carreteras, escuelas, hospitales, trenes, leyes, máquinas, derechos e instituciones funcionando desde el primer momento.</p>
+                    <p>Y eso hace que acaben percibiéndolo todo como se percibe el aire: simplemente está ahí, sin necesidad de comprender cómo se sostiene.</p>
+                `,
+                title: "El Advenimiento de las Masas"
+            },
+            // Capítulo 1 - Parte 6
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">¿Qué es el Hombre-Masa?</h4>
+                    <p>La expresión es fuerte y puede llevarnos por el camino equivocado. Para Ortega, "masa" no significa clase obrera, tampoco pobre, ni pueblo, ni siquiera mayoría.</p>
+                    <p>La "masa" es el conjunto de personas que no se valoran a sí mismas, sino que se sienten como todo el mundo, y que por encima de esto no experimentan ningún malestar.</p>
+                    <p>Ortega divide psicológicamente a los seres humanos en dos tipos: los que no se exigen demasiado a sí mismos, y las minorías selectas que se imponen obligaciones rigurosas.</p>
+                `,
+                right: `
+                    <p>El hombre-masa no es el hombre que pertenece a las masas, sino el hombre que no experimenta una necesidad profunda de exigirse más a sí mismo.</p>
+                    <p>Cuando Ortega habla del "hombre-masa", utiliza "hombre" en el sentido de ser humano. Puede ser un hombre o una mujer.</p>
+                    <p>Lo que está describiendo no es un sexo, sino un tipo humano, una determinada manera de comportarse ante uno mismo y ante el mundo.</p>
+                `,
+                title: "¿Qué es el Hombre-Masa?"
+            },
+            // Capítulo 1 - Parte 7
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">El Niño Mimado y el Señorito Satisfecho</h4>
+                    <p>Millones de seres humanos han recibido unas posibilidades de vida que las generaciones anteriores nunca tuvieron. El ser humano que se encuentra con todo esto empieza a considerarlo parte natural del mundo.</p>
+                    <p>Ortega le pone un nombre: el niño mimado. El niño que nace en una familia donde siempre ha encontrado satisfechas sus necesidades y no conoce el esfuerzo que hay detrás.</p>
+                    <p>El hombre-masa recibe una civilización y corre el riesgo de olvidar que alguien tuvo que construirla.</p>
+                `,
+                right: `
+                    <p>Y desde aquí se entiende otro asunto: la relación entre derechos y obligaciones.</p>
+                    <p>El individuo moderno disfruta de enormes libertades, pero olvida que los derechos dependen de obligaciones y normas que recaen sobre nosotros.</p>
+                    <p>Finalmente, aparece el señorito satisfecho: alguien que recibe una herencia o posición que no ha creado, pero se comporta como si todo fuese una prolongación natural de su persona.</p>
+                `,
+                title: "El Niño Mimado y el Señorito Satisfecho"
+            },
+            // Capítulo 1 - Parte 8
+            {
+                left: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">El Sabio Ignorante y la Acción Directa</h4>
+                    <p>Ortega describe una incómoda paradoja: el éxito de una civilización produce individuos que desconocen las condiciones de ese éxito.</p>
+                    <p>El sabio ignorante es aquel que domina a la perfección su pequeña parcela de especialización, pero fuera de ella desconoce grandes regiones y opina con una seguridad no justificada.</p>
+                    <p>Cuando la masa se convence de sus opiniones y rechaza discutir, surge la tentación de imponerse sin someterse a límites: la acción directa y la hiperdemocracia.</p>
+                `,
+                right: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">Fascismo, Comunismo y el Peligro del Estado</h4>
+                    <p>Supongamos que aparece un movimiento político convencido de que el país atraviesa una decadencia increíble y que las instituciones se han vuelto débiles. Considera que los parlamentos hablan demasiado y que hay enemigos internos impidiendo la regeneración.</p>
+                    <p>Muchos pensarán inmediatamente en el fascismo. Ortega tenía delante la Italia de Mussolini y veía el desprecio por el parlamentarismo y el recurso a la fuerza.</p>
+                    <p>Pero cambiemos el escenario: un movimiento convencido de poseer una explicación científica de la historia, donde el orden existente responde a una clase dominante. Hablamos del comunismo o bolchevismo.</p>
+                `,
+                title: "Sabio Ignorante y Extremismos"
+            },
+            // Capítulo 1 - Parte 9
+            {
+                left: `
+                    <p>Ortega no señala a uno solo: señala a ambos. No porque sean iguales, sino porque comparten una disposición común: creerse poseedores de una verdad absoluta donde el adversario pasa de ser alguien a quien convencer a alguien a quien derrotar.</p>
+                    <p>Y en este punto entra la herramienta que cambia la escala: el Estado moderno. El Estado es un triunfo formidable de la civilización, pero cuando el hombre-masa lo utiliza para resolver cualquier resistencia social mediante la prohibición y regulación, ocurre la estatificación de la vida.</p>
+                    <p>Cuanto más poder se deposita en esa maquinaria, mayor capacidad adquiere para dominar a la sociedad que la creó.</p>
+                `,
+                right: `
+                    <h4 class="font-bold text-sm text-amber-900 dark:text-amber-400 mb-3">Redes de Dependencia y el Futuro de Europa</h4>
+                    <p>Llevamos un buen rato leyendo frases escritas hace casi un siglo y encontrando cosas que nos suenan demasiado familiares.</p>
+                    <p>Pero Ortega no veía el futuro. Escribía en 1930 con la información de su tiempo. Algunas de sus expectativas envejecieron mal: consideró fascismo y bolchevismo regresiones primitivas sin anticipar del todo Hitler en 1933, la Guerra Civil Española en 1936 o la represión estalinista.</p>
+                    <p>Sin embargo, fuera de la política, aquel mundo producía una transformación más profunda: la humanidad sabía cada vez más, pero cada ser humano comprendía una parte cada vez menor de todo lo que hacía posible su vida.</p>
+                `,
+                title: "El Peligro del Estado y Redes"
+            },
+            // Capítulo 1 - Fin & Hagemuke (Spread 10)
+            {
+                left: `
+                    <p>El resultado de todos los avances científicos que hoy nos hacen la vida mucho más cómoda es una situación contradictoria.</p>
+                    <p>La humanidad sabe cada vez más, pero cada ser humano conoce una proporción cada vez menor de todo lo que la humanidad sabe.</p>
+                    <p>Nadie puede ser matemático, genetista, historiador, economista, neurólogo, químico, jurista e informático al mismo tiempo.</p>
+                    <p>Gracias a esa división hemos conseguido que un cirujano intervenga un corazón sin fabricar el equipo electrónico. Nadie comprende perfectamente el conjunto, pero el conjunto funciona. La civilización moderna consiste en beneficiarnos de conocimientos que no poseemos.</p>
+                `,
+                right: `
+                    <h3 class="font-bold text-lg text-amber-950 dark:text-amber-100 mb-2 border-b border-amber-900/20 dark:border-neutral-800 pb-2 mt-4">HAGEMUKE</h3>
+                    <p>Capítulo independiente dedicado a la exploración y reflexión profunda sobre nuevos horizontes y perspectivas del pensamiento.</p>
+                    <p class="mt-4 italic text-neutral-600 dark:text-neutral-400">"El camino hacia adelante requiere constancia, disciplina y la capacidad permanente de cuestionar nuestras propias certezas."</p>
+                `,
+                title: "Redes de Dependencia y Hagemuke"
             }
-        }
+        ];
 
-        // AUTHENTICATION LOGIC
+        // Lógica de Login
         function handleLogin(e) {
             e.preventDefault();
-            const inputUser = document.getElementById('username-input').value.trim().toLowerCase();
-            const inputPass = document.getElementById('password-input').value.trim();
+            const user = document.getElementById('userInput').value.trim().toLowerCase();
+            const pass = document.getElementById('passInput').value;
+            const err = document.getElementById('loginError');
 
-            const matchedUser = VALID_USERS.find(u => u.username === inputUser && u.pass === inputPass);
-
-            if (matchedUser) {
-                document.getElementById('cover-screen').classList.add('opacity-0');
+            if (validUsers[user] && validUsers[user] === pass) {
+                currentUser = user;
+                document.getElementById('currentUserBadge').innerText = user;
+                document.getElementById('authScreen').classList.add('opacity-0', 'pointer-events-none');
                 setTimeout(() => {
-                    document.getElementById('cover-screen').classList.add('hidden');
-                    document.getElementById('main-interface').classList.remove('hidden');
-                    updatePagePositions();
-                    showToast('Bienvenido a la lectura', 'success');
-                }, 400);
+                    document.getElementById('authScreen').style.display = 'none';
+                    document.getElementById('mainApp').classList.remove('hidden');
+                    renderBook();
+                }, 500);
             } else {
-                showToast('Usuario o contraseña incorrectos', 'error');
+                err.classList.remove('hidden');
             }
         }
 
-        function lockBook() {
-            document.getElementById('main-interface').classList.add('hidden');
-            document.getElementById('cover-screen').classList.remove('hidden', 'opacity-0');
-            document.getElementById('password-input').value = '';
-            showToast('Sesión cerrada', 'info');
+        function logout() {
+            currentUser = "";
+            document.getElementById('userInput').value = "";
+            document.getElementById('passInput').value = "";
+            document.getElementById('loginError').classList.add('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+            document.getElementById('authScreen').style.display = 'flex';
+            setTimeout(() => document.getElementById('authScreen').classList.remove('opacity-0'), 10);
         }
 
-        // 3D FLIP ENGINE
-        function setupPagesLayout() {
-            pages.forEach((page, idx) => {
-                page.style.zIndex = pages.length - idx;
-                
-                page.addEventListener('click', (e) => {
-                    if (e.target.closest('button') || e.target.closest('a')) return;
-                    const rect = page.getBoundingClientRect();
-                    const clickX = e.clientX - rect.left;
-                    if (clickX > rect.width * 0.7) nextPage();
-                    else if (clickX < rect.width * 0.3) prevPage();
-                });
-            });
-        }
+        // Navegación del Libro
+        function renderBook() {
+            const spread = bookPages[currentSpread];
+            
+            // Render Left Page
+            document.getElementById('leftPageContent').innerHTML = spread.left;
+            document.getElementById('leftPageNum').innerText = (currentSpread * 2) + 1;
 
-        function updatePagePositions() {
-            pages.forEach((page, idx) => {
-                if (idx < currentPageIndex) {
-                    page.classList.add('flipped');
-                    page.style.zIndex = idx + 1;
-                } else {
-                    page.classList.remove('flipped');
-                    page.style.zIndex = pages.length - idx;
-                }
-            });
+            // Render Right Page (Desktop)
+            const rightContainer = document.getElementById('rightPageContainer');
+            if (spread.right) {
+                rightContainer.style.display = 'flex';
+                document.getElementById('rightPageContent').innerHTML = spread.right;
+                document.getElementById('rightPageNum').innerText = (currentSpread * 2) + 2;
+            } else {
+                rightContainer.style.display = 'none';
+            }
 
-            const activePageNum = currentPageIndex + 1;
-            const totalPages = pages.length;
-            const currentTitle = pages[currentPageIndex]?.getAttribute('data-title') || `Página ${activePageNum}`;
-
-            document.getElementById('nav-chapter-title').innerText = currentTitle;
-            document.getElementById('progress-text').innerText = `Página ${activePageNum} de ${totalPages}`;
-            document.getElementById('progress-bar').style.width = `${(activePageNum / totalPages) * 100}%`;
-
-            renderTOC();
+            // Actualizar barra de progreso e indicador
+            const totalSpreads = bookPages.length;
+            const progress = ((currentSpread + 1) / totalSpreads) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('spreadIndicator').innerText = `${currentSpread + 1} / ${totalSpreads}`;
+            document.getElementById('currentSpreadText').innerText = spread.title;
         }
 
         function nextPage() {
-            if (currentPageIndex < pages.length - 1) {
-                currentPageIndex++;
-                updatePagePositions();
+            if (currentSpread < bookPages.length - 1) {
+                currentSpread++;
+                renderBook();
             }
         }
 
         function prevPage() {
-            if (currentPageIndex > 0) {
-                currentPageIndex--;
-                updatePagePositions();
+            if (currentSpread > 0) {
+                currentSpread--;
+                renderBook();
             }
         }
 
-        function goToPage(index) {
-            if (index >= 0 && index < pages.length) {
-                currentPageIndex = index;
-                updatePagePositions();
-                const drawer = document.getElementById('toc-drawer');
-                if (!drawer.classList.contains('-translate-x-full')) {
-                    toggleTOC();
-                }
+        function goToSpread(index) {
+            if (index >= 0 && index < bookPages.length) {
+                currentSpread = index;
+                renderBook();
             }
         }
 
-        function handleSwipe() {
-            const threshold = 40;
-            if (touchEndX < touchStartX - threshold) nextPage();
-            if (touchEndX > touchStartX + threshold) prevPage();
+        // Sidebar de Índice
+        function toggleSidebar() {
+            const drawer = document.getElementById('tocDrawer');
+            const panel = document.getElementById('tocPanel');
+            if (drawer.classList.contains('hidden')) {
+                drawer.classList.remove('hidden');
+                setTimeout(() => {
+                    drawer.classList.remove('opacity-0');
+                    panel.classList.remove('-translate-x-full');
+                }, 10);
+            } else {
+                drawer.classList.add('opacity-0');
+                panel.classList.add('-translate-x-full');
+                setTimeout(() => drawer.classList.add('hidden'), 300);
+            }
         }
 
-        // READER CONTROLS
-        function changeTheme(themeName) {
-            pages.forEach(p => {
-                p.classList.remove('theme-parchment', 'theme-sepia', 'theme-light', 'theme-dark');
-                p.classList.add(`theme-${themeName}`);
-            });
-            showToast(`Tema ${themeName} activado`, 'info');
+        // Modo Oscuro (Descanso Visual)
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('darkModeIcon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            }
         }
 
-        function changeFontSize(delta) {
-            fontSize = Math.min(Math.max(fontSize + delta, 13), 22);
-            pages.forEach(p => {
-                const body = p.querySelector('.page-content');
-                if (body) body.style.fontSize = `${fontSize}px`;
-            });
+        // Inicializar tema guardado
+        if (localStorage.getItem('theme') === 'dark' || (!localStorage.getItem('theme') && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            document.getElementById('darkModeIcon').classList.replace('fa-moon', 'fa-sun');
         }
 
-        function toggleTOC() {
-            document.getElementById('toc-drawer').classList.toggle('-translate-x-full');
-            document.getElementById('toc-backdrop').classList.toggle('hidden');
-        }
-
-        function renderTOC() {
-            const container = document.getElementById('toc-list');
-            container.innerHTML = "";
-
-            pages.forEach((page, idx) => {
-                const title = page.getAttribute('data-title') || `Página ${idx + 1}`;
-
-                const item = document.createElement('button');
-                item.className = `w-full text-left p-3 rounded-lg text-xs font-bold transition flex items-center justify-between ${idx === currentPageIndex ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`;
-                
-                item.onclick = () => goToPage(idx);
-
-                item.innerHTML = `
-                    <div class="flex items-center gap-2 truncate">
-                        <span class="text-[10px] opacity-50 font-mono">${idx + 1}.</span>
-                        <span class="truncate">${title}</span>
-                    </div>
-                    <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
-                `;
-
-                container.appendChild(item);
-            });
-        }
-
-        function showToast(msg, type = 'info') {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            
-            let bg = 'bg-slate-900 border-slate-700 text-slate-100';
-            let icon = 'fa-circle-info text-blue-400';
-            if (type === 'success') { bg = 'bg-slate-900 border-amber-500/40 text-amber-100'; icon = 'fa-circle-check text-amber-400'; }
-            if (type === 'error') { bg = 'bg-slate-900 border-red-500/40 text-red-100'; icon = 'fa-triangle-exclamation text-red-400'; }
-
-            toast.className = `px-4 py-2.5 rounded-lg border shadow-2xl text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 ${bg}`;
-            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${msg}</span>`;
-
-            container.appendChild(toast);
-            requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
-
-        window.onresize = function() {
-            updatePagePositions();
-        };
+        // Atajos de teclado (Flechas izq/der)
+        document.addEventListener('keydown', (e) => {
+            if (currentUser && document.getElementById('authScreen').style.display === 'none') {
+                if (e.key === 'ArrowRight') nextPage();
+                if (e.key === 'ArrowLeft') prevPage();
+            }
+        });
     </script>
 </body>
 </html>
