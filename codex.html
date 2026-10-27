@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Aquello que Fue Antes - PAPINHO BJJ</title>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Quicksand -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Quicksand', 'sans-serif'],
+                        body: ['Quicksand', 'sans-serif'],
+                        heading: ['Quicksand', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base typography setup */
+        body, button, input, select, textarea {
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        /* CSS 3D PAGE FLIP ENGINE */
+        .book-viewport {
+            perspective: 2000px;
+            perspective-origin: 50% 50%;
+        }
+
+        .book-stage {
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease;
+        }
+
+        /* Page styling & 3D Layering */
+        .paper-page {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transform-style: preserve-3d;
+            transform-origin: left center;
+            transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), z-index 0s 0.3s;
+            backface-visibility: hidden;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: pan-y;
+        }
+
+        /* Dual Page Spread for Desktop */
+        @media (min-width: 1024px) {
+            .paper-page {
+                width: 50%;
+                left: 50%;
+            }
+            .paper-page.left-page {
+                left: 0;
+                transform-origin: right center;
+            }
+        }
+
+        /* Flipped state animation */
+        .paper-page.flipped {
+            transform: rotateY(-180deg);
+        }
+
+        /* Realist Book Spine Shadow & Crease Effects */
+        .spine-shadow-left {
+            background: linear-gradient(to left, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 8%, rgba(0,0,0,0) 20%);
+        }
+        .spine-shadow-right {
+            background: linear-gradient(to right, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.04) 8%, rgba(0,0,0,0) 20%);
+        }
+
+        /* Page Shadow on Flip */
+        .page-shadow {
+            box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.25), 0 0 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* Content Typography Specifics */
+        .page-content p {
+            margin-bottom: 1.2em;
+            line-height: 1.75;
+            text-align: justify;
+            font-weight: 400;
+        }
+        .page-content p:first-of-type::first-letter {
+            font-size: 3em;
+            float: left;
+            line-height: 0.85;
+            margin-right: 0.15em;
+            font-weight: 700;
+            color: #d97706;
+        }
+
+        .page-content blockquote {
+            border-left: 3px solid #d97706;
+            opacity: 0.9;
+            padding-left: 1rem;
+            margin: 1.25rem 0;
+            font-style: italic;
+            font-weight: 500;
+        }
+
+        /* Custom Scrollbar inside pages */
+        .page-body-scroll::-webkit-scrollbar {
+            width: 4px;
+        }
+        .page-body-scroll::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.15);
+            border-radius: 4px;
+        }
+
+        /* Color Themes */
+        .theme-parchment { background-color: #f7f1e3; color: #2c2c2c; border-color: #e5d8be; }
+        .theme-sepia { background-color: #f4ecd8; color: #3e2723; border-color: #e0d0b0; }
+        .theme-light { background-color: #ffffff; color: #1e293b; border-color: #f1f5f9; }
+        .theme-dark { background-color: #121212; color: #e0e0e0; border-color: #262626; }
+    </style>
+</head>
+<body class="h-full bg-slate-950 font-sans text-slate-100 antialiased select-none overflow-hidden">
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toast-container" class="fixed top-4 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+    <!-- 1. LOCK / AUTHENTICATION COVER SCREEN -->
+    <section id="cover-screen" class="fixed inset-0 z-50 bg-slate-950 flex items-center justify-center p-4 bg-cover bg-center transition-opacity duration-500" style="background-image: radial-gradient(circle at center, rgba(30, 27, 75, 0.85) 0%, rgba(3, 7, 18, 0.98) 100%);">
+        <div class="max-w-md w-full bg-slate-900/95 backdrop-blur-md border border-amber-500/30 rounded-2xl p-6 sm:p-8 shadow-2xl relative overflow-hidden text-center text-amber-50">
+            <div class="absolute inset-2 border border-amber-500/20 rounded-xl pointer-events-none"></div>
+            
+            <div class="mb-6 pt-2">
+                <div class="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-amber-400 text-2xl shadow-inner">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                </div>
+                <h1 class="text-2xl sm:text-3xl font-bold text-amber-200 tracking-wider mb-1">AQUELLO QUE FUE ANTES</h1>
+                <p class="text-amber-400/80 text-sm font-semibold tracking-wide uppercase">Por PAPINHO BJJ</p>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" onsubmit="handleLogin(event)" class="space-y-4 text-left relative z-10 pb-2">
+                <div>
+                    <label class="block text-xs font-semibold text-amber-300/80 uppercase tracking-wider mb-1">Usuario</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-500/60">
+                            <i class="fa-solid fa-user text-sm"></i>
+                        </span>
+                        <input type="text" id="username-input" required class="w-full bg-slate-950/80 border border-amber-500/30 rounded-lg py-2.5 pl-9 pr-3 text-sm text-amber-100 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="Ingrese usuario">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-amber-300/80 uppercase tracking-wider mb-1">Contraseña</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-500/60">
+                            <i class="fa-solid fa-lock text-sm"></i>
+                        </span>
+                        <input type="password" id="password-input" required class="w-full bg-slate-950/80 border border-amber-500/30 rounded-lg py-2.5 pl-9 pr-3 text-sm text-amber-100 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition" placeholder="••••••••">
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full mt-2 py-3 px-4 bg-amber-600 hover:bg-amber-500 active:bg-amber-700 text-slate-950 font-bold rounded-lg shadow-lg transition duration-200 flex items-center justify-center gap-2">
+                    <span>INGRESAR A LEER</span>
+                    <i class="fa-solid fa-book-open"></i>
+                </button>
+            </form>
+        </div>
+    </section>
+
+
+    <!-- 2. MAIN READING INTERFACE -->
+    <div id="main-interface" class="hidden h-screen flex flex-col bg-slate-950">
+
+        <!-- HEADER TOOLBAR -->
+        <header class="bg-slate-900/90 border-b border-slate-800 px-3 sm:px-4 py-2.5 flex items-center justify-between z-30 shadow-md">
+            <div class="flex items-center gap-2 sm:gap-3">
+                <button onclick="toggleTOC()" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Índice de Capítulos">
+                    <i class="fa-solid fa-list-ul text-lg"></i>
+                </button>
+                <div class="max-w-[150px] sm:max-w-xs">
+                    <h1 class="text-xs sm:text-sm font-bold text-amber-200 truncate uppercase">AQUELLO QUE FUE ANTES</h1>
+                    <p id="nav-chapter-title" class="text-xs text-slate-400 truncate font-medium">Índice</p>
+                </div>
+            </div>
+
+            <!-- CONTROLS -->
+            <div class="flex items-center gap-1 sm:gap-2">
+                <!-- Print / Export Button -->
+                <button onclick="window.print()" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Imprimir / Exportar a PDF">
+                    <i class="fa-solid fa-print text-sm"></i>
+                </button>
+
+                <!-- Direct Link to Cover/Index -->
+                <button onclick="goToPage(0)" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Ir a Portada/Índice">
+                    <i class="fa-solid fa-house text-sm"></i>
+                </button>
+
+                <!-- Theme Switcher -->
+                <div class="relative group">
+                    <button class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Tema">
+                        <i class="fa-solid fa-palette text-sm"></i>
+                    </button>
+                    <div class="absolute right-0 top-full mt-1 hidden group-hover:flex flex-col bg-slate-900 border border-slate-800 rounded-lg shadow-2xl p-1.5 z-50 w-36 gap-1">
+                        <button onclick="changeTheme('parchment')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-amber-100 hover:text-amber-900 flex items-center gap-2 font-medium">
+                            <span class="w-3 h-3 rounded-full bg-[#f7f1e3] border border-amber-400"></span> Pergamino
+                        </button>
+                        <button onclick="changeTheme('sepia')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-amber-200 hover:text-amber-950 flex items-center gap-2 font-medium">
+                            <span class="w-3 h-3 rounded-full bg-[#f4ecd8] border border-amber-600"></span> Sepia
+                        </button>
+                        <button onclick="changeTheme('light')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-slate-200 hover:text-slate-900 flex items-center gap-2 font-medium">
+                            <span class="w-3 h-3 rounded-full bg-white border border-slate-300"></span> Claro
+                        </button>
+                        <button onclick="changeTheme('dark')" class="px-3 py-1.5 text-xs text-left rounded hover:bg-slate-800 hover:text-slate-100 flex items-center gap-2 font-medium">
+                            <span class="w-3 h-3 rounded-full bg-slate-800 border border-slate-600"></span> Oscuro
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Font Sizing -->
+                <button onclick="changeFontSize(-1)" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Reducir Texto">
+                    <i class="fa-solid fa-minus text-xs"></i>
+                </button>
+                <button onclick="changeFontSize(1)" class="p-2 text-slate-300 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition" title="Aumentar Texto">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                </button>
+
+                <div class="h-5 w-px bg-slate-800 mx-1"></div>
+
+                <!-- Lock App -->
+                <button onclick="lockBook()" class="p-2 text-red-400 hover:bg-red-500/10 rounded-lg transition" title="Salir">
+                    <i class="fa-solid fa-power-off text-sm"></i>
+                </button>
+            </div>
+        </header>
+
+
+        <!-- 3D BOOK VIEWPORT CONTAINER -->
+        <main class="flex-1 relative flex items-center justify-center p-2 sm:p-6 overflow-hidden bg-slate-950">
+            
+            <!-- Left Arrow Button -->
+            <button onclick="prevPage()" class="absolute left-2 sm:left-6 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-900/90 hover:bg-amber-600 text-slate-300 hover:text-slate-950 border border-slate-700/80 flex items-center justify-center transition shadow-2xl group" title="Anterior">
+                <i class="fa-solid fa-chevron-left text-lg group-hover:-translate-x-0.5 transition-transform"></i>
+            </button>
+
+            <!-- 3D STAGE & PAGES CONTAINER -->
+            <div class="book-viewport w-full max-w-5xl h-[82vh] sm:h-[85vh] flex items-center justify-center">
+                
+                <div id="book-stage" class="book-stage w-full h-full relative">
+
+                    <!-- ================================================================= -->
+                    <!-- ÁREA DE PÁGINAS Y CAPÍTULOS DEL LIBRO                             -->
+                    <!-- ================================================================= -->
+
+                    <!-- PÁGINA 1: PORTADA & ÍNDICE INTERACTIVO -->
+                    <div class="paper-page theme-parchment page-shadow rounded-r-lg border-l border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between" data-page="1" data-title="Portada e Índice">
+                        <div class="absolute inset-y-0 left-0 w-8 spine-shadow-right pointer-events-none"></div>
+                        <div class="text-right text-xs opacity-40 font-bold">INICIO</div>
+                        
+                        <div class="my-auto space-y-6 text-center">
+                            <div>
+                                <span class="text-amber-700 dark:text-amber-400 text-xs tracking-widest uppercase font-bold">Autor: PAPINHO BJJ</span>
+                                <h1 class="text-2xl sm:text-4xl font-bold tracking-tight mt-1 mb-2">AQUELLO QUE FUE ANTES</h1>
+                                <div class="w-16 h-1 bg-amber-600/40 mx-auto rounded-full"></div>
+                                <p class="text-xs mt-2 opacity-70 italic">Escrito por PAPINHO BJJ</p>
+                            </div>
+
+                            <!-- INTERACTIVE CHAPTER LINKS (PORTADA / INICIO) -->
+                            <div class="pt-2 text-left max-w-md mx-auto space-y-3">
+                                <p class="text-xs uppercase tracking-wider text-amber-800 dark:text-amber-300 font-bold text-center mb-3">Índice de Capítulos</p>
+                                
+                                <button onclick="goToPage(1)" class="w-full p-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-600/30 rounded-xl transition flex items-center justify-between group shadow-sm text-left">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-7 h-7 rounded-lg bg-amber-600 text-slate-950 font-bold text-xs flex items-center justify-center">1</span>
+                                        <span class="font-bold text-xs sm:text-sm group-hover:text-amber-800 dark:group-hover:text-amber-200">REFLEXION SOBRE LA REBELION DE LAS MASAS</span>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+
+                                <button onclick="goToPage(2)" class="w-full p-3.5 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-600/30 rounded-xl transition flex items-center justify-between group shadow-sm text-left">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-7 h-7 rounded-lg bg-amber-600 text-slate-950 font-bold text-xs flex items-center justify-center">2</span>
+                                        <span class="font-bold text-xs sm:text-sm group-hover:text-amber-800 dark:group-hover:text-amber-200">HAGEMUKE</span>
+                                    </div>
+                                    <i class="fa-solid fa-arrow-right text-xs opacity-60 group-hover:translate-x-1 transition-transform"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs opacity-50 border-t border-current/10 pt-3">
+                            <span>PAPINHO BJJ</span>
+                            <span>Pág. 1</span>
+                        </div>
+                    </div>
+
+
+                    <!-- PÁGINA 2: CAPÍTULO NO CONTINUO 1 -->
+                    <div class="paper-page theme-parchment page-shadow rounded-l-lg border-r border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between" data-page="2" data-title="REFLEXION SOBRE LA REBELION DE LAS MASAS">
+                        <div class="absolute inset-y-0 right-0 w-8 spine-shadow-left pointer-events-none"></div>
+                        <div class="flex justify-between text-xs opacity-40 border-b border-current/10 pb-2 font-semibold">
+                            <span class="truncate">REFLEXION SOBRE LA REBELION DE LAS MASAS</span>
+                            <span>PAPINHO BJJ</span>
+                        </div>
+                        
+                        <div class="page-content page-body-scroll overflow-y-auto flex-1 my-4 pr-1">
+                            <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center text-amber-900 dark:text-amber-200">
+                                REFLEXION SOBRE LA REBELION DE LAS MASAS
+                            </h2>
+                            
+                            <p>El fenómeno del hombre-masa plantea una de las encrucijadas más profundas de la modernidad. No se trata únicamente de un concepto cuantitativo, sino de una actitud frente a la existencia y la responsabilidad individual dentro de la sociedad contemporánea.</p>
+                            
+                            <p>Cuando el individuo se diluye en la muchedumbre, cede su capacidad crítica a cambio de la comodidad del consenso automático. La masa no exige excelencia; por el contrario, tiende a homologar el pensamiento y descalificar la divergencia creadora.</p>
+                            
+                            <blockquote>«La libertad no consiste en hacer lo que nos apetece, sino en el compromiso consciente con los valores que dignifican el pensamiento.»</blockquote>
+
+                            <p>Frente a esta inercia colectiva, surge la necesidad urgente de reivindicar la autonomía moral y la búsqueda singular del conocimiento auténtico.</p>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs opacity-50 border-t border-current/10 pt-3">
+                            <button onclick="goToPage(0)" class="hover:text-amber-700 underline flex items-center gap-1">
+                                <i class="fa-solid fa-house text-[10px]"></i> ÍNDICE
+                            </button>
+                            <span>Pág. 2</span>
+                        </div>
+                    </div>
+
+
+                    <!-- PÁGINA 3: CAPÍTULO NO CONTINUO 2 -->
+                    <div class="paper-page theme-parchment page-shadow rounded-r-lg border-l border-amber-900/10 p-6 sm:p-10 flex flex-col justify-between" data-page="3" data-title="HAGEMUKE">
+                        <div class="absolute inset-y-0 left-0 w-8 spine-shadow-right pointer-events-none"></div>
+                        <div class="flex justify-between text-xs opacity-40 border-b border-current/10 pb-2 font-semibold">
+                            <span>HAGEMUKE</span>
+                            <span>PAPINHO BJJ</span>
+                        </div>
+                        
+                        <div class="page-content page-body-scroll overflow-y-auto flex-1 my-4 pr-1">
+                            <h2 class="text-lg sm:text-2xl font-bold mb-4 text-center text-amber-900 dark:text-amber-200">
+                                HAGEMUKE
+                            </h2>
+
+                            <p>Hagemuke representa la perseverancia inquebrantable en el arte del esfuerzo diario. Es la disciplina interna que impulsa a continuar escribiendo, aprendiendo y superando límites aun cuando los resultados inmediatos no sean visibles.</p>
+
+                            <p>En la tradición de la superación personal, este concepto enfatiza la constancia silenciosa frente a la distracción. Cada palabra plasmada y cada idea desarrollada son peldaños de un camino que se construye paso a paso.</p>
+
+                            <p>Cultivar esta mentalidad permite transformar la rutina ordinaria en una búsqueda continua de excelencia y perfeccionamiento personal.</p>
+                        </div>
+
+                        <div class="flex justify-between items-center text-xs opacity-50 border-t border-current/10 pt-3">
+                            <button onclick="goToPage(0)" class="hover:text-amber-700 underline flex items-center gap-1">
+                                <i class="fa-solid fa-house text-[10px]"></i> ÍNDICE
+                            </button>
+                            <span>Pág. 3</span>
+                        </div>
+                    </div>
+
+                    <!-- ================================================================= -->
+                    <!-- PUEDES AGREGAR MÁS PÁGINAS EDITANDO DIRECTAMENTE ESTE ARCHIVO     -->
+                    <!-- ================================================================= -->
+
+                </div>
+            </div>
+
+            <!-- Right Arrow Button -->
+            <button onclick="nextPage()" class="absolute right-2 sm:right-6 z-20 w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-slate-900/90 hover:bg-amber-600 text-slate-300 hover:text-slate-950 border border-slate-700/80 flex items-center justify-center transition shadow-2xl group" title="Siguiente">
+                <i class="fa-solid fa-chevron-right text-lg group-hover:translate-x-0.5 transition-transform"></i>
+            </button>
+        </main>
+
+
+        <!-- FOOTER & PROGRESS BAR -->
+        <footer class="bg-slate-900/90 border-t border-slate-800 px-4 py-2.5 flex items-center justify-between text-xs text-slate-400 z-30">
+            <span id="progress-text" class="font-semibold">Página 1 de 3</span>
+            
+            <div class="w-1/3 sm:w-1/2 bg-slate-950 rounded-full h-2 overflow-hidden border border-slate-800 mx-2">
+                <div id="progress-bar" class="bg-amber-500 h-full w-0 transition-all duration-300"></div>
+            </div>
+
+            <span class="hidden sm:inline opacity-60">Autor: PAPINHO BJJ</span>
+        </footer>
+
+
+        <!-- TABLE OF CONTENTS (TOC) DRAWER -->
+        <div id="toc-drawer" class="fixed inset-y-0 left-0 z-40 w-80 bg-slate-900 border-r border-slate-800 transform -translate-x-full transition-transform duration-300 flex flex-col">
+            <div class="p-4 border-b border-slate-800 flex justify-between items-center">
+                <h3 class="font-bold text-amber-200 text-xs tracking-wider uppercase">ÍNDICE DE CAPÍTULOS</h3>
+                <button onclick="toggleTOC()" class="text-slate-400 hover:text-white p-1">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+            
+            <div id="toc-list" class="flex-1 overflow-y-auto p-3 space-y-2">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+        <div id="toc-backdrop" onclick="toggleTOC()" class="fixed inset-0 bg-black/60 z-30 hidden"></div>
+
+    </div>
+
+    <!-- PRINT PREVIEW STYLES SHEET -->
+    <style id="print-styles">
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                overflow: visible !important;
+            }
+            #cover-screen, header, footer, button, #toc-drawer, #toc-backdrop, #toast-container {
+                display: none !important;
+            }
+            #main-interface {
+                display: block !important;
+                height: auto !important;
+                background: white !important;
+            }
+            .book-viewport, .book-stage {
+                perspective: none !important;
+                transform: none !important;
+                height: auto !important;
+                width: 100% !important;
+                position: static !important;
+            }
+            .paper-page {
+                position: relative !important;
+                width: 100% !important;
+                height: auto !important;
+                transform: none !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+                page-break-after: always;
+                border: none !important;
+                padding: 2rem 1rem !important;
+            }
+            .paper-page.flipped {
+                transform: none !important;
+            }
+            .spine-shadow-left, .spine-shadow-right {
+                display: none !important;
+            }
+            .page-body-scroll {
+                overflow: visible !important;
+                max-height: none !important;
+            }
+        }
+    </style>
+
+    <!-- JAVASCRIPT ENGINE -->
+    <script>
+        const VALID_USERS = [
+            { username: "dana", display: "Dana", pass: "Mako" },
+            { username: "lauri", display: "Lauri", pass: "Mako" },
+            { username: "autor", display: "PAPINHO BJJ", pass: "libro123" }
+        ];
+
+        let pages = [];
+        let currentPageIndex = 0;
+        let fontSize = 16; // px
+
+        // Touch swipe tracking
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        window.onload = function() {
+            pages = Array.from(document.querySelectorAll('.paper-page'));
+            setupPagesLayout();
+            renderTOC();
+            
+            // Keyboard navigation
+            window.addEventListener('keydown', (e) => {
+                if (document.getElementById('main-interface').classList.contains('hidden')) return;
+                if (e.key === 'ArrowRight' || e.key === ' ') nextPage();
+                if (e.key === 'ArrowLeft') prevPage();
+            });
+
+            // Touch Swipe listeners
+            const stage = document.getElementById('book-stage');
+            stage.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, {passive: true});
+            stage.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, {passive: true});
+        };
+
+        // AUTHENTICATION LOGIC
+        function handleLogin(e) {
+            e.preventDefault();
+            const inputUser = document.getElementById('username-input').value.trim().toLowerCase();
+            const inputPass = document.getElementById('password-input').value.trim();
+
+            const matchedUser = VALID_USERS.find(u => u.username === inputUser && u.pass === inputPass);
+
+            if (matchedUser) {
+                document.getElementById('cover-screen').classList.add('opacity-0');
+                setTimeout(() => {
+                    document.getElementById('cover-screen').classList.add('hidden');
+                    document.getElementById('main-interface').classList.remove('hidden');
+                    updatePagePositions();
+                    showToast('Bienvenido a la lectura', 'success');
+                }, 400);
+            } else {
+                showToast('Usuario o contraseña incorrectos', 'error');
+            }
+        }
+
+        function lockBook() {
+            document.getElementById('main-interface').classList.add('hidden');
+            document.getElementById('cover-screen').classList.remove('hidden', 'opacity-0');
+            document.getElementById('password-input').value = '';
+            showToast('Sesión cerrada', 'info');
+        }
+
+        // 3D FLIP ENGINE
+        function setupPagesLayout() {
+            pages.forEach((page, idx) => {
+                page.style.zIndex = pages.length - idx;
+                
+                page.addEventListener('click', (e) => {
+                    if (e.target.closest('button') || e.target.closest('a')) return;
+                    const rect = page.getBoundingClientRect();
+                    const clickX = e.clientX - rect.left;
+                    if (clickX > rect.width * 0.7) nextPage();
+                    else if (clickX < rect.width * 0.3) prevPage();
+                });
+            });
+        }
+
+        function updatePagePositions() {
+            pages.forEach((page, idx) => {
+                if (idx < currentPageIndex) {
+                    page.classList.add('flipped');
+                    page.style.zIndex = idx + 1;
+                } else {
+                    page.classList.remove('flipped');
+                    page.style.zIndex = pages.length - idx;
+                }
+            });
+
+            const activePageNum = currentPageIndex + 1;
+            const totalPages = pages.length;
+            const currentTitle = pages[currentPageIndex]?.getAttribute('data-title') || `Página ${activePageNum}`;
+
+            document.getElementById('nav-chapter-title').innerText = currentTitle;
+            document.getElementById('progress-text').innerText = `Página ${activePageNum} de ${totalPages}`;
+            document.getElementById('progress-bar').style.width = `${(activePageNum / totalPages) * 100}%`;
+
+            renderTOC();
+        }
+
+        function nextPage() {
+            if (currentPageIndex < pages.length - 1) {
+                currentPageIndex++;
+                updatePagePositions();
+            }
+        }
+
+        function prevPage() {
+            if (currentPageIndex > 0) {
+                currentPageIndex--;
+                updatePagePositions();
+            }
+        }
+
+        function goToPage(index) {
+            if (index >= 0 && index < pages.length) {
+                currentPageIndex = index;
+                updatePagePositions();
+                const drawer = document.getElementById('toc-drawer');
+                if (!drawer.classList.contains('-translate-x-full')) {
+                    toggleTOC();
+                }
+            }
+        }
+
+        function handleSwipe() {
+            const threshold = 40;
+            if (touchEndX < touchStartX - threshold) nextPage();
+            if (touchEndX > touchStartX + threshold) prevPage();
+        }
+
+        // READER CONTROLS
+        function changeTheme(themeName) {
+            pages.forEach(p => {
+                p.classList.remove('theme-parchment', 'theme-sepia', 'theme-light', 'theme-dark');
+                p.classList.add(`theme-${themeName}`);
+            });
+            showToast(`Tema ${themeName} activado`, 'info');
+        }
+
+        function changeFontSize(delta) {
+            fontSize = Math.min(Math.max(fontSize + delta, 13), 22);
+            pages.forEach(p => {
+                const body = p.querySelector('.page-content');
+                if (body) body.style.fontSize = `${fontSize}px`;
+            });
+        }
+
+        function toggleTOC() {
+            document.getElementById('toc-drawer').classList.toggle('-translate-x-full');
+            document.getElementById('toc-backdrop').classList.toggle('hidden');
+        }
+
+        function renderTOC() {
+            const container = document.getElementById('toc-list');
+            container.innerHTML = "";
+
+            pages.forEach((page, idx) => {
+                const title = page.getAttribute('data-title') || `Página ${idx + 1}`;
+
+                const item = document.createElement('button');
+                item.className = `w-full text-left p-3 rounded-lg text-xs font-bold transition flex items-center justify-between ${idx === currentPageIndex ? 'bg-amber-500/20 text-amber-300 border border-amber-500/30' : 'text-slate-400 hover:bg-slate-800 hover:text-slate-200'}`;
+                
+                item.onclick = () => goToPage(idx);
+
+                item.innerHTML = `
+                    <div class="flex items-center gap-2 truncate">
+                        <span class="text-[10px] opacity-50 font-mono">${idx + 1}.</span>
+                        <span class="truncate">${title}</span>
+                    </div>
+                    <i class="fa-solid fa-chevron-right text-[10px] opacity-40"></i>
+                `;
+
+                container.appendChild(item);
+            });
+        }
+
+        function showToast(msg, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bg = 'bg-slate-900 border-slate-700 text-slate-100';
+            let icon = 'fa-circle-info text-blue-400';
+            if (type === 'success') { bg = 'bg-slate-900 border-amber-500/40 text-amber-100'; icon = 'fa-circle-check text-amber-400'; }
+            if (type === 'error') { bg = 'bg-slate-900 border-red-500/40 text-red-100'; icon = 'fa-triangle-exclamation text-red-400'; }
+
+            toast.className = `px-4 py-2.5 rounded-lg border shadow-2xl text-xs font-semibold flex items-center gap-2 transform transition-all duration-300 translate-y-2 opacity-0 ${bg}`;
+            toast.innerHTML = `<i class="fa-solid ${icon}"></i> <span>${msg}</span>`;
+
+            container.appendChild(toast);
+            requestAnimationFrame(() => toast.classList.remove('translate-y-2', 'opacity-0'));
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        window.onresize = function() {
+            updatePagePositions();
+        };
+    </script>
+</body>
+</html>
