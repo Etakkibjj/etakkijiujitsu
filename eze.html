@@ -530,6 +530,7 @@
         // State variables
         let currentDay = 1;
         let completedState = JSON.parse(localStorage.getItem('combat_strength_progress')) || {};
+        let openExercises = {}; // Objeto para recordar qué ejercicios están desplegados
 
         // Timers
         let sessionSeconds = 0;
@@ -565,8 +566,14 @@
 
         function switchDay(day) {
             currentDay = day;
+            openExercises = {}; // Reinicia acordeones al cambiar de día si se desea
             renderDayTabs();
             renderDayContent(day);
+        }
+
+        function toggleAccordion(exIdx) {
+            openExercises[exIdx] = !openExercises[exIdx];
+            renderDayContent(currentDay);
         }
 
         function renderDayContent(day) {
@@ -580,19 +587,33 @@
             let completedSets = 0;
 
             dayData.exercises.forEach((ex, exIdx) => {
-                const exCard = document.createElement('div');
-                exCard.className = 'bg-slate-800/90 rounded-xl p-3.5 border border-slate-700/70 shadow-md space-y-2.5';
+                const isOpen = !!openExercises[exIdx]; // Por defecto cerrados o según estado
 
+                const exCard = document.createElement('div');
+                exCard.className = 'bg-slate-800/90 rounded-xl border border-slate-700/70 shadow-md overflow-hidden transition-all';
+
+                // Header clickeable para desplegar/ocultar
                 const exHeader = document.createElement('div');
-                exHeader.className = 'flex items-center justify-between border-b border-slate-700/60 pb-2';
+                exHeader.className = 'flex items-center justify-between p-3.5 bg-slate-800 hover:bg-slate-750 cursor-pointer select-none';
+                exHeader.onclick = () => toggleAccordion(exIdx);
+                
                 exHeader.innerHTML = `
-                    <h2 class="text-sm font-black text-sky-400 tracking-wide uppercase">${ex.name}</h2>
-                    <span class="text-[11px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded border border-slate-700">${ex.sets.length} SERIES</span>
+                    <div class="flex items-center gap-2">
+                        <span class="text-sky-400 transition-transform duration-200 ${isOpen ? 'rotate-90' : ''}">▶</span>
+                        <h2 class="text-sm font-black text-sky-400 tracking-wide uppercase">${ex.name}</h2>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="text-[11px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded border border-slate-700">${ex.sets.length} SERIES</span>
+                    </div>
                 `;
                 exCard.appendChild(exHeader);
 
+                // Contenedor de las series (desplegable)
+                const setsContainer = document.createElement('div');
+                setsContainer.className = `p-3.5 pt-0 space-y-1.5 bg-slate-900/40 border-t border-slate-700/40 ${isOpen ? 'block' : 'hidden'}`;
+
                 const setsList = document.createElement('div');
-                setsList.className = 'space-y-1.5';
+                setsList.className = 'space-y-1.5 pt-2';
 
                 ex.sets.forEach((set, setIdx) => {
                     totalSets++;
@@ -620,14 +641,15 @@
                         <div class="flex items-center gap-3 ml-auto">
                             <span class="font-black text-amber-400 text-base sm:text-lg tracking-wide text-right">${set.weight}</span>
                             <input type="checkbox" ${isChecked ? 'checked' : ''} 
-                                onclick="toggleSet('${setKey}')"
+                                onclick="event.stopPropagation(); toggleSet('${setKey}')"
                                 class="w-7 h-7 sm:w-8 sm:h-8 rounded bg-slate-800 border-2 border-slate-600 text-sky-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-sky-500 flex-shrink-0">
                         </div>
                     `;
                     setsList.appendChild(setRow);
                 });
 
-                exCard.appendChild(setsList);
+                setsContainer.appendChild(setsList);
+                exCard.appendChild(setsContainer);
                 container.appendChild(exCard);
             });
 
