@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Strength & Combat Training - Ezequiel Muracciole</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0f172a',
+                        cardBg: '#1e293b',
+                        accentBlue: '#38bdf8',
+                        accentRed: '#ef4444',
+                        accentGreen: '#22c55e'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen pb-20">
+
+    <!-- Header Navigation & Profile -->
+    <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-3 py-2.5 shadow-md">
+        <div class="max-w-3xl mx-auto flex flex-col gap-2">
+            <!-- Top Row: Title, Profile Badge & Session Timer -->
+            <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+                <div>
+                    <h1 class="text-base sm:text-lg font-black tracking-wider text-sky-400 uppercase leading-none">
+                        BJJ TRAINING PROGRAM <span class="text-xs font-semibold text-slate-400 block sm:inline">JIU JITSU - GRAPPLING</span>
+                    </h1>
+                </div>
+
+                <!-- Profile Badge & Flag -->
+                <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700/80 px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-200">
+                    <span>EZEQUIEL MURACCIOLE - BLUE BELT | 82 KG - 178 CM | ARG</span>
+                    <svg class="w-4 h-3 rounded-xs flex-shrink-0" viewBox="0 0 750 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="750" height="500" fill="#74ACDF"/>
+                        <rect y="166.6" width="750" height="166.6" fill="#FFFFFF"/>
+                        <circle cx="375" cy="250" r="35" fill="#F6B40E"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Session Timer & Actions Row -->
+            <div class="flex items-center justify-between bg-slate-800/60 p-1.5 rounded-lg border border-slate-700/50">
+                <!-- Session Timer -->
+                <div class="flex items-center gap-2">
+                    <span class="text-xs font-bold uppercase text-slate-400">TIEMPO SESIÓN:</span>
+                    <span id="sessionTimerDisplay" class="font-mono text-base font-black text-amber-400 tracking-wider">00:00:00</span>
+                    <button onclick="toggleSessionTimer()" id="sessionTimerBtn" class="bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 text-xs px-2 py-0.5 rounded font-bold transition-all">
+                        INICIAR
+                    </button>
+                    <button onclick="resetSessionTimer()" class="bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs px-2 py-0.5 rounded font-bold transition-all">
+                        RESET
+                    </button>
+                </div>
+
+                <!-- Install PWA Button -->
+                <button id="pwaInstallBtn" onclick="openInstallModal()" class="flex items-center gap-1 bg-sky-500 hover:bg-sky-400 text-slate-950 px-2.5 py-1 rounded font-black text-xs transition-all shadow-sm">
+                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    INSTALAR APP
+                </button>
+            </div>
+
+            <!-- Day Selector Tabs -->
+            <div class="flex items-center gap-1 overflow-x-auto pb-1 no-scrollbar text-xs font-bold" id="dayTabs">
+                <!-- Day buttons populated via JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-3xl mx-auto px-3 pt-4">
+        <!-- Progress Bar for Active Day -->
+        <div class="bg-slate-800 rounded-lg p-3 mb-4 border border-slate-700/60 shadow-sm">
+            <div class="flex justify-between items-center text-xs font-bold mb-1.5">
+                <span id="activeDayTitle" class="text-sky-400 uppercase tracking-wide">DÍA 1</span>
+                <span id="progressPercent" class="text-slate-300">0% COMPLETADO</span>
+            </div>
+            <div class="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden">
+                <div id="progressBar" class="bg-sky-400 h-full transition-all duration-300 w-0"></div>
+            </div>
+        </div>
+
+        <!-- Exercises List -->
+        <div id="exercisesContainer" class="space-y-4">
+            <!-- Dynamically Rendered Exercises -->
+        </div>
+    </main>
+
+    <!-- Rest Timer Overlay / Modal (Haciendo más grande y visible) -->
+    <div id="restTimerModal" class="fixed inset-x-0 bottom-0 z-50 bg-slate-950/98 border-t-4 border-sky-400 p-6 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] backdrop-blur-md hidden">
+        <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
+            <div>
+                <p class="text-xs sm:text-sm uppercase text-sky-400 font-extrabold tracking-widest mb-1">⏱️ TIEMPO DE DESCANSO ENTRE SERIES</p>
+                <div id="restTimerDisplay" class="text-6xl sm:text-7xl font-black font-mono text-amber-400 drop-shadow-[0_0_15px_rgba(245,158,11,0.5)]">01:30</div>
+            </div>
+            <div class="flex items-center gap-3 w-full sm:w-auto">
+                <button onclick="addRestTime(30)" class="flex-1 sm:flex-none bg-slate-800 hover:bg-slate-700 border-2 border-slate-600 text-slate-100 text-base font-black px-5 py-3 rounded-xl active:scale-95 shadow-md transition-all">+30s</button>
+                <button onclick="skipRestTimer()" class="flex-1 sm:flex-none bg-red-600/30 hover:bg-red-600/50 text-red-300 border-2 border-red-500/50 text-base font-black px-5 py-3 rounded-xl active:scale-95 shadow-md transition-all">OMITIR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Modal / Instructions -->
+    <div id="installGuideModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-start">
+                <h3 class="text-base font-black text-sky-400 uppercase">Instalar App en tu Teléfono</h3>
+                <button onclick="closeInstallModal()" class="text-slate-400 hover:text-white font-bold">✕</button>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Para instalar esta app en la pantalla de inicio de tu celular sin pasar por la tienda:
+            </p>
+            <div class="space-y-2 text-xs">
+                <div class="bg-slate-900/70 p-2.5 rounded border border-slate-700">
+                    <p class="font-bold text-amber-400 mb-0.5">Android (Chrome):</p>
+                    <p class="text-slate-300">Presiona los <strong>3 puntos (⋮)</strong> arriba a la derecha y selecciona <strong>"Agregar a la pantalla principal"</strong> o <strong>"Instalar app"</strong>.</p>
+                </div>
+                <div class="bg-slate-900/70 p-2.5 rounded border border-slate-700">
+                    <p class="font-bold text-sky-400 mb-0.5">iPhone (Safari):</p>
+                    <p class="text-slate-300">Presiona el botón <strong>Compartir (⎋)</strong> en la barra inferior y elige <strong>"Agregar a inicio"</strong>.</p>
+                </div>
+            </div>
+            <button onclick="triggerNativeInstall()" id="nativeInstallPromptBtn" class="w-full bg-sky-500 hover:bg-sky-400 text-slate-950 font-black py-2.5 rounded-lg text-xs uppercase tracking-wider hidden">
+                ¡Instalar Ahora Directamente!
+            </button>
+        </div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Complete Workout Data Schema (Days 1 to 6)
+        const workoutData = {
+            1: {
+                title: "DÍA 1: ZERCHER, TRÍCEPS, REMO & DOMINADAS",
+                exercises: [
+                    {
+                        name: "Sentadilla Zercher",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "1", weight: "" },
+                            { reps: "1", weight: "" },
+                            { reps: "1", weight: "" },
+                            { reps: "1", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Tríceps",
+                        sets: [
+                            { reps: "8", weight: "" },
+                            { reps: "8", weight: "" },
+                            { reps: "8", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Remo KB 21 kg",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Dominadas",
+                        sets: [
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" }
+                        ]
+                    }
+                ]
+            },
+            2: {
+                title: "DÍA 2: PRESS PLANO, RACK PULL & LANDMINE",
+                exercises: [
+                    {
+                        name: "Press Plano con Pausa",
+                        sets: [
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Rack Pull Deadlift",
+                        sets: [
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Kettlebell Swings",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Press Militar Unilateral con Landmine",
+                        sets: [
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" }
+                        ]
+                    }
+                ]
+            },
+            3: {
+                title: "DÍA 3: SENTADILLA, REMO LANDMINE & PRESS",
+                exercises: [
+                    {
+                        name: "Sentadilla",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Remo Landmine",
+                        sets: [
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Press Plano",
+                        sets: [
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Coactivación Zona Media",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Espinales",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    }
+                ]
+            },
+            4: {
+                title: "DÍA 4: PRESS PLANO, RACK PULL & PUSH PRESS",
+                exercises: [
+                    {
+                        name: "Press Plano con Barra",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Rack Pull Deadlift",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Push Press",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Vuelos Posteriores con Mancuerna",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Extensión de Tríceps con Mancuerna",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    }
+                ]
+            },
+            5: {
+                title: "DÍA 5: SENTADILLAS, REMO CON BARRA & ACCESORIOS",
+                exercises: [
+                    {
+                        name: "Sentadillas (Bloque 1)",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "5", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Remo con Barra",
+                        sets: [
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" },
+                            { reps: "2", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Sentadillas (Bloque 2)",
+                        sets: [
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Dominadas",
+                        sets: [
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" },
+                            { reps: "6", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Curl de Bíceps Martillo",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Puente Glúteo",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    }
+                ]
+            },
+            6: {
+                title: "DÍA 6: MILITAR, RACK PULL, PRESS PLANO & HIP THRUST",
+                exercises: [
+                    {
+                        name: "Press Militar con Barra",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Rack Pull Deadlift",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Press Plano con Barra",
+                        sets: [
+                            { reps: "5", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "4", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" },
+                            { reps: "3", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Hip Thrust (3s Pausa)",
+                        sets: [
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" },
+                            { reps: "10", weight: "" }
+                        ]
+                    },
+                    {
+                        name: "Farmer Walk Kettlebells",
+                        sets: [
+                            { reps: "20 pasos", weight: "" },
+                            { reps: "20 pasos", weight: "" },
+                            { reps: "20 pasos", weight: "" },
+                            { reps: "20 pasos", weight: "" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // State variables
+        let currentDay = 1;
+        let completedState = JSON.parse(localStorage.getItem('combat_strength_progress')) || {};
+
+        // Timers
+        let sessionSeconds = 0;
+        let sessionTimerInterval = null;
+        let isSessionTimerRunning = false;
+
+        let restSeconds = 90;
+        let restTimerInterval = null;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDayTabs();
+            renderDayContent(currentDay);
+            setupPWAIntegration();
+        });
+
+        function renderDayTabs() {
+            const tabsContainer = document.getElementById('dayTabs');
+            tabsContainer.innerHTML = '';
+
+            for (let day = 1; day <= 6; day++) {
+                const btn = document.createElement('button');
+                btn.className = `px-3 py-1.5 rounded-md border text-xs font-bold transition-all whitespace-nowrap ${
+                    day === currentDay
+                        ? 'bg-sky-500 text-slate-950 border-sky-400 shadow'
+                        : 'bg-slate-800 text-slate-300 border-slate-700/80 hover:bg-slate-700'
+                }`;
+                btn.innerText = `DÍA ${day}`;
+                btn.onclick = () => switchDay(day);
+                tabsContainer.appendChild(btn);
+            }
+        }
+
+        function switchDay(day) {
+            currentDay = day;
+            renderDayTabs();
+            renderDayContent(day);
+        }
+
+        function renderDayContent(day) {
+            const dayData = workoutData[day];
+            document.getElementById('activeDayTitle').innerText = dayData.title;
+
+            const container = document.getElementById('exercisesContainer');
+            container.innerHTML = '';
+
+            let totalSets = 0;
+            let completedSets = 0;
+
+            dayData.exercises.forEach((ex, exIdx) => {
+                const exCard = document.createElement('div');
+                exCard.className = 'bg-slate-800/90 rounded-xl p-3.5 border border-slate-700/70 shadow-md space-y-2.5';
+
+                const exHeader = document.createElement('div');
+                exHeader.className = 'flex items-center justify-between border-b border-slate-700/60 pb-2';
+                exHeader.innerHTML = `
+                    <h2 class="text-sm font-black text-sky-400 tracking-wide uppercase">${ex.name}</h2>
+                    <span class="text-[11px] font-bold text-slate-400 bg-slate-900/60 px-2 py-0.5 rounded border border-slate-700">${ex.sets.length} SERIES</span>
+                `;
+                exCard.appendChild(exHeader);
+
+                const setsList = document.createElement('div');
+                setsList.className = 'space-y-1.5';
+
+                ex.sets.forEach((set, setIdx) => {
+                    totalSets++;
+                    const setKey = `d${day}_e${exIdx}_s${setIdx}`;
+                    const isChecked = !!completedState[setKey];
+                    if (isChecked) completedSets++;
+
+                    const setRow = document.createElement('div');
+                    setRow.className = `flex items-center justify-between p-2.5 sm:p-3 rounded-lg border transition-all ${
+                        isChecked 
+                            ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300' 
+                            : 'bg-slate-900/80 border-slate-700/60 text-slate-200 hover:border-slate-600'
+                    }`;
+
+                    setRow.innerHTML = `
+                        <!-- Left side: Set Number & Repetitions -->
+                        <div class="flex items-center gap-3">
+                            <span class="text-slate-400 font-mono font-bold text-xs bg-slate-800/80 px-2 py-1 rounded border border-slate-700">S${setIdx + 1}</span>
+                            <span class="text-slate-100 font-black text-base sm:text-lg flex items-baseline gap-1">
+                                ${set.reps} <span class="text-xs text-slate-400 font-semibold uppercase">REPS</span>
+                            </span>
+                        </div>
+
+                        <!-- Right side: Weight & Checkbox -->
+                        <div class="flex items-center gap-3 ml-auto">
+                            <span class="font-black text-amber-400 text-base sm:text-lg tracking-wide text-right">${set.weight}</span>
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} 
+                                onclick="toggleSet('${setKey}')"
+                                class="w-7 h-7 sm:w-8 sm:h-8 rounded bg-slate-800 border-2 border-slate-600 text-sky-500 focus:ring-0 focus:ring-offset-0 cursor-pointer accent-sky-500 flex-shrink-0">
+                        </div>
+                    `;
+                    setsList.appendChild(setRow);
+                });
+
+                exCard.appendChild(setsList);
+                container.appendChild(exCard);
+            });
+
+            // Update Progress Bar
+            const percent = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+            document.getElementById('progressPercent').innerText = `${percent}% COMPLETADO`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+        }
+
+        function toggleSet(key) {
+            completedState[key] = !completedState[key];
+            localStorage.setItem('combat_strength_progress', JSON.stringify(completedState));
+            
+            if (completedState[key]) {
+                startRestTimer();
+            }
+            
+            renderDayContent(currentDay);
+        }
+
+        // --- Session Timer & Reset Logic ---
+        function toggleSessionTimer() {
+            const btn = document.getElementById('sessionTimerBtn');
+            if (isSessionTimerRunning) {
+                clearInterval(sessionTimerInterval);
+                isSessionTimerRunning = false;
+                btn.innerText = 'REANUDAR';
+                btn.className = 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 text-xs px-2 py-0.5 rounded font-bold transition-all';
+            } else {
+                isSessionTimerRunning = true;
+                btn.innerText = 'PAUSAR';
+                btn.className = 'bg-slate-700 hover:bg-slate-600 text-slate-300 text-xs px-2 py-0.5 rounded font-bold transition-all';
+                sessionTimerInterval = setInterval(() => {
+                    sessionSeconds++;
+                    updateSessionDisplay();
+                }, 1000);
+            }
+        }
+
+        function resetSessionTimer() {
+            const clearChecks = confirm("¿Deseas desmarcar las series realizadas?\n\nAceptar = Desmarcar solo el DÍA " + currentDay + "\nCancelar = Solo reiniciar el temporizador");
+            
+            if (clearChecks) {
+                // Eliminar los checks del día actual
+                Object.keys(completedState).forEach(key => {
+                    if (key.startsWith(`d${currentDay}_`)) {
+                        delete completedState[key];
+                    }
+                });
+                localStorage.setItem('combat_strength_progress', JSON.stringify(completedState));
+                renderDayContent(currentDay);
+            }
+
+            clearInterval(sessionTimerInterval);
+            isSessionTimerRunning = false;
+            sessionSeconds = 0;
+            updateSessionDisplay();
+            const btn = document.getElementById('sessionTimerBtn');
+            btn.innerText = 'INICIAR';
+            btn.className = 'bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40 text-xs px-2 py-0.5 rounded font-bold transition-all';
+        }
+
+        function updateSessionDisplay() {
+            const hrs = String(Math.floor(sessionSeconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((sessionSeconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(sessionSeconds % 60).padStart(2, '0');
+            document.getElementById('sessionTimerDisplay').innerText = `${hrs}:${mins}:${secs}`;
+        }
+
+        // --- Rest Timer Logic ---
+        function startRestTimer() {
+            clearInterval(restTimerInterval);
+            restSeconds = 90;
+            const modal = document.getElementById('restTimerModal');
+            modal.classList.remove('hidden');
+            updateRestDisplay();
+
+            restTimerInterval = setInterval(() => {
+                restSeconds--;
+                updateRestDisplay();
+                if (restSeconds <= 0) {
+                    clearInterval(restTimerInterval);
+                    modal.classList.add('hidden');
+                }
+            }, 1000);
+        }
+
+        function addRestTime(seconds) {
+            restSeconds += seconds;
+            updateRestDisplay();
+        }
+
+        function skipRestTimer() {
+            clearInterval(restTimerInterval);
+            document.getElementById('restTimerModal').classList.add('hidden');
+        }
+
+        function updateRestDisplay() {
+            const mins = String(Math.floor(restSeconds / 60)).padStart(2, '0');
+            const secs = String(restSeconds % 60).padStart(2, '0');
+            document.getElementById('restTimerDisplay').innerText = `${mins}:${secs}`;
+        }
+
+        // --- PWA / Install Logic ---
+        let deferredPrompt = null;
+        function setupPWAIntegration() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                document.getElementById('nativeInstallPromptBtn').classList.remove('hidden');
+            });
+        }
+
+        function openInstallModal() {
+            document.getElementById('installGuideModal').classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installGuideModal').classList.add('hidden');
+        }
+
+        function triggerNativeInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the install prompt');
+                    }
+                    deferredPrompt = null;
+                    closeInstallModal();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
