@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Strength & Combat Training - Ezequiel Muracciole</title>
+    <title>ETAKKI JIU JITSU TRAINING PROGRAM</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -44,20 +44,29 @@
 <body class="bg-slate-900 text-slate-100 min-h-screen pb-20">
 
     <!-- Header Navigation & Profile -->
-    <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-3 py-2.5 shadow-md">
-        <div class="max-w-3xl mx-auto flex flex-col gap-2">
-            <!-- Top Row: Title, Profile Badge & Session Timer -->
-            <div class="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
-                <div>
-                    <h1 class="text-base sm:text-lg font-black tracking-wider text-sky-400 uppercase leading-none">
-                        BJJ TRAINING PROGRAM <span class="text-xs font-semibold text-slate-400 block sm:inline">JIU JITSU - GRAPPLING</span>
-                    </h1>
+    <header class="sticky top-0 z-40 bg-slate-900/95 backdrop-blur border-b border-slate-800 px-3 py-3 shadow-md">
+        <div class="max-w-3xl mx-auto flex flex-col gap-3">
+            <!-- Top Row: Title with Elephant Icon & Profile Badge -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <!-- Title & Subtitle Centered/Aligned -->
+                <div class="text-center sm:text-left flex items-center gap-2.5">
+                    <span class="text-2xl sm:text-3xl" title="Elefante">🐘</span>
+                    <div>
+                        <h1 class="text-lg sm:text-xl font-black tracking-wider text-sky-400 uppercase leading-tight">
+                            ETAKKI JIU JITSU TRAINING PROGRAM
+                        </h1>
+                        <p class="text-xs sm:text-sm font-bold text-slate-400 tracking-widest text-center uppercase mt-0.5">
+                            JIU JITSU - GRAPPLING
+                        </p>
+                    </div>
                 </div>
 
-                <!-- Profile Badge & Flag -->
-                <div class="flex items-center gap-1.5 bg-slate-800/90 border border-slate-700/80 px-2.5 py-1 rounded-md text-[11px] font-bold text-slate-200">
+                <!-- Profile Badge & Icons (Viking & Dumbbell) -->
+                <div class="flex items-center gap-2 bg-slate-800/90 border border-slate-700/80 px-3 py-1.5 rounded-md text-[11px] font-bold text-slate-200">
+                    <span class="text-sm" title="Vikingo">🪓</span>
                     <span>EZEQUIEL MURACCIOLE - BLUE BELT | 82 KG - 178 CM | ARG</span>
-                    <svg class="w-4 h-3 rounded-xs flex-shrink-0" viewBox="0 0 750 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <span class="text-sm" title="Mancuerna">🏋️‍♂️</span>
+                    <svg class="w-4 h-3 rounded-xs flex-shrink-0 ml-0.5" viewBox="0 0 750 500" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <rect width="750" height="500" fill="#74ACDF"/>
                         <rect y="166.6" width="750" height="166.6" fill="#FFFFFF"/>
                         <circle cx="375" cy="250" r="35" fill="#F6B40E"/>
@@ -114,7 +123,7 @@
         </div>
     </main>
 
-    <!-- Rest Timer Overlay / Modal (Haciendo más grande y visible) -->
+    <!-- Rest Timer Overlay / Modal (Grande y visible) -->
     <div id="restTimerModal" class="fixed inset-x-0 bottom-0 z-50 bg-slate-950/98 border-t-4 border-sky-400 p-6 shadow-[0_-10px_30px_rgba(0,0,0,0.8)] backdrop-blur-md hidden">
         <div class="max-w-3xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-center sm:text-left">
             <div>
@@ -662,7 +671,6 @@
             const clearChecks = confirm("¿Deseas desmarcar las series realizadas?\n\nAceptar = Desmarcar solo el DÍA " + currentDay + "\nCancelar = Solo reiniciar el temporizador");
             
             if (clearChecks) {
-                // Eliminar los checks del día actual
                 Object.keys(completedState).forEach(key => {
                     if (key.startsWith(`d${currentDay}_`)) {
                         delete completedState[key];
