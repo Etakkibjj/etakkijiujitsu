@@ -38,7 +38,7 @@
     <!-- Google Fonts: Barlow Condensed, Montserrat & Oswald -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700;800;900&family=Montserrat:ital,wght@0,600;0,700;0,800;0,900;1,900&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&family=Montserrat:wght@800;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
 
     <style>
         /* Base Styling with Barlow Condensed & Montserrat */
@@ -83,19 +83,51 @@
             filter: brightness(1.2);
         }
 
-        /* Neon Text Glow Effects */
-        .neon-blue-text {
-            color: #FFFFFF;
-            text-shadow: 
-                0 0 5px rgba(0, 240, 255, 0.8),
-                0 0 15px rgba(0, 240, 255, 0.6);
+        /* ANIMACIONES Y EFECTOS DE NEÓN PULSANTE */
+        @keyframes neon-blue-pulse {
+            0%, 100% {
+                color: #00F0FF;
+                text-shadow: 
+                    0 0 7px #00F0FF,
+                    0 0 15px #00F0FF,
+                    0 0 30px rgba(0, 240, 255, 0.8),
+                    0 0 50px rgba(0, 240, 255, 0.5);
+            }
+            50% {
+                color: #E0FFFF;
+                text-shadow: 
+                    0 0 12px #00F0FF,
+                    0 0 25px #00F0FF,
+                    0 0 45px rgba(0, 240, 255, 1),
+                    0 0 70px rgba(0, 240, 255, 0.8);
+            }
         }
 
-        .neon-red-text {
-            color: #FFFFFF;
-            text-shadow: 
-                0 0 5px rgba(255, 42, 85, 0.8),
-                0 0 15px rgba(255, 42, 85, 0.6);
+        @keyframes neon-red-pulse {
+            0%, 100% {
+                color: #FF0055;
+                text-shadow: 
+                    0 0 7px #FF0055,
+                    0 0 15px #FF0055,
+                    0 0 30px rgba(255, 0, 85, 0.8),
+                    0 0 50px rgba(255, 0, 85, 0.5);
+            }
+            50% {
+                color: #FFE6EE;
+                text-shadow: 
+                    0 0 12px #FF0055,
+                    0 0 25px #FF0055,
+                    0 0 45px rgba(255, 0, 85, 1),
+                    0 0 70px rgba(255, 0, 85, 0.8);
+            }
+        }
+
+        .neon-blue-glow {
+            animation: neon-blue-pulse 2.2s infinite ease-in-out;
+        }
+
+        .neon-red-glow {
+            animation: neon-red-pulse 2.2s infinite ease-in-out;
         }
 
         /* Flash on timer finish */
@@ -111,7 +143,7 @@
 <body class="min-h-screen w-screen bg-[#161C26] text-white flex flex-col justify-between overflow-x-hidden select-none">
 
     <!-- HEADER SUPERIOR CENTRADO CON TIPOGRAFÍA CONDENSADA Y LOGO EJJ -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2 flex items-center justify-between shrink-0 z-20 shadow-md relative">
+    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2.5 flex items-center justify-between shrink-0 z-20 shadow-md relative">
         
         <!-- Logo EJJ Vectorial a la izquierda -->
         <div class="flex items-center space-x-2 shrink-0 z-10">
@@ -125,7 +157,7 @@
 
         <!-- Encabezado Centrado con Tipografía Condensada Grande -->
         <div class="absolute inset-0 flex items-center justify-center pointer-events-none px-12">
-            <h1 class="font-condensed font-extrabold text-base sm:text-xl md:text-2xl tracking-widest text-slate-100 uppercase text-center truncate">
+            <h1 class="font-condensed font-black text-lg sm:text-2xl md:text-3xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
                 ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
             </h1>
         </div>
@@ -142,8 +174,8 @@
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
         
-        <!-- PANTALLA DE PUNTUACIÓN (LUCHADOR AZUL / LUCHADOR ROJO) -->
-        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[220px] w-full">
+        <!-- PANTALLA DE PUNTUACIÓN GIGANTE CON LUCHADORES NEÓN -->
+        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[260px] w-full">
             
             <!-- BLOQUE LUCHADOR AZUL -->
             <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
@@ -154,10 +186,9 @@
                     </h2>
                 </div>
 
-                <!-- Input Nombre Participante con Bandera de Argentina y Estilo Tipográfico -->
+                <!-- Input Nombre Participante con Bandera y Animación Neón Azul -->
                 <div class="bg-[#151C28] px-3 py-2 border-b border-slate-800 flex items-center justify-center space-x-3">
-                    <!-- Bandera de Argentina (SVG) -->
-                    <div class="w-8 h-6 sm:w-10 sm:h-7 shrink-0 rounded shadow overflow-hidden border border-slate-600">
+                    <div class="w-8 h-6 sm:w-11 sm:h-8 shrink-0 rounded shadow overflow-hidden border border-slate-600">
                         <svg viewBox="0 0 900 600" class="w-full h-full">
                             <rect width="900" height="600" fill="#74acdf"/>
                             <rect y="200" width="900" height="200" fill="#ffffff"/>
@@ -167,14 +198,14 @@
                     </div>
 
                     <div class="flex flex-col flex-1 text-left min-w-0">
-                        <!-- Nombre del Luchador: Font Bold Condensada -->
+                        <!-- Nombre con Neón Pulsante Azul Cian -->
                         <input type="text" 
                                id="blue-name" 
-                               placeholder="NOMBRE DEL LUCHADOR" 
+                               placeholder="NOMBRE LUCHADOR" 
                                value="LUKE SKYWALKER"
-                               class="w-full bg-transparent font-condensed font-bold text-xl sm:text-3xl md:text-4xl text-white focus:outline-none uppercase tracking-wide leading-none truncate">
+                               class="w-full bg-transparent font-condensed font-bold text-2xl sm:text-4xl md:text-5xl neon-blue-glow focus:outline-none uppercase tracking-wide leading-none truncate">
                         
-                        <!-- Equipo / País: Font Regular Condensada Gris -->
+                        <!-- Equipo / País -->
                         <input type="text" 
                                id="blue-team" 
                                placeholder="PAÍS / EQUIPO" 
@@ -183,9 +214,9 @@
                     </div>
                 </div>
 
-                <!-- Puntuación Gigante -->
-                <div class="flex-1 flex items-center justify-center bg-[#101520] min-h-[110px] p-2">
-                    <span id="blue-score" class="font-oswald text-7xl sm:text-8xl md:text-9xl font-bold text-white leading-none drop-shadow-md">0</span>
+                <!-- Puntuación Duplicada en Tamaño (2X Big Score Display) -->
+                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
+                    <span id="blue-score" class="font-oswald text-[120px] sm:text-[170px] md:text-[210px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
                 </div>
             </div>
 
@@ -198,10 +229,9 @@
                     </h2>
                 </div>
 
-                <!-- Input Nombre Participante con Bandera de Argentina y Estilo Tipográfico -->
+                <!-- Input Nombre Participante con Bandera y Animación Neón Rojo -->
                 <div class="bg-[#151C28] px-3 py-2 border-b border-slate-800 flex items-center justify-center space-x-3">
-                    <!-- Bandera de Argentina (SVG) -->
-                    <div class="w-8 h-6 sm:w-10 sm:h-7 shrink-0 rounded shadow overflow-hidden border border-slate-600">
+                    <div class="w-8 h-6 sm:w-11 sm:h-8 shrink-0 rounded shadow overflow-hidden border border-slate-600">
                         <svg viewBox="0 0 900 600" class="w-full h-full">
                             <rect width="900" height="600" fill="#74acdf"/>
                             <rect y="200" width="900" height="200" fill="#ffffff"/>
@@ -211,14 +241,14 @@
                     </div>
 
                     <div class="flex flex-col flex-1 text-left min-w-0">
-                        <!-- Nombre del Luchador: Font Bold Condensada -->
+                        <!-- Nombre con Neón Pulsante Rojo/Rosa -->
                         <input type="text" 
                                id="red-name" 
-                               placeholder="NOMBRE DEL LUCHADOR" 
+                               placeholder="NOMBRE LUCHADOR" 
                                value="DARTH VADER"
-                               class="w-full bg-transparent font-condensed font-bold text-xl sm:text-3xl md:text-4xl text-white focus:outline-none uppercase tracking-wide leading-none truncate">
+                               class="w-full bg-transparent font-condensed font-bold text-2xl sm:text-4xl md:text-5xl neon-red-glow focus:outline-none uppercase tracking-wide leading-none truncate">
                         
-                        <!-- Equipo / País: Font Regular Condensada Gris -->
+                        <!-- Equipo / País -->
                         <input type="text" 
                                id="red-team" 
                                placeholder="PAÍS / EQUIPO" 
@@ -227,77 +257,53 @@
                     </div>
                 </div>
 
-                <!-- Puntuación Gigante -->
-                <div class="flex-1 flex items-center justify-center bg-[#101520] min-h-[110px] p-2">
-                    <span id="red-score" class="font-oswald text-7xl sm:text-8xl md:text-9xl font-bold text-white leading-none drop-shadow-md">0</span>
+                <!-- Puntuación Duplicada en Tamaño (2X Big Score Display) -->
+                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
+                    <span id="red-score" class="font-oswald text-[120px] sm:text-[170px] md:text-[210px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
                 </div>
             </div>
 
         </div>
 
-        <!-- BOTONES DE ACCIÓN Y PUNTOS (AZUL Y ROJO) -->
-        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[220px] w-full">
+        <!-- 3 BOTONES EXCLUSIVOS DE PUNTUACIÓN POR LADO (+2, +3, +4) Y DESHACER -->
+        <div class="grid grid-cols-2 gap-2 w-full">
             
             <!-- BOTONES LADO AZUL -->
-            <div class="grid grid-cols-1 gap-1.5 h-full">
-                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">TAKEDOWN</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+2</span>
+            <div class="flex flex-col space-y-1.5 sm:space-y-2">
+                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
+                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+2</span>
                 </button>
-                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">SWEEP</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+2</span>
+                <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
+                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+3</span>
                 </button>
-                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">KNEE ON BELLY</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+2</span>
+                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
+                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+4</span>
                 </button>
-                <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">GUARD PASS</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+3</span>
-                </button>
-                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">MOUNT</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+4</span>
-                </button>
-                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">BACK CONTROL</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+4</span>
-                </button>
-                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 flex items-center justify-center space-x-2 shadow">
-                    <span class="font-condensed font-bold text-sm text-slate-400 uppercase tracking-wide">DESHACER</span>
+                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
+                    <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
                     <span class="font-oswald text-base text-red-400 font-bold">-1</span>
                 </button>
             </div>
 
             <!-- BOTONES LADO ROJO -->
-            <div class="grid grid-cols-1 gap-1.5 h-full">
-                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">TAKEDOWN</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+2</span>
+            <div class="flex flex-col space-y-1.5 sm:space-y-2">
+                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
+                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+2</span>
                 </button>
-                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">SWEEP</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+2</span>
+                <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
+                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+3</span>
                 </button>
-                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">KNEE ON BELLY</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+2</span>
+                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
+                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+4</span>
                 </button>
-                <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">GUARD PASS</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+3</span>
-                </button>
-                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">MOUNT</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+4</span>
-                </button>
-                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-extrabold text-sm sm:text-base text-slate-200 uppercase tracking-wide">BACK CONTROL</span>
-                    <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+4</span>
-                </button>
-                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 flex items-center justify-center space-x-2 shadow">
-                    <span class="font-condensed font-bold text-sm text-slate-400 uppercase tracking-wide">DESHACER</span>
+                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
+                    <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
                     <span class="font-oswald text-base text-red-400 font-bold">-1</span>
                 </button>
             </div>
@@ -305,241 +311,3 @@
         </div>
 
     </main>
-
-    <!-- BARRA INFERIOR DE CONTROLES Y TEMPORIZADOR -->
-    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-4 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl">
-        <!-- Botón Reiniciar -->
-        <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-base sm:text-lg px-4 py-1.5 rounded-lg border border-slate-600 uppercase shadow">
-            REINICIAR
-        </button>
-
-        <!-- Reloj Central -->
-        <div class="flex items-center space-x-2">
-            <div id="timer-display" class="font-oswald text-4xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-5 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
-                03:00
-            </div>
-        </div>
-
-        <!-- Botón Iniciar / Pausa -->
-        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-bold text-base sm:text-lg px-5 py-1.5 rounded-lg border border-emerald-400 min-w-[110px] text-center uppercase shadow-lg transition-colors">
-            <span id="start-pause-text">INICIAR</span>
-        </button>
-    </footer>
-
-    <!-- MODAL GANADOR -->
-    <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
-            <h2 id="winner-name-display" class="font-condensed text-2xl sm:text-3xl font-extrabold uppercase tracking-wider text-slate-300 mb-1">
-                GANADOR
-            </h2>
-            <h3 id="winner-title" class="font-oswald text-4xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
-                ¡GANADOR!
-            </h3>
-            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
-                SCORE: 0 - 0
-            </div>
-            <div class="w-full space-y-2.5">
-                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-condensed font-bold text-lg py-2 rounded-lg w-full border border-blue-400 uppercase shadow-lg">
-                    NUEVA LUCHA
-                </button>
-                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-condensed font-bold text-base py-1.5 rounded-lg w-full border border-slate-600 uppercase">
-                    CERRAR
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- REGISTRO SERVICE WORKER Y LÓGICA DE LA APLICACIÓN -->
-    <script>
-        // Service Worker inline via Blob URL
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                const CACHE_NAME = 'bjj-scoreboard-v2';
-                self.addEventListener('install', (e) => self.skipWaiting());
-                self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
-                self.addEventListener('fetch', (e) => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
-            `;
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
-        }
-
-        let deferredPrompt;
-        const pwaInstallBtn = document.getElementById('pwa-install-btn');
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            if (pwaInstallBtn) pwaInstallBtn.classList.remove('hidden');
-        });
-
-        if (pwaInstallBtn) {
-            pwaInstallBtn.addEventListener('click', async () => {
-                if (deferredPrompt) {
-                    deferredPrompt.prompt();
-                    const { outcome } = await deferredPrompt.userChoice;
-                    if (outcome === 'accepted') pwaInstallBtn.classList.add('hidden');
-                    deferredPrompt = null;
-                }
-            });
-        }
-
-        // Lógica de Marcador y Reloj
-        const MATCH_DURATION = 180;
-        let timeLeft = MATCH_DURATION;
-        let timerInterval = null;
-        let isRunning = false;
-        const scores = { blue: 0, red: 0 };
-
-        const timerDisplay = document.getElementById('timer-display');
-        const startPauseBtn = document.getElementById('start-pause-btn');
-        const startPauseText = document.getElementById('start-pause-text');
-
-        let audioCtx = null;
-        function getAudioContext() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            return audioCtx;
-        }
-
-        function playBeep(freq = 600, duration = 0.12) {
-            try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.frequency.setValueAtTime(freq, ctx.currentTime);
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + duration);
-            } catch(e){}
-        }
-
-        function playEndAlarm() {
-            for(let i = 0; i < 4; i++) {
-                setTimeout(() => playBeep(800, 0.3), i * 300);
-            }
-        }
-
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60);
-            const s = sec % 60;
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function updateTimerDisplay() {
-            timerDisplay.textContent = formatTime(timeLeft);
-        }
-
-        function toggleTimer() {
-            getAudioContext();
-            if (isRunning) pauseTimer();
-            else startTimer();
-        }
-
-        function startTimer() {
-            if (timeLeft <= 0) return;
-            isRunning = true;
-            startPauseText.textContent = 'PAUSA';
-            startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-bold text-base sm:text-lg px-5 py-1.5 rounded-lg border border-amber-400 min-w-[110px] text-center uppercase shadow-lg transition-colors';
-            playBeep(700, 0.1);
-
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else {
-                    endTimer();
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-            startPauseText.textContent = 'REANUDAR';
-            startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-bold text-base sm:text-lg px-5 py-1.5 rounded-lg border border-emerald-400 min-w-[110px] text-center uppercase shadow-lg transition-colors';
-            playBeep(450, 0.1);
-        }
-
-        function endTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            startPauseText.textContent = 'FIN';
-            timerDisplay.classList.add('timer-ended');
-            playEndAlarm();
-            showWinnerModal();
-        }
-
-        function showWinnerModal() {
-            const modal = document.getElementById('winner-modal');
-            const card = document.getElementById('winner-card');
-            const title = document.getElementById('winner-title');
-            const winnerNameDisplay = document.getElementById('winner-name-display');
-            const scoreDisplay = document.getElementById('winner-score-display');
-
-            const blueName = document.getElementById('blue-name').value.trim() || 'LUCHADOR AZUL';
-            const redName = document.getElementById('red-name').value.trim() || 'LUCHADOR ROJO';
-
-            scoreDisplay.textContent = `${scores.blue} - ${scores.red}`;
-
-            if (scores.blue > scores.red) {
-                winnerNameDisplay.textContent = blueName;
-                winnerNameDisplay.className = 'font-condensed text-2xl sm:text-3xl font-extrabold uppercase tracking-wider text-blue-400 mb-1';
-                title.textContent = '¡GANADOR!';
-                title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-blue-400';
-                card.className = 'bg-[#19202D] border-2 border-blue-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
-            } else if (scores.red > scores.blue) {
-                winnerNameDisplay.textContent = redName;
-                winnerNameDisplay.className = 'font-condensed text-2xl sm:text-3xl font-extrabold uppercase tracking-wider text-red-400 mb-1';
-                title.textContent = '¡GANADOR!';
-                title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-red-500';
-                card.className = 'bg-[#19202D] border-2 border-red-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
-            } else {
-                winnerNameDisplay.textContent = 'EMPATE TÉCNICO';
-                winnerNameDisplay.className = 'font-condensed text-2xl sm:text-3xl font-extrabold uppercase tracking-wider text-yellow-400 mb-1';
-                title.textContent = '¡EMPATE!';
-                title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-yellow-400';
-                card.className = 'bg-[#19202D] border-2 border-yellow-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function closeWinnerModal() {
-            document.getElementById('winner-modal').classList.add('hidden');
-        }
-
-        function resetMatch() {
-            pauseTimer();
-            timeLeft = MATCH_DURATION;
-            updateTimerDisplay();
-            timerDisplay.classList.remove('timer-ended');
-            startPauseText.textContent = 'INICIAR';
-            closeWinnerModal();
-            scores.blue = 0;
-            scores.red = 0;
-            updateScoreDisplays();
-        }
-
-        function addPoints(fighter, pts) {
-            playBeep(600, 0.08);
-            scores[fighter] += pts;
-            updateScoreDisplays();
-        }
-
-        function subtractPoint(fighter) {
-            if (scores[fighter] > 0) {
-                playBeep(350, 0.08);
-                scores[fighter] -= 1;
-                updateScoreDisplays();
-            }
-        }
-
-        function updateScoreDisplays() {
-            document.getElementById('blue-score').textContent = scores.blue;
-            document.getElementById('red-score').textContent = scores.red;
-        }
-    </script>
-</body>
-</html>
