@@ -2,14 +2,43 @@
 <html lang="es" class="h-full w-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ETAKKI BJJ Referee Scoreboard</title>
+    
+    <!-- Configuración PWA Meta Tags -->
+    <meta name="theme-color" content="#111620">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ETAKKI BJJ">
+    <meta name="application-name" content="ETAKKI BJJ Scoreboard">
+    <meta name="description" content="Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules">
+
+    <!-- Web App Manifest Embebido via Data URL -->
+    <link rel="manifest" href='data:application/json,{
+        "name": "ETAKKI BJJ Referee Scoreboard",
+        "short_name": "ETAKKI BJJ",
+        "start_url": "./",
+        "display": "standalone",
+        "background_color": "#161C26",
+        "theme_color": "#111620",
+        "orientation": "any",
+        "icons": [
+            {
+                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%2245%22 font-weight=%22900%22 fill=%22%23ffffff%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
+                "sizes": "192x192 512x512",
+                "type": "image/svg+xml"
+            }
+        ]
+    }'>
+
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Montserrat (for Smoothcomp UI text/headings) & Oswald (for scoreboard numbers) -->
+    
+    <!-- Google Fonts: Montserrat & Oswald -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,800;0,900;1,900&family=Oswald:wght@600;700&display=swap" rel="stylesheet">
 
     <style>
         /* Smoothcomp Clean Dark UI Aesthetic */
@@ -50,6 +79,36 @@
             filter: brightness(1.2);
         }
 
+        /* Neon Text Glow Effects */
+        .neon-blue-text {
+            color: #00F0FF;
+            text-shadow: 
+                0 0 5px rgba(0, 240, 255, 0.8),
+                0 0 15px rgba(0, 240, 255, 0.6),
+                0 0 25px rgba(0, 240, 255, 0.4);
+        }
+
+        .neon-red-text {
+            color: #FF2A55;
+            text-shadow: 
+                0 0 5px rgba(255, 42, 85, 0.8),
+                0 0 15px rgba(255, 42, 85, 0.6),
+                0 0 25px rgba(255, 42, 85, 0.4);
+        }
+
+        /* Placeholder Neon Styles */
+        .neon-input::placeholder {
+            opacity: 0.5;
+        }
+        .neon-blue-text::placeholder {
+            color: #00F0FF;
+            text-shadow: 0 0 8px rgba(0, 240, 255, 0.5);
+        }
+        .neon-red-text::placeholder {
+            color: #FF2A55;
+            text-shadow: 0 0 8px rgba(255, 42, 85, 0.5);
+        }
+
         /* Flash on timer finish */
         @keyframes flash-timer {
             0%, 100% { opacity: 1; color: #FF4D4D; }
@@ -60,124 +119,152 @@
         }
     </style>
 </head>
-<body class="h-screen w-screen overflow-hidden bg-[#161C26] text-white flex flex-col justify-between select-none">
+<body class="min-h-screen w-screen bg-[#161C26] text-white flex flex-col justify-between overflow-x-hidden select-none">
 
-    <!-- TOP HEADER WITH LOGO ON THE LEFT OF ETAKKI JIU JITSU -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-1.5 flex items-center justify-center shrink-0 z-10 shadow-md">
-        <div class="flex items-center justify-center space-x-2.5 max-w-full">
-            <!-- ETAKKI DOJO Elephant Emblem Logo (Left of text) -->
-            <div class="w-7 h-7 shrink-0 bg-white rounded-full p-0.5 flex items-center justify-center border border-slate-300 shadow-sm">
-                <svg viewBox="0 0 100 100" class="w-full h-full text-[#111620] fill-current">
-                    <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"/>
-                    <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/>
-                    <!-- Elephant Silhouette representation -->
-                    <path d="M50 20 C35 20 28 32 28 44 C28 56 34 60 38 68 C40 72 42 78 45 84 C47 88 50 88 50 82 C50 74 46 68 46 62 C46 56 54 56 54 62 C54 68 50 74 50 82 C50 88 53 88 55 84 C58 78 60 72 62 68 C66 60 72 56 72 44 C72 32 65 20 50 20 Z" />
-                    <!-- Ears -->
-                    <path d="M30 35 C20 30 15 45 26 52 Z" />
-                    <path d="M70 35 C80 30 85 45 74 52 Z" />
+    <!-- HEADER SUPERIOR CON LOGO VECTORIAL EJJ ACTUALIZADO -->
+    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2 flex items-center justify-between shrink-0 z-20 shadow-md">
+        <div class="flex items-center space-x-3 max-w-full">
+            <!-- Nuevo Logo EJJ Vectorial Blanco con marco itálico -->
+            <div class="w-10 h-7 shrink-0 flex items-center justify-center">
+                <svg viewBox="0 0 120 70" class="w-full h-full text-white fill-current drop-shadow">
+                    <!-- Outer frame -->
+                    <path d="M 15 5 L 115 5 Q 118 5 116 12 L 105 62 Q 103 68 95 68 L 5 68 Q 2 68 4 61 L 15 12 Q 17 5 25 5 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <!-- Inner EJJ Text Styling -->
+                    <text x="58" y="52" font-family="'Montserrat', sans-serif" font-weight="900" font-style="italic" font-size="44" fill="currentColor" text-anchor="middle" letter-spacing="-2">EJJ</text>
                 </svg>
             </div>
-            <!-- Header Text with Smoothcomp font aesthetic -->
-            <div class="font-smooth font-extrabold text-[11px] sm:text-xs md:text-sm tracking-wider text-slate-100 uppercase truncate">
+            
+            <!-- Header Text -->
+            <div class="font-smooth font-extrabold text-xs sm:text-sm md:text-base tracking-wider text-slate-100 uppercase truncate">
                 ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
             </div>
         </div>
+
+        <!-- Botón de instalación PWA -->
+        <button id="pwa-install-btn" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded shadow flex items-center space-x-1">
+            <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+            <span class="hidden sm:inline">INSTALAR</span>
+        </button>
     </header>
 
-    <!-- MAIN SCORE & CONTROLS CONTAINER -->
-    <div class="flex-1 flex flex-col min-h-0 w-full p-1.5 space-y-1.5">
+    <!-- CONTENEDOR PRINCIPAL -->
+    <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
         
-        <!-- FIGHTERS SCORE BOARD (SPLIT RED / BLUE SMOOTHCOMP STYLE) -->
-        <div class="grid grid-cols-2 gap-1.5 h-2/5 min-h-0 w-full">
+        <!-- PANTALLA DE PUNTUACIÓN (LUCHADOR AZUL / LUCHADOR ROJO) -->
+        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[220px] w-full">
             
-            <!-- BLUE FIGHTER TOP BLOCK -->
-            <div class="flex flex-col bg-[#19202D] rounded-lg overflow-hidden border border-slate-700/80 shadow-md">
-                <div class="bg-smooth-blue px-2 py-1 text-center shrink-0">
-                    <h2 class="font-smooth text-base sm:text-lg md:text-xl font-extrabold tracking-wider text-white leading-none uppercase">
+            <!-- BLOQUE LUCHADOR AZUL -->
+            <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
+                <!-- Encabezado Azul -->
+                <div class="bg-smooth-blue px-2 py-1.5 text-center shrink-0">
+                    <h2 class="font-smooth text-sm sm:text-base md:text-lg font-black tracking-widest text-white leading-none uppercase">
                         LUCHADOR AZUL
                     </h2>
                 </div>
-                <div class="flex-1 flex items-center justify-center bg-[#131924]">
-                    <span id="blue-score" class="font-oswald text-6xl sm:text-7xl md:text-8xl font-bold text-white leading-none">0</span>
+
+                <!-- Input Nombre Participante con Destello Neón Azul -->
+                <div class="bg-[#151C28] px-2 py-1.5 border-b border-slate-800 text-center">
+                    <input type="text" 
+                           id="blue-name" 
+                           placeholder="Escribir Nombre..." 
+                           value="LUCHADOR 1"
+                           class="w-full bg-transparent text-center font-smooth font-black text-lg sm:text-2xl md:text-3xl neon-blue-text neon-input focus:outline-none uppercase tracking-wide">
+                </div>
+
+                <!-- Puntuación Gigante -->
+                <div class="flex-1 flex items-center justify-center bg-[#101520] min-h-[110px] p-2">
+                    <span id="blue-score" class="font-oswald text-7xl sm:text-8xl md:text-9xl font-bold text-white leading-none drop-shadow-md">0</span>
                 </div>
             </div>
 
-            <!-- RED FIGHTER TOP BLOCK -->
-            <div class="flex flex-col bg-[#19202D] rounded-lg overflow-hidden border border-slate-700/80 shadow-md">
-                <div class="bg-smooth-red px-2 py-1 text-center shrink-0">
-                    <h2 class="font-smooth text-base sm:text-lg md:text-xl font-extrabold tracking-wider text-white leading-none uppercase">
+            <!-- BLOQUE LUCHADOR ROJO -->
+            <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
+                <!-- Encabezado Rojo -->
+                <div class="bg-smooth-red px-2 py-1.5 text-center shrink-0">
+                    <h2 class="font-smooth text-sm sm:text-base md:text-lg font-black tracking-widest text-white leading-none uppercase">
                         LUCHADOR ROJO
                     </h2>
                 </div>
-                <div class="flex-1 flex items-center justify-center bg-[#131924]">
-                    <span id="red-score" class="font-oswald text-6xl sm:text-7xl md:text-8xl font-bold text-white leading-none">0</span>
+
+                <!-- Input Nombre Participante con Destello Neón Rojo -->
+                <div class="bg-[#151C28] px-2 py-1.5 border-b border-slate-800 text-center">
+                    <input type="text" 
+                           id="red-name" 
+                           placeholder="Escribir Nombre..." 
+                           value="LUCHADOR 2"
+                           class="w-full bg-transparent text-center font-smooth font-black text-lg sm:text-2xl md:text-3xl neon-red-text neon-input focus:outline-none uppercase tracking-wide">
+                </div>
+
+                <!-- Puntuación Gigante -->
+                <div class="flex-1 flex items-center justify-center bg-[#101520] min-h-[110px] p-2">
+                    <span id="red-score" class="font-oswald text-7xl sm:text-8xl md:text-9xl font-bold text-white leading-none drop-shadow-md">0</span>
                 </div>
             </div>
 
         </div>
 
-        <!-- ACTION BUTTONS GRID (COLUMNS BLUE & RED) -->
-        <div class="grid grid-cols-2 gap-1.5 h-3/5 min-h-0 w-full">
+        <!-- BOTONES DE ACCIÓN Y PUNTOS (AZUL Y ROJO) -->
+        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[220px] w-full">
             
-            <!-- BLUE BUTTONS -->
-            <div class="grid grid-cols-1 gap-1 h-full min-h-0">
-                <button onclick="addPoints('blue', 2, 'Takedown')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+            <!-- BOTONES LADO AZUL -->
+            <div class="grid grid-cols-1 gap-1.5 h-full">
+                <button onclick="addPoints('blue', 2, 'Takedown')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">TAKEDOWN</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+2</span>
                 </button>
-                <button onclick="addPoints('blue', 2, 'Sweep')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('blue', 2, 'Sweep')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">SWEEP</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+2</span>
                 </button>
-                <button onclick="addPoints('blue', 2, 'Knee on Belly')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('blue', 2, 'Knee on Belly')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">KNEE ON BELLY</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+2</span>
                 </button>
-                <button onclick="addPoints('blue', 3, 'Guard Pass')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('blue', 3, 'Guard Pass')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">GUARD PASS</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+3</span>
                 </button>
-                <button onclick="addPoints('blue', 4, 'Mount')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('blue', 4, 'Mount')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">MOUNT</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+4</span>
                 </button>
-                <button onclick="addPoints('blue', 4, 'Back Control')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('blue', 4, 'Back Control')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">BACK CONTROL</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-blue-400">+4</span>
                 </button>
-                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-md px-2 flex items-center justify-center space-x-1">
+                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 flex items-center justify-center space-x-2 shadow">
                     <span class="font-smooth font-bold text-xs text-slate-400 uppercase">DESHACER</span>
                     <span class="font-oswald text-base text-red-400 font-bold">-1</span>
                 </button>
             </div>
 
-            <!-- RED BUTTONS -->
-            <div class="grid grid-cols-1 gap-1 h-full min-h-0">
-                <button onclick="addPoints('red', 2, 'Takedown')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+            <!-- BOTONES LADO ROJO -->
+            <div class="grid grid-cols-1 gap-1.5 h-full">
+                <button onclick="addPoints('red', 2, 'Takedown')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">TAKEDOWN</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+2</span>
                 </button>
-                <button onclick="addPoints('red', 2, 'Sweep')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('red', 2, 'Sweep')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">SWEEP</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+2</span>
                 </button>
-                <button onclick="addPoints('red', 2, 'Knee on Belly')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('red', 2, 'Knee on Belly')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">KNEE ON BELLY</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+2</span>
                 </button>
-                <button onclick="addPoints('red', 3, 'Guard Pass')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('red', 3, 'Guard Pass')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">GUARD PASS</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+3</span>
                 </button>
-                <button onclick="addPoints('red', 4, 'Mount')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('red', 4, 'Mount')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">MOUNT</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+4</span>
                 </button>
-                <button onclick="addPoints('red', 4, 'Back Control')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-md px-2.5 flex items-center justify-between text-left">
+                <button onclick="addPoints('red', 4, 'Back Control')" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600 rounded-lg px-3 py-2 flex items-center justify-between text-left shadow">
                     <span class="font-smooth font-extrabold text-xs sm:text-sm text-slate-200">BACK CONTROL</span>
                     <span class="font-oswald text-xl sm:text-2xl font-bold text-red-400">+4</span>
                 </button>
-                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-md px-2 flex items-center justify-center space-x-1">
+                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900 hover:bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 flex items-center justify-center space-x-2 shadow">
                     <span class="font-smooth font-bold text-xs text-slate-400 uppercase">DESHACER</span>
                     <span class="font-oswald text-base text-red-400 font-bold">-1</span>
                 </button>
@@ -185,51 +272,97 @@
 
         </div>
 
-    </div>
+    </main>
 
-    <!-- BOTTOM TIMER & FOOTER CONTROLS BAR (SMOOTHCOMP BAR STYLE) -->
-    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-3 py-1.5 shrink-0 flex items-center justify-between z-10">
-        <!-- Reset Button -->
-        <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-smooth font-bold text-xs sm:text-sm px-3 py-1.5 rounded border border-slate-600 uppercase">
+    <!-- BARRA INFERIOR DE CONTROLES Y TEMPORIZADOR (SIEMPRE VISIBLE) -->
+    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-4 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl">
+        <!-- Botón Reiniciar -->
+        <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-smooth font-bold text-xs sm:text-sm px-4 py-2 rounded-lg border border-slate-600 uppercase shadow">
             REINICIAR
         </button>
 
-        <!-- Central Timer Block -->
+        <!-- Reloj Central -->
         <div class="flex items-center space-x-2">
-            <div id="timer-display" class="font-oswald text-4xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-4 py-0.5 rounded border border-slate-700 leading-none">
+            <div id="timer-display" class="font-oswald text-4xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-5 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
                 03:00
             </div>
         </div>
 
-        <!-- Start/Pause Button -->
-        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-smooth font-extrabold text-xs sm:text-sm px-4 py-1.5 rounded border border-emerald-400 min-w-[85px] text-center uppercase">
+        <!-- Botón Iniciar / Pausa (Optimizado para visibilidad Web y Móvil) -->
+        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-smooth font-black text-sm sm:text-base px-5 py-2 rounded-lg border border-emerald-400 min-w-[110px] text-center uppercase shadow-lg transition-colors">
             <span id="start-pause-text">INICIAR</span>
         </button>
     </footer>
 
-    <!-- WINNER MODAL -->
+    <!-- MODAL GANADOR -->
     <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-xl p-6 text-center max-w-xs w-full shadow-2xl flex flex-col items-center">
-            <h2 id="winner-title" class="font-smooth text-3xl sm:text-4xl font-extrabold tracking-wide uppercase leading-tight mb-2">
-                ¡GANADOR!
+        <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
+            <h2 id="winner-name-display" class="font-smooth text-xl sm:text-2xl font-black uppercase tracking-wider text-slate-300 mb-1">
+                GANADOR
             </h2>
-            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-5">
+            <h3 id="winner-title" class="font-oswald text-4xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
+                ¡GANADOR!
+            </h3>
+            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
                 SCORE: 0 - 0
             </div>
-            <div class="w-full space-y-2">
-                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-smooth font-extrabold text-base py-2 rounded-md w-full border border-blue-400 uppercase">
+            <div class="w-full space-y-2.5">
+                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-smooth font-extrabold text-base py-2.5 rounded-lg w-full border border-blue-400 uppercase shadow-lg">
                     NUEVA LUCHA
                 </button>
-                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-smooth font-bold text-sm py-1.5 rounded-md w-full border border-slate-600 uppercase">
+                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-smooth font-bold text-sm py-2 rounded-lg w-full border border-slate-600 uppercase">
                     CERRAR
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- APP LOGIC -->
+    <!-- REGISTRO SERVICE WORKER EMANADO (PWA) Y LÓGICA DE LA APLICACIÓN -->
     <script>
-        const MATCH_DURATION = 180; // 3 minutes
+        // 1. Registro del Service Worker mediante Blob URL para funcionalidad PWA offline e instalación
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'bjj-scoreboard-v1';
+                self.addEventListener('install', (e) => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('activate', (e) => {
+                    e.waitUntil(clients.claim());
+                });
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+                });
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(() => {});
+        }
+
+        // Manejo de la instalación PWA
+        let deferredPrompt;
+        const pwaInstallBtn = document.getElementById('pwa-install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (pwaInstallBtn) pwaInstallBtn.classList.remove('hidden');
+        });
+
+        if (pwaInstallBtn) {
+            pwaInstallBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        pwaInstallBtn.classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                }
+            });
+        }
+
+        // 2. Lógica del Marcador y Temporizador
+        const MATCH_DURATION = 180; // 3 minutos
         let timeLeft = MATCH_DURATION;
         let timerInterval = null;
         let isRunning = false;
@@ -240,7 +373,7 @@
         const startPauseBtn = document.getElementById('start-pause-btn');
         const startPauseText = document.getElementById('start-pause-text');
 
-        // Audio synthesizer
+        // Sintetizador de audio Web Audio API
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -289,7 +422,7 @@
             if (timeLeft <= 0) return;
             isRunning = true;
             startPauseText.textContent = 'PAUSA';
-            startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-bold text-xs sm:text-sm px-4 py-1.5 rounded border border-amber-400 min-w-[85px] text-center';
+            startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-black text-sm sm:text-base px-5 py-2 rounded-lg border border-amber-400 min-w-[110px] text-center uppercase shadow-lg transition-colors';
             playBeep(700, 0.1);
 
             timerInterval = setInterval(() => {
@@ -306,7 +439,7 @@
             isRunning = false;
             clearInterval(timerInterval);
             startPauseText.textContent = 'REANUDAR';
-            startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs sm:text-sm px-4 py-1.5 rounded border border-emerald-400 min-w-[85px] text-center';
+            startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-black text-sm sm:text-base px-5 py-2 rounded-lg border border-emerald-400 min-w-[110px] text-center uppercase shadow-lg transition-colors';
             playBeep(450, 0.1);
         }
 
@@ -323,22 +456,32 @@
             const modal = document.getElementById('winner-modal');
             const card = document.getElementById('winner-card');
             const title = document.getElementById('winner-title');
+            const winnerNameDisplay = document.getElementById('winner-name-display');
             const scoreDisplay = document.getElementById('winner-score-display');
 
-            scoreDisplay.textContent = `SCORE FINAL: ${scores.blue} - ${scores.red}`;
+            const blueName = document.getElementById('blue-name').value.trim() || 'LUCHADOR AZUL';
+            const redName = document.getElementById('red-name').value.trim() || 'LUCHADOR ROJO';
+
+            scoreDisplay.textContent = `${scores.blue} - ${scores.red}`;
 
             if (scores.blue > scores.red) {
-                title.textContent = '¡GANADOR AZUL!';
-                title.className = 'font-oswald text-4xl sm:text-5xl font-bold tracking-wide uppercase leading-none mb-2 text-blue-400';
-                card.className = 'bg-[#19202D] border-2 border-blue-500 rounded-xl p-6 text-center max-w-xs w-full shadow-2xl flex flex-col items-center';
+                winnerNameDisplay.textContent = blueName;
+                winnerNameDisplay.className = 'font-smooth text-xl sm:text-2xl font-black uppercase tracking-wider text-blue-400 mb-1';
+                title.textContent = '¡GANADOR!';
+                title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-blue-400 neon-blue-text';
+                card.className = 'bg-[#19202D] border-2 border-blue-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
             } else if (scores.red > scores.blue) {
-                title.textContent = '¡GANADOR ROJO!';
-                title.className = 'font-oswald text-4xl sm:text-5xl font-bold tracking-wide uppercase leading-none mb-2 text-red-500';
-                card.className = 'bg-[#19202D] border-2 border-red-500 rounded-xl p-6 text-center max-w-xs w-full shadow-2xl flex flex-col items-center';
+                winnerNameDisplay.textContent = redName;
+                winnerNameDisplay.className = 'font-smooth text-xl sm:text-2xl font-black uppercase tracking-wider text-red-400 mb-1';
+                title.textContent = '¡GANADOR!';
+                title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-red-500 neon-red-text';
+                card.className = 'bg-[#19202D] border-2 border-red-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
             } else {
+                winnerNameDisplay.textContent = 'EMPATE TÉCNICO';
+                winnerNameDisplay.className = 'font-smooth text-xl sm:text-2xl font-black uppercase tracking-wider text-yellow-400 mb-1';
                 title.textContent = '¡EMPATE!';
-                title.className = 'font-oswald text-4xl sm:text-5xl font-bold tracking-wide uppercase leading-none mb-2 text-yellow-400';
-                card.className = 'bg-[#19202D] border-2 border-yellow-500 rounded-xl p-6 text-center max-w-xs w-full shadow-2xl flex flex-col items-center';
+                title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-yellow-400';
+                card.className = 'bg-[#19202D] border-2 border-yellow-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
             }
 
             modal.classList.remove('hidden');
@@ -378,10 +521,6 @@
             document.getElementById('blue-score').textContent = scores.blue;
             document.getElementById('red-score').textContent = scores.red;
         }
-
-        document.addEventListener('touchmove', function(e) {
-            e.preventDefault();
-        }, { passive: false });
     </script>
 </body>
 </html>
