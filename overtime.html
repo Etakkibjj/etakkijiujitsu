@@ -50,22 +50,23 @@
             filter: brightness(1.2);
         }
 
-    <!-- TOP HEADER WITH SMOOTHCOMP LOGO & ETAKKI LOGO -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-1.5 flex items-center justify-center shrink-0 z-10 shadow-md">
-        <div class="flex items-center justify-center space-x-2 sm:space-x-2.5 max-w-full">
-            
-            <!-- Smoothcomp Icon Logo (Rounded Outer Square with Inner Square) -->
-            <div class="w-6 h-6 sm:w-7 sm:h-7 shrink-0 flex items-center justify-center">
-                <svg viewBox="0 0 100 100" class="w-full h-full fill-none stroke-white" stroke-width="10">
-                    <!-- Outer Rounded Square -->
-                    <rect x="10" y="10" width="80" height="80" rx="22" ry="22" stroke="white" stroke-width="10" fill="none" />
-                    <!-- Inner Square -->
-                    <rect x="35" y="35" width="30" height="30" rx="4" ry="4" stroke="white" stroke-width="8" fill="none" />
-                </svg>
-            </div>
+        /* Flash on timer finish */
+        @keyframes flash-timer {
+            0%, 100% { opacity: 1; color: #FF4D4D; }
+            50% { opacity: 0.3; color: #FFFFFF; }
+        }
+        .timer-ended {
+            animation: flash-timer 0.6s infinite;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden bg-[#161C26] text-white flex flex-col justify-between select-none">
 
-            <!-- ETAKKI DOJO Elephant Emblem Logo -->
-            <div class="w-6 h-6 sm:w-7 sm:h-7 shrink-0 bg-white rounded-full p-0.5 flex items-center justify-center border border-slate-300 shadow-sm">
+    <!-- TOP HEADER WITH LOGO ON THE LEFT OF ETAKKI JIU JITSU -->
+    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-1.5 flex items-center justify-center shrink-0 z-10 shadow-md">
+        <div class="flex items-center justify-center space-x-2.5 max-w-full">
+            <!-- ETAKKI DOJO Elephant Emblem Logo (Left of text) -->
+            <div class="w-7 h-7 shrink-0 bg-white rounded-full p-0.5 flex items-center justify-center border border-slate-300 shadow-sm">
                 <svg viewBox="0 0 100 100" class="w-full h-full text-[#111620] fill-current">
                     <circle cx="50" cy="50" r="46" fill="none" stroke="currentColor" stroke-width="4"/>
                     <circle cx="50" cy="50" r="38" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="3 2"/>
@@ -76,9 +77,8 @@
                     <path d="M70 35 C80 30 85 45 74 52 Z" />
                 </svg>
             </div>
-
             <!-- Header Text with Smoothcomp font aesthetic -->
-            <div class="font-smooth font-extrabold text-[10px] sm:text-xs md:text-sm tracking-wider text-slate-100 uppercase truncate">
+            <div class="font-smooth font-extrabold text-[11px] sm:text-xs md:text-sm tracking-wider text-slate-100 uppercase truncate">
                 ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
             </div>
         </div>
