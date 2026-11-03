@@ -311,3 +311,268 @@
         </div>
 
     </main>
+
+    <!-- BARRA INFERIOR DE CONTROLES Y TEMPORIZADOR DE 3 MINUTOS -->
+    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-4 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl">
+        <!-- Botón Reiniciar -->
+        <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-sm sm:text-base px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider">
+            REINICIAR
+        </button>
+
+        <!-- Reloj Central (3 Minutos) -->
+        <div class="flex items-center space-x-2">
+            <div id="timer-display" class="font-oswald text-4xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-5 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
+                03:00
+            </div>
+        </div>
+
+        <!-- Botón Iniciar / Pausa -->
+        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-sm sm:text-base px-5 py-2 rounded-lg border border-emerald-400 min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider">
+            <span id="start-pause-text">INICIAR</span>
+        </button>
+    </footer>
+
+    <!-- MODAL GANADOR -->
+    <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
+            <h2 id="winner-name-display" class="font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-300 mb-1">
+                GANADOR
+            </h2>
+            <h3 id="winner-title" class="font-oswald text-4xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
+                ¡GANADOR!
+            </h3>
+            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
+                SCORE: 0 - 0
+            </div>
+            <div class="w-full space-y-2.5">
+                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-condensed font-extrabold text-lg py-2.5 rounded-lg w-full border border-blue-400 uppercase shadow-lg tracking-wider">
+                    NUEVA LUCHA
+                </button>
+                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-condensed font-bold text-sm py-2 rounded-lg w-full border border-slate-600 uppercase tracking-wider">
+                    CERRAR
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- REGISTRO SERVICE WORKER PWA Y LÓGICA DE LA APLICACIÓN -->
+    <script>
+        // 1. Registro del Service Worker mediante Blob URL para PWA
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'bjj-scoreboard-v2';
+                self.addEventListener('install', (e) => self.skipWaiting());
+                self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+                self.addEventListener('fetch', (e) => e.respondWith(fetch(e.request).catch(() => caches.match(e.request))));
+            `;
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+            navigator.serviceWorker.register(swUrl).catch(() => {});
+        }
+
+        // Manejo de la instalación PWA
+        let deferredPrompt;
+        const pwaInstallBtn = document.getElementById('pwa-install-btn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            if (pwaInstallBtn) pwaInstallBtn.classList.remove('hidden');
+        });
+
+        if (pwaInstallBtn) {
+            pwaInstallBtn.addEventListener('click', async () => {
+                if (deferredPrompt) {
+                    deferredPrompt.prompt();
+                    const { outcome } = await deferredPrompt.userChoice;
+                    if (outcome === 'accepted') {
+                        pwaInstallBtn.classList.add('hidden');
+                    }
+                    deferredPrompt = null;
+                }
+            });
+        }
+
+        // 2. Lógica del Marcador y Temporizador
+        const MATCH_DURATION = 180; // 3 minutos en segundos
+        let timeLeft = MATCH_DURATION;
+        let timerInterval = null;
+        let isRunning = false;
+
+        const scores = { blue: 0, red: 0 };
+
+        const timerDisplay = document.getElementById('timer-display');
+        const startPauseBtn = document.getElementById('start-pause-btn');
+        const startPauseText = document.getElementById('start-pause-text');
+
+        // Sintetizador de audio Web Audio API
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            return audioCtx;
+        }
+
+        function playBeep(freq = 600, duration = 0.12) {
+            try {
+                const ctx = getAudioContext();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + duration);
+            } catch(e){}
+        }
+
+        function playEndAlarm() {
+            for(let i = 0; i < 4; i++) {
+                setTimeout(() => playBeep(800, 0.3), i * 300);
+            }
+        }
+
+        function formatTime(sec) {
+            const m = Math.floor(sec / 60);
+            const s = sec % 60;
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+        }
+
+        function updateTimerDisplay() {
+            if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft);
+        }
+
+        function toggleTimer() {
+            getAudioContext();
+            if (isRunning) pauseTimer();
+            else startTimer();
+        }
+
+        function startTimer() {
+            if (timeLeft <= 0) return;
+            isRunning = true;
+            if (startPauseText) startPauseText.textContent = 'PAUSA';
+            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-black text-sm sm:text-base px-5 py-2 rounded-lg border border-amber-400 min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
+            playBeep(700, 0.1);
+
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateTimerDisplay();
+                } else {
+                    endTimer();
+                }
+            }, 1000);
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            if (startPauseText) startPauseText.textContent = 'REANUDAR';
+            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-sm sm:text-base px-5 py-2 rounded-lg border border-emerald-400 min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
+            playBeep(450, 0.1);
+        }
+
+        function endTimer() {
+            clearInterval(timerInterval);
+            isRunning = false;
+            if (startPauseText) startPauseText.textContent = 'FIN';
+            if (timerDisplay) timerDisplay.classList.add('timer-ended');
+            playEndAlarm();
+            showWinnerModal();
+        }
+
+        function showWinnerModal() {
+            const modal = document.getElementById('winner-modal');
+            const card = document.getElementById('winner-card');
+            const title = document.getElementById('winner-title');
+            const winnerNameDisplay = document.getElementById('winner-name-display');
+            const scoreDisplay = document.getElementById('winner-score-display');
+
+            const blueName = document.getElementById('blue-name').value.trim() || 'LUCHADOR AZUL';
+            const redName = document.getElementById('red-name').value.trim() || 'LUCHADOR ROJO';
+
+            if (scoreDisplay) scoreDisplay.textContent = `SCORE: ${scores.blue} - ${scores.red}`;
+
+            if (scores.blue > scores.red) {
+                if (winnerNameDisplay) {
+                    winnerNameDisplay.textContent = blueName;
+                    winnerNameDisplay.className = 'font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-blue-400 mb-1';
+                }
+                if (title) {
+                    title.textContent = '¡GANADOR!';
+                    title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-blue-400 neon-blue-glow';
+                }
+                if (card) card.className = 'bg-[#19202D] border-2 border-blue-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+            } else if (scores.red > scores.blue) {
+                if (winnerNameDisplay) {
+                    winnerNameDisplay.textContent = redName;
+                    winnerNameDisplay.className = 'font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-red-400 mb-1';
+                }
+                if (title) {
+                    title.textContent = '¡GANADOR!';
+                    title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-red-500 neon-red-glow';
+                }
+                if (card) card.className = 'bg-[#19202D] border-2 border-red-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+            } else {
+                if (winnerNameDisplay) {
+                    winnerNameDisplay.textContent = 'EMPATE TÉCNICO';
+                    winnerNameDisplay.className = 'font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-yellow-400 mb-1';
+                }
+                if (title) {
+                    title.textContent = '¡EMPATE!';
+                    title.className = 'font-oswald text-4xl sm:text-5xl font-black tracking-wide uppercase leading-none mb-3 text-yellow-400';
+                }
+                if (card) card.className = 'bg-[#19202D] border-2 border-yellow-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+            }
+
+            if (modal) modal.classList.remove('hidden');
+        }
+
+        function closeWinnerModal() {
+            const modal = document.getElementById('winner-modal');
+            if (modal) modal.classList.add('hidden');
+        }
+
+        function resetMatch() {
+            pauseTimer();
+            timeLeft = MATCH_DURATION;
+            updateTimerDisplay();
+            if (timerDisplay) timerDisplay.classList.remove('timer-ended');
+            if (startPauseText) startPauseText.textContent = 'INICIAR';
+            closeWinnerModal();
+            scores.blue = 0;
+            scores.red = 0;
+            updateScoreDisplays();
+        }
+
+        function addPoints(fighter, pts) {
+            playBeep(600, 0.08);
+            scores[fighter] += pts;
+            updateScoreDisplays();
+        }
+
+        function subtractPoint(fighter) {
+            if (scores[fighter] > 0) {
+                playBeep(350, 0.08);
+                scores[fighter] -= 1;
+                updateScoreDisplays();
+            }
+        }
+
+        function updateScoreDisplays() {
+            const blueScoreEl = document.getElementById('blue-score');
+            const redScoreEl = document.getElementById('red-score');
+            if (blueScoreEl) blueScoreEl.textContent = scores.blue;
+            if (redScoreEl) redScoreEl.textContent = scores.red;
+        }
+
+        // Inicializar pantalla al cargar
+        updateTimerDisplay();
+        updateScoreDisplays();
+    </script>
+</body>
+</html>
