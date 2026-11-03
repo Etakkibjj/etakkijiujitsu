@@ -14,13 +14,13 @@
     <meta name="application-name" content="ETAKKI BJJ Scoreboard">
     <meta name="description" content="Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules">
 
-    <!-- Web App Manifest Embebido Completo PWA -->
-    <link rel="manifest" href='data:application/manifest+json,{
-        "id": "etakki-bjj-scoreboard-v2",
+    <!-- Web App Manifest Embebido Completo y Válido PWA -->
+    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{
+        "id": "etakki-bjj-scoreboard-v3",
         "name": "ETAKKI BJJ Referee Scoreboard",
         "short_name": "ETAKKI BJJ",
         "description": "Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules",
-        "start_url": "./",
+        "start_url": ".",
         "scope": "./",
         "display": "standalone",
         "background_color": "#161C26",
@@ -401,9 +401,13 @@
         let deferredPrompt = null;
 
         window.addEventListener('beforeinstallprompt', (e) => {
-            // Prevenir que Android/Chrome muestre la barra emergente por defecto
+            // Evitar comportamiento diferido nativo
             e.preventDefault();
             deferredPrompt = e;
+            const pwaBtn = document.getElementById('pwa-install-btn');
+            if (pwaBtn) {
+                pwaBtn.classList.add('animate-pulse');
+            }
         });
 
         async function openPwaModal() {
@@ -412,7 +416,7 @@
                     deferredPrompt.prompt();
                     const choiceResult = await deferredPrompt.userChoice;
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('El usuario aceptó la instalación');
+                        console.log('App Instalada con éxito');
                     } else {
                         document.getElementById('pwa-modal').classList.remove('hidden');
                     }
@@ -421,7 +425,7 @@
                     document.getElementById('pwa-modal').classList.remove('hidden');
                 }
             } else {
-                // Mostrar modal con instrucciones claras si el prompt nativo no está activo
+                // Si no está disponible la instalación automática nativa, desplegar modal con pasos
                 document.getElementById('pwa-modal').classList.remove('hidden');
             }
         }
@@ -430,17 +434,57 @@
             document.getElementById('pwa-modal').classList.add('hidden');
         }
 
-        // Registro de Service Worker Inline con manejo de errores/iFrames
+        // Registro de Service Worker para funcionamiento 100% Offline (Cache-First)
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 try {
                     const swCode = `
-                        const CACHE_NAME = 'etakki-bjj-v3';
-                        self.addEventListener('install', (e) => self.skipWaiting());
-                        self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+                        const CACHE_NAME = 'bjj-scoreboard-offline-v3';
+                        const urlsToCache = [
+                            './',
+                            'https://cdn.tailwindcss.com',
+                            'https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&family=Montserrat:wght@800;900&family=Oswald:wght@700&display=swap'
+                        ];
+
+                        self.addEventListener('install', (e) => {
+                            self.skipWaiting();
+                            e.waitUntil(
+                                caches.open(CACHE_NAME).then((cache) => {
+                                    return cache.addAll(urlsToCache).catch(() => {});
+                                })
+                            );
+                        });
+
+                        self.addEventListener('activate', (e) => {
+                            e.waitUntil(
+                                caches.keys().then((keys) => {
+                                    return Promise.all(
+                                        keys.map((key) => {
+                                            if (key !== CACHE_NAME) return caches.delete(key);
+                                        })
+                                    );
+                                }).then(() => self.clients.claim())
+                            );
+                        });
+
                         self.addEventListener('fetch', (e) => {
                             e.respondWith(
-                                fetch(e.request).catch(() => caches.match(e.request))
+                                caches.match(e.request).then((cachedResponse) => {
+                                    if (cachedResponse) {
+                                        return cachedResponse;
+                                    }
+                                    return fetch(e.request).then((networkResponse) => {
+                                        if (e.request.method === 'GET' && networkResponse.status === 200) {
+                                            const responseClone = networkResponse.clone();
+                                            caches.open(CACHE_NAME).then((cache) => {
+                                                cache.put(e.request, responseClone);
+                                            });
+                                        }
+                                        return networkResponse;
+                                    }).catch(() => {
+                                        return caches.match('./');
+                                    });
+                                })
                             );
                         });
                     `;
@@ -448,10 +492,10 @@
                     const swUrl = URL.createObjectURL(blob);
                     
                     navigator.serviceWorker.register(swUrl)
-                        .then(() => console.log('Service Worker Registrado'))
-                        .catch((err) => console.log('Service Worker no activado en modo preview:', err));
+                        .then(() => console.log('Service Worker listo para soporte Offline.'))
+                        .catch((err) => console.log('Suscripción SW omitida en entorno no SSL/Iframe:', err));
                 } catch (e) {
-                    console.log('PWA Service Worker en modo iframe no soportado activamente');
+                    console.log('PWA Service Worker offline fallback activo.');
                 }
             });
         }
