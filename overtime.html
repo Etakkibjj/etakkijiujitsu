@@ -156,20 +156,20 @@
         </div>
 
         <!-- Encabezado Centrado con Tipografía Condensada Grande -->
-        <div class="absolute inset-0 flex items-center justify-center pointer-events-none px-12">
-            <h1 class="font-condensed font-black text-lg sm:text-2xl md:text-3xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
-                ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
-            </h1>
-        </div>
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none px-12">
+        <h1 class="font-condensed font-black text-lg sm:text-2xl md:text-3xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
+            ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
+        </h1>
+    </div>
 
-        <!-- Botón de instalación PWA -->
-        <div class="shrink-0 z-10">
-            <button id="pwa-install-btn" class="hidden bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-2.5 py-1 rounded shadow flex items-center space-x-1">
-                <svg class="w-3.5 h-3.5 fill-current" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-                <span class="hidden sm:inline font-condensed">INSTALAR</span>
-            </button>
-        </div>
-    </header>
+    <!-- Botón de instalación PWA (Siempre accesible con fallback de ayuda) -->
+    <div class="shrink-0 z-10">
+        <button id="pwa-install-btn" onclick="openPwaModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold px-2.5 py-1.5 rounded shadow flex items-center space-x-1.5 border border-emerald-400">
+            <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+            <span class="font-condensed font-extrabold tracking-wider">INSTALAR APP</span>
+        </button>
+    </div>
+</header>
 
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
@@ -319,7 +319,7 @@
     </footer>
 
     <!-- MODAL GANADOR -->
-    <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+<div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
             <h2 id="winner-name-display" class="font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-300 mb-1">
                 GANADOR
@@ -341,9 +341,61 @@
         </div>
     </div>
 
-    <!-- REGISTRO SERVICE WORKER PWA Y LÓGICA DE LA APLICACIÓN -->
-    <script>
-        // 1. Registro del Service Worker mediante Blob URL para PWA
+<!-- MODAL INSTRUCCIONES INSTALACIÓN PWA -->
+<div id="pwa-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div class="bg-[#19202D] border-2 border-emerald-500 rounded-2xl p-5 max-w-md w-full shadow-2xl flex flex-col items-center text-slate-200">
+        <h2 class="font-condensed text-2xl font-black uppercase text-emerald-400 tracking-wide mb-2 flex items-center space-x-2">
+            <svg class="w-6 h-6 fill-current" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
+            <span>Instalar en tu Teléfono</span>
+        </h2>
+        <p class="font-condensed text-sm text-slate-300 text-center mb-4">
+            Para usar la app en pantalla completa y sin internet en tu teléfono, sigue estos pasos según tu dispositivo:
+        </p>
+
+        <div class="w-full space-y-3 mb-5 text-left font-condensed text-xs sm:text-sm">
+            <!-- iOS -->
+            <div class="bg-[#101520] p-3 rounded-lg border border-slate-700">
+                <span class="font-bold text-sky-400 text-sm block mb-1">📱 En iPhone / iPad (Safari):</span>
+                1. Toca el botón <strong>Compartir</strong> <span class="text-base">⎘</span> en la barra inferior.<br>
+                2. Selecciona <strong>"Agregar a inicio"</strong> ➕.
+            </div>
+
+            <!-- Android -->
+            <div class="bg-[#101520] p-3 rounded-lg border border-slate-700">
+                <span class="font-bold text-emerald-400 text-sm block mb-1">🤖 En Android (Chrome):</span>
+                1. Toca los <strong>3 puntos (⋮)</strong> arriba a la derecha.<br>
+                2. Elige <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.
+            </div>
+        </div>
+
+        <button onclick="closePwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider">
+            ¡ENTENDIDO!
+        </button>
+    </div>
+</div>
+
+<!-- REGISTRO SERVICE WORKER PWA Y LÓGICA DE LA APLICACIÓN -->
+<script>
+    // Manejo Modal PWA
+    function openPwaModal() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then((choiceResult) => {
+                if (choiceResult.outcome !== 'accepted') {
+                    document.getElementById('pwa-modal').classList.remove('hidden');
+                }
+                deferredPrompt = null;
+            });
+        } else {
+            document.getElementById('pwa-modal').classList.remove('hidden');
+        }
+    }
+
+    function closePwaModal() {
+        document.getElementById('pwa-modal').classList.add('hidden');
+    }
+
+    // 1. Registro del Service Worker mediante Blob URL para PWA
         if ('serviceWorker' in navigator) {
             const swCode = `
                 const CACHE_NAME = 'bjj-scoreboard-v2';
