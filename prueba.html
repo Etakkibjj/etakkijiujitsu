@@ -177,14 +177,6 @@
                    class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-5 py-2.5 rounded-xl transition duration-300 flex items-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-xs sm:text-sm uppercase tracking-wider transform hover:scale-105">
                     <i class="fa-solid fa-book-open text-base"></i> Reglamento
                 </a>
-
-                <button onclick="resetVotes()" class="bg-purple-950/90 hover:bg-pink-500 hover:text-white border border-pink-500 px-3 py-2.5 rounded-xl transition duration-300 flex items-center gap-1.5 shadow-lg font-sans font-bold text-xs">
-                    <i class="fa-solid fa-check-to-slot"></i> Reiniciar Votos
-                </button>
-
-                <button onclick="resetAllBrackets()" class="bg-blue-950/90 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-3 py-2.5 rounded-xl transition duration-300 flex items-center gap-1.5 shadow-lg font-sans font-bold text-xs">
-                    <i class="fa-solid fa-rotate-right"></i> Reiniciar Torneos
-                </button>
             </div>
         </div>
 
@@ -933,18 +925,8 @@
             }
         }
 
-        async function resetVotes() {
-            if (!isAuthReady || !auth.currentUser) return;
-            try {
-                await setDoc(votesDocRef, defaultVotes);
-            } catch (error) {
-                console.error("Error al reiniciar votos:", error);
-            }
-        }
-
         // Exponer funciones globales al objeto window para los onclick
         window.voteFighter = voteFighter;
-        window.resetVotes = resetVotes;
 
         initAuth();
     </script>
@@ -1027,10 +1009,6 @@
                 champName.innerText = `CAMPEÓN: ${winner}`;
                 champBox.classList.remove('hidden');
             }
-        }
-
-        function resetAllBrackets() {
-            location.reload();
         }
 
         // Canvas de Rayos de fondo
