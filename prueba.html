@@ -24,8 +24,6 @@
                         deepBlue: '#030b1e',
                         cardBg: 'rgba(5, 18, 48, 0.9)',
                         whatsappGreen: '#25D366',
-                        neonPink: '#ff007f',
-                        neonPurple: '#a855f7'
                     },
                     fontFamily: {
                         heading: ['Orbitron', 'sans-serif'],
@@ -42,8 +40,7 @@
             background-color: #020612;
             background-image: 
                 radial-gradient(circle at 50% 15%, rgba(0, 102, 255, 0.4), transparent 60%),
-                radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.15), transparent 50%),
-                radial-gradient(circle at 50% 85%, rgba(0, 240, 255, 0.25), transparent 50%),
+                radial-gradient(circle at 50% 65%, rgba(0, 240, 255, 0.25), transparent 50%),
                 radial-gradient(circle at 50% 100%, rgba(2, 6, 18, 0.95), #020612);
             background-attachment: fixed;
             color: #ffffff;
@@ -66,44 +63,30 @@
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.6);
         }
 
-        .neon-pink-text {
-            text-shadow: 0 0 12px rgba(255, 0, 127, 0.9), 0 0 25px rgba(168, 85, 247, 0.8);
-        }
-
         .neon-glow-box {
             box-shadow: 0 0 15px rgba(0, 102, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
             border: 1px solid rgba(0, 240, 255, 0.5);
         }
 
-        .superfight-glow-box {
-            box-shadow: 0 0 25px rgba(255, 0, 127, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.3);
-            border: 2px solid rgba(255, 0, 127, 0.8);
-            animation: superfight-pulse 2s infinite alternate ease-in-out;
-        }
-
-        @keyframes superfight-pulse {
-            0% {
-                box-shadow: 0 0 20px rgba(255, 0, 127, 0.5), inset 0 0 10px rgba(168, 85, 247, 0.3);
-                border-color: rgba(255, 0, 127, 0.7);
-            }
-            100% {
-                box-shadow: 0 0 35px rgba(255, 0, 127, 0.9), 0 0 15px rgba(0, 240, 255, 0.6), inset 0 0 20px rgba(255, 0, 127, 0.5);
-                border-color: rgba(0, 240, 255, 1);
-            }
-        }
-
-        .vs-neon {
-            animation: vs-flash 1.2s infinite alternate;
-        }
-
-        @keyframes vs-flash {
-            0% { transform: scale(1); text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f; }
-            100% { transform: scale(1.15); text-shadow: 0 0 20px #00f0ff, 0 0 35px #00f0ff; }
-        }
-
         .whatsapp-glow-box {
             box-shadow: 0 0 20px rgba(37, 211, 102, 0.5), inset 0 0 10px rgba(37, 211, 102, 0.2);
             border: 1px solid rgba(37, 211, 102, 0.7);
+        }
+
+        .superfight-glow-box {
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5), inset 0 0 20px rgba(255, 0, 127, 0.25);
+            border: 2px solid rgba(255, 0, 127, 0.8);
+        }
+
+        .superfight-title {
+            background: linear-gradient(180deg, #ffffff 0%, #ffb6c1 50%, #ff007f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 12px rgba(255, 0, 127, 0.9));
+        }
+
+        .vs-neon {
+            text-shadow: 0 0 15px rgba(255, 0, 127, 0.9), 0 0 30px rgba(255, 0, 127, 0.6);
         }
 
         .champion-glow {
@@ -122,13 +105,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
-        }
-
-        .superfight-title {
-            background: linear-gradient(180deg, #ffffff 0%, #ff80bf 50%, #ff007f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 10px rgba(255, 0, 127, 0.8));
         }
 
         .slot-empty {
@@ -155,6 +131,20 @@
             box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
         }
 
+        .win-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .win-bar-fill {
+            background: linear-gradient(90deg, #00f0ff, #0066ff);
+            transition: width 0.4s ease-in-out;
+        }
+
+        .win-bar-pink {
+            background: linear-gradient(90deg, #ff007f, #a855f7);
+            transition: width 0.4s ease-in-out;
+        }
+
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -179,16 +169,20 @@
         <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
             <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
                 <i class="fa-solid fa-bolt text-yellow-400 animate-pulse text-base"></i> 
-                <span>SISTEMA DE ARBOLES SUPER 8 ( HAZ CLICK PARA AVANZAR )</span>
+                <span>SISTEMA DE ARBOLES Y WIN CHANCE (VOTA O AVANZA)</span>
             </span>
 
             <div class="flex flex-wrap items-center gap-3">
                 <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
-                   class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-6 py-3 rounded-xl transition duration-300 flex items-center gap-3 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-sm sm:text-base uppercase tracking-wider transform hover:scale-105">
-                    <i class="fa-solid fa-book-open text-lg"></i> Ver Reglamento Oficial
+                   class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-5 py-2.5 rounded-xl transition duration-300 flex items-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-xs sm:text-sm uppercase tracking-wider transform hover:scale-105">
+                    <i class="fa-solid fa-book-open text-base"></i> Reglamento
                 </a>
 
-                <button onclick="resetAllBrackets()" class="bg-blue-950/90 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-4 py-3 rounded-xl transition duration-300 flex items-center gap-2 shadow-lg font-sans font-bold text-xs sm:text-sm">
+                <button onclick="resetVotes()" class="bg-purple-950/90 hover:bg-pink-500 hover:text-white border border-pink-500 px-3 py-2.5 rounded-xl transition duration-300 flex items-center gap-1.5 shadow-lg font-sans font-bold text-xs">
+                    <i class="fa-solid fa-check-to-slot"></i> Reiniciar Votos
+                </button>
+
+                <button onclick="resetAllBrackets()" class="bg-blue-950/90 hover:bg-cyan-400 hover:text-black border border-cyan-400 px-3 py-2.5 rounded-xl transition duration-300 flex items-center gap-1.5 shadow-lg font-sans font-bold text-xs">
                     <i class="fa-solid fa-rotate-right"></i> Reiniciar Torneos
                 </button>
             </div>
@@ -203,11 +197,11 @@
                 Sábado 14 de noviembre
             </p>
             <p class="font-body text-xs sm:text-base md:text-lg text-white font-semibold tracking-wide uppercase mt-1">
-                dos torneos super 8, dos títulos en juego + superfight especial.
+                dos torneos super 8, dos títulos en juego + superfight femenina.
             </p>
         </header>
 
-        <!-- CONTENEDOR DE TORNEOS Y SUPERFIGHT -->
+        <!-- CONTENEDOR DE TORNEOS -->
         <div class="w-full space-y-12">
 
             <!-- ================= TORNEO 1: INICIANTES (FAIXA BLANCA) ================= -->
@@ -227,25 +221,81 @@
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
                         
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="init-qf0-p0" onclick="advanceFighter('iniciantes', 'qf', 0, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>LAUTARO AGUIRRE</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+                        <!-- QF 1 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf0-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 0, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">LAUTARO AGUIRRE</span>
+                                    <button onclick="voteFighter('iniciantes_qf0', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf0-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf0-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="init-qf0-p1" onclick="advanceFighter('iniciantes', 'qf', 0, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>JUAN ESPINOZA</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+
+                            <div id="init-qf0-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 0, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">JUAN ESPINOZA</span>
+                                    <button onclick="voteFighter('iniciantes_qf0', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf0-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf0-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="init-qf1-p0" onclick="advanceFighter('iniciantes', 'qf', 1, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>GONZALO TUÑON</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+                        <!-- QF 2 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf1-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 1, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">GONZALO TUÑON</span>
+                                    <button onclick="voteFighter('iniciantes_qf1', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf1-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf1-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="init-qf1-p1" onclick="advanceFighter('iniciantes', 'qf', 1, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>VALENTINO DI ROSA</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+
+                            <div id="init-qf1-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 1, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">VALENTINO DI ROSA</span>
+                                    <button onclick="voteFighter('iniciantes_qf1', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf1-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf1-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -255,10 +305,10 @@
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="init-sf0-p0" onclick="advanceFighter('iniciantes', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="init-sf0-p0" onclick="advanceFighter('iniciantes', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
-                                <div id="init-sf0-p1" onclick="advanceFighter('iniciantes', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="init-sf0-p1" onclick="advanceFighter('iniciantes', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
                             </div>
@@ -273,10 +323,10 @@
 
                             <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
                                 <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
-                                <div id="init-f0-p0" onclick="advanceFighter('iniciantes', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate">
+                                <div id="init-f0-p0" onclick="advanceFighter('iniciantes', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
                                     Finalista A
                                 </div>
-                                <div id="init-f0-p1" onclick="advanceFighter('iniciantes', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate">
+                                <div id="init-f0-p1" onclick="advanceFighter('iniciantes', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
                                     Finalista B
                                 </div>
                             </div>
@@ -292,40 +342,95 @@
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="init-sf1-p0" onclick="advanceFighter('iniciantes', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="init-sf1-p0" onclick="advanceFighter('iniciantes', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
-                                <div id="init-sf1-p1" onclick="advanceFighter('iniciantes', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="init-sf1-p1" onclick="advanceFighter('iniciantes', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <!-- LADO DERECHO: CUARTOS DE FINAL -->
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
                         
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="init-qf2-p0" onclick="advanceFighter('iniciantes', 'qf', 2, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>AGUSTIN VELAZQUEZ</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+                        <!-- QF 3 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf2-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 2, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">AGUSTIN VELAZQUEZ</span>
+                                    <button onclick="voteFighter('iniciantes_qf2', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf2-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf2-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="init-qf2-p1" onclick="advanceFighter('iniciantes', 'qf', 2, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>FEDERICO WANG</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+
+                            <div id="init-qf2-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 2, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">FEDERICO WANG</span>
+                                    <button onclick="voteFighter('iniciantes_qf2', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf2-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf2-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="init-qf3-p0" onclick="advanceFighter('iniciantes', 'qf', 3, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>BENJAMIN DUVOBSKY</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+                        <!-- QF 4 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf3-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 3, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">BENJAMIN DUVOBSKY</span>
+                                    <button onclick="voteFighter('iniciantes_qf3', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf3-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf3-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="init-qf3-p1" onclick="advanceFighter('iniciantes', 'qf', 3, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>EZEQUIEL ARGÜELLO</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+
+                            <div id="init-qf3-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 3, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">EZEQUIEL ARGÜELLO</span>
+                                    <button onclick="voteFighter('iniciantes_qf3', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="init-qf3-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf3-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -333,10 +438,8 @@
                 </div>
             </div>
 
-
-            <!-- ================= SECCIÓN SUPERFIGHT FEMENINA (NUEVO) ================= -->
-            <div class="w-full bg-slate-950/80 backdrop-blur-md p-4 sm:p-8 rounded-2xl superfight-glow-box relative overflow-hidden my-8">
-                <!-- Efecto de destello de luz animado en el fondo -->
+            <!-- ================= SECCIÓN SUPERFIGHT FEMENINA CON VOTACIÓN ================= -->
+            <div class="w-full bg-slate-950/90 backdrop-blur-md p-4 sm:p-8 rounded-2xl superfight-glow-box relative overflow-hidden my-8">
                 <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
 
                 <div class="text-center relative z-10 mb-6">
@@ -353,20 +456,35 @@
                     </div>
                 </div>
 
-                <!-- Tarjetas de Luchadoras vs Luchadora -->
+                <!-- Tarjetas de Luchadoras con Votación y Win Chance -->
                 <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center max-w-5xl mx-auto relative z-10">
                     
                     <!-- LUCHADORA 1: JULIA GRANATA -->
-                    <div class="md:col-span-5 bg-gradient-to-br from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center transform hover:scale-105 transition duration-300 shadow-[0_0_20px_rgba(255,0,127,0.3)]">
+                    <div class="md:col-span-5 bg-gradient-to-br from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center shadow-[0_0_20px_rgba(255,0,127,0.3)]">
                         <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
                             VIBRUM
                         </div>
                         <h3 class="font-heading text-2xl sm:text-3xl font-black text-white tracking-wide uppercase">
                             JULIA GRANATA
                         </h3>
-                        <div class="flex items-center justify-center gap-1 mt-2 text-cyan-300 text-xs font-semibold">
+                        <div class="flex items-center justify-center gap-1 mt-1 text-cyan-300 text-xs font-semibold mb-3">
                             <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
                         </div>
+
+                        <!-- Barra Win Chance -->
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-pink-500/40 mb-3">
+                            <div class="flex justify-between text-xs font-mono text-pink-300 font-bold mb-1">
+                                <span>WIN CHANCE:</span>
+                                <span id="sf-p0-pct">50%</span>
+                            </div>
+                            <div class="w-full h-2 win-bar-bg rounded-full overflow-hidden">
+                                <div id="sf-p0-bar" class="h-full win-bar-pink" style="width: 50%;"></div>
+                            </div>
+                        </div>
+
+                        <button onclick="voteFighter('superfight', 0)" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-2 rounded-lg text-xs sm:text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-thumbs-up"></i> Votar por Julia
+                        </button>
                     </div>
 
                     <!-- VS CENTRO ANIMADO -->
@@ -377,21 +495,35 @@
                     </div>
 
                     <!-- LUCHADORA 2: MARIA VICTORIA BENITEZ -->
-                    <div class="md:col-span-5 bg-gradient-to-bl from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center transform hover:scale-105 transition duration-300 shadow-[0_0_20px_rgba(255,0,127,0.3)]">
+                    <div class="md:col-span-5 bg-gradient-to-bl from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center shadow-[0_0_20px_rgba(255,0,127,0.3)]">
                         <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
                             CASTAÑO JIU JITSU
                         </div>
                         <h3 class="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-wide uppercase">
                             MARIA VICTORIA BENITEZ
                         </h3>
-                        <div class="flex items-center justify-center gap-1 mt-2 text-cyan-300 text-xs font-semibold">
+                        <div class="flex items-center justify-center gap-1 mt-1 text-cyan-300 text-xs font-semibold mb-3">
                             <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
                         </div>
+
+                        <!-- Barra Win Chance -->
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-pink-500/40 mb-3">
+                            <div class="flex justify-between text-xs font-mono text-pink-300 font-bold mb-1">
+                                <span>WIN CHANCE:</span>
+                                <span id="sf-p1-pct">50%</span>
+                            </div>
+                            <div class="w-full h-2 win-bar-bg rounded-full overflow-hidden">
+                                <div id="sf-p1-bar" class="h-full win-bar-pink" style="width: 50%;"></div>
+                            </div>
+                        </div>
+
+                        <button onclick="voteFighter('superfight', 1)" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-bold py-2 rounded-lg text-xs sm:text-sm uppercase tracking-wider transition shadow-lg flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-thumbs-up"></i> Votar por Victoria
+                        </button>
                     </div>
 
                 </div>
             </div>
-
 
             <!-- ================= TORNEO 2: AVANZADOS (AZUL - ROXA) ================= -->
             <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
@@ -410,25 +542,81 @@
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
                         
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="av-qf0-p0" onclick="advanceFighter('avanzados', 'qf', 0, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>EZEQUIEL MURACCIOLE</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+                        <!-- QF 1 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf0-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 0, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">EZEQUIEL MURACCIOLE</span>
+                                    <button onclick="voteFighter('avanzados_qf0', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf0-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf0-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="av-qf0-p1" onclick="advanceFighter('avanzados', 'qf', 0, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>DANIEL GOLDSMAN</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+
+                            <div id="av-qf0-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 0, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">DANIEL GOLDSMAN</span>
+                                    <button onclick="voteFighter('avanzados_qf0', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf0-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf0-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="av-qf1-p0" onclick="advanceFighter('avanzados', 'qf', 1, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>CIRO CESPEDES</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+                        <!-- QF 2 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf1-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 1, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">CIRO CESPEDES</span>
+                                    <button onclick="voteFighter('avanzados_qf1', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf1-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf1-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="av-qf1-p1" onclick="advanceFighter('avanzados', 'qf', 1, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>IGNACIO LEGUIZAMON</span>
-                                <i class="fa-solid fa-chevron-right text-cyan-400 text-xs"></i>
+
+                            <div id="av-qf1-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 1, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">IGNACIO LEGUIZAMON</span>
+                                    <button onclick="voteFighter('avanzados_qf1', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf1-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf1-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -438,10 +626,10 @@
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="av-sf0-p0" onclick="advanceFighter('avanzados', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="av-sf0-p0" onclick="advanceFighter('avanzados', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
-                                <div id="av-sf0-p1" onclick="advanceFighter('avanzados', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="av-sf0-p1" onclick="advanceFighter('avanzados', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
                             </div>
@@ -455,10 +643,10 @@
 
                             <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
                                 <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
-                                <div id="av-f0-p0" onclick="advanceFighter('avanzados', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate">
+                                <div id="av-f0-p0" onclick="advanceFighter('avanzados', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
                                     Finalista A
                                 </div>
-                                <div id="av-f0-p1" onclick="advanceFighter('avanzados', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate">
+                                <div id="av-f0-p1" onclick="advanceFighter('avanzados', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
                                     Finalista B
                                 </div>
                             </div>
@@ -474,40 +662,95 @@
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="av-sf1-p0" onclick="advanceFighter('avanzados', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="av-sf1-p0" onclick="advanceFighter('avanzados', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
-                                <div id="av-sf1-p1" onclick="advanceFighter('avanzados', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate">
+                                <div id="av-sf1-p1" onclick="advanceFighter('avanzados', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
                                     Avanzar Cuartos
                                 </div>
                             </div>
                         </div>
-
                     </div>
 
                     <!-- LADO DERECHO: CUARTOS DE FINAL -->
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
                         
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="av-qf2-p0" onclick="advanceFighter('avanzados', 'qf', 2, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>FELIPE ORTIZ</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+                        <!-- QF 3 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf2-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 2, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">FELIPE ORTIZ</span>
+                                    <button onclick="voteFighter('avanzados_qf2', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf2-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf2-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="av-qf2-p1" onclick="advanceFighter('avanzados', 'qf', 2, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>IAN CESPEDES</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+
+                            <div id="av-qf2-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 2, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">IAN CESPEDES</span>
+                                    <button onclick="voteFighter('avanzados_qf2', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf2-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf2-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
-                            <div id="av-qf3-p0" onclick="advanceFighter('avanzados', 'qf', 3, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>ALEJANDRO DELGADO</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+                        <!-- QF 4 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf3-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 3, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">ALEJANDRO DELGADO</span>
+                                    <button onclick="voteFighter('avanzados_qf3', 0)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf3-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf3-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
-                            <div id="av-qf3-p1" onclick="advanceFighter('avanzados', 'qf', 3, 1)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
-                                <span>AXEL FURLAN</span>
-                                <i class="fa-solid fa-chevron-left text-cyan-400 text-xs"></i>
+
+                            <div id="av-qf3-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 3, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">AXEL FURLAN</span>
+                                    <button onclick="voteFighter('avanzados_qf3', 1)" class="ml-2 bg-cyan-500/20 hover:bg-cyan-400 hover:text-black text-cyan-300 border border-cyan-400 text-[10px] px-2 py-0.5 rounded transition font-mono flex items-center gap-1">
+                                        <i class="fa-solid fa-thumbs-up"></i> Votar
+                                    </button>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[10px] font-mono text-cyan-300 mb-0.5">
+                                        <span>WIN CHANCE:</span>
+                                        <span id="av-qf3-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf3-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -548,21 +791,92 @@
                 </h3>
             </div>
 
+            <!-- REPRODUCTOR DE SOUNDCLOUD PEQUEÑO Y DEBAJO DE TODO -->
             <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
                 <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
                     <i class="fa-solid fa-music text-cyan-400"></i>
                     <span>Soundtrack - Sirius</span>
                 </div>
                 <div class="rounded-lg overflow-hidden border border-cyan-500/20">
-                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/264805093&color=%2300f0ff&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"></iframe>
+                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true"></iframe>
                 </div>
             </div>
+
         </footer>
 
     </section>
 
-    <!-- LÓGICA DE INTERACTIVIDAD BRACKETS & CANVAS -->
+    <!-- LÓGICA DE INTERACTIVIDAD BRACKETS, VOTACIÓN & CANVAS -->
     <script>
+        const defaultVotes = {
+            iniciantes_qf0: [5, 5],
+            iniciantes_qf1: [5, 5],
+            iniciantes_qf2: [5, 5],
+            iniciantes_qf3: [5, 5],
+            avanzados_qf0: [5, 5],
+            avanzados_qf1: [5, 5],
+            avanzados_qf2: [5, 5],
+            avanzados_qf3: [5, 5],
+            superfight: [10, 10]
+        };
+
+        let votesData = JSON.parse(localStorage.getItem('jj_tournament_votes')) || defaultVotes;
+
+        function saveVotes() {
+            localStorage.setItem('jj_tournament_votes', JSON.stringify(votesData));
+        }
+
+        function updateUIPercentages() {
+            for (let matchKey in votesData) {
+                const votes = votesData[matchKey];
+                const total = votes[0] + votes[1];
+                const pct0 = total > 0 ? Math.round((votes[0] / total) * 100) : 50;
+                const pct1 = 100 - pct0;
+
+                if (matchKey === 'superfight') {
+                    const el0 = document.getElementById('sf-p0-pct');
+                    const el1 = document.getElementById('sf-p1-pct');
+                    const bar0 = document.getElementById('sf-p0-bar');
+                    const bar1 = document.getElementById('sf-p1-bar');
+                    if (el0) el0.innerText = `${pct0}%`;
+                    if (el1) el1.innerText = `${pct1}%`;
+                    if (bar0) bar0.style.width = `${pct0}%`;
+                    if (bar1) bar1.style.width = `${pct1}%`;
+                } else {
+                    const parts = matchKey.split('_'); // e.g. ["iniciantes", "qf0"]
+                    const prefix = parts[0] === 'iniciantes' ? 'init' : 'av';
+                    const qfCode = parts[1]; // "qf0", "qf1", etc.
+
+                    const p0PctElem = document.getElementById(`${prefix}-${qfCode}-p0-pct`);
+                    const p1PctElem = document.getElementById(`${prefix}-${qfCode}-p1-pct`);
+                    const p0BarElem = document.getElementById(`${prefix}-${qfCode}-p0-bar`);
+                    const p1BarElem = document.getElementById(`${prefix}-${qfCode}-p1-bar`);
+
+                    if (p0PctElem && p1PctElem) {
+                        p0PctElem.innerText = `${pct0}%`;
+                        p1PctElem.innerText = `${pct1}%`;
+                        if (p0BarElem) p0BarElem.style.width = `${pct0}%`;
+                        if (p1BarElem) p1BarElem.style.width = `${pct1}%`;
+                    }
+                }
+            }
+        }
+
+        function voteFighter(matchKey, playerIdx) {
+            if (!votesData[matchKey]) {
+                votesData[matchKey] = [1, 1];
+            }
+            votesData[matchKey][playerIdx]++;
+            saveVotes();
+            updateUIPercentages();
+        }
+
+        function resetVotes() {
+            votesData = JSON.parse(JSON.stringify(defaultVotes));
+            saveVotes();
+            updateUIPercentages();
+        }
+
         const bracketsData = {
             iniciantes: {
                 qf: [
@@ -603,11 +917,9 @@
 
                 data.sf[sfMatchIdx][sfSlotIdx] = winner;
 
-                // Actualizar interfaz visual QF
-                document.getElementById(`${prefix}-qf${matchIdx}-p${playerIdx}`).classList.add('slot-winner');
-                document.getElementById(`${prefix}-qf${matchIdx}-p${1 - playerIdx}`).classList.add('slot-defeated');
+                document.getElementById(`${prefix}-qf${matchIdx}-p${playerIdx}-box`).classList.add('slot-winner');
+                document.getElementById(`${prefix}-qf${matchIdx}-p${1 - playerIdx}-box`).classList.add('slot-defeated');
 
-                // Actualizar interfaz visual SF
                 const sfSlot = document.getElementById(`${prefix}-sf${sfMatchIdx}-p${sfSlotIdx}`);
                 sfSlot.innerText = winner;
                 sfSlot.classList.remove('slot-empty');
@@ -647,19 +959,17 @@
             location.reload();
         }
 
-        // Efecto Canvas de Lightning/Relámpagos de Fondo
-        const canvas = document.getElementById('lightning-canvas');
-        const ctx = canvas.getContext('2d');
-        let width, height;
+        // Canvas Lightning
+        let canvas, ctx, width, height;
 
         function resizeCanvas() {
+            if (!canvas) return;
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
         }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
 
         function drawLightning() {
+            if (!ctx) return;
             ctx.clearRect(0, 0, width, height);
             if (Math.random() < 0.08) {
                 const startX = Math.random() * width;
@@ -684,7 +994,17 @@
             }
             requestAnimationFrame(drawLightning);
         }
-        drawLightning();
+
+        window.onload = function() {
+            canvas = document.getElementById('lightning-canvas');
+            if (canvas) {
+                ctx = canvas.getContext('2d');
+                window.addEventListener('resize', resizeCanvas);
+                resizeCanvas();
+                drawLightning();
+            }
+            updateUIPercentages();
+        };
     </script>
 </body>
 </html>
