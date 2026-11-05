@@ -24,6 +24,8 @@
                         deepBlue: '#030b1e',
                         cardBg: 'rgba(5, 18, 48, 0.9)',
                         whatsappGreen: '#25D366',
+                        neonPink: '#ff007f',
+                        neonPurple: '#a855f7'
                     },
                     fontFamily: {
                         heading: ['Orbitron', 'sans-serif'],
@@ -40,7 +42,8 @@
             background-color: #020612;
             background-image: 
                 radial-gradient(circle at 50% 15%, rgba(0, 102, 255, 0.4), transparent 60%),
-                radial-gradient(circle at 50% 65%, rgba(0, 240, 255, 0.25), transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 127, 0.15), transparent 50%),
+                radial-gradient(circle at 50% 85%, rgba(0, 240, 255, 0.25), transparent 50%),
                 radial-gradient(circle at 50% 100%, rgba(2, 6, 18, 0.95), #020612);
             background-attachment: fixed;
             color: #ffffff;
@@ -63,9 +66,39 @@
             text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.6);
         }
 
+        .neon-pink-text {
+            text-shadow: 0 0 12px rgba(255, 0, 127, 0.9), 0 0 25px rgba(168, 85, 247, 0.8);
+        }
+
         .neon-glow-box {
             box-shadow: 0 0 15px rgba(0, 102, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
             border: 1px solid rgba(0, 240, 255, 0.5);
+        }
+
+        .superfight-glow-box {
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.5), inset 0 0 15px rgba(168, 85, 247, 0.3);
+            border: 2px solid rgba(255, 0, 127, 0.8);
+            animation: superfight-pulse 2s infinite alternate ease-in-out;
+        }
+
+        @keyframes superfight-pulse {
+            0% {
+                box-shadow: 0 0 20px rgba(255, 0, 127, 0.5), inset 0 0 10px rgba(168, 85, 247, 0.3);
+                border-color: rgba(255, 0, 127, 0.7);
+            }
+            100% {
+                box-shadow: 0 0 35px rgba(255, 0, 127, 0.9), 0 0 15px rgba(0, 240, 255, 0.6), inset 0 0 20px rgba(255, 0, 127, 0.5);
+                border-color: rgba(0, 240, 255, 1);
+            }
+        }
+
+        .vs-neon {
+            animation: vs-flash 1.2s infinite alternate;
+        }
+
+        @keyframes vs-flash {
+            0% { transform: scale(1); text-shadow: 0 0 10px #ff007f, 0 0 20px #ff007f; }
+            100% { transform: scale(1.15); text-shadow: 0 0 20px #00f0ff, 0 0 35px #00f0ff; }
         }
 
         .whatsapp-glow-box {
@@ -91,7 +124,13 @@
             filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
         }
 
-        /* Bracket slot placeholder styling */
+        .superfight-title {
+            background: linear-gradient(180deg, #ffffff 0%, #ff80bf 50%, #ff007f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 10px rgba(255, 0, 127, 0.8));
+        }
+
         .slot-empty {
             color: #4b5563;
             border-style: dashed;
@@ -136,7 +175,7 @@
     <!-- SECTION PRINCIPAL INTERACTIVA -->
     <section id="brackets" class="relative z-10 w-full max-w-7xl mx-auto my-4 scroll-mt-10">
 
-        <!-- Barra de Control y Restablecimiento con el Botón Grande de Reglamento -->
+        <!-- Barra de Control y Restablecimiento -->
         <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
             <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
                 <i class="fa-solid fa-bolt text-yellow-400 animate-pulse text-base"></i> 
@@ -144,7 +183,6 @@
             </span>
 
             <div class="flex flex-wrap items-center gap-3">
-                <!-- Botón Grande de Reglamento -->
                 <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
                    class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-6 py-3 rounded-xl transition duration-300 flex items-center gap-3 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-sm sm:text-base uppercase tracking-wider transform hover:scale-105">
                     <i class="fa-solid fa-book-open text-lg"></i> Ver Reglamento Oficial
@@ -165,16 +203,15 @@
                 Sábado 14 de noviembre
             </p>
             <p class="font-body text-xs sm:text-base md:text-lg text-white font-semibold tracking-wide uppercase mt-1">
-                dos torneos super 8, dos títulos en juego.
+                dos torneos super 8, dos títulos en juego + superfight especial.
             </p>
         </header>
 
-        <!-- CONTENEDOR DE TORNEOS -->
+        <!-- CONTENEDOR DE TORNEOS Y SUPERFIGHT -->
         <div class="w-full space-y-12">
 
             <!-- ================= TORNEO 1: INICIANTES (FAIXA BLANCA) ================= -->
             <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-cyan-500/40 shadow-2xl relative overflow-hidden">
-                <!-- Banner Categoría -->
                 <div class="text-center mb-6">
                     <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
                         INICIANTES
@@ -184,14 +221,12 @@
                     </span>
                 </div>
 
-                <!-- Arbol de Competición (3 Fases: Cuartos -> Semis -> Final -> Campeón) -->
                 <div class="grid grid-cols-1 lg:grid-cols-7 gap-3 sm:gap-4 items-center">
 
-                    <!-- LADO IZQUIERDO: CUARTOS DE FINAL (A1, A2) -->
+                    <!-- LADO IZQUIERDO: CUARTOS DE FINAL -->
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
                         
-                        <!-- QF 1 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="init-qf0-p0" onclick="advanceFighter('iniciantes', 'qf', 0, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>LAUTARO AGUIRRE</span>
@@ -203,7 +238,6 @@
                             </div>
                         </div>
 
-                        <!-- QF 2 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="init-qf1-p0" onclick="advanceFighter('iniciantes', 'qf', 1, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>GONZALO TUÑON</span>
@@ -216,10 +250,8 @@
                         </div>
                     </div>
 
-                    <!-- SEMIFINAL A + FINAL + SEMIFINAL B (LADO CENTRAL) -->
+                    <!-- SEMIFINAL A + FINAL + SEMIFINAL B -->
                     <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-2 lg:my-0">
-                        
-                        <!-- Semifinal A -->
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
@@ -232,16 +264,13 @@
                             </div>
                         </div>
 
-                        <!-- CENTRO: GRAN FINAL Y CAMPEÓN -->
                         <div class="flex flex-col items-center justify-center space-y-3 py-2">
-                            <!-- Logo EBI -->
                             <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/80 shadow-[0_0_20px_rgba(0,240,255,0.5)]">
                                 <i class="fa-solid fa-shield-halved text-2xl text-cyan-300 mb-0.5"></i>
                                 <span class="font-heading font-black text-sm text-white leading-none">EBI</span>
                                 <span class="font-subheading text-xs text-cyan-400 leading-none">RULES</span>
                             </div>
 
-                            <!-- Match Final Box -->
                             <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
                                 <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
                                 <div id="init-f0-p0" onclick="advanceFighter('iniciantes', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate">
@@ -252,7 +281,6 @@
                                 </div>
                             </div>
 
-                            <!-- Banner de Campeón Coronado -->
                             <div id="init-champion-box" class="w-full text-center hidden">
                                 <div class="bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-500 text-black font-black py-2 px-3 rounded-xl champion-glow text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-crown text-base animate-bounce"></i>
@@ -261,7 +289,6 @@
                             </div>
                         </div>
 
-                        <!-- Semifinal B -->
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
@@ -276,11 +303,10 @@
 
                     </div>
 
-                    <!-- LADO DERECHO: CUARTOS DE FINAL (B1, B2) -->
+                    <!-- LADO DERECHO: CUARTOS DE FINAL -->
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
                         
-                        <!-- QF 3 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="init-qf2-p0" onclick="advanceFighter('iniciantes', 'qf', 2, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>AGUSTIN VELAZQUEZ</span>
@@ -292,7 +318,6 @@
                             </div>
                         </div>
 
-                        <!-- QF 4 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="init-qf3-p0" onclick="advanceFighter('iniciantes', 'qf', 3, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>BENJAMIN DUVOBSKY</span>
@@ -309,9 +334,67 @@
             </div>
 
 
+            <!-- ================= SECCIÓN SUPERFIGHT FEMENINA (NUEVO) ================= -->
+            <div class="w-full bg-slate-950/80 backdrop-blur-md p-4 sm:p-8 rounded-2xl superfight-glow-box relative overflow-hidden my-8">
+                <!-- Efecto de destello de luz animado en el fondo -->
+                <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="text-center relative z-10 mb-6">
+                    <span class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-heading text-xs sm:text-sm font-black tracking-[0.2em] px-4 py-1.5 rounded-full uppercase shadow-[0_0_15px_rgba(255,0,127,0.8)] inline-block mb-2">
+                        <i class="fa-solid fa-fire text-yellow-300 mr-1 animate-pulse"></i> SPECIAL MATCH - FEMALE SUPERFIGHT
+                    </span>
+                    <h2 class="font-heading text-3xl sm:text-5xl md:text-6xl font-black superfight-title uppercase tracking-widest my-1">
+                        SUPERFIGHT FEMENINA
+                    </h2>
+                    <div class="flex items-center justify-center gap-2 mt-1">
+                        <span class="bg-blue-600 text-white font-bold text-xs sm:text-sm px-3 py-0.5 rounded border border-cyan-300 shadow-[0_0_8px_rgba(0,240,255,0.7)]">
+                            FAIXA AZUL
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Tarjetas de Luchadoras vs Luchadora -->
+                <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center max-w-5xl mx-auto relative z-10">
+                    
+                    <!-- LUCHADORA 1: JULIA GRANATA -->
+                    <div class="md:col-span-5 bg-gradient-to-br from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center transform hover:scale-105 transition duration-300 shadow-[0_0_20px_rgba(255,0,127,0.3)]">
+                        <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
+                            VIBRUM
+                        </div>
+                        <h3 class="font-heading text-2xl sm:text-3xl font-black text-white tracking-wide uppercase">
+                            JULIA GRANATA
+                        </h3>
+                        <div class="flex items-center justify-center gap-1 mt-2 text-cyan-300 text-xs font-semibold">
+                            <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
+                        </div>
+                    </div>
+
+                    <!-- VS CENTRO ANIMADO -->
+                    <div class="md:col-span-1 flex flex-col items-center justify-center py-2 md:py-0">
+                        <span class="font-heading text-4xl sm:text-5xl font-black text-pink-500 vs-neon tracking-tighter italic">
+                            VS
+                        </span>
+                    </div>
+
+                    <!-- LUCHADORA 2: MARIA VICTORIA BENITEZ -->
+                    <div class="md:col-span-5 bg-gradient-to-bl from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center transform hover:scale-105 transition duration-300 shadow-[0_0_20px_rgba(255,0,127,0.3)]">
+                        <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
+                            CASTAÑO JIU JITSU
+                        </div>
+                        <h3 class="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-wide uppercase">
+                            MARIA VICTORIA BENITEZ
+                        </h3>
+                        <div class="flex items-center justify-center gap-1 mt-2 text-cyan-300 text-xs font-semibold">
+                            <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
             <!-- ================= TORNEO 2: AVANZADOS (AZUL - ROXA) ================= -->
             <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
-                <!-- Banner Categoría -->
                 <div class="text-center mb-6">
                     <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
                         AVANZADOS
@@ -321,14 +404,12 @@
                     </span>
                 </div>
 
-                <!-- Arbol de Competición -->
                 <div class="grid grid-cols-1 lg:grid-cols-7 gap-3 sm:gap-4 items-center">
 
                     <!-- LADO IZQUIERDO: CUARTOS DE FINAL -->
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
                         
-                        <!-- QF 1 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="av-qf0-p0" onclick="advanceFighter('avanzados', 'qf', 0, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>EZEQUIEL MURACCIOLE</span>
@@ -340,7 +421,6 @@
                             </div>
                         </div>
 
-                        <!-- QF 2 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="av-qf1-p0" onclick="advanceFighter('avanzados', 'qf', 1, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>CIRO CESPEDES</span>
@@ -355,8 +435,6 @@
 
                     <!-- SEMIFINAL A + FINAL + SEMIFINAL B -->
                     <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-2 lg:my-0">
-                        
-                        <!-- Semifinal A -->
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
@@ -369,15 +447,12 @@
                             </div>
                         </div>
 
-                        <!-- CENTRO: GRAN FINAL Y CAMPEÓN -->
                         <div class="flex flex-col items-center justify-center space-y-3 py-2">
-                            <!-- Logo Escudo -->
                             <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/90 shadow-[0_0_20px_rgba(0,102,255,0.6)] p-1 text-center">
                                 <i class="fa-solid fa-ring text-cyan-300 text-xl mb-0.5"></i>
                                 <span class="font-heading text-[8px] font-bold text-white tracking-widest uppercase leading-none">ETAKKI DOJO</span>
                             </div>
 
-                            <!-- Match Final Box -->
                             <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
                                 <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
                                 <div id="av-f0-p0" onclick="advanceFighter('avanzados', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate">
@@ -388,7 +463,6 @@
                                 </div>
                             </div>
 
-                            <!-- Banner de Campeón Coronado -->
                             <div id="av-champion-box" class="w-full text-center hidden">
                                 <div class="bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-500 text-black font-black py-2 px-3 rounded-xl champion-glow text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
                                     <i class="fa-solid fa-crown text-base animate-bounce"></i>
@@ -397,7 +471,6 @@
                             </div>
                         </div>
 
-                        <!-- Semifinal B -->
                         <div class="space-y-2">
                             <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
                             <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
@@ -416,7 +489,6 @@
                     <div class="lg:col-span-2 space-y-4">
                         <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
                         
-                        <!-- QF 3 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="av-qf2-p0" onclick="advanceFighter('avanzados', 'qf', 2, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>FELIPE ORTIZ</span>
@@ -428,7 +500,6 @@
                             </div>
                         </div>
 
-                        <!-- QF 4 -->
                         <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-1.5">
                             <div id="av-qf3-p0" onclick="advanceFighter('avanzados', 'qf', 3, 0)" class="fighter-slot slot-active bg-blue-950/90 hover:bg-blue-800 text-white font-bold py-2 px-3 rounded-lg border border-blue-500/40 transition flex justify-between items-center text-xs sm:text-sm">
                                 <span>ALEJANDRO DELGADO</span>
@@ -449,14 +520,12 @@
         <!-- PIE DE PÁGINA E INFORMACIÓN GENERAL -->
         <footer class="w-full text-center mt-12 space-y-4 flex flex-col items-center">
             
-            <!-- Entradas disponibles card -->
             <div class="bg-blue-950/90 border border-cyan-400/50 rounded-2xl py-3 px-8 inline-block shadow-2xl">
                 <p class="font-heading text-lg sm:text-2xl text-white font-bold tracking-wide">
                     Entradas disponibles al público <span class="text-cyan-300 font-extrabold">10k</span>
                 </p>
             </div>
 
-            <!-- Botón / Enlace directo de WhatsApp para conseguir entradas -->
             <a href="https://wa.me/5491131977287?text=Hola%2C%20quiero%20comprar%20entradas%20para%20el%20Torneo%20de%20EJJ%20del%2014%20de%20Noviembre" 
                target="_blank" 
                rel="noopener noreferrer"
@@ -479,43 +548,39 @@
                 </h3>
             </div>
 
-            <!-- REPRODUCTOR DE SOUNDCLOUD PEQUEÑO Y DEBAJO DE TODO -->
             <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
                 <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
                     <i class="fa-solid fa-music text-cyan-400"></i>
                     <span>Soundtrack - Sirius</span>
                 </div>
                 <div class="rounded-lg overflow-hidden border border-cyan-500/20">
-                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=false"></iframe>
+                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/264805093&color=%2300f0ff&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"></iframe>
                 </div>
             </div>
-
         </footer>
 
     </section>
 
-    <!-- LÓGICA INTERACTIVA DEL TORNEO -->
+    <!-- LÓGICA DE INTERACTIVIDAD BRACKETS & CANVAS -->
     <script>
-        const tournamentState = {
+        const bracketsData = {
             iniciantes: {
-                prefix: 'init',
                 qf: [
-                    ['LAUTARO AGUIRRE', 'JUAN ESPINOZA'],
-                    ['GONZALO TUÑON', 'VALENTINO DI ROSA'],
-                    ['AGUSTIN VELAZQUEZ', 'FEDERICO WANG'],
-                    ['BENJAMIN DUVOBSKY', 'EZEQUIEL ARGÜELLO']
+                    ["LAUTARO AGUIRRE", "JUAN ESPINOZA"],
+                    ["GONZALO TUÑON", "VALENTINO DI ROSA"],
+                    ["AGUSTIN VELAZQUEZ", "FEDERICO WANG"],
+                    ["BENJAMIN DUVOBSKY", "EZEQUIEL ARGÜELLO"]
                 ],
                 sf: [[null, null], [null, null]],
                 f: [[null, null]],
                 champion: null
             },
             avanzados: {
-                prefix: 'av',
                 qf: [
-                    ['EZEQUIEL MURACCIOLE', 'DANIEL GOLDSMAN'],
-                    ['CIRO CESPEDES', 'IGNACIO LEGUIZAMON'],
-                    ['FELIPE ORTIZ', 'IAN CESPEDES'],
-                    ['ALEJANDRO DELGADO', 'AXEL FURLAN']
+                    ["EZEQUIEL MURACCIOLE", "DANIEL GOLDSMAN"],
+                    ["CIRO CESPEDES", "IGNACIO LEGUIZAMON"],
+                    ["FELIPE ORTIZ", "IAN CESPEDES"],
+                    ["ALEJANDRO DELGADO", "AXEL FURLAN"]
                 ],
                 sf: [[null, null], [null, null]],
                 f: [[null, null]],
@@ -523,9 +588,103 @@
             }
         };
 
-        function advanceFighter(category, stage, matchIdx, playerIdx) {
-            // Lógica del bracket
+        function getPrefix(tournament) {
+            return tournament === 'iniciantes' ? 'init' : 'av';
         }
+
+        function advanceFighter(tournament, round, matchIdx, playerIdx) {
+            const data = bracketsData[tournament];
+            const prefix = getPrefix(tournament);
+
+            if (round === 'qf') {
+                const winner = data.qf[matchIdx][playerIdx];
+                const sfMatchIdx = Math.floor(matchIdx / 2);
+                const sfSlotIdx = matchIdx % 2;
+
+                data.sf[sfMatchIdx][sfSlotIdx] = winner;
+
+                // Actualizar interfaz visual QF
+                document.getElementById(`${prefix}-qf${matchIdx}-p${playerIdx}`).classList.add('slot-winner');
+                document.getElementById(`${prefix}-qf${matchIdx}-p${1 - playerIdx}`).classList.add('slot-defeated');
+
+                // Actualizar interfaz visual SF
+                const sfSlot = document.getElementById(`${prefix}-sf${sfMatchIdx}-p${sfSlotIdx}`);
+                sfSlot.innerText = winner;
+                sfSlot.classList.remove('slot-empty');
+                sfSlot.classList.add('slot-active', 'bg-blue-950/90', 'border-cyan-400', 'text-white');
+
+            } else if (round === 'sf') {
+                const winner = data.sf[matchIdx][playerIdx];
+                if (!winner) return;
+
+                data.f[0][matchIdx] = winner;
+
+                document.getElementById(`${prefix}-sf${matchIdx}-p${playerIdx}`).classList.add('slot-winner');
+                document.getElementById(`${prefix}-sf${matchIdx}-p${1 - playerIdx}`).classList.add('slot-defeated');
+
+                const fSlot = document.getElementById(`${prefix}-f0-p${matchIdx}`);
+                fSlot.innerText = winner;
+                fSlot.classList.remove('slot-empty');
+                fSlot.classList.add('slot-active', 'bg-blue-950/90', 'border-yellow-400', 'text-white');
+
+            } else if (round === 'f') {
+                const winner = data.f[0][playerIdx];
+                if (!winner) return;
+
+                data.champion = winner;
+
+                document.getElementById(`${prefix}-f0-p${playerIdx}`).classList.add('slot-winner');
+                document.getElementById(`${prefix}-f0-p${1 - playerIdx}`).classList.add('slot-defeated');
+
+                const champBox = document.getElementById(`${prefix}-champion-box`);
+                const champName = document.getElementById(`${prefix}-champion-name`);
+                champName.innerText = `CAMPEÓN: ${winner}`;
+                champBox.classList.remove('hidden');
+            }
+        }
+
+        function resetAllBrackets() {
+            location.reload();
+        }
+
+        // Efecto Canvas de Lightning/Relámpagos de Fondo
+        const canvas = document.getElementById('lightning-canvas');
+        const ctx = canvas.getContext('2d');
+        let width, height;
+
+        function resizeCanvas() {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawLightning() {
+            ctx.clearRect(0, 0, width, height);
+            if (Math.random() < 0.08) {
+                const startX = Math.random() * width;
+                let currentX = startX;
+                let currentY = 0;
+
+                ctx.beginPath();
+                ctx.moveTo(currentX, currentY);
+                ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#ff007f';
+                ctx.lineWidth = Math.random() * 2 + 1;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = ctx.strokeStyle;
+
+                while (currentY < height) {
+                    const nextX = currentX + (Math.random() - 0.5) * 50;
+                    const nextY = currentY + Math.random() * 40 + 10;
+                    ctx.lineTo(nextX, nextY);
+                    currentX = nextX;
+                    currentY = nextY;
+                }
+                ctx.stroke();
+            }
+            requestAnimationFrame(drawLightning);
+        }
+        drawLightning();
     </script>
 </body>
 </html>
