@@ -802,7 +802,7 @@
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, doc, onSnapshot, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // Configuración de almacenamiento en la nube en tiempo real
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'jj-tournament-app';
@@ -835,6 +835,9 @@
 
         let votesData = { ...defaultVotes };
         let isAuthReady = false;
+        
+        // Control de votos por sesión (1 voto por lucha en cada apertura de página)
+        const votedMatchesInSession = new Set();
 
         // Autenticación inicial
         async function initAuth() {
@@ -871,8 +874,11 @@
         function updateUIPercentages() {
             for (let matchKey in votesData) {
                 const votes = votesData[matchKey] || [0, 0];
-                const total = (votes[0] || 0) + (votes[1] || 0);
-                const pct0 = total > 0 ? Math.round(((votes[0] || 0) / total) * 100) : 50;
+                const count0 = Number(votes[0]) || 0;
+                const count1 = Number(votes[1]) || 0;
+                const total = count0 + count1;
+                
+                const pct0 = total > 0 ? Math.round((count0 / total) * 100) : 50;
                 const pct1 = 100 - pct0;
 
                 if (matchKey === 'superfight') {
@@ -905,21 +911,34 @@
         }
 
         async function voteFighter(matchKey, playerIdx) {
+            // Verificar si ya votó en este combate durante la presente apertura de página
+            if (votedMatchesInSession.has(matchKey)) {
+                return;
+            }
+
             if (!isAuthReady || !auth.currentUser) return;
 
             try {
-                const currentMatchVotes = votesData[matchKey] || [0, 0];
-                const updatedMatchVotes = [...currentMatchVotes];
-                updatedMatchVotes[playerIdx] = (updatedMatchVotes[playerIdx] || 0) + 1;
+                // Marcar como votado en esta apertura de la página
+                votedMatchesInSession.add(matchKey);
 
-                // Actualizar de inmediato localmente para respuesta instantánea
+                const currentMatchVotes = votesData[matchKey] || [0, 0];
+                const updatedMatchVotes = [
+                    Number(currentMatchVotes[0]) || 0,
+                    Number(currentMatchVotes[1]) || 0
+                ];
+                
+                updatedMatchVotes[playerIdx] += 1;
+
+                // Actualizar de inmediato localmente
                 votesData[matchKey] = updatedMatchVotes;
                 updateUIPercentages();
 
-                // Enviar cambio atómico a la nube
-                await updateDoc(votesDocRef, {
+                // Enviar cambio a la nube
+                await setDoc(votesDocRef, {
                     [matchKey]: updatedMatchVotes
-                });
+                }, { merge: true });
+
             } catch (error) {
                 console.error("Error al registrar voto:", error);
             }
