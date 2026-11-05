@@ -807,7 +807,28 @@
     </section>
 
     <!-- LÓGICA DE INTERACTIVIDAD BRACKETS, VOTACIÓN & CANVAS -->
-    <script>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot, setDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Configuración de almacenamiento en la nube en tiempo real
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'jj-tournament-app';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "",
+            authDomain: "demo.firebaseapp.com",
+            projectId: "demo-project",
+            storageBucket: "demo.appspot.com",
+            messagingSenderId: "000000000000",
+            appId: "1:000000000000:web:000000000000"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const votesDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'votes', 'global');
+
         const defaultVotes = {
             iniciantes_qf0: [5, 5],
             iniciantes_qf1: [5, 5],
@@ -820,17 +841,46 @@
             superfight: [10, 10]
         };
 
-        let votesData = JSON.parse(localStorage.getItem('jj_tournament_votes')) || defaultVotes;
+        let votesData = { ...defaultVotes };
+        let isAuthReady = false;
 
-        function saveVotes() {
-            localStorage.setItem('jj_tournament_votes', JSON.stringify(votesData));
+        // Autenticación inicial
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                isAuthReady = true;
+                subscribeToLiveVotes();
+            } catch (err) {
+                console.error("Error de autenticación:", err);
+            }
+        }
+
+        // Suscripción a cambios globales en tiempo real
+        function subscribeToLiveVotes() {
+            if (!auth.currentUser) return;
+
+            onSnapshot(votesDocRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    votesData = { ...defaultVotes, ...docSnap.data() };
+                } else {
+                    // Inicializar documento en la nube si no existe
+                    setDoc(votesDocRef, defaultVotes).catch(console.error);
+                }
+                updateUIPercentages();
+            }, (error) => {
+                console.error("Error al escuchar votos en vivo:", error);
+            });
         }
 
         function updateUIPercentages() {
             for (let matchKey in votesData) {
-                const votes = votesData[matchKey];
-                const total = votes[0] + votes[1];
-                const pct0 = total > 0 ? Math.round((votes[0] / total) * 100) : 50;
+                const votes = votesData[matchKey] || [0, 0];
+                const total = (votes[0] || 0) + (votes[1] || 0);
+                const pct0 = total > 0 ? Math.round(((votes[0] || 0) / total) * 100) : 50;
                 const pct1 = 100 - pct0;
 
                 if (matchKey === 'superfight') {
@@ -843,9 +893,9 @@
                     if (bar0) bar0.style.width = `${pct0}%`;
                     if (bar1) bar1.style.width = `${pct1}%`;
                 } else {
-                    const parts = matchKey.split('_'); // e.g. ["iniciantes", "qf0"]
+                    const parts = matchKey.split('_');
                     const prefix = parts[0] === 'iniciantes' ? 'init' : 'av';
-                    const qfCode = parts[1]; // "qf0", "qf1", etc.
+                    const qfCode = parts[1];
 
                     const p0PctElem = document.getElementById(`${prefix}-${qfCode}-p0-pct`);
                     const p1PctElem = document.getElementById(`${prefix}-${qfCode}-p1-pct`);
@@ -862,21 +912,45 @@
             }
         }
 
-        function voteFighter(matchKey, playerIdx) {
-            if (!votesData[matchKey]) {
-                votesData[matchKey] = [1, 1];
+        async function voteFighter(matchKey, playerIdx) {
+            if (!isAuthReady || !auth.currentUser) return;
+
+            try {
+                const currentMatchVotes = votesData[matchKey] || [0, 0];
+                const updatedMatchVotes = [...currentMatchVotes];
+                updatedMatchVotes[playerIdx] = (updatedMatchVotes[playerIdx] || 0) + 1;
+
+                // Actualizar de inmediato localmente para respuesta instantánea
+                votesData[matchKey] = updatedMatchVotes;
+                updateUIPercentages();
+
+                // Enviar cambio atómico a la nube
+                await updateDoc(votesDocRef, {
+                    [matchKey]: updatedMatchVotes
+                });
+            } catch (error) {
+                console.error("Error al registrar voto:", error);
             }
-            votesData[matchKey][playerIdx]++;
-            saveVotes();
-            updateUIPercentages();
         }
 
-        function resetVotes() {
-            votesData = JSON.parse(JSON.stringify(defaultVotes));
-            saveVotes();
-            updateUIPercentages();
+        async function resetVotes() {
+            if (!isAuthReady || !auth.currentUser) return;
+            try {
+                await setDoc(votesDocRef, defaultVotes);
+            } catch (error) {
+                console.error("Error al reiniciar votos:", error);
+            }
         }
 
+        // Exponer funciones globales al objeto window para los onclick
+        window.voteFighter = voteFighter;
+        window.resetVotes = resetVotes;
+
+        initAuth();
+    </script>
+
+    <script>
+        // Lógica interactiva de Brackets (Árboles de competición)
         const bracketsData = {
             iniciantes: {
                 qf: [
@@ -959,7 +1033,7 @@
             location.reload();
         }
 
-        // Canvas Lightning
+        // Canvas de Rayos de fondo
         let canvas, ctx, width, height;
 
         function resizeCanvas() {
@@ -1003,7 +1077,6 @@
                 resizeCanvas();
                 drawLightning();
             }
-            updateUIPercentages();
         };
     </script>
 </body>
