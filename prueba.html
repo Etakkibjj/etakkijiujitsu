@@ -942,8 +942,25 @@
             }
             globalVotes[matchId][playerIndex] = (parseInt(globalVotes[matchId][playerIndex]) || 0) + 1;
 
-            saveLocalAndSync();
-            updateUI();
+            // Automatically advance winner to next round based on vote matchId
+            if (matchId.includes('_qf')) {
+                const parts = matchId.split('_qf');
+                const cat = parts[0];
+                const matchIdx = parseInt(parts[1]);
+                advanceFighter(cat, 'qf', matchIdx, playerIndex);
+            } else if (matchId.includes('_sf')) {
+                const parts = matchId.split('_sf');
+                const cat = parts[0];
+                const matchIdx = parseInt(parts[1]);
+                advanceFighter(cat, 'sf', matchIdx, playerIndex);
+            } else if (matchId.includes('_f')) {
+                const parts = matchId.split('_f');
+                const cat = parts[0];
+                advanceFighter(cat, 'f', 0, playerIndex);
+            } else {
+                saveLocalAndSync();
+                updateUI();
+            }
 
             if (db && firestoreActive) {
                 try {
@@ -1047,7 +1064,7 @@
                     const winnerName = document.getElementById("sf-winner-name");
                     const winnerPct = document.getElementById("sf-winner-pct");
 
-                    if (winnerBox && votes[0] + votes[1] > 10) {
+                    if (winnerBox && (votes[0] + votes[1] > 0)) {
                         winnerBox.classList.remove("hidden");
                         if (pct0 >= pct1) {
                             winnerName.innerText = "JULIA GRANATA";
@@ -1099,7 +1116,15 @@
 
                 if (champBox && champName && b.champion) {
                     champBox.classList.remove("hidden");
-                    champName.innerText = `CAMPEÓN: ${b.champion}`;
+                    // Retrieve percentage if available
+                    let winRateText = "";
+                    const qfVotesMatch = Object.keys(globalVotes).find(k => k.startsWith(cat));
+                    if (qfVotesMatch) {
+                        const votes = globalVotes[qfVotesMatch];
+                        const [p0, p1] = calculatePercentages(votes[0], votes[1]);
+                        winRateText = ` (${Math.max(p0, p1)}% WIN CHANCE)`;
+                    }
+                    champName.innerText = `CAMPEÓN: ${b.champion}${winRateText}`;
                 }
             });
         }
