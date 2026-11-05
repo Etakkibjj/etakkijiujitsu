@@ -515,6 +515,19 @@
                     </div>
 
                 </div>
+
+                <!-- Banner de Ganadora de la Superfight con % -->
+                <div id="sf-winner-box" class="w-full max-w-md mx-auto text-center mt-6 hidden relative z-10">
+                    <div class="bg-gradient-to-r from-pink-600 via-purple-500 to-pink-600 text-white font-black py-3 px-4 rounded-xl superfight-glow-box text-sm sm:text-base uppercase tracking-wider flex flex-col items-center justify-center gap-1">
+                        <div class="flex items-center gap-2">
+                            <i class="fa-solid fa-crown text-yellow-300 text-lg animate-bounce"></i>
+                            <span class="text-yellow-300 font-heading">GANADORA SUPERFIGHT</span>
+                        </div>
+                        <div id="sf-winner-name" class="text-base sm:text-xl font-heading text-white">JULIA GRANATA</div>
+                        <div id="sf-winner-pct" class="text-xs font-mono text-pink-200">WIN CHANCE: 50% DE LOS VOTOS</div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- ================= TORNEO 2: AVANZADOS (AZUL - ROXA) ================= -->
@@ -755,12 +768,14 @@
         <!-- PIE DE PÁGINA E INFORMACIÓN GENERAL -->
         <footer class="w-full text-center mt-12 space-y-4 flex flex-col items-center">
             
+            <!-- Entradas disponibles card -->
             <div class="bg-blue-950/90 border border-cyan-400/50 rounded-2xl py-3 px-8 inline-block shadow-2xl">
                 <p class="font-heading text-lg sm:text-2xl text-white font-bold tracking-wide">
                     Entradas disponibles al público <span class="text-cyan-300 font-extrabold">10k</span>
                 </p>
             </div>
 
+            <!-- Botón / Enlace directo de WhatsApp para conseguir entradas -->
             <a href="https://wa.me/5491131977287?text=Hola%2C%20quiero%20comprar%20entradas%20para%20el%20Torneo%20de%20EJJ%20del%2014%20de%20Noviembre" 
                target="_blank" 
                rel="noopener noreferrer"
@@ -784,296 +799,383 @@
             </div>
 
             <!-- REPRODUCTOR DE SOUNDCLOUD PEQUEÑO Y DEBAJO DE TODO -->
-            <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
-                <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
-                    <i class="fa-solid fa-music text-cyan-400"></i>
-                    <span>Soundtrack - Sirius</span>
-                </div>
-                <div class="rounded-lg overflow-hidden border border-cyan-500/20">
-                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true"></iframe>
-                </div>
+        <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
+            <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
+                <i class="fa-solid fa-music text-cyan-400"></i>
+                <span>Soundtrack - Sirius</span>
             </div>
+            <div class="rounded-lg overflow-hidden border border-cyan-500/20">
+                <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/soundcloud%253Atracks%253A264805093&color=%2300f0ff&auto_play=true"></iframe>
+            </div>
+        </div>
+    </footer>
+</section>
 
-        </footer>
-
-    </section>
-
-    <!-- LÓGICA DE INTERACTIVIDAD BRACKETS, VOTACIÓN & CANVAS -->
+    <!-- App State & Realtime Sync System -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, onSnapshot, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, doc, onSnapshot, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Configuración de almacenamiento en la nube en tiempo real
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'jj-tournament-app';
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+        // Firebase Configuration (Replace with your actual keys if connecting to your own Firebase project)
+        const firebaseConfig = {
             apiKey: "",
-            authDomain: "demo.firebaseapp.com",
-            projectId: "demo-project",
-            storageBucket: "demo.appspot.com",
-            messagingSenderId: "000000000000",
-            appId: "1:000000000000:web:000000000000"
+            authDomain: "",
+            projectId: "",
+            storageBucket: "",
+            messagingSenderId: "",
+            appId: ""
         };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        let db = null;
+        let firestoreActive = false;
 
-        const votesDocRef = doc(db, 'artifacts', appId, 'public', 'data', 'votes', 'global');
+        // BroadcastChannel for instant local multi-tab / window realtime sync
+        const syncChannel = window.BroadcastChannel ? new BroadcastChannel("bjj_tournament_sync") : null;
 
-        const defaultVotes = {
-            iniciantes_qf0: [5, 5],
-            iniciantes_qf1: [5, 5],
-            iniciantes_qf2: [5, 5],
-            iniciantes_qf3: [5, 5],
-            avanzados_qf0: [5, 5],
-            avanzados_qf1: [5, 5],
-            avanzados_qf2: [5, 5],
-            avanzados_qf3: [5, 5],
-            superfight: [10, 10]
+        // Initial default state
+        const initialVotes = {
+            iniciantes_qf0: [8, 12],
+            iniciantes_qf1: [15, 9],
+            iniciantes_qf2: [11, 14],
+            iniciantes_qf3: [10, 10],
+            superfight: [24, 18],
+            avanzados_qf0: [13, 11],
+            avanzados_qf1: [16, 8],
+            avanzados_qf2: [9, 15],
+            avanzados_qf3: [12, 12]
         };
 
-        let votesData = { ...defaultVotes };
-        let isAuthReady = false;
-        
-        // Control de votos por sesión (1 voto por lucha en cada apertura de página)
-        const votedMatchesInSession = new Set();
-
-        // Autenticación inicial
-        async function initAuth() {
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                isAuthReady = true;
-                subscribeToLiveVotes();
-            } catch (err) {
-                console.error("Error de autenticación:", err);
-            }
-        }
-
-        // Suscripción a cambios globales en tiempo real
-        function subscribeToLiveVotes() {
-            if (!auth.currentUser) return;
-
-            onSnapshot(votesDocRef, (docSnap) => {
-                if (docSnap.exists()) {
-                    votesData = { ...defaultVotes, ...docSnap.data() };
-                } else {
-                    // Inicializar documento en la nube si no existe
-                    setDoc(votesDocRef, defaultVotes).catch(console.error);
-                }
-                updateUIPercentages();
-            }, (error) => {
-                console.error("Error al escuchar votos en vivo:", error);
-            });
-        }
-
-        function updateUIPercentages() {
-            for (let matchKey in votesData) {
-                const votes = votesData[matchKey] || [0, 0];
-                const count0 = Number(votes[0]) || 0;
-                const count1 = Number(votes[1]) || 0;
-                const total = count0 + count1;
-                
-                const pct0 = total > 0 ? Math.round((count0 / total) * 100) : 50;
-                const pct1 = 100 - pct0;
-
-                if (matchKey === 'superfight') {
-                    const el0 = document.getElementById('sf-p0-pct');
-                    const el1 = document.getElementById('sf-p1-pct');
-                    const bar0 = document.getElementById('sf-p0-bar');
-                    const bar1 = document.getElementById('sf-p1-bar');
-                    if (el0) el0.innerText = `${pct0}%`;
-                    if (el1) el1.innerText = `${pct1}%`;
-                    if (bar0) bar0.style.width = `${pct0}%`;
-                    if (bar1) bar1.style.width = `${pct1}%`;
-                } else {
-                    const parts = matchKey.split('_');
-                    const prefix = parts[0] === 'iniciantes' ? 'init' : 'av';
-                    const qfCode = parts[1];
-
-                    const p0PctElem = document.getElementById(`${prefix}-${qfCode}-p0-pct`);
-                    const p1PctElem = document.getElementById(`${prefix}-${qfCode}-p1-pct`);
-                    const p0BarElem = document.getElementById(`${prefix}-${qfCode}-p0-bar`);
-                    const p1BarElem = document.getElementById(`${prefix}-${qfCode}-p1-bar`);
-
-                    if (p0PctElem && p1PctElem) {
-                        p0PctElem.innerText = `${pct0}%`;
-                        p1PctElem.innerText = `${pct1}%`;
-                        if (p0BarElem) p0BarElem.style.width = `${pct0}%`;
-                        if (p1BarElem) p1BarElem.style.width = `${pct1}%`;
-                    }
-                }
-            }
-        }
-
-        async function voteFighter(matchKey, playerIdx) {
-            // Verificar si ya votó en este combate durante la presente apertura de página
-            if (votedMatchesInSession.has(matchKey)) {
-                return;
-            }
-
-            if (!isAuthReady || !auth.currentUser) return;
-
-            try {
-                // Marcar como votado en esta apertura de la página
-                votedMatchesInSession.add(matchKey);
-
-                const currentMatchVotes = votesData[matchKey] || [0, 0];
-                const updatedMatchVotes = [
-                    Number(currentMatchVotes[0]) || 0,
-                    Number(currentMatchVotes[1]) || 0
-                ];
-                
-                updatedMatchVotes[playerIdx] += 1;
-
-                // Actualizar de inmediato localmente
-                votesData[matchKey] = updatedMatchVotes;
-                updateUIPercentages();
-
-                // Enviar cambio a la nube
-                await setDoc(votesDocRef, {
-                    [matchKey]: updatedMatchVotes
-                }, { merge: true });
-
-            } catch (error) {
-                console.error("Error al registrar voto:", error);
-            }
-        }
-
-        // Exponer funciones globales al objeto window para los onclick
-        window.voteFighter = voteFighter;
-
-        initAuth();
-    </script>
-
-    <script>
-        // Lógica interactiva de Brackets (Árboles de competición)
-        const bracketsData = {
+        const initialBrackets = {
             iniciantes: {
-                qf: [
-                    ["LAUTARO AGUIRRE", "JUAN ESPINOZA"],
-                    ["GONZALO TUÑON", "VALENTINO DI ROSA"],
-                    ["AGUSTIN VELAZQUEZ", "FEDERICO WANG"],
-                    ["BENJAMIN DUVOBSKY", "EZEQUIEL ARGÜELLO"]
-                ],
-                sf: [[null, null], [null, null]],
-                f: [[null, null]],
+                sf0: [null, null],
+                sf1: [null, null],
+                f0: [null, null],
                 champion: null
             },
             avanzados: {
-                qf: [
-                    ["EZEQUIEL MURACCIOLE", "DANIEL GOLDSMAN"],
-                    ["CIRO CESPEDES", "IGNACIO LEGUIZAMON"],
-                    ["FELIPE ORTIZ", "IAN CESPEDES"],
-                    ["ALEJANDRO DELGADO", "AXEL FURLAN"]
-                ],
-                sf: [[null, null], [null, null]],
-                f: [[null, null]],
+                sf0: [null, null],
+                sf1: [null, null],
+                f0: [null, null],
                 champion: null
             }
         };
 
-        function getPrefix(tournament) {
-            return tournament === 'iniciantes' ? 'init' : 'av';
+        // Load saved state from LocalStorage or fall back to initial
+        function loadSavedState() {
+            try {
+                const savedVotes = localStorage.getItem("bjj_tournament_votes");
+                const savedBrackets = localStorage.getItem("bjj_tournament_brackets");
+                return {
+                    votes: savedVotes ? JSON.parse(savedVotes) : { ...initialVotes },
+                    brackets: savedBrackets ? JSON.parse(savedBrackets) : JSON.parse(JSON.stringify(initialBrackets))
+                };
+            } catch (e) {
+                return {
+                    votes: { ...initialVotes },
+                    brackets: JSON.parse(JSON.stringify(initialBrackets))
+                };
+            }
         }
 
-        function advanceFighter(tournament, round, matchIdx, playerIdx) {
-            const data = bracketsData[tournament];
-            const prefix = getPrefix(tournament);
+        const loaded = loadSavedState();
+        let globalVotes = loaded.votes;
+        let globalBrackets = loaded.brackets;
+        const votedMatchesInSession = new Set();
+
+        function saveLocalAndSync() {
+            try {
+                localStorage.setItem("bjj_tournament_votes", JSON.stringify(globalVotes));
+                localStorage.setItem("bjj_tournament_brackets", JSON.stringify(globalBrackets));
+                if (syncChannel) {
+                    syncChannel.postMessage({ votes: globalVotes, brackets: globalBrackets });
+                }
+            } catch (e) {
+                console.warn("Could not save to localStorage", e);
+            }
+        }
+
+        if (syncChannel) {
+            syncChannel.onmessage = (event) => {
+                if (event.data) {
+                    if (event.data.votes) globalVotes = event.data.votes;
+                    if (event.data.brackets) globalBrackets = event.data.brackets;
+                    updateUI();
+                }
+            };
+        }
+
+        // Initialize Firestore safely if valid config keys are present
+        if (firebaseConfig.apiKey && firebaseConfig.projectId) {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                
+                onSnapshot(doc(db, "tournament", "state"), (docSnap) => {
+                    if (docSnap.exists()) {
+                        firestoreActive = true;
+                        const data = docSnap.data();
+                        if (data.votes) globalVotes = data.votes;
+                        if (data.brackets) globalBrackets = data.brackets;
+                        saveLocalAndSync();
+                        updateUI();
+                    }
+                }, (error) => {
+                    // Silently handle permission error and continue in local/sync mode
+                    firestoreActive = false;
+                });
+            } catch (e) {
+                firestoreActive = false;
+            }
+        }
+
+        // Global Action Handlers
+        window.voteFighter = async function(matchId, playerIndex) {
+            if (votedMatchesInSession.has(matchId)) {
+                alert("Ya has emitido tu voto para esta pelea en esta sesión.");
+                return;
+            }
+
+            votedMatchesInSession.add(matchId);
+
+            if (!globalVotes[matchId]) {
+                globalVotes[matchId] = [0, 0];
+            }
+            globalVotes[matchId][playerIndex] = (parseInt(globalVotes[matchId][playerIndex]) || 0) + 1;
+
+            saveLocalAndSync();
+            updateUI();
+
+            if (db && firestoreActive) {
+                try {
+                    const docRef = doc(db, "tournament", "state");
+                    await setDoc(docRef, { votes: globalVotes, brackets: globalBrackets }, { merge: true });
+                } catch (err) {
+                    // Fallback to local mode
+                }
+            }
+        };
+
+        window.advanceFighter = async function(category, round, matchIdx, playerIdx) {
+            const names = {
+                iniciantes: {
+                    qf: [
+                        ["LAUTARO AGUIRRE", "JUAN ESPINOZA"],
+                        ["GONZALO TUÑON", "VALENTINO DI ROSA"],
+                        ["AGUSTIN VELAZQUEZ", "FEDERICO WANG"],
+                        ["BENJAMIN DUVOBSKY", "EZEQUIEL ARGÜELLO"]
+                    ]
+                },
+                avanzados: {
+                    qf: [
+                        ["EZEQUIEL MURACCIOLE", "DANIEL GOLDSMAN"],
+                        ["CIRO CESPEDES", "IGNACIO LEGUIZAMON"],
+                        ["FELIPE ORTIZ", "IAN CESPEDES"],
+                        ["ALEJANDRO DELGADO", "AXEL FURLAN"]
+                    ]
+                }
+            };
+
+            let selectedName = "";
 
             if (round === 'qf') {
-                const winner = data.qf[matchIdx][playerIdx];
-                const sfMatchIdx = Math.floor(matchIdx / 2);
-                const sfSlotIdx = matchIdx % 2;
-
-                data.sf[sfMatchIdx][sfSlotIdx] = winner;
-
-                document.getElementById(`${prefix}-qf${matchIdx}-p${playerIdx}-box`).classList.add('slot-winner');
-                document.getElementById(`${prefix}-qf${matchIdx}-p${1 - playerIdx}-box`).classList.add('slot-defeated');
-
-                const sfSlot = document.getElementById(`${prefix}-sf${sfMatchIdx}-p${sfSlotIdx}`);
-                sfSlot.innerText = winner;
-                sfSlot.classList.remove('slot-empty');
-                sfSlot.classList.add('slot-active', 'bg-blue-950/90', 'border-cyan-400', 'text-white');
-
+                selectedName = names[category].qf[matchIdx][playerIdx];
+                if (matchIdx === 0) globalBrackets[category].sf0[0] = selectedName;
+                if (matchIdx === 1) globalBrackets[category].sf0[1] = selectedName;
+                if (matchIdx === 2) globalBrackets[category].sf1[0] = selectedName;
+                if (matchIdx === 3) globalBrackets[category].sf1[1] = selectedName;
             } else if (round === 'sf') {
-                const winner = data.sf[matchIdx][playerIdx];
-                if (!winner) return;
+                selectedName = matchIdx === 0 ? globalBrackets[category].sf0[playerIdx] : globalBrackets[category].sf1[playerIdx];
+                if (!selectedName || selectedName === "Avanzar Cuartos") return;
 
-                data.f[0][matchIdx] = winner;
-
-                document.getElementById(`${prefix}-sf${matchIdx}-p${playerIdx}`).classList.add('slot-winner');
-                document.getElementById(`${prefix}-sf${matchIdx}-p${1 - playerIdx}`).classList.add('slot-defeated');
-
-                const fSlot = document.getElementById(`${prefix}-f0-p${matchIdx}`);
-                fSlot.innerText = winner;
-                fSlot.classList.remove('slot-empty');
-                fSlot.classList.add('slot-active', 'bg-blue-950/90', 'border-yellow-400', 'text-white');
-
+                if (matchIdx === 0) globalBrackets[category].f0[0] = selectedName;
+                if (matchIdx === 1) globalBrackets[category].f0[1] = selectedName;
             } else if (round === 'f') {
-                const winner = data.f[0][playerIdx];
-                if (!winner) return;
+                selectedName = globalBrackets[category].f0[playerIdx];
+                if (!selectedName || selectedName === "Finalista A" || selectedName === "Finalista B") return;
 
-                data.champion = winner;
-
-                document.getElementById(`${prefix}-f0-p${playerIdx}`).classList.add('slot-winner');
-                document.getElementById(`${prefix}-f0-p${1 - playerIdx}`).classList.add('slot-defeated');
-
-                const champBox = document.getElementById(`${prefix}-champion-box`);
-                const champName = document.getElementById(`${prefix}-champion-name`);
-                champName.innerText = `CAMPEÓN: ${winner}`;
-                champBox.classList.remove('hidden');
+                globalBrackets[category].champion = selectedName;
             }
-        }
 
-        // Canvas de Rayos de fondo
-        let canvas, ctx, width, height;
+            saveLocalAndSync();
+            updateUI();
 
-        function resizeCanvas() {
-            if (!canvas) return;
-            width = canvas.width = window.innerWidth;
-            height = canvas.height = window.innerHeight;
-        }
-
-        function drawLightning() {
-            if (!ctx) return;
-            ctx.clearRect(0, 0, width, height);
-            if (Math.random() < 0.08) {
-                const startX = Math.random() * width;
-                let currentX = startX;
-                let currentY = 0;
-
-                ctx.beginPath();
-                ctx.moveTo(currentX, currentY);
-                ctx.strokeStyle = Math.random() > 0.5 ? '#00f0ff' : '#ff007f';
-                ctx.lineWidth = Math.random() * 2 + 1;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = ctx.strokeStyle;
-
-                while (currentY < height) {
-                    const nextX = currentX + (Math.random() - 0.5) * 50;
-                    const nextY = currentY + Math.random() * 40 + 10;
-                    ctx.lineTo(nextX, nextY);
-                    currentX = nextX;
-                    currentY = nextY;
+            if (db && firestoreActive) {
+                try {
+                    const docRef = doc(db, "tournament", "state");
+                    await setDoc(docRef, { votes: globalVotes, brackets: globalBrackets }, { merge: true });
+                } catch (err) {
+                    // Fallback to local mode
                 }
-                ctx.stroke();
             }
-            requestAnimationFrame(drawLightning);
+        };
+
+        function calculatePercentages(p0Votes, p1Votes) {
+            const v0 = parseInt(p0Votes) || 0;
+            const v1 = parseInt(p1Votes) || 0;
+            const total = v0 + v1;
+            if (total === 0) return [50, 50];
+            const pct0 = Math.round((v0 / total) * 100);
+            const pct1 = 100 - pct0;
+            return [pct0, pct1];
         }
 
+        function updateUI() {
+            // Update Vote Percentages
+            Object.keys(globalVotes).forEach(matchId => {
+                const votes = globalVotes[matchId] || [1, 1];
+                const [pct0, pct1] = calculatePercentages(votes[0], votes[1]);
+
+                let prefix = "";
+                if (matchId.startsWith("iniciantes")) prefix = "init-";
+                else if (matchId.startsWith("avanzados")) prefix = "av-";
+                else if (matchId === "superfight") prefix = "sf-";
+
+                let key = matchId.replace("iniciantes_", "").replace("avanzados_", "");
+
+                if (matchId === "superfight") {
+                    const el0Pct = document.getElementById("sf-p0-pct");
+                    const el0Bar = document.getElementById("sf-p0-bar");
+                    const el1Pct = document.getElementById("sf-p1-pct");
+                    const el1Bar = document.getElementById("sf-p1-bar");
+
+                    if (el0Pct) el0Pct.innerText = `${pct0}%`;
+                    if (el0Bar) el0Bar.style.width = `${pct0}%`;
+                    if (el1Pct) el1Pct.innerText = `${pct1}%`;
+                    if (el1Bar) el1Bar.style.width = `${pct1}%`;
+
+                    const winnerBox = document.getElementById("sf-winner-box");
+                    const winnerName = document.getElementById("sf-winner-name");
+                    const winnerPct = document.getElementById("sf-winner-pct");
+
+                    if (winnerBox && votes[0] + votes[1] > 10) {
+                        winnerBox.classList.remove("hidden");
+                        if (pct0 >= pct1) {
+                            winnerName.innerText = "JULIA GRANATA";
+                            winnerPct.innerText = `WIN CHANCE: ${pct0}% DE LOS VOTOS`;
+                        } else {
+                            winnerName.innerText = "MARIA VICTORIA BENITEZ";
+                            winnerPct.innerText = `WIN CHANCE: ${pct1}% DE LOS VOTOS`;
+                        }
+                    }
+                } else {
+                    const el0Pct = document.getElementById(`${prefix}${key}-p0-pct`);
+                    const el0Bar = document.getElementById(`${prefix}${key}-p0-bar`);
+                    const el1Pct = document.getElementById(`${prefix}${key}-p1-pct`);
+                    const el1Bar = document.getElementById(`${prefix}${key}-p1-bar`);
+
+                    if (el0Pct) el0Pct.innerText = `${pct0}%`;
+                    if (el0Bar) el0Bar.style.width = `${pct0}%`;
+                    if (el1Pct) el1Pct.innerText = `${pct1}%`;
+                    if (el1Bar) el1Bar.style.width = `${pct1}%`;
+                }
+            });
+
+            // Update Brackets on Screen
+            ["iniciantes", "avanzados"].forEach(cat => {
+                const pfx = cat === "iniciantes" ? "init" : "av";
+                const b = globalBrackets[cat];
+
+                // Semifinals
+                const sf0p0 = document.getElementById(`${pfx}-sf0-p0`);
+                const sf0p1 = document.getElementById(`${pfx}-sf0-p1`);
+                const sf1p0 = document.getElementById(`${pfx}-sf1-p0`);
+                const sf1p1 = document.getElementById(`${pfx}-sf1-p1`);
+
+                if (sf0p0 && b.sf0[0]) { sf0p0.innerText = b.sf0[0]; sf0p0.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+                if (sf0p1 && b.sf0[1]) { sf0p1.innerText = b.sf0[1]; sf0p1.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+                if (sf1p0 && b.sf1[0]) { sf1p0.innerText = b.sf1[0]; sf1p0.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+                if (sf1p1 && b.sf1[1]) { sf1p1.innerText = b.sf1[1]; sf1p1.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+
+                // Finalists
+                const f0p0 = document.getElementById(`${pfx}-f0-p0`);
+                const f0p1 = document.getElementById(`${pfx}-f0-p1`);
+
+                if (f0p0 && b.f0[0]) { f0p0.innerText = b.f0[0]; f0p0.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer"; }
+                if (f0p1 && b.f0[1]) { f0p1.innerText = b.f0[1]; f0p1.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer"; }
+
+                // Champion
+                const champBox = document.getElementById(`${pfx}-champion-box`);
+                const champName = document.getElementById(`${pfx}-champion-name`);
+
+                if (champBox && champName && b.champion) {
+                    champBox.classList.remove("hidden");
+                    champName.innerText = `CAMPEÓN: ${b.champion}`;
+                }
+            });
+        }
+
+        // Initial Render
+        updateUI();
+    </script>
+
+    <!-- Canvas Animation -->
+    <script>
         window.onload = function() {
-            canvas = document.getElementById('lightning-canvas');
-            if (canvas) {
-                ctx = canvas.getContext('2d');
-                window.addEventListener('resize', resizeCanvas);
-                resizeCanvas();
-                drawLightning();
+            const canvas = document.getElementById('lightning-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            function resizeCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            resizeCanvas();
+            window.addEventListener('resize', resizeCanvas);
+
+            let bolts = [];
+
+            function createBolt() {
+                const startX = Math.random() * canvas.width;
+                const startY = 0;
+                let x = startX;
+                let y = startY;
+                const path = [{x, y}];
+
+                while (y < canvas.height) {
+                    x += (Math.random() - 0.5) * 40;
+                    y += Math.random() * 20 + 10;
+                    path.push({x, y});
+                }
+
+                bolts.push({
+                    path: path,
+                    alpha: 1,
+                    width: Math.random() * 2 + 1
+                });
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                if (Math.random() < 0.04) {
+                    createBolt();
+                }
+
+                for (let i = bolts.length - 1; i >= 0; i--) {
+                    const bolt = bolts[i];
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, 240, 255, ${bolt.alpha})`;
+                    ctx.lineWidth = bolt.width;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00f0ff';
+
+                    for (let j = 0; j < bolt.path.length - 1; j++) {
+                        ctx.moveTo(bolt.path[j].x, bolt.path[j].y);
+                        ctx.lineTo(bolt.path[j+1].x, bolt.path[j+1].y);
+                    }
+                    ctx.stroke();
+
+                    bolt.alpha -= 0.05;
+                    if (bolt.alpha <= 0) {
+                        bolts.splice(i, 1);
+                    }
+                }
+
+                requestAnimationFrame(animate);
+            }
+
+            animate();
         };
     </script>
 </body>
