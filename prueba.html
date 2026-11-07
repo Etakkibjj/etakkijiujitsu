@@ -77,27 +77,37 @@
         @keyframes neon-blue-pulse {
             0%, 100% {
                 color: #00F0FF;
-                text-shadow: 0 0 7px #00F0FF, 0 0 15px #00F0FF, 0 0 30px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.5);
+                text-shadow: 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 40px rgba(0, 240, 255, 0.9), 0 0 60px rgba(0, 240, 255, 0.6);
             }
             50% {
                 color: #E0FFFF;
-                text-shadow: 0 0 12px #00F0FF, 0 0 25px #00F0FF, 0 0 45px rgba(0, 240, 255, 1), 0 0 70px rgba(0, 240, 255, 0.8);
+                text-shadow: 0 0 15px #00F0FF, 0 0 30px #00F0FF, 0 0 50px rgba(0, 240, 255, 1), 0 0 80px rgba(0, 240, 255, 0.9);
             }
         }
 
         @keyframes neon-red-pulse {
             0%, 100% {
                 color: #FF0055;
-                text-shadow: 0 0 7px #FF0055, 0 0 15px #FF0055, 0 0 30px rgba(255, 0, 85, 0.8), 0 0 50px rgba(255, 0, 85, 0.5);
+                text-shadow: 0 0 10px #FF0055, 0 0 20px #FF0055, 0 0 40px rgba(255, 0, 85, 0.9), 0 0 60px rgba(255, 0, 85, 0.6);
             }
             50% {
                 color: #FFE6EE;
-                text-shadow: 0 0 12px #FF0055, 0 0 25px #FF0055, 0 0 45px rgba(255, 0, 85, 1), 0 0 70px rgba(255, 0, 85, 0.8);
+                text-shadow: 0 0 15px #FF0055, 0 0 30px #FF0055, 0 0 50px rgba(255, 0, 85, 1), 0 0 80px rgba(255, 0, 85, 0.9);
             }
         }
 
         .neon-blue-glow { animation: neon-blue-pulse 2.2s infinite ease-in-out; }
         .neon-red-glow { animation: neon-red-pulse 2.2s infinite ease-in-out; }
+
+        .score-blue-neon {
+            color: #00F0FF;
+            text-shadow: 0 0 12px #00F0FF, 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.5);
+        }
+
+        .score-red-neon {
+            color: #FF0055;
+            text-shadow: 0 0 12px #FF0055, 0 0 25px rgba(255, 0, 85, 0.8), 0 0 50px rgba(255, 0, 85, 0.5);
+        }
 
         @keyframes flash-timer {
             0%, 100% { opacity: 1; color: #FF4D4D; }
@@ -109,9 +119,9 @@
 <body class="min-h-screen w-screen bg-[#161C26] text-white flex flex-col justify-between overflow-x-hidden select-none">
 
     <!-- HEADER SUPERIOR -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2.5 flex items-center justify-between shrink-0 z-20 shadow-md relative">
+    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2 flex items-center justify-between shrink-0 z-20 shadow-md relative">
         <div class="flex items-center space-x-2 shrink-0 z-10">
-            <div class="w-9 h-7 flex items-center justify-center">
+            <div class="w-8 h-6 flex items-center justify-center">
                 <svg viewBox="0 0 120 70" class="w-full h-full text-white fill-current drop-shadow">
                     <path d="M 15 5 L 115 5 Q 118 5 116 12 L 105 62 Q 103 68 95 68 L 5 68 Q 2 68 4 61 L 15 12 Q 17 5 25 5 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                     <text x="58" y="52" font-family="'Montserrat', sans-serif" font-weight="900" font-style="italic" font-size="44" fill="currentColor" text-anchor="middle" letter-spacing="-2">EJJ</text>
@@ -120,28 +130,28 @@
         </div>
 
         <div class="flex-1 flex items-center justify-center px-2">
-            <h1 class="font-condensed font-black text-sm sm:text-2xl md:text-3xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
+            <h1 class="font-condensed font-black text-xs sm:text-xl md:text-2xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
                 ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
             </h1>
         </div>
 
-        <div class="w-9 h-7 shrink-0 z-10"></div>
+        <div class="w-8 h-6 shrink-0 z-10"></div>
     </header>
 
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
-        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[240px] w-full">
+        <div class="grid grid-cols-2 gap-2 flex-1 w-full">
             
             <!-- LUCHADOR AZUL -->
             <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
-                <div class="bg-smooth-blue px-2 py-1.5 text-center shrink-0">
-                    <h2 class="font-condensed text-base sm:text-lg md:text-xl font-extrabold tracking-wider text-white leading-none uppercase">
+                <div class="bg-smooth-blue px-2 py-1 text-center shrink-0">
+                    <h2 class="font-condensed text-xs sm:text-base font-extrabold tracking-wider text-white leading-none uppercase">
                         LUCHADOR AZUL
                     </h2>
                 </div>
 
-                <div class="bg-[#151C28] px-3 py-2 border-b border-slate-800 flex items-center justify-center space-x-3">
-                    <div class="w-8 h-6 sm:w-11 sm:h-8 shrink-0 rounded shadow overflow-hidden border border-slate-600">
+                <div class="bg-[#151C28] px-2.5 py-1.5 border-b border-slate-800 flex items-center justify-center space-x-2 shrink-0">
+                    <div class="w-7 h-5 sm:w-9 sm:h-6 shrink-0 rounded shadow overflow-hidden border border-slate-600">
                         <svg viewBox="0 0 900 600" class="w-full h-full">
                             <rect width="900" height="600" fill="#74acdf"/>
                             <rect y="200" width="900" height="200" fill="#ffffff"/>
@@ -151,25 +161,26 @@
                     </div>
                     <div class="flex flex-1 text-left min-w-0">
                         <input type="text" id="blue-name" placeholder="NOMBRE LUCHADOR" value="LUKE"
-                               class="w-full bg-transparent font-condensed font-bold text-2xl sm:text-4xl md:text-5xl neon-blue-glow focus:outline-none uppercase tracking-wide leading-none truncate">
+                               class="w-full bg-transparent font-condensed font-bold text-xl sm:text-3xl md:text-4xl neon-blue-glow focus:outline-none uppercase tracking-wide leading-none truncate">
                     </div>
                 </div>
 
-                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
-                    <span id="blue-score" class="font-oswald text-[110px] sm:text-[160px] md:text-[200px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
+                <!-- CONTENEDOR DE NÚMEROS COMPACTO CON NÚMEROS GIGANTES AZUL NEÓN -->
+                <div class="flex-1 min-h-[100px] flex items-center justify-center bg-[#0C1018] py-1 px-2 overflow-hidden">
+                    <span id="blue-score" class="font-oswald text-[115px] sm:text-[160px] md:text-[210px] font-bold score-blue-neon leading-none select-none">0</span>
                 </div>
             </div>
 
             <!-- LUCHADOR ROJO -->
             <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
-                <div class="bg-smooth-red px-2 py-1.5 text-center shrink-0">
-                    <h2 class="font-condensed text-base sm:text-lg md:text-xl font-extrabold tracking-wider text-white leading-none uppercase">
+                <div class="bg-smooth-red px-2 py-1 text-center shrink-0">
+                    <h2 class="font-condensed text-xs sm:text-base font-extrabold tracking-wider text-white leading-none uppercase">
                         LUCHADOR ROJO
                     </h2>
                 </div>
 
-                <div class="bg-[#151C28] px-3 py-2 border-b border-slate-800 flex items-center justify-center space-x-3">
-                    <div class="w-8 h-6 sm:w-11 sm:h-8 shrink-0 rounded shadow overflow-hidden border border-slate-600">
+                <div class="bg-[#151C28] px-2.5 py-1.5 border-b border-slate-800 flex items-center justify-center space-x-2 shrink-0">
+                    <div class="w-7 h-5 sm:w-9 sm:h-6 shrink-0 rounded shadow overflow-hidden border border-slate-600">
                         <svg viewBox="0 0 900 600" class="w-full h-full">
                             <rect width="900" height="600" fill="#74acdf"/>
                             <rect y="200" width="900" height="200" fill="#ffffff"/>
@@ -179,32 +190,33 @@
                     </div>
                     <div class="flex flex-1 text-left min-w-0">
                         <input type="text" id="red-name" placeholder="NOMBRE LUCHADOR" value="VADER"
-                               class="w-full bg-transparent font-condensed font-bold text-2xl sm:text-4xl md:text-5xl neon-red-glow focus:outline-none uppercase tracking-wide leading-none truncate">
+                               class="w-full bg-transparent font-condensed font-bold text-xl sm:text-3xl md:text-4xl neon-red-glow focus:outline-none uppercase tracking-wide leading-none truncate">
                     </div>
                 </div>
 
-                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
-                    <span id="red-score" class="font-oswald text-[110px] sm:text-[160px] md:text-[200px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
+                <!-- CONTENEDOR DE NÚMEROS COMPACTO CON NÚMEROS GIGANTES ROJO NEÓN -->
+                <div class="flex-1 min-h-[100px] flex items-center justify-center bg-[#0C1018] py-1 px-2 overflow-hidden">
+                    <span id="red-score" class="font-oswald text-[115px] sm:text-[160px] md:text-[210px] font-bold score-red-neon leading-none select-none">0</span>
                 </div>
             </div>
 
         </div>
 
         <!-- BOTONES DE PUNTUACIÓN -->
-        <div class="grid grid-cols-2 gap-2 w-full">
+        <div class="grid grid-cols-2 gap-2 w-full shrink-0">
             <!-- AZUL -->
             <div class="flex flex-col space-y-1.5 sm:space-y-2">
                 <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+2</span>
+                    <span class="font-oswald text-xl sm:text-3xl font-bold text-cyan-400 ml-1">+2</span>
                 </button>
                 <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+3</span>
+                    <span class="font-oswald text-xl sm:text-3xl font-bold text-cyan-400 ml-1">+3</span>
                 </button>
                 <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+4</span>
+                    <span class="font-oswald text-xl sm:text-3xl font-bold text-cyan-400 ml-1">+4</span>
                 </button>
                 <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
                     <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
@@ -216,15 +228,15 @@
             <div class="flex flex-col space-y-1.5 sm:space-y-2">
                 <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+2</span>
+                    <span class="font-oswald text-xl sm:text-3xl font-bold text-pink-500 ml-1">+2</span>
                 </button>
                 <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+3</span>
+                    <span class="font-oswald text-xl sm:text-3xl font-bold text-pink-500 ml-1">+3</span>
                 </button>
                 <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+4</span>
+                    <span class="font-oswald text-xl sm:text-3xl font-bold text-pink-500 ml-1">+4</span>
                 </button>
                 <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
                     <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
@@ -234,25 +246,29 @@
         </div>
     </main>
 
-    <!-- FOOTER Y CONTROLES -->
-    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-3 sm:px-5 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl gap-2">
-        <div class="flex items-center space-x-2">
-            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-base px-3 sm:px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider">
+    <!-- FOOTER Y CONTROLES PROPORCIONADOS PARA MÓVIL (SIN CORTAR BOTÓN INICIAR) -->
+    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-2 sm:px-4 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl gap-1.5 sm:gap-3">
+        
+        <!-- Bloque de Botones Izquierda: Reiniciar e Instalar App -->
+        <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
+            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-sm px-2.5 sm:px-4 py-2.5 rounded-lg border border-slate-600 uppercase shadow tracking-wider whitespace-nowrap">
                 REINICIAR
             </button>
-            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-base font-bold px-3 sm:px-3.5 py-2 rounded-lg shadow flex items-center space-x-1.5 border border-emerald-400 transition-colors">
+            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold px-2.5 sm:px-3.5 py-2.5 rounded-lg shadow flex items-center space-x-1 border border-emerald-400 transition-colors shrink-0">
                 <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
                 <span class="font-condensed font-extrabold tracking-wider uppercase whitespace-nowrap">INSTALAR APP</span>
             </button>
         </div>
 
-        <div class="flex items-center justify-center">
-            <div id="timer-display" class="font-oswald text-3xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-3 sm:px-5 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
+        <!-- Reloj Central -->
+        <div class="flex items-center justify-center shrink-0">
+            <div id="timer-display" class="font-oswald text-2xl sm:text-4xl md:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-2.5 sm:px-4 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
                 03:00
             </div>
         </div>
 
-        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider">
+        <!-- Botón Iniciar / Pausa GRANDE Y LEGIBLE -->
+        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-sm sm:text-lg px-3.5 sm:px-6 py-2.5 rounded-lg border border-emerald-400 flex-1 sm:flex-none max-w-[140px] text-center uppercase shadow-lg transition-colors tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
             <span id="start-pause-text">INICIAR</span>
         </button>
     </footer>
@@ -261,12 +277,12 @@
     <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
         <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
             <h2 id="winner-name-display" class="font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-300 mb-1">
-                GANADOR
+                RESULTADO LUCHA
             </h2>
-            <h3 id="winner-title" class="font-oswald text-4xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
+            <h3 id="winner-title" class="font-oswald text-3xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
                 ¡TIEMPO!
             </h3>
-            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
+            <div id="winner-score-display" class="font-oswald text-2xl sm:text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
                 SCORE: 0 - 0
             </div>
             <div class="w-full space-y-2.5">
