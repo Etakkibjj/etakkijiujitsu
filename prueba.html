@@ -11,16 +11,14 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="EJJ 3">
-    
-    <!-- Dynamic Manifest Injection via Data URI -->
-    <link rel="manifest" href="data:application/manifest+json;utf8,%7B%22name%22%3A%22EJJ%20SUBMISSION%20ONLY%203%22%2C%22short_name%22%3A%22EJJ%203%22%2C%22description%22%3A%22Cronograma%20interactivo%20y%20llaves%20del%20Torneo%20EJJ%20Submission%20Only%203%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23181e26%22%2C%22theme_color%22%3A%22%23181e26%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%3E%3Crect%20width%3D'512'%20height%3D'512'%20rx%3D'100'%20fill%3D'%23181e26'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'55%25'%20font-size%3D'200'%20font-weight%3D'900'%20fill%3D'%2338bdf8'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%3EEJJ%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for icons -->
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -50,7 +48,6 @@
             color: #f1f5f9;
             user-select: none;
         }
-        /* Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -64,8 +61,6 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #475569;
         }
-        
-        /* Interactive hover highlights */
         .fighter-card:hover {
             background-color: rgba(255, 255, 255, 0.07);
         }
@@ -73,44 +68,62 @@
 </head>
 <body class="font-sans antialiased min-h-screen pb-16">
 
-    <!-- Header Banner Notice -->
-    <div class="bg-smooth-banner text-smooth-bannerText px-4 py-3 shadow-md flex flex-wrap items-center justify-between text-center font-medium text-sm md:text-base border-b border-sky-200 gap-2">
-        <div class="flex items-center justify-center mx-auto">
-            <i class="fa-solid fa-comment-dots text-lg mr-2"></i>
-            <span>Times are dynamic and change in real time. Watch this screen for updates.</span>
+    <!-- Navigation Header & Banner -->
+    <header class="bg-smooth-card/90 border-b border-smooth-cardBorder sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-4xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+            
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-2">
+                <span class="bg-sky-500 text-slate-950 font-black text-xs px-2 py-1 rounded tracking-wider uppercase">EJJ 3</span>
+                <span class="text-xs font-bold text-slate-300 hidden sm:inline">Cronograma Interactivo</span>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- Brackets Main Page Button -->
+                <a href="https://etakkibjj.github.io/etakkijiujitsu/brackets.html" target="_blank" rel="noopener noreferrer" 
+                   class="bg-slate-800 hover:bg-slate-700 text-sky-400 border border-sky-500/50 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-sitemap"></i>
+                    <span>Brackets</span>
+                </a>
+
+                <!-- Reglamento Button -->
+                <a href="https://etakkibjj.github.io/etakkijiujitsu/reglamento.html" target="_blank" rel="noopener noreferrer" 
+                   class="bg-amber-600 hover:bg-amber-500 text-white border border-amber-400 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Reglamento</span>
+                </a>
+
+                <!-- Edit Mode Toggle -->
+                <button id="toggleEditBtn" onclick="toggleEditMode()" 
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-95 shadow-sm border border-indigo-400">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span id="editBtnText">Modo Edición</span>
+                </button>
+            </div>
         </div>
-        <div class="flex items-center gap-2 ml-auto flex-wrap justify-center">
-            <!-- Botón Página Principal / Brackets -->
-            <a href="https://etakkibjj.github.io/etakkijiujitsu/brackets.html" target="_blank" rel="noopener noreferrer" 
-               class="bg-sky-600 hover:bg-sky-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md border border-sky-300 transition-all active:scale-95">
-                <i class="fa-solid fa-sitemap text-sm"></i> <span>BRACKETS</span>
-            </a>
-            <!-- Botón al Reglamento -->
-            <a href="https://etakkibjj.github.io/etakkijiujitsu/reglamento.html" target="_blank" rel="noopener noreferrer" 
-               class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md border border-amber-300 transition-all active:scale-95">
-                <i class="fa-solid fa-book-bookmark text-sm"></i> <span>REGLAMENTO</span>
-            </a>
-            <!-- Live Canvas Editor Mode Toggle -->
-            <button id="toggleEditModeBtn" class="bg-slate-900 hover:bg-slate-800 text-sky-400 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 border border-sky-400/40 shadow-sm transition-all">
-                <i class="fa-solid fa-pen-to-square"></i> <span id="editModeBtnText">Modo Edición</span>
-            </button>
-        </div>
+    </header>
+
+    <!-- Real-time Banner Notice -->
+    <div class="bg-smooth-banner text-smooth-bannerText px-4 py-2.5 shadow-md flex items-center justify-center text-center font-medium text-xs sm:text-sm border-b border-sky-200">
+        <i class="fa-solid fa-circle-info text-sky-800 mr-2"></i>
+        <span>Los horarios son dinámicos y cambian en tiempo real durante el evento.</span>
     </div>
 
     <!-- Main Container -->
     <main class="max-w-4xl mx-auto px-4 pt-6">
 
         <!-- Title Section -->
-        <header class="text-center mb-6">
+        <div class="text-center mb-6">
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight uppercase text-white mb-1">
                 Cronograma del Torneo
             </h1>
             <p class="text-sky-400 font-semibold tracking-wider text-sm sm:text-base uppercase">
                 EJJ SUBMISSION ONLY 3
             </p>
-        </header>
+        </div>
 
-        <!-- Bar Control: Filter, Legend & Reset -->
+        <!-- Bar Control: Filter, Legend, Reset & Install -->
         <div class="mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between bg-smooth-card/80 p-3.5 rounded-xl border border-smooth-cardBorder shadow-lg">
             <!-- Search -->
             <div class="relative w-full sm:w-72">
@@ -119,19 +132,20 @@
                     class="w-full bg-slate-900/90 border border-slate-700 text-sm rounded-lg pl-9 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-sky-500 transition-colors">
             </div>
             
-            <!-- Legend & Controls -->
-            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3 w-full sm:w-auto text-xs font-medium">
+            <!-- Controls & PWA -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full sm:w-auto text-xs font-medium">
                 <!-- PWA Install Button -->
-                <button id="installAppBtn" onclick="openInstallModal()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md transition-all text-xs active:scale-95 border border-sky-400">
+                <button id="installAppBtn" onclick="handleInstallClick()" 
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md transition-all text-xs active:scale-95 border border-emerald-400">
                     <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
                 </button>
 
                 <div class="flex items-center gap-2">
                     <span class="inline-flex items-center gap-1.5 bg-blue-950/70 border border-blue-500/50 text-blue-300 px-2.5 py-1 rounded-md">
-                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Pendiente (Azul)
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Pendiente
                     </span>
                     <span class="inline-flex items-center gap-1.5 bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 px-2.5 py-1 rounded-md">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Finalizada (Verde)
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Finalizada
                     </span>
                 </div>
 
@@ -141,16 +155,30 @@
             </div>
         </div>
 
+        <!-- Live Editor Toolbar (Hidden by default) -->
+        <div id="editorToolbar" class="hidden mb-6 bg-indigo-950/60 border border-indigo-500/50 p-4 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> Panel de Edición En Vivo
+                </h3>
+                <button onclick="addNewMatch()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                    <i class="fa-solid fa-plus"></i> Agregar Lucha
+                </button>
+            </div>
+            <p class="text-xs text-slate-300">
+                Puedes cambiar nombres, horarios y categorías directamente haciendo clic en los textos marcados en modo edición.
+            </p>
+        </div>
+
         <!-- Tatami Central Container -->
         <div class="bg-smooth-bg border border-smooth-cardBorder rounded-2xl p-4 sm:p-6 shadow-2xl">
             
-            <!-- Tatami Header -->
             <div class="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-4">
                 <div class="flex items-center space-x-3">
                     <div class="w-3 h-8 bg-sky-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
                     <div>
                         <h2 class="text-2xl font-bold text-white tracking-wide">Tatami Central</h2>
-                        <p id="subHeaderText" class="text-xs text-slate-400">Haz clic en un competidor para declararlo GANADOR</p>
+                        <p class="text-xs text-slate-400">Haz clic en un competidor para declararlo GANADOR</p>
                     </div>
                 </div>
                 <span class="bg-sky-500/10 text-sky-400 border border-sky-500/30 font-semibold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider hidden sm:inline-block">
@@ -158,10 +186,8 @@
                 </span>
             </div>
 
-            <!-- Matches List Container -->
-            <div id="matchesContainer" class="space-y-3">
-                <!-- Dynamically Rendered via JS -->
-            </div>
+            <!-- Matches List -->
+            <div id="matchesContainer" class="space-y-3"></div>
 
             <!-- Empty Search State -->
             <div id="noResults" class="hidden text-center py-12 text-gray-400">
@@ -171,75 +197,66 @@
 
         </div>
 
-        <!-- Footer Info -->
         <footer class="mt-8 text-center text-xs text-gray-500">
-            <p>© EJJ Submission Only 3 • Sistema de Llaves e Live Canvas Interactivo</p>
+            <p>© EJJ Submission Only 3 • Sistema de Llaves Interactivo</p>
         </footer>
 
     </main>
 
-    <!-- PWA Install Modal / Instructions -->
+    <!-- PWA Install Instructions Modal -->
     <div id="installGuideModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
         <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 max-w-sm w-full shadow-2xl space-y-4">
             <div class="flex justify-between items-start border-b border-slate-700 pb-2">
-                <h3 class="text-base font-black text-sky-400 uppercase flex items-center gap-2">
-                    <i class="fa-solid fa-download"></i> Instalar App en tu Celular
+                <h3 class="text-sm font-black text-sky-400 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-mobile-screen-button"></i> Instalar App en tu Celular
                 </h3>
-                <button onclick="closeInstallModal()" class="text-slate-400 hover:text-white font-bold text-lg leading-none">&times;</button>
+                <button onclick="closeInstallModal()" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
             </div>
             
             <p class="text-xs text-slate-300 leading-relaxed">
-                Para instalar esta app en la pantalla de inicio de tu teléfono y usarla sin barra de navegador:
+                Instala esta aplicación en la pantalla de inicio para un acceso rápido en el evento:
             </p>
 
-            <!-- Instructions Android vs iOS -->
             <div class="space-y-3 text-xs">
-                <!-- Android Instructions -->
-                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
-                    <div class="font-bold text-emerald-400 flex items-center gap-1.5">
-                        <i class="fa-brands fa-android text-sm"></i> Android / Chrome
-                    </div>
-                    <p class="text-slate-300">Presiona el botón <strong>"Instalar Ahora"</strong> abajo o abre el menú (<strong>⋮</strong>) y selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</p>
+                <!-- Native Button if supported -->
+                <div id="nativeInstallContainer" class="hidden">
+                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md">
+                        <i class="fa-solid fa-download"></i> Confirmar Instalación Automática
+                    </button>
+                    <div class="text-center my-2 text-[10px] text-slate-400 uppercase tracking-widest">— o manualmente —</div>
                 </div>
 
-                <!-- iOS Instructions -->
+                <!-- iOS Safari Instructions -->
                 <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
-                    <div class="font-bold text-sky-400 flex items-center gap-1.5">
-                        <i class="fa-brands fa-apple text-sm"></i> iPhone / iPad (Safari)
+                    <div class="font-bold text-sky-300 flex items-center gap-1.5">
+                        <i class="fa-brands fa-apple text-sm"></i> iPhone / iPad (Safari):
                     </div>
-                    <p class="text-slate-300">Toca el botón <strong>Compartir</strong> (<i class="fa-solid fa-share-from-square text-sky-400"></i> en la parte inferior) y luego selecciona <strong>"Agregar a inicio"</strong> (<i class="fa-regular fa-square-plus text-sky-400"></i>).</p>
+                    <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
+                        <li>Toca el botón <strong>Compartir</strong> <i class="fa-solid fa-share-nodes text-sky-400"></i> abajo.</li>
+                        <li>Selecciona <strong>"Agregar a inicio"</strong> <i class="fa-regular fa-square-plus text-sky-400"></i>.</li>
+                    </ol>
+                </div>
+
+                <!-- Android Chrome Instructions -->
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
+                    <div class="font-bold text-emerald-300 flex items-center gap-1.5">
+                        <i class="fa-brands fa-android text-sm"></i> Android (Chrome):
+                    </div>
+                    <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
+                        <li>Toca los <strong>3 puntos</strong> <i class="fa-solid fa-ellipsis-vertical text-emerald-400"></i> arriba a la derecha.</li>
+                        <li>Toca <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
+                    </ol>
                 </div>
             </div>
 
-            <div class="flex justify-end gap-2 pt-2">
-                <button id="nativeInstallPromptBtn" onclick="triggerNativePrompt()" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 py-2 rounded-lg text-xs hidden shadow-md">
-                    Instalar Ahora
-                </button>
-                <button onclick="closeInstallModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold px-4 py-2 rounded-lg text-xs">
-                    Entendido
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para Notificaciones / Confirmaciones Generales -->
-    <div id="modalOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4">
-            <div id="modalIcon" class="text-3xl text-sky-400">
-                <i class="fa-solid fa-circle-info"></i>
-            </div>
-            <h3 id="modalTitle" class="text-lg font-bold text-white">Notificación</h3>
-            <p id="modalMessage" class="text-sm text-slate-300"></p>
-            <div class="flex justify-center gap-3 pt-2">
-                <button id="modalConfirmBtn" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition-all">Aceptar</button>
-                <button id="modalCancelBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold px-4 py-2 rounded-lg text-xs border border-slate-600 transition-all hidden">Cancelar</button>
-            </div>
+            <button onclick="closeInstallModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-1.5 text-xs rounded-lg transition-colors">
+                Entendido
+            </button>
         </div>
     </div>
 
     <!-- JavaScript Application Logic -->
     <script>
-        // Initial Matches State Model
         const defaultMatches = [
             { id: "A1", time: "13:00 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Lautaro", last: "Aguirre" }, f2: { first: "Juan", last: "Espinoza" }, winner: null },
             { id: "A2", time: "13:10 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Gonzalo", last: "Tuñon" }, f2: { first: "Valentino", last: "di Rosa" }, winner: null },
@@ -250,90 +267,118 @@
             { id: "A7", time: "14:00 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Felipe", last: "Ortiz" }, f2: { first: "Ian", last: "Cespedes" }, winner: null },
             { id: "A8", time: "14:10 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Alejandro", last: "Delgado" }, f2: { first: "Antonio", last: "Olcese" }, winner: null },
 
-            // Semifinals (Calculated automatically from A1-A8)
             { id: "A9", time: "14:20 hs", category: "Men / Absoluto / Semifinal Iniciantes", f1Ref: { type: 'winner', matchId: 'A1', placeholder: { first: "GAN Lucha", last: "A1" } }, f2Ref: { type: 'winner', matchId: 'A2', placeholder: { first: "GAN Lucha", last: "A2" } }, winner: null },
             { id: "A10", time: "14:30 hs", category: "Men / Absoluto / Semifinal Iniciantes", f1Ref: { type: 'winner', matchId: 'A3', placeholder: { first: "GAN Lucha", last: "A3" } }, f2Ref: { type: 'winner', matchId: 'A4', placeholder: { first: "GAN Lucha", last: "A4" } }, winner: null },
             { id: "A11", time: "14:40 hs", category: "Men / Absoluto / Semifinal Avanzados", f1Ref: { type: 'winner', matchId: 'A5', placeholder: { first: "GAN Lucha", last: "A5" } }, f2Ref: { type: 'winner', matchId: 'A6', placeholder: { first: "GAN Lucha", last: "A6" } }, winner: null },
+            
+            // Horarios actualizados A12 - A17
             { id: "A12", time: "14:50 hs", category: "Men / Absoluto / Semifinal Avanzados", f1Ref: { type: 'winner', matchId: 'A7', placeholder: { first: "GAN Lucha", last: "A7" } }, f2Ref: { type: 'winner', matchId: 'A8', placeholder: { first: "GAN Lucha", last: "A8" } }, winner: null },
-
-            // Superfight
             { id: "A13", time: "15:00 hs", category: "Superfight Femenina / Blue Belt Challenge / Absoluto", f1: { first: "Julia", last: "GRANATA" }, f2: { first: "Maria Victoria", last: "BENITEZ" }, winner: null, isSuperfight: true },
-
-            // Finals and Bronze Matches
             { id: "A14", time: "15:10 hs", category: "Men / Absoluto / Bronze Medal Match Iniciantes", f1Ref: { type: 'loser', matchId: 'A9', placeholder: { first: "PER Lucha", last: "A9" } }, f2Ref: { type: 'loser', matchId: 'A10', placeholder: { first: "PER Lucha", last: "A10" } }, winner: null },
             { id: "A15", time: "15:20 hs", category: "Men / Absoluto / Final Iniciantes", f1Ref: { type: 'winner', matchId: 'A9', placeholder: { first: "GAN Lucha", last: "A9" } }, f2Ref: { type: 'winner', matchId: 'A10', placeholder: { first: "GAN Lucha", last: "A10" } }, winner: null },
             { id: "A16", time: "15:30 hs", category: "Men / Absoluto / Bronze Medal Match Avanzados", f1Ref: { type: 'loser', matchId: 'A11', placeholder: { first: "PER Lucha", last: "A11" } }, f2Ref: { type: 'loser', matchId: 'A12', placeholder: { first: "PER Lucha", last: "A12" } }, winner: null },
             { id: "A17", time: "15:40 hs", category: "Men / Absoluto / Final Avanzados", f1Ref: { type: 'winner', matchId: 'A11', placeholder: { first: "GAN Lucha", last: "A11" } }, f2Ref: { type: 'winner', matchId: 'A12', placeholder: { first: "GAN Lucha", last: "A12" } }, winner: null }
         ];
 
-        // Global Edit Mode Switch
+        let state = JSON.parse(localStorage.getItem('ejj3_matches_state')) || JSON.parse(JSON.stringify(defaultMatches));
         let isEditMode = false;
+        let deferredPrompt = null;
 
-        // Active State Store (with LocalStorage fallback)
-        let state = [];
-        try {
-            const saved = localStorage.getItem('ejj3_matches_state');
-            state = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultMatches));
-        } catch (e) {
-            state = JSON.parse(JSON.stringify(defaultMatches));
-        }
-
-        // Save State
         function saveState() {
-            try {
-                localStorage.setItem('ejj3_matches_state', JSON.stringify(state));
-            } catch(e) {}
+            localStorage.setItem('ejj3_matches_state', JSON.stringify(state));
         }
 
-        // Custom UI Modal instead of alert/confirm
-        function showModal(title, message, isConfirm = false, onConfirm = null) {
-            const overlay = document.getElementById('modalOverlay');
-            const mTitle = document.getElementById('modalTitle');
-            const mMsg = document.getElementById('modalMessage');
-            const confirmBtn = document.getElementById('modalConfirmBtn');
-            const cancelBtn = document.getElementById('modalCancelBtn');
+        function setupPWAIntegration() {
+            const manifestData = {
+                name: "EJJ SUBMISSION ONLY 3",
+                short_name: "EJJ 3",
+                description: "Cronograma interactivo y llaves del Torneo EJJ Submission Only 3",
+                start_url: "./",
+                display: "standalone",
+                background_color: "#181e26",
+                theme_color: "#181e26",
+                icons: [{
+                    src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23181e26'/><text x='50%' y='55%' font-size='200' font-weight='900' fill='%2338bdf8' text-anchor='middle' dominant-baseline='middle'>EJJ</text></svg>",
+                    sizes: "512x512",
+                    type: "image/svg+xml",
+                    purpose: "any maskable"
+                }]
+            };
 
-            mTitle.textContent = title;
-            mMsg.textContent = message;
+            const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+            const manifestURL = URL.createObjectURL(manifestBlob);
+            const manifestLink = document.createElement('link');
+            manifestLink.rel = 'manifest';
+            manifestLink.href = manifestURL;
+            document.head.appendChild(manifestLink);
 
-            if (isConfirm) {
-                cancelBtn.classList.remove('hidden');
-                confirmBtn.onclick = () => {
-                    overlay.classList.add('hidden');
-                    if (onConfirm) onConfirm();
-                };
-                cancelBtn.onclick = () => overlay.classList.add('hidden');
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const nativeContainer = document.getElementById('nativeInstallContainer');
+                if (nativeContainer) nativeContainer.classList.remove('hidden');
+            });
+        }
+
+        function handleInstallClick() {
+            if (deferredPrompt) {
+                triggerNativeInstall();
             } else {
-                cancelBtn.classList.add('hidden');
-                confirmBtn.onclick = () => overlay.classList.add('hidden');
+                openInstallModal();
             }
-
-            overlay.classList.remove('hidden');
         }
 
-        // Helper to get match by ID
+        function openInstallModal() {
+            document.getElementById('installGuideModal').classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installGuideModal').classList.add('hidden');
+        }
+
+        function triggerNativeInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    closeInstallModal();
+                });
+            }
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btnText = document.getElementById('editBtnText');
+            const toolbar = document.getElementById('editorToolbar');
+            
+            if (isEditMode) {
+                btnText.innerText = "Salir Edición";
+                toolbar.classList.remove('hidden');
+            } else {
+                btnText.innerText = "Modo Edición";
+                toolbar.classList.add('hidden');
+            }
+            render();
+        }
+
         function getMatch(id) {
             return state.find(m => m.id === id);
         }
 
-        // Helper to get custom badge for a fighter slot based on match type and result
         function getFighterBadgeHtml(match, slotIndex) {
             if (!match.winner) return '';
 
             const isWinner = match.winner === slotIndex;
             const isLoser = match.winner !== slotIndex;
 
-            // Superfight Winner
             if (match.isSuperfight && isWinner) {
                 return `<span class="text-amber-300 font-extrabold text-xs bg-amber-950/80 px-2 py-1 rounded-md border border-amber-500/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-medal text-amber-400"></i> SUPERFIGHT WINNER</span>`;
             }
 
-            // Bronze Medal Match Winner
             if ((match.id === 'A14' || match.id === 'A16') && isWinner) {
                 return `<span class="text-amber-200 font-extrabold text-xs bg-amber-950/70 px-2 py-1 rounded-md border border-amber-700/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-award text-amber-600"></i> GANADOR BRONZE MEDAL</span>`;
             }
 
-            // Finals (A15 & A17)
             if (match.id === 'A15' || match.id === 'A17') {
                 if (isWinner) {
                     return `<span class="text-amber-300 font-extrabold text-xs bg-gradient-to-r from-amber-950 to-yellow-900 px-2.5 py-1 rounded-md border border-amber-400 flex items-center gap-1.5 shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"><i class="fa-solid fa-trophy text-amber-400"></i> CHAMPION</span>`;
@@ -343,7 +388,6 @@
                 }
             }
 
-            // Regular Match Winner
             if (isWinner) {
                 return `<span class="text-emerald-400 font-bold text-xs bg-emerald-950 px-2 py-1 rounded-md border border-emerald-500/50 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-400"></i> GANADOR</span>`;
             }
@@ -351,12 +395,10 @@
             return '';
         }
 
-        // Helper to resolve fighter from reference or static data
         function getFighter(match, slotIndex) {
             if (slotIndex === 1) {
                 if (match.f1) return match.f1;
                 const srcMatch = getMatch(match.f1Ref.matchId);
-                if (!srcMatch) return match.f1Ref.placeholder;
                 if (match.f1Ref.type === 'winner') {
                     return srcMatch.winner ? getFighter(srcMatch, srcMatch.winner) : match.f1Ref.placeholder;
                 } else {
@@ -369,7 +411,6 @@
             } else {
                 if (match.f2) return match.f2;
                 const srcMatch = getMatch(match.f2Ref.matchId);
-                if (!srcMatch) return match.f2Ref.placeholder;
                 if (match.f2Ref.type === 'winner') {
                     return srcMatch.winner ? getFighter(srcMatch, srcMatch.winner) : match.f2Ref.placeholder;
                 } else {
@@ -382,35 +423,28 @@
             }
         }
 
-        // Check if fighter slot is valid/clickable (not a placeholder)
         function isRealFighter(fighter) {
-            return fighter && fighter.first && !fighter.first.startsWith('GAN') && !fighter.first.startsWith('PER');
+            return fighter && !fighter.first.startsWith('GAN') && !fighter.first.startsWith('PER');
         }
 
-        // Select winner logic
         function setWinner(matchId, fighterIndex) {
-            if (isEditMode) return; // In edit mode, clicking inputs edits text instead
-
+            if (isEditMode) return;
             const match = getMatch(matchId);
             const fighter = getFighter(match, fighterIndex);
 
-            // Cannot select a placeholder as winner
             if (!isRealFighter(fighter)) return;
 
-            // Toggle or change winner
             if (match.winner === fighterIndex) {
-                match.winner = null; // Unselect
+                match.winner = null;
             } else {
-                match.winner = fighterIndex; // Set winner
+                match.winner = fighterIndex;
             }
 
-            // Clean dependent matches if winner was removed/changed
             cleanDependentMatches();
             saveState();
             render();
         }
 
-        // Re-evaluate downstream matches to ensure consistent bracket logic
         function cleanDependentMatches() {
             let changed = true;
             while(changed) {
@@ -428,31 +462,34 @@
             }
         }
 
-        // Live Canvas Inline Update Functions
         function updateMatchField(matchId, field, value) {
             const match = getMatch(matchId);
             if (!match) return;
-            match[field] = value;
+
+            if (field === 'category') match.category = value;
+            if (field === 'time') match.time = value;
+            if (field === 'f1_first') { match.f1 = match.f1 || {}; match.f1.first = value; }
+            if (field === 'f1_last') { match.f1 = match.f1 || {}; match.f1.last = value; }
+            if (field === 'f2_first') { match.f2 = match.f2 || {}; match.f2.first = value; }
+            if (field === 'f2_last') { match.f2 = match.f2 || {}; match.f2.last = value; }
+
             saveState();
         }
 
-        function updateFighterField(matchId, slot, field, value) {
-            const match = getMatch(matchId);
-            if (!match) return;
-            if (slot === 1) {
-                if (!match.f1) match.f1 = { first: "", last: "" };
-                match.f1[field] = value;
-            } else {
-                if (!match.f2) match.f2 = { first: "", last: "" };
-                match.f2[field] = value;
-            }
+        function addNewMatch() {
+            const newId = "A" + (state.length + 1);
+            state.push({
+                id: newId,
+                time: "16:00 hs",
+                category: "Men / Absoluto / Nueva Lucha",
+                f1: { first: "Nuevo", last: "Luchador 1" },
+                f2: { first: "Nuevo", last: "Luchador 2" },
+                winner: null
+            });
             saveState();
-            // Re-render dependent names in real-time
-            cleanDependentMatches();
             render();
         }
 
-        // Render main view
         function render() {
             const container = document.getElementById('matchesContainer');
             const query = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -478,24 +515,18 @@
                 const f2 = getFighter(match, 2);
                 const isFinished = match.winner !== null;
 
-                // Color Themes strictly aligned with prompt
-                let cardStyle = "";
-                let badgeStyle = "";
-                let iconClass = "";
+                let cardStyle = isFinished 
+                    ? "bg-emerald-950/40 border-emerald-500/80 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                    : "bg-blue-950/30 border-blue-500/60 shadow-[0_0_15px_rgba(59,130,246,0.1)]";
 
-                if (isFinished) {
-                    // VERDE (Lucha Finalizada)
-                    cardStyle = "bg-emerald-950/40 border-emerald-500/80 shadow-[0_0_15px_rgba(16,185,129,0.15)]";
-                    badgeStyle = "bg-emerald-900/60 text-emerald-300 border-emerald-500/50";
-                    iconClass = "fa-solid fa-circle-check text-emerald-400";
-                } else {
-                    // AZUL (Lucha pendiente o no realizada)
-                    cardStyle = "bg-blue-950/30 border-blue-500/60 shadow-[0_0_15px_rgba(59,130,246,0.1)]";
-                    badgeStyle = "bg-blue-900/50 text-blue-300 border-blue-500/40";
-                    iconClass = "fa-regular fa-clock text-blue-400";
-                }
+                let badgeStyle = isFinished 
+                    ? "bg-emerald-900/60 text-emerald-300 border-emerald-500/50"
+                    : "bg-blue-900/50 text-blue-300 border-blue-500/40";
 
-                // Superfight special border tint if pending
+                let iconClass = isFinished 
+                    ? "fa-solid fa-circle-check text-emerald-400"
+                    : "fa-regular fa-clock text-blue-400";
+
                 if (match.isSuperfight && !isFinished) {
                     cardStyle = "bg-purple-950/30 border-purple-500/70 shadow-[0_0_15px_rgba(168,85,247,0.15)]";
                     badgeStyle = "bg-purple-900/50 text-purple-300 border-purple-500/40";
@@ -504,27 +535,20 @@
 
                 const canSelectF1 = isRealFighter(f1);
                 const canSelectF2 = isRealFighter(f2);
-                const isStaticF1 = !!match.f1;
-                const isStaticF2 = !!match.f2;
 
                 return `
                 <div class="border ${cardStyle} rounded-xl p-3 sm:p-4 transition-all duration-300 relative overflow-hidden">
                     
                     <!-- Category Header -->
-                    <div class="flex items-center justify-between text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-2.5 gap-2">
-                        ${isEditMode ? `
-                            <input type="text" value="${match.category}" 
-                                onchange="updateMatchField('${match.id}', 'category', this.value)" 
-                                class="bg-slate-900/90 border border-slate-600 rounded px-2 py-0.5 text-sky-300 w-full text-xs font-semibold focus:outline-none focus:border-sky-400">
-                        ` : `
-                            <span class="${isFinished ? 'text-emerald-400' : (match.isSuperfight ? 'text-purple-300' : 'text-blue-300')}">
-                                ${match.category}
-                            </span>
-                        `}
-                        
-                        <div class="shrink-0">
-                            ${isFinished ? '<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-700/50"><i class="fa-solid fa-check mr-1"></i> FINALIZADA</span>' : '<span class="text-blue-400 font-bold text-[10px] bg-blue-950 px-2 py-0.5 rounded border border-blue-700/50"><i class="fa-solid fa-hourglass-start mr-1"></i> PENDIENTE</span>'}
-                        </div>
+                    <div class="flex items-center justify-between text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-2.5">
+                        <span class="${isFinished ? 'text-emerald-400' : (match.isSuperfight ? 'text-purple-300' : 'text-blue-300')}"
+                              contenteditable="${isEditMode}" 
+                              onblur="updateMatchField('${match.id}', 'category', this.innerText)">
+                            ${match.category}
+                        </span>
+                        ${isFinished 
+                            ? '<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-700/50"><i class="fa-solid fa-check mr-1"></i> FINALIZADA</span>' 
+                            : '<span class="text-blue-400 font-bold text-[10px] bg-blue-950 px-2 py-0.5 rounded border border-blue-700/50"><i class="fa-solid fa-hourglass-start mr-1"></i> PENDIENTE</span>'}
                     </div>
 
                     <!-- Match Main Body -->
@@ -542,70 +566,52 @@
                         <div class="flex-1 px-2 sm:px-4 space-y-2">
                             
                             <!-- Fighter 1 -->
-                            <div ${!isEditMode ? `onclick="setWinner('${match.id}', 1)"` : ''} 
-                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? (canSelectF1 ? 'hover:scale-[1.01] cursor-pointer' : 'opacity-60 cursor-not-allowed') : ''} ${match.winner === 1 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : (match.winner === 2 && (match.id === 'A15' || match.id === 'A17') ? 'bg-slate-800/60 border-slate-500/50' : 'bg-slate-900/40')} border border-slate-700/40">
+                            <div onclick="setWinner('${match.id}', 1)" 
+                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? 'cursor-pointer' : ''} ${canSelectF1 ? 'hover:scale-[1.01]' : 'opacity-60 cursor-not-allowed'} ${match.winner === 1 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : 'bg-slate-900/40'} border border-slate-700/40">
                                 
-                                <div class="flex items-center space-x-2.5 w-full">
-                                    <!-- Green Dot -->
+                                <div class="flex items-center space-x-2.5">
                                     <span class="w-2.5 h-2.5 rounded-full ${isRealFighter(f1) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]' : 'bg-slate-600'} shrink-0"></span>
-                                    
-                                    <div class="leading-tight w-full">
-                                        ${isEditMode && isStaticF1 ? `
-                                            <div class="flex flex-col gap-1 pr-2">
-                                                <input type="text" placeholder="Nombre" value="${f1.first}" onchange="updateFighterField('${match.id}', 1, 'first', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none focus:border-sky-400">
-                                                <input type="text" placeholder="Apellido" value="${f1.last}" onchange="updateFighterField('${match.id}', 1, 'last', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white font-bold uppercase focus:outline-none focus:border-sky-400">
-                                            </div>
-                                        ` : `
-                                            <div class="text-xs sm:text-sm font-medium ${match.winner === 1 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}">${f1.first}</div>
-                                            <div class="text-xs sm:text-sm font-extrabold ${match.winner === 1 ? 'text-white' : 'text-slate-100'} uppercase tracking-wide">${f1.last}</div>
-                                        `}
+                                    <div class="leading-tight">
+                                        <div class="text-xs sm:text-sm font-medium ${match.winner === 1 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}"
+                                             contenteditable="${isEditMode && match.f1}" 
+                                             onblur="updateMatchField('${match.id}', 'f1_first', this.innerText)">${f1.first}</div>
+                                        <div class="text-xs sm:text-sm font-extrabold ${match.winner === 1 ? 'text-white' : 'text-slate-100'} uppercase tracking-wide"
+                                             contenteditable="${isEditMode && match.f1}" 
+                                             onblur="updateMatchField('${match.id}', 'f1_last', this.innerText)">${f1.last}</div>
                                     </div>
                                 </div>
 
-                                <div class="shrink-0">
-                                    ${getFighterBadgeHtml(match, 1)}
-                                </div>
+                                ${getFighterBadgeHtml(match, 1)}
                             </div>
 
                             <!-- Fighter 2 -->
-                            <div ${!isEditMode ? `onclick="setWinner('${match.id}', 2)"` : ''} 
-                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? (canSelectF2 ? 'hover:scale-[1.01] cursor-pointer' : 'opacity-60 cursor-not-allowed') : ''} ${match.winner === 2 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : (match.winner === 1 && (match.id === 'A15' || match.id === 'A17') ? 'bg-slate-800/60 border-slate-500/50' : 'bg-slate-900/40')} border border-slate-700/40">
+                            <div onclick="setWinner('${match.id}', 2)" 
+                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? 'cursor-pointer' : ''} ${canSelectF2 ? 'hover:scale-[1.01]' : 'opacity-60 cursor-not-allowed'} ${match.winner === 2 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : 'bg-slate-900/40'} border border-slate-700/40">
                                 
-                                <div class="flex items-center space-x-2.5 w-full">
-                                    <!-- Green Dot -->
+                                <div class="flex items-center space-x-2.5">
                                     <span class="w-2.5 h-2.5 rounded-full ${isRealFighter(f2) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]' : 'bg-slate-600'} shrink-0"></span>
-                                    
-                                    <div class="leading-tight w-full">
-                                        ${isEditMode && isStaticF2 ? `
-                                            <div class="flex flex-col gap-1 pr-2">
-                                                <input type="text" placeholder="Nombre" value="${f2.first}" onchange="updateFighterField('${match.id}', 2, 'first', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none focus:border-sky-400">
-                                                <input type="text" placeholder="Apellido" value="${f2.last}" onchange="updateFighterField('${match.id}', 2, 'last', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white font-bold uppercase focus:outline-none focus:border-sky-400">
-                                            </div>
-                                        ` : `
-                                            <div class="text-xs sm:text-sm font-medium ${match.winner === 2 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}">${f2.first}</div>
-                                            <div class="text-xs sm:text-sm font-extrabold ${match.winner === 2 ? 'text-white' : 'text-slate-100'} uppercase tracking-wide">${f2.last}</div>
-                                        `}
+                                    <div class="leading-tight">
+                                        <div class="text-xs sm:text-sm font-medium ${match.winner === 2 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}"
+                                             contenteditable="${isEditMode && match.f2}" 
+                                             onblur="updateMatchField('${match.id}', 'f2_first', this.innerText)">${f2.first}</div>
+                                        <div class="text-xs sm:text-sm font-extrabold ${match.winner === 2 ? 'text-white' : 'text-slate-100'} uppercase tracking-wide"
+                                             contenteditable="${isEditMode && match.f2}" 
+                                             onblur="updateMatchField('${match.id}', 'f2_last', this.innerText)">${f2.last}</div>
                                     </div>
                                 </div>
 
-                                <div class="shrink-0">
-                                    ${getFighterBadgeHtml(match, 2)}
-                                </div>
+                                ${getFighterBadgeHtml(match, 2)}
                             </div>
 
                         </div>
 
                         <!-- Scheduled Time -->
                         <div class="shrink-0 pl-1">
-                            ${isEditMode ? `
-                                <input type="text" value="${match.time}" 
-                                    onchange="updateMatchField('${match.id}', 'time', this.value)" 
-                                    class="bg-slate-900 border border-slate-600 font-extrabold text-xs sm:text-sm px-2 py-1.5 rounded-lg text-center min-w-[70px] text-sky-300 focus:outline-none focus:border-sky-400">
-                            ` : `
-                                <div class="border ${badgeStyle} font-extrabold text-xs sm:text-sm px-2.5 py-2 rounded-lg text-center min-w-[70px] shadow-sm">
-                                    ${match.time}
-                                </div>
-                            `}
+                            <div class="border ${badgeStyle} font-extrabold text-xs sm:text-sm px-2.5 py-2 rounded-lg text-center min-w-[70px] shadow-sm"
+                                 contenteditable="${isEditMode}" 
+                                 onblur="updateMatchField('${match.id}', 'time', this.innerText)">
+                                ${match.time}
+                            </div>
                         </div>
 
                     </div>
@@ -614,109 +620,19 @@
             }).join('');
         }
 
-        // Toggle Edit Mode
-        document.getElementById('toggleEditModeBtn').addEventListener('click', () => {
-            isEditMode = !isEditMode;
-            const btnText = document.getElementById('editModeBtnText');
-            const subHeaderText = document.getElementById('subHeaderText');
-            
-            if (isEditMode) {
-                btnText.textContent = "Ver Modo Torneo";
-                subHeaderText.textContent = "MODO EDICIÓN ACTIVO: Edita nombres, horarios y categorías directamente en los campos";
-            } else {
-                btnText.textContent = "Modo Edición";
-                subHeaderText.textContent = "Haz clic en un competidor para declararlo GANADOR";
-            }
-            render();
-        });
-
-        // Search Input Listener
         document.getElementById('searchInput').addEventListener('input', render);
 
-        // Reset Button Listener with Modal Confirmation
         document.getElementById('resetBtn').addEventListener('click', () => {
-            showModal(
-                "¿Reiniciar Torneo?", 
-                "Esta acción restablecerá todos los resultados y competidores a su estado inicial por defecto.", 
-                true, 
-                () => {
-                    state = JSON.parse(JSON.stringify(defaultMatches));
-                    saveState();
-                    render();
-                }
-            );
+            if (confirm("¿Reiniciar todo el cronograma y eliminar cambios guardados?")) {
+                state = JSON.parse(JSON.stringify(defaultMatches));
+                saveState();
+                render();
+            }
         });
 
-        // First Render
+        // Initialize PWA and Render app
+        setupPWAIntegration();
         render();
-
-        /* =========================================================
-           PWA SERVICE WORKER & BEFOREINSTALLPROMPT / MODAL LOGIC
-           ========================================================= */
-        let deferredPrompt = null;
-
-        function openInstallModal() {
-            const modal = document.getElementById('installGuideModal');
-            const nativeBtn = document.getElementById('nativeInstallPromptBtn');
-            
-            if (deferredPrompt) {
-                nativeBtn.classList.remove('hidden');
-            } else {
-                nativeBtn.classList.add('hidden');
-            }
-            modal.classList.remove('hidden');
-        }
-
-        function closeInstallModal() {
-            document.getElementById('installGuideModal').classList.add('hidden');
-        }
-
-        async function triggerNativePrompt() {
-            if (!deferredPrompt) return;
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === 'accepted') {
-                closeInstallModal();
-            }
-            deferredPrompt = null;
-        }
-
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
-
-        // Register Service Worker via Blob
-        if ('serviceWorker' in navigator) {
-            const swCode = `
-                const CACHE_NAME = 'ejj3-pwa-v3';
-                self.addEventListener('install', (e) => {
-                    self.skipWaiting();
-                });
-                self.addEventListener('activate', (e) => {
-                    e.waitUntil(clients.claim());
-                });
-                self.addEventListener('fetch', (e) => {
-                    e.respondWith(
-                        caches.match(e.request).then((res) => {
-                            return res || fetch(e.request).then((netRes) => {
-                                return caches.open(CACHE_NAME).then((cache) => {
-                                    cache.put(e.request, netRes.clone());
-                                    return netRes;
-                                });
-                            }).catch(() => res);
-                        })
-                    );
-                });
-            `;
-
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-
-            navigator.serviceWorker.register(swUrl)
-                .then(() => console.log('PWA Service Worker registrado con éxito'))
-                .catch(err => console.log('PWAServiceWorker fallback error:', err));
-        }
     </script>
 </body>
 </html>
