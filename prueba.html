@@ -1,555 +1,1086 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full w-full">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ETAKKI BJJ Referee Scoreboard</title>
-    
-    <!-- Configuración PWA Meta Tags -->
-    <meta name="theme-color" content="#111620">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ETAKKI BJJ">
-    <meta name="application-name" content="ETAKKI BJJ Scoreboard">
-    <meta name="description" content="Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submission Only Jiu Jitsu Tournament - Interactive Brackets</title>
 
-    <!-- Web App Manifest Embebido Completo y Válido PWA -->
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{
-        "id": "etakki-bjj-scoreboard-v3",
-        "name": "ETAKKI BJJ Referee Scoreboard",
-        "short_name": "ETAKKI BJJ",
-        "description": "Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules",
-        "start_url": ".",
-        "scope": "./",
-        "display": "standalone",
-        "background_color": "#161C26",
-        "theme_color": "#111620",
-        "orientation": "any",
-        "icons": [
-            {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22><rect width=%22192%22 height=%22192%22 rx=%2232%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%2280%22 font-weight=%22900%22 fill=%22%2300F0FF%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
-                "sizes": "192x192",
-                "type": "image/svg+xml",
-                "purpose": "any maskable"
-            },
-            {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%2264%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%22200%22 font-weight=%22900%22 fill=%22%2300F0FF%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
-                "sizes": "512x512",
-                "type": "image/svg+xml",
-                "purpose": "any maskable"
-            }
-        ]
-    }'>
-
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Google Fonts: Barlow Condensed, Montserrat & Oswald -->
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&family=Montserrat:wght@800;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Montserrat:ital,wght@0,400;0,700;0,900;1,800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        neonBlue: '#00f0ff',
+                        electricBlue: '#0066ff',
+                        deepBlue: '#030b1e',
+                        cardBg: 'rgba(5, 18, 48, 0.9)',
+                        whatsappGreen: '#25D366',
+                    },
+                    fontFamily: {
+                        heading: ['Orbitron', 'sans-serif'],
+                        subheading: ['Teko', 'sans-serif'],
+                        body: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
 
     <style>
         body {
-            font-family: 'Barlow Condensed', sans-serif;
-            background-color: #161C26;
-            color: #FFFFFF;
-            user-select: none;
-            -webkit-user-select: none;
-            touch-action: manipulation;
+            background-color: #020612;
+            background-image: 
+                radial-gradient(circle at 50% 15%, rgba(0, 102, 255, 0.4), transparent 60%),
+                radial-gradient(circle at 50% 65%, rgba(0, 240, 255, 0.25), transparent 50%),
+                radial-gradient(circle at 50% 100%, rgba(2, 6, 18, 0.95), #020612);
+            background-attachment: fixed;
+            color: #ffffff;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
         }
 
-        .font-condensed { font-family: 'Barlow Condensed', sans-serif; }
-        .font-smooth { font-family: 'Montserrat', sans-serif; }
-        .font-oswald { font-family: 'Oswald', sans-serif; }
-
-        .bg-smooth-dark { background-color: #19202D; }
-        .bg-smooth-card { background-color: #212B3B; }
-        .bg-smooth-blue { background-color: #1360EF; }
-        .bg-smooth-red { background-color: #D32F2F; }
-
-        .btn-tap:active {
-            transform: scale(0.96);
-            filter: brightness(1.2);
+        #lightning-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.6;
         }
 
-        @keyframes neon-blue-pulse {
-            0%, 100% {
-                color: #00F0FF;
-                text-shadow: 0 0 10px #00F0FF, 0 0 20px #00F0FF, 0 0 40px rgba(0, 240, 255, 0.9), 0 0 60px rgba(0, 240, 255, 0.6);
-            }
-            50% {
-                color: #E0FFFF;
-                text-shadow: 0 0 15px #00F0FF, 0 0 30px #00F0FF, 0 0 50px rgba(0, 240, 255, 1), 0 0 80px rgba(0, 240, 255, 0.9);
-            }
+        .neon-glow-text {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.6);
         }
 
-        @keyframes neon-red-pulse {
-            0%, 100% {
-                color: #FF0055;
-                text-shadow: 0 0 10px #FF0055, 0 0 20px #FF0055, 0 0 40px rgba(255, 0, 85, 0.9), 0 0 60px rgba(255, 0, 85, 0.6);
-            }
-            50% {
-                color: #FFE6EE;
-                text-shadow: 0 0 15px #FF0055, 0 0 30px #FF0055, 0 0 50px rgba(255, 0, 85, 1), 0 0 80px rgba(255, 0, 85, 0.9);
-            }
+        .neon-glow-box {
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.5);
         }
 
-        .neon-blue-glow { animation: neon-blue-pulse 2.2s infinite ease-in-out; }
-        .neon-red-glow { animation: neon-red-pulse 2.2s infinite ease-in-out; }
-
-        .score-blue-neon {
-            color: #00F0FF;
-            text-shadow: 0 0 12px #00F0FF, 0 0 25px rgba(0, 240, 255, 0.8), 0 0 50px rgba(0, 240, 255, 0.5);
+        .whatsapp-glow-box {
+            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5), inset 0 0 10px rgba(37, 211, 102, 0.2);
+            border: 1px solid rgba(37, 211, 102, 0.7);
         }
 
-        .score-red-neon {
-            color: #FF0055;
-            text-shadow: 0 0 12px #FF0055, 0 0 25px rgba(255, 0, 85, 0.8), 0 0 50px rgba(255, 0, 85, 0.5);
+        .superfight-glow-box {
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5), inset 0 0 20px rgba(255, 0, 127, 0.25);
+            border: 2px solid rgba(255, 0, 127, 0.8);
         }
 
-        @keyframes flash-timer {
-            0%, 100% { opacity: 1; color: #FF4D4D; }
-            50% { opacity: 0.3; color: #FFFFFF; }
+        .superfight-title {
+            background: linear-gradient(180deg, #ffffff 0%, #ffb6c1 50%, #ff007f 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 12px rgba(255, 0, 127, 0.9));
         }
-        .timer-ended { animation: flash-timer 0.6s infinite; }
+
+        .vs-neon {
+            text-shadow: 0 0 15px rgba(255, 0, 127, 0.9), 0 0 30px rgba(255, 0, 127, 0.6);
+        }
+
+        .champion-glow {
+            box-shadow: 0 0 25px rgba(250, 204, 21, 0.8), inset 0 0 15px rgba(250, 204, 21, 0.4);
+            border: 2px solid #facc15 !important;
+            animation: pulse-glow 1.5s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 15px rgba(250, 204, 21, 0.6); }
+            100% { box-shadow: 0 0 30px rgba(250, 204, 21, 1); }
+        }
+
+        .metallic-title {
+            background: linear-gradient(180deg, #ffffff 0%, #b0dfff 50%, #0088ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
+        }
+
+        .slot-empty {
+            color: #4b5563;
+            border-style: dashed;
+            border-color: #1e3a8a;
+            background: rgba(3, 11, 30, 0.5);
+        }
+
+        .slot-active {
+            cursor: pointer;
+        }
+
+        .slot-defeated {
+            opacity: 0.4;
+            filter: grayscale(80%);
+        }
+
+        .slot-winner {
+            background-color: #00f0ff !important;
+            color: #000000 !important;
+            font-weight: 800;
+            border-color: #ffffff !important;
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
+        }
+
+        .win-bar-bg {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .win-bar-fill {
+            background: linear-gradient(90deg, #00f0ff, #0066ff);
+            transition: width 0.4s ease-in-out;
+        }
+
+        .win-bar-pink {
+            background: linear-gradient(90deg, #ff007f, #a855f7);
+            transition: width 0.4s ease-in-out;
+        }
+
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #020612;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #0066ff;
+            border-radius: 4px;
+        }
     </style>
 </head>
-<body class="min-h-screen w-screen bg-[#161C26] text-white flex flex-col justify-between overflow-x-hidden select-none">
+<body class="min-h-screen flex flex-col justify-between items-center relative py-6 px-2 sm:px-4">
 
-    <!-- HEADER SUPERIOR -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2 flex items-center justify-between shrink-0 z-20 shadow-md relative">
-        <div class="flex items-center space-x-2 shrink-0 z-10">
-            <div class="w-8 h-6 flex items-center justify-center">
-                <svg viewBox="0 0 120 70" class="w-full h-full text-white fill-current drop-shadow">
-                    <path d="M 15 5 L 115 5 Q 118 5 116 12 L 105 62 Q 103 68 95 68 L 5 68 Q 2 68 4 61 L 15 12 Q 17 5 25 5 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <text x="58" y="52" font-family="'Montserrat', sans-serif" font-weight="900" font-style="italic" font-size="44" fill="currentColor" text-anchor="middle" letter-spacing="-2">EJJ</text>
-                </svg>
+    <!-- Canvas de rayos/relámpagos de fondo -->
+    <canvas id="lightning-canvas"></canvas>
+
+    <!-- SECTION PRINCIPAL INTERACTIVA -->
+    <section id="brackets" class="relative z-10 w-full max-w-7xl mx-auto my-4 scroll-mt-10">
+
+        <!-- Barra de Control y Restablecimiento -->
+        <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
+            <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
+                <i class="fa-solid fa-lock text-red-400 text-base"></i> 
+                <span>VOTOS CERRADOS - WIN CHANCE SEGÚN VOTACIÓN FINAL</span>
+            </span>
+
+            <div class="flex flex-wrap items-center gap-3">
+                <span id="total-votes-counter" class="bg-blue-950 border border-cyan-400/50 text-cyan-300 font-mono text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-lg">
+                    <i class="fa-solid fa-check-to-slot text-yellow-400"></i> TOTAL VOTOS REGISTRADOS: <span class="text-white font-extrabold text-sm" id="total-votes-num">166</span>
+                </span>
+                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
+                   class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-5 py-2.5 rounded-xl transition duration-300 flex items-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-xs sm:text-sm uppercase tracking-wider transform hover:scale-105">
+                    <i class="fa-solid fa-book-open text-base"></i> Reglamento
+                </a>
             </div>
         </div>
 
-        <div class="flex-1 flex items-center justify-center px-2">
-            <h1 class="font-condensed font-black text-xs sm:text-xl md:text-2xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
-                ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
+        <!-- ENCABEZADO -->
+        <header class="text-center w-full mb-8">
+            <h1 class="font-heading text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase metallic-title leading-none mb-1">
+                SUBMISSION ONLY JIU JITSU TOURNAMENT
             </h1>
-        </div>
-
-        <div class="w-8 h-6 shrink-0 z-10"></div>
-    </header>
-
-    <!-- CONTENEDOR PRINCIPAL -->
-    <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
-        <div class="grid grid-cols-2 gap-2 flex-1 w-full">
-            
-            <!-- LUCHADOR AZUL -->
-            <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
-                <div class="bg-smooth-blue px-2 py-1 text-center shrink-0">
-                    <h2 class="font-condensed text-xs sm:text-base font-extrabold tracking-wider text-white leading-none uppercase">
-                        LUCHADOR AZUL
-                    </h2>
-                </div>
-
-                <div class="bg-[#151C28] px-2.5 py-1.5 border-b border-slate-800 flex items-center justify-center space-x-2 shrink-0">
-                    <div class="w-7 h-5 sm:w-9 sm:h-6 shrink-0 rounded shadow overflow-hidden border border-slate-600">
-                        <svg viewBox="0 0 900 600" class="w-full h-full">
-                            <rect width="900" height="600" fill="#74acdf"/>
-                            <rect y="200" width="900" height="200" fill="#ffffff"/>
-                            <circle cx="450" cy="300" r="45" fill="#f6b40e"/>
-                            <path d="M 450 240 L 450 360 M 390 300 L 510 300 M 408 258 L 492 342 M 408 342 L 492 258" stroke="#843b14" stroke-width="6" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <div class="flex flex-1 text-left min-w-0">
-                        <input type="text" id="blue-name" placeholder="NOMBRE LUCHADOR" value="LUKE"
-                               class="w-full bg-transparent font-condensed font-bold text-xl sm:text-3xl md:text-4xl neon-blue-glow focus:outline-none uppercase tracking-wide leading-none truncate">
-                    </div>
-                </div>
-
-                <!-- CONTENEDOR DE NÚMEROS COMPACTO CON NÚMEROS GIGANTES AZUL NEÓN -->
-                <div class="flex-1 min-h-[100px] flex items-center justify-center bg-[#0C1018] py-1 px-2 overflow-hidden">
-                    <span id="blue-score" class="font-oswald text-[115px] sm:text-[160px] md:text-[210px] font-bold score-blue-neon leading-none select-none">0</span>
-                </div>
-            </div>
-
-            <!-- LUCHADOR ROJO -->
-            <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
-                <div class="bg-smooth-red px-2 py-1 text-center shrink-0">
-                    <h2 class="font-condensed text-xs sm:text-base font-extrabold tracking-wider text-white leading-none uppercase">
-                        LUCHADOR ROJO
-                    </h2>
-                </div>
-
-                <div class="bg-[#151C28] px-2.5 py-1.5 border-b border-slate-800 flex items-center justify-center space-x-2 shrink-0">
-                    <div class="w-7 h-5 sm:w-9 sm:h-6 shrink-0 rounded shadow overflow-hidden border border-slate-600">
-                        <svg viewBox="0 0 900 600" class="w-full h-full">
-                            <rect width="900" height="600" fill="#74acdf"/>
-                            <rect y="200" width="900" height="200" fill="#ffffff"/>
-                            <circle cx="450" cy="300" r="45" fill="#f6b40e"/>
-                            <path d="M 450 240 L 450 360 M 408 258 L 492 342 M 408 342 L 492 258" stroke="#843b14" stroke-width="6" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    <div class="flex flex-1 text-left min-w-0">
-                        <input type="text" id="red-name" placeholder="NOMBRE LUCHADOR" value="VADER"
-                               class="w-full bg-transparent font-condensed font-bold text-xl sm:text-3xl md:text-4xl neon-red-glow focus:outline-none uppercase tracking-wide leading-none truncate">
-                    </div>
-                </div>
-
-                <!-- CONTENEDOR DE NÚMEROS COMPACTO CON NÚMEROS GIGANTES ROJO NEÓN -->
-                <div class="flex-1 min-h-[100px] flex items-center justify-center bg-[#0C1018] py-1 px-2 overflow-hidden">
-                    <span id="red-score" class="font-oswald text-[115px] sm:text-[160px] md:text-[210px] font-bold score-red-neon leading-none select-none">0</span>
-                </div>
-            </div>
-
-        </div>
-
-        <!-- BOTONES DE PUNTUACIÓN -->
-        <div class="grid grid-cols-2 gap-2 w-full shrink-0">
-            <!-- AZUL -->
-            <div class="flex flex-col space-y-1.5 sm:space-y-2">
-                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
-                    <span class="font-oswald text-xl sm:text-3xl font-bold text-cyan-400 ml-1">+2</span>
-                </button>
-                <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
-                    <span class="font-oswald text-xl sm:text-3xl font-bold text-cyan-400 ml-1">+3</span>
-                </button>
-                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
-                    <span class="font-oswald text-xl sm:text-3xl font-bold text-cyan-400 ml-1">+4</span>
-                </button>
-                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
-                    <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
-                    <span class="font-oswald text-base text-red-400 font-bold">-1</span>
-                </button>
-            </div>
-
-            <!-- ROJO -->
-            <div class="flex flex-col space-y-1.5 sm:space-y-2">
-                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
-                    <span class="font-oswald text-xl sm:text-3xl font-bold text-pink-500 ml-1">+2</span>
-                </button>
-                <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
-                    <span class="font-oswald text-xl sm:text-3xl font-bold text-pink-500 ml-1">+3</span>
-                </button>
-                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
-                    <span class="font-oswald text-xl sm:text-3xl font-bold text-pink-500 ml-1">+4</span>
-                </button>
-                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
-                    <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
-                    <span class="font-oswald text-base text-red-400 font-bold">-1</span>
-                </button>
-            </div>
-        </div>
-    </main>
-
-    <!-- FOOTER Y CONTROLES PROPORCIONADOS PARA MÓVIL (SIN CORTAR BOTÓN INICIAR) -->
-    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-2 sm:px-4 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl gap-1.5 sm:gap-3">
-        
-        <!-- Bloque de Botones Izquierda: Reiniciar e Instalar App -->
-        <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-sm px-2.5 sm:px-4 py-2.5 rounded-lg border border-slate-600 uppercase shadow tracking-wider whitespace-nowrap">
-                REINICIAR
-            </button>
-            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-sm font-bold px-2.5 sm:px-3.5 py-2.5 rounded-lg shadow flex items-center space-x-1 border border-emerald-400 transition-colors shrink-0">
-                <svg class="w-4 h-4 fill-current shrink-0" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-                <span class="font-condensed font-extrabold tracking-wider uppercase whitespace-nowrap">INSTALAR APP</span>
-            </button>
-        </div>
-
-        <!-- Reloj Central -->
-        <div class="flex items-center justify-center shrink-0">
-            <div id="timer-display" class="font-oswald text-2xl sm:text-4xl md:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-2.5 sm:px-4 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
-                03:00
-            </div>
-        </div>
-
-        <!-- Botón Iniciar / Pausa GRANDE Y LEGIBLE -->
-        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-sm sm:text-lg px-3.5 sm:px-6 py-2.5 rounded-lg border border-emerald-400 flex-1 sm:flex-none max-w-[140px] text-center uppercase shadow-lg transition-colors tracking-wider whitespace-nowrap overflow-hidden text-ellipsis">
-            <span id="start-pause-text">INICIAR</span>
-        </button>
-    </footer>
-
-    <!-- MODAL GANADOR -->
-    <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
-            <h2 id="winner-name-display" class="font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-300 mb-1">
-                RESULTADO LUCHA
-            </h2>
-            <h3 id="winner-title" class="font-oswald text-3xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
-                ¡TIEMPO!
-            </h3>
-            <div id="winner-score-display" class="font-oswald text-2xl sm:text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
-                SCORE: 0 - 0
-            </div>
-            <div class="w-full space-y-2.5">
-                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-condensed font-extrabold text-lg py-2.5 rounded-lg w-full border border-blue-400 uppercase shadow-lg tracking-wider">
-                    NUEVA LUCHA
-                </button>
-                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-condensed font-bold text-sm py-2 rounded-lg w-full border border-slate-600 uppercase tracking-wider">
-                    CERRAR
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL INSTRUCCIONES INSTALACIÓN PWA -->
-    <div id="pwa-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-[#19202D] border-2 border-emerald-500 rounded-2xl p-5 max-w-md w-full shadow-2xl flex flex-col items-center text-slate-200 my-auto">
-            <h2 class="font-condensed text-2xl font-black uppercase text-emerald-400 tracking-wide mb-2 flex items-center space-x-2 text-center">
-                <svg class="w-6 h-6 fill-current shrink-0" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z"/></svg>
-                <span>Instalar ETAKKI BJJ App</span>
-            </h2>
-            <p class="font-condensed text-xs sm:text-sm text-slate-300 text-center mb-4">
-                Usa el marcador en pantalla completa, sin barras de navegador y 100% offline.
+            <p class="font-subheading text-3xl sm:text-5xl md:text-6xl text-cyan-300 italic font-bold leading-none uppercase drop-shadow-[0_0_12px_rgba(0,240,255,0.7)]">
+                Sábado 14 de noviembre
             </p>
+            <p class="font-body text-xs sm:text-base md:text-lg text-white font-semibold tracking-wide uppercase mt-1">
+                dos torneos super 8, dos títulos en juego + superfight femenina.
+            </p>
+        </header>
 
-            <div class="w-full space-y-3 mb-5 text-left font-condensed text-xs sm:text-sm">
-                <div class="bg-[#101520] p-3 rounded-lg border border-slate-700">
-                    <span class="font-bold text-sky-400 text-sm block mb-1">📱 En iPhone / iPad (Safari):</span>
-                    1. Toca el botón <strong>Compartir</strong> <span class="text-base">⎘</span> en la barra del navegador.<br>
-                    2. Desplázate hacia abajo y selecciona <strong>"Agregar a inicio"</strong> ➕.
+        <!-- CONTENEDOR DE TORNEOS -->
+        <div class="w-full space-y-12">
+
+            <!-- ================= TORNEO 1: INICIANTES (FAIXA BLANCA) ================= -->
+            <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-cyan-500/40 shadow-2xl relative overflow-hidden">
+                <div class="text-center mb-6">
+                    <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
+                        INICIANTES
+                    </h2>
+                    <span class="bg-cyan-950 text-cyan-200 border border-cyan-400/60 text-xs sm:text-sm font-bold tracking-widest px-4 py-1 rounded-full uppercase inline-block">
+                        FAIXA BLANCA
+                    </span>
                 </div>
-                <div class="bg-[#101520] p-3 rounded-lg border border-slate-700">
-                    <span class="font-bold text-emerald-400 text-sm block mb-1">🤖 En Android (Chrome / Edge):</span>
-                    1. Toca los <strong>3 puntos (⋮)</strong> en la esquina superior derecha.<br>
-                    2. Selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.
-                </div>
-                <div class="bg-[#101520] p-3 rounded-lg border border-slate-700">
-                    <span class="font-bold text-purple-400 text-sm block mb-1">💻 En Computadora (Chrome / Edge):</span>
-                    1. Haz clic en el icono de <strong>Instalar</strong> <span class="text-base">⊕</span> en la barra de dirección arriba a la derecha.
+
+                <div class="grid grid-cols-1 lg:grid-cols-7 gap-3 sm:gap-4 items-center">
+
+                    <!-- LADO IZQUIERDO: CUARTOS DE FINAL -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
+                        
+                        <!-- QF 1 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf0-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 0, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">LAUTARO AGUIRRE</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf0-p0-pct">40%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf0-p0-bar" class="h-full win-bar-fill" style="width: 40%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="init-qf0-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 0, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">JUAN ESPINOZA</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf0-p1-pct">60%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf0-p1-bar" class="h-full win-bar-fill" style="width: 60%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QF 2 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf1-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 1, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">GONZALO TUÑON</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf1-p0-pct">63%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf1-p0-bar" class="h-full win-bar-fill" style="width: 63%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="init-qf1-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 1, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">VALENTINO DI ROSA</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf1-p1-pct">37%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf1-p1-bar" class="h-full win-bar-fill" style="width: 37%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEMIFINAL A + FINAL + SEMIFINAL B -->
+                    <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-2 lg:my-0">
+                        <div class="space-y-2">
+                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
+                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
+                                <div id="init-sf0-p0" onclick="advanceFighter('iniciantes', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                                <div id="init-sf0-p1" onclick="advanceFighter('iniciantes', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center space-y-3 py-2">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/80 shadow-[0_0_20px_rgba(0,240,255,0.5)]">
+                                <i class="fa-solid fa-shield-halved text-2xl text-cyan-300 mb-0.5"></i>
+                                <span class="font-heading font-black text-sm text-white leading-none">EBI</span>
+                                <span class="font-subheading text-xs text-cyan-400 leading-none">RULES</span>
+                            </div>
+
+                            <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
+                                <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
+                                <div id="init-f0-p0" onclick="advanceFighter('iniciantes', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
+                                    Finalista A
+                                </div>
+                                <div id="init-f0-p1" onclick="advanceFighter('iniciantes', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
+                                    Finalista B
+                                </div>
+                            </div>
+
+                            <div id="init-champion-box" class="w-full text-center hidden">
+                                <div class="bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-500 text-black font-black py-2 px-3 rounded-xl champion-glow text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-crown text-base animate-bounce"></i>
+                                    <span id="init-champion-name">CAMPEÓN</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
+                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
+                                <div id="init-sf1-p0" onclick="advanceFighter('iniciantes', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                                <div id="init-sf1-p1" onclick="advanceFighter('iniciantes', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LADO DERECHO: CUARTOS DE FINAL -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
+                        
+                        <!-- QF 3 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf2-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 2, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">AGUSTIN VELAZQUEZ</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf2-p0-pct">44%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf2-p0-bar" class="h-full win-bar-fill" style="width: 44%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="init-qf2-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 2, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">FEDERICO WANG</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf2-p1-pct">56%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf2-p1-bar" class="h-full win-bar-fill" style="width: 56%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QF 4 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="init-qf3-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 3, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">BENJAMIN DUVOBSKY</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf3-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf3-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="init-qf3-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('iniciantes', 'qf', 3, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">EZEQUIEL ARGÜELLO</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="init-qf3-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="init-qf3-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
-            <button onclick="closePwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider">
-                ¡ENTENDIDO!
-            </button>
+            <!-- ================= SECCIÓN SUPERFIGHT FEMENINA ================= -->
+            <div class="w-full bg-slate-950/90 backdrop-blur-md p-4 sm:p-8 rounded-2xl superfight-glow-box relative overflow-hidden my-8">
+                <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="text-center relative z-10 mb-6">
+                    <span class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-heading text-xs sm:text-sm font-black tracking-[0.2em] px-4 py-1.5 rounded-full uppercase shadow-[0_0_15px_rgba(255,0,127,0.8)] inline-block mb-2">
+                        <i class="fa-solid fa-fire text-yellow-300 mr-1 animate-pulse"></i> SPECIAL MATCH - FEMALE SUPERFIGHT
+                    </span>
+                    <h2 class="font-heading text-3xl sm:text-5xl md:text-6xl font-black superfight-title uppercase tracking-widest my-1">
+                        SUPERFIGHT FEMENINA
+                    </h2>
+                    <div class="flex items-center justify-center gap-2 mt-1">
+                        <span class="bg-blue-600 text-white font-bold text-xs sm:text-sm px-3 py-0.5 rounded border border-cyan-300 shadow-[0_0_8px_rgba(0,240,255,0.7)]">
+                            FAIXA AZUL
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Banner Ganadora Superfight -->
+                <div id="sf-winner-box" class="w-full max-w-lg mx-auto mb-6 text-center">
+                    <div class="bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 text-white font-black py-2.5 px-4 rounded-xl shadow-[0_0_20px_rgba(255,0,127,0.8)] border border-pink-300 uppercase tracking-wider text-xs sm:text-sm">
+                        <div class="flex items-center justify-center gap-2 mb-0.5">
+                            <i class="fa-solid fa-trophy text-yellow-300"></i>
+                            <span>GANADORA SUPERFIGHT: <span id="sf-winner-name" class="underline decoration-pink-300">JULIA GRANATA</span></span>
+                        </div>
+                        <div id="sf-winner-pct" class="text-[10px] sm:text-xs font-mono text-pink-200">
+                            WIN CHANCE SEGÚN VOTACIÓN: 57% DE LOS VOTOS
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center max-w-5xl mx-auto relative z-10">
+                    
+                    <!-- LUCHADORA 1: JULIA GRANATA -->
+                    <div class="md:col-span-5 bg-gradient-to-br from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center shadow-[0_0_20px_rgba(255,0,127,0.3)]">
+                        <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
+                            VIBRUM
+                        </div>
+                        <h3 class="font-heading text-2xl sm:text-3xl font-black text-white tracking-wide uppercase">
+                            JULIA GRANATA
+                        </h3>
+                        <div class="flex items-center justify-center gap-1 mt-1 text-cyan-300 text-xs font-semibold mb-3">
+                            <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
+                        </div>
+
+                        <!-- Barra Win Chance -->
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-pink-500/40 mb-3">
+                            <div class="flex justify-between text-xs font-mono text-pink-300 font-bold mb-1">
+                                <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                <span id="sf-p0-pct">57%</span>
+                            </div>
+                            <div class="w-full h-2 win-bar-bg rounded-full overflow-hidden">
+                                <div id="sf-p0-bar" class="h-full win-bar-pink" style="width: 57%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="w-full bg-slate-900/90 text-red-400 border border-red-500/40 font-bold py-2 rounded-lg text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 opacity-90">
+                            <i class="fa-solid fa-lock"></i> Votos Cerrados
+                        </div>
+                    </div>
+
+                    <!-- VS CENTRO ANIMADO -->
+                    <div class="md:col-span-1 flex flex-col items-center justify-center py-2 md:py-0">
+                        <span class="font-heading text-4xl sm:text-5xl font-black text-pink-500 vs-neon tracking-tighter italic">
+                            VS
+                        </span>
+                    </div>
+
+                    <!-- LUCHADORA 2: MARIA VICTORIA BENITEZ -->
+                    <div class="md:col-span-5 bg-gradient-to-bl from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center shadow-[0_0_20px_rgba(255,0,127,0.3)]">
+                        <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
+                            CASTAÑO JIU JITSU
+                        </div>
+                        <h3 class="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-wide uppercase">
+                            MARIA VICTORIA BENITEZ
+                        </h3>
+                        <div class="flex items-center justify-center gap-1 mt-1 text-cyan-300 text-xs font-semibold mb-3">
+                            <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
+                        </div>
+
+                        <!-- Barra Win Chance -->
+                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-pink-500/40 mb-3">
+                            <div class="flex justify-between text-xs font-mono text-pink-300 font-bold mb-1">
+                                <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                <span id="sf-p1-pct">43%</span>
+                            </div>
+                            <div class="w-full h-2 win-bar-bg rounded-full overflow-hidden">
+                                <div id="sf-p1-bar" class="h-full win-bar-pink" style="width: 43%;"></div>
+                            </div>
+                        </div>
+
+                        <div class="w-full bg-slate-900/90 text-red-400 border border-red-500/40 font-bold py-2 rounded-lg text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 opacity-90">
+                            <i class="fa-solid fa-lock"></i> Votos Cerrados
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ================= TORNEO 2: AVANZADOS (AZUL - ROXA) ================= -->
+            <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
+                <div class="text-center mb-6">
+                    <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
+                        AVANZADOS
+                    </h2>
+                    <span class="bg-blue-950 text-cyan-200 border border-blue-400/60 text-xs sm:text-sm font-bold tracking-widest px-4 py-1 rounded-full uppercase inline-block">
+                        AZUL – ROXA
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-7 gap-3 sm:gap-4 items-center">
+
+                    <!-- LADO IZQUIERDO: CUARTOS DE FINAL -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
+                        
+                        <!-- QF 1 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf0-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 0, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">EZEQUIEL MURACCIOLE</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf0-p0-pct">54%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf0-p0-bar" class="h-full win-bar-fill" style="width: 54%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="av-qf0-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 0, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">DANIEL GOLDSMAN</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf0-p1-pct">46%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf0-p1-bar" class="h-full win-bar-fill" style="width: 46%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QF 2 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf1-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 1, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">CIRO CESPEDES</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf1-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf1-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="av-qf1-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 1, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">AXEL FURLAN</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf1-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf1-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SEMIFINAL A + FINAL + SEMIFINAL B -->
+                    <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-2 lg:my-0">
+                        <div class="space-y-2">
+                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
+                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
+                                <div id="av-sf0-p0" onclick="advanceFighter('avanzados', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                                <div id="av-sf0-p1" onclick="advanceFighter('avanzados', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col items-center justify-center space-y-3 py-2">
+                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/90 shadow-[0_0_20px_rgba(0,102,255,0.6)] p-1 text-center">
+                                <i class="fa-solid fa-ring text-cyan-300 text-xl mb-0.5"></i>
+                                <span class="font-heading text-[8px] font-bold text-white tracking-widest uppercase leading-none">ETAKKI DOJO</span>
+                            </div>
+
+                            <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
+                                <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
+                                <div id="av-f0-p0" onclick="advanceFighter('avanzados', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
+                                    Finalista A
+                                </div>
+                                <div id="av-f0-p1" onclick="advanceFighter('avanzados', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
+                                    Finalista B
+                                </div>
+                            </div>
+
+                            <div id="av-champion-box" class="w-full text-center hidden">
+                                <div class="bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-500 text-black font-black py-2 px-3 rounded-xl champion-glow text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
+                                    <i class="fa-solid fa-crown text-base animate-bounce"></i>
+                                    <span id="av-champion-name">CAMPEÓN</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
+                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
+                                <div id="av-sf1-p0" onclick="advanceFighter('avanzados', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                                <div id="av-sf1-p1" onclick="advanceFighter('avanzados', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
+                                    Avanzar Cuartos
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- LADO DERECHO: CUARTOS DE FINAL -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
+                        
+                        <!-- QF 3 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf2-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 2, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">FELIPE ORTIZ</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf2-p0-pct">38%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf2-p0-bar" class="h-full win-bar-fill" style="width: 38%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="av-qf2-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 2, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">IAN CESPEDES</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf2-p1-pct">62%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf2-p1-bar" class="h-full win-bar-fill" style="width: 62%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QF 4 -->
+                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
+                            <div id="av-qf3-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 3, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">ALEJANDRO DELGADO</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf3-p0-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf3-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div id="av-qf3-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
+                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
+                                    <span onclick="advanceFighter('avanzados', 'qf', 3, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">ANTONIO OLCESE</span>
+                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
+                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
+                                    </span>
+                                </div>
+                                <div class="mt-1.5">
+                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
+                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
+                                        <span id="av-qf3-p1-pct">50%</span>
+                                    </div>
+                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
+                                        <div id="av-qf3-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
         </div>
-    </div>
 
-    <!-- SCRIPT DE LÓGICA, PWA Y AUDIO -->
+        <!-- PIE DE PÁGINA E INFORMACIÓN GENERAL -->
+        <footer class="w-full text-center mt-12 space-y-4 flex flex-col items-center">
+            
+            <div class="bg-blue-950/90 border border-cyan-400/50 rounded-2xl py-3 px-8 inline-block shadow-2xl">
+                <p class="font-heading text-lg sm:text-2xl text-white font-bold tracking-wide">
+                    Entradas disponibles al público <span class="text-cyan-300 font-extrabold">10k</span>
+                </p>
+            </div>
+
+            <a href="https://wa.me/5491131977287?text=Hola%2C%20quiero%20comprar%20entradas%20para%20el%20Torneo%20de%20EJJ%20del%2014%20de%20Noviembre" 
+               target="_blank" 
+               rel="noopener noreferrer"
+               class="bg-emerald-950/90 hover:bg-emerald-800 border-2 border-emerald-400 text-emerald-300 hover:text-white rounded-2xl py-3.5 px-6 sm:px-8 flex items-center justify-center gap-3 shadow-lg hover:shadow-emerald-500/60 transition-all duration-300 transform hover:-translate-y-0.5 whatsapp-glow-box group max-w-lg w-full">
+                <i class="fa-brands fa-whatsapp text-emerald-400 text-2xl sm:text-3xl group-hover:scale-110 transition-transform"></i>
+                <span class="font-heading font-extrabold text-sm sm:text-base md:text-lg tracking-wider text-center uppercase text-white">
+                    CONSIGUE TU ENTRADA X WHATSAPP AQUI
+                </span>
+            </a>
+
+            <div class="text-sm sm:text-base text-cyan-200 font-semibold tracking-wide pt-2">
+                <span>Inicio 13:00 hs</span>
+                <span class="mx-3 text-cyan-500">|</span>
+                <span>Puertas abren 12:15 hs</span>
+            </div>
+
+            <div>
+                <h3 class="font-subheading text-3xl sm:text-5xl font-black italic metallic-title uppercase tracking-wider">
+                    AMBROSETTI 826 - CABALLITO
+                </h3>
+            </div>
+
+            <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
+                <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
+                    <i class="fa-solid fa-music text-cyan-400"></i>
+                    <span>Soundtrack - Sirius</span>
+                </div>
+                <div class="rounded-lg overflow-hidden border border-cyan-500/20">
+                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/264805093&color=%2300f0ff&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"></iframe>
+                </div>
+            </div>
+        </footer>
+
+    </section>
+
+    <!-- Canvas Animation & Bracket Logic Script -->
     <script>
-        let deferredPrompt = null;
+        // Lightning Background Canvas Animation
+        window.addEventListener('load', function () {
+            const canvas = document.getElementById('lightning-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
 
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const pwaBtn = document.getElementById('pwa-install-btn');
-            if (pwaBtn) {
-                pwaBtn.classList.add('animate-pulse');
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
             }
+            resize();
+            window.addEventListener('resize', resize);
+
+            let bolts = [];
+
+            function createBolt() {
+                const startX = Math.random() * canvas.width;
+                const bolt = {
+                    path: [{ x: startX, y: 0 }],
+                    life: 0,
+                    maxLife: Math.floor(Math.random() * 10) + 5
+                };
+                let currentX = startX;
+                let currentY = 0;
+                while (currentY < canvas.height) {
+                    currentX += (Math.random() - 0.5) * 50;
+                    currentY += Math.random() * 30 + 10;
+                    bolt.path.push({ x: currentX, y: currentY });
+                }
+                bolts.push(bolt);
+            }
+
+            function animate() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                if (Math.random() < 0.04) {
+                    createBolt();
+                }
+
+                bolts.forEach((bolt, index) => {
+                    ctx.beginPath();
+                    ctx.strokeStyle = `rgba(0, 240, 255, ${1 - bolt.life / bolt.maxLife})`;
+                    ctx.lineWidth = 2;
+                    ctx.shadowBlur = 15;
+                    ctx.shadowColor = '#00f0ff';
+                    for (let i = 0; i < bolt.path.length; i++) {
+                        if (i === 0) ctx.moveTo(bolt.path[i].x, bolt.path[i].y);
+                        else ctx.lineTo(bolt.path[i].x, bolt.path[i].y);
+                    }
+                    ctx.stroke();
+                    bolt.life++;
+                    if (bolt.life >= bolt.maxLife) {
+                        bolts.splice(index, 1);
+                    }
+                });
+
+                requestAnimationFrame(animate);
+            }
+            animate();
         });
 
-        async function openPwaModal() {
-            if (deferredPrompt) {
-                try {
-                    deferredPrompt.prompt();
-                    const choiceResult = await deferredPrompt.userChoice;
-                    if (choiceResult.outcome === 'accepted') {
-                        console.log('App Instalada con éxito');
-                    } else {
-                        document.getElementById('pwa-modal').classList.remove('hidden');
-                    }
-                    deferredPrompt = null;
-                } catch(err) {
-                    document.getElementById('pwa-modal').classList.remove('hidden');
-                }
-            } else {
-                document.getElementById('pwa-modal').classList.remove('hidden');
+        // App State & Bracket Logic
+        const initialVotes = {
+            iniciantes_qf0: [8, 12],   // 20
+            iniciantes_qf1: [15, 9],   // 24
+            iniciantes_qf2: [11, 14],  // 25
+            iniciantes_qf3: [10, 10],  // 20
+            superfight: [24, 18],      // 42
+            avanzados_qf0: [13, 11],   // 24
+            avanzados_qf1: [0, 0],     // 0
+            avanzados_qf2: [9, 15],    // 24
+            avanzados_qf3: [0, 0]      // 0
+        };
+
+        const initialBrackets = {
+            iniciantes: {
+                sf0: [null, null],
+                sf1: [null, null],
+                f0: [null, null],
+                champion: null
+            },
+            avanzados: {
+                sf0: [null, null],
+                sf1: [null, null],
+                f0: [null, null],
+                champion: null
+            }
+        };
+
+        function loadSavedState() {
+            try {
+                const savedVotes = localStorage.getItem("bjj_tournament_votes");
+                const savedBrackets = localStorage.getItem("bjj_tournament_brackets");
+                return {
+                    votes: savedVotes ? JSON.parse(savedVotes) : { ...initialVotes },
+                    brackets: savedBrackets ? JSON.parse(savedBrackets) : JSON.parse(JSON.stringify(initialBrackets))
+                };
+            } catch (e) {
+                return {
+                    votes: { ...initialVotes },
+                    brackets: JSON.parse(JSON.stringify(initialBrackets))
+                };
             }
         }
 
-        function closePwaModal() {
-            document.getElementById('pwa-modal').classList.add('hidden');
+        const loaded = loadSavedState();
+        let globalVotes = loaded.votes;
+        let globalBrackets = loaded.brackets;
+
+        window.voteFighter = function() {
+            alert("Las votaciones para el torneo están oficialmente cerradas.");
+        };
+
+        window.advanceFighter = function(category, round, matchIdx, playerIdx) {
+            const names = {
+                iniciantes: {
+                    qf: [
+                        ["LAUTARO AGUIRRE", "JUAN ESPINOZA"],
+                        ["GONZALO TUÑON", "VALENTINO DI ROSA"],
+                        ["AGUSTIN VELAZQUEZ", "FEDERICO WANG"],
+                        ["BENJAMIN DUVOBSKY", "EZEQUIEL ARGÜELLO"]
+                    ]
+                },
+                avanzados: {
+                    qf: [
+                        ["EZEQUIEL MURACCIOLE", "DANIEL GOLDSMAN"],
+                        ["CIRO CESPEDES", "AXEL FURLAN"],
+                        ["FELIPE ORTIZ", "IAN CESPEDES"],
+                        ["ALEJANDRO DELGADO", "ANTONIO OLCESE"]
+                    ]
+                }
+            };
+
+            let selectedName = "";
+
+            if (round === 'qf') {
+                selectedName = names[category].qf[matchIdx][playerIdx];
+                if (matchIdx === 0) globalBrackets[category].sf0[0] = selectedName;
+                if (matchIdx === 1) globalBrackets[category].sf0[1] = selectedName;
+                if (matchIdx === 2) globalBrackets[category].sf1[0] = selectedName;
+                if (matchIdx === 3) globalBrackets[category].sf1[1] = selectedName;
+            } else if (round === 'sf') {
+                selectedName = matchIdx === 0 ? globalBrackets[category].sf0[playerIdx] : globalBrackets[category].sf1[playerIdx];
+                if (!selectedName || selectedName === "Avanzar Cuartos") return;
+
+                if (matchIdx === 0) globalBrackets[category].f0[0] = selectedName;
+                if (matchIdx === 1) globalBrackets[category].f0[1] = selectedName;
+            } else if (round === 'f') {
+                selectedName = globalBrackets[category].f0[playerIdx];
+                if (!selectedName || selectedName === "Finalista A" || selectedName === "Finalista B") return;
+
+                globalBrackets[category].champion = selectedName;
+            }
+
+            try {
+                localStorage.setItem("bjj_tournament_brackets", JSON.stringify(globalBrackets));
+            } catch (e) {}
+            updateUI();
+        };
+
+        function calculatePercentages(p0Votes, p1Votes) {
+            const v0 = parseInt(p0Votes) || 0;
+            const v1 = parseInt(p1Votes) || 0;
+            const total = v0 + v1;
+            if (total === 0) return [50, 50];
+            const pct0 = Math.round((v0 / total) * 100);
+            const pct1 = 100 - pct0;
+            return [pct0, pct1];
         }
 
-        // Service Worker Offline Support
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                try {
-                    const swCode = `
-                        const CACHE_NAME = 'bjj-scoreboard-offline-v4';
-                        const urlsToCache = ['./', 'https://cdn.tailwindcss.com'];
+        function updateUI() {
+            let totalVotesSum = 0;
 
-                        self.addEventListener('install', (e) => {
-                            self.skipWaiting();
-                            e.waitUntil(
-                                caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache).catch(() => {}))
-                            );
-                        });
+            Object.keys(globalVotes).forEach(matchId => {
+                const votes = globalVotes[matchId] || [0, 0];
+                totalVotesSum += (parseInt(votes[0]) || 0) + (parseInt(votes[1]) || 0);
+            });
 
-                        self.addEventListener('activate', (e) => {
-                            e.waitUntil(
-                                caches.keys().then((keys) => Promise.all(keys.map((key) => {
-                                    if (key !== CACHE_NAME) return caches.delete(key);
-                                }))).then(() => self.clients.claim())
-                            );
-                        });
+            const totalNumEl = document.getElementById("total-votes-num");
+            if (totalNumEl) totalNumEl.innerText = totalVotesSum;
 
-                        self.addEventListener('fetch', (e) => {
-                            e.respondWith(
-                                caches.match(e.request).then((cachedResponse) => {
-                                    if (cachedResponse) return cachedResponse;
-                                    return fetch(e.request).then((networkResponse) => {
-                                        if (e.request.method === 'GET' && networkResponse.status === 200) {
-                                            const responseClone = networkResponse.clone();
-                                            caches.open(CACHE_NAME).then((cache) => cache.put(e.request, responseClone));
-                                        }
-                                        return networkResponse;
-                                    }).catch(() => caches.match('./'));
-                                })
-                            );
-                        });
-                    `;
-                    const blob = new Blob([swCode], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(blob);
-                    navigator.serviceWorker.register(swUrl).catch(() => {});
-                } catch (e) {}
+            Object.keys(globalVotes).forEach(matchId => {
+                const votes = globalVotes[matchId] || [1, 1];
+                const [pct0, pct1] = calculatePercentages(votes[0], votes[1]);
+
+                let prefix = "";
+                if (matchId.startsWith("iniciantes")) prefix = "init-";
+                else if (matchId.startsWith("avanzados")) prefix = "av-";
+                else if (matchId === "superfight") prefix = "sf-";
+
+                let key = matchId.replace("iniciantes_", "").replace("avanzados_", "");
+
+                if (matchId === "superfight") {
+                    const el0Pct = document.getElementById("sf-p0-pct");
+                    const el0Bar = document.getElementById("sf-p0-bar");
+                    const el1Pct = document.getElementById("sf-p1-pct");
+                    const el1Bar = document.getElementById("sf-p1-bar");
+
+                    if (el0Pct) el0Pct.innerText = `${pct0}%`;
+                    if (el0Bar) el0Bar.style.width = `${pct0}%`;
+                    if (el1Pct) el1Pct.innerText = `${pct1}%`;
+                    if (el1Bar) el1Bar.style.width = `${pct1}%`;
+
+                    const winnerBox = document.getElementById("sf-winner-box");
+                    const winnerName = document.getElementById("sf-winner-name");
+                    const winnerPct = document.getElementById("sf-winner-pct");
+
+                    if (winnerBox && (votes[0] + votes[1] > 0)) {
+                        winnerBox.classList.remove("hidden");
+                        if (pct0 >= pct1) {
+                            winnerName.innerText = "JULIA GRANATA";
+                            winnerPct.innerText = `WIN CHANCE SEGÚN VOTACIÓN: ${pct0}% DE LOS VOTOS`;
+                        } else {
+                            winnerName.innerText = "MARIA VICTORIA BENITEZ";
+                            winnerPct.innerText = `WIN CHANCE SEGÚN VOTACIÓN: ${pct1}% DE LOS VOTOS`;
+                        }
+                    }
+                } else {
+                    const el0Pct = document.getElementById(`${prefix}${key}-p0-pct`);
+                    const el0Bar = document.getElementById(`${prefix}${key}-p0-bar`);
+                    const el1Pct = document.getElementById(`${prefix}${key}-p1-pct`);
+                    const el1Bar = document.getElementById(`${prefix}${key}-p1-bar`);
+
+                    if (el0Pct) el0Pct.innerText = `${pct0}%`;
+                    if (el0Bar) el0Bar.style.width = `${pct0}%`;
+                    if (el1Pct) el1Pct.innerText = `${pct1}%`;
+                    if (el1Bar) el1Bar.style.width = `${pct1}%`;
+                }
+            });
+
+            ["iniciantes", "avanzados"].forEach(cat => {
+                const pfx = cat === "iniciantes" ? "init" : "av";
+                const b = globalBrackets[cat];
+
+                const sf0p0 = document.getElementById(`${pfx}-sf0-p0`);
+                const sf0p1 = document.getElementById(`${pfx}-sf0-p1`);
+                const sf1p0 = document.getElementById(`${pfx}-sf1-p0`);
+                const sf1p1 = document.getElementById(`${pfx}-sf1-p1`);
+
+                if (sf0p0 && b.sf0[0]) { sf0p0.innerText = b.sf0[0]; sf0p0.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+                if (sf0p1 && b.sf0[1]) { sf0p1.innerText = b.sf0[1]; sf0p1.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+                if (sf1p0 && b.sf1[0]) { sf1p0.innerText = b.sf1[0]; sf1p0.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+                if (sf1p1 && b.sf1[1]) { sf1p1.innerText = b.sf1[1]; sf1p1.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
+
+                const f0p0 = document.getElementById(`${pfx}-f0-p0`);
+                const f0p1 = document.getElementById(`${pfx}-f0-p1`);
+
+                if (f0p0 && b.f0[0]) { f0p0.innerText = b.f0[0]; f0p0.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer"; }
+                if (f0p1 && b.f0[1]) { f0p1.innerText = b.f0[1]; f0p1.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer"; }
+
+                const champBox = document.getElementById(`${pfx}-champion-box`);
+                const champName = document.getElementById(`${pfx}-champion-name`);
+
+                if (champBox && champName && b.champion) {
+                    champBox.classList.remove("hidden");
+                    let winRateText = "";
+                    const qfVotesMatch = Object.keys(globalVotes).find(k => k.startsWith(cat));
+                    if (qfVotesMatch) {
+                        const votes = globalVotes[qfVotesMatch];
+                        const [p0, p1] = calculatePercentages(votes[0], votes[1]);
+                        winRateText = ` (${Math.max(p0, p1)}% WIN CHANCE SEGÚN VOTACIÓN)`;
+                    }
+                    champName.innerText = `CAMPEÓN: ${b.champion}${winRateText}`;
+                }
             });
         }
 
-        // --- LÓGICA DEL MARCADOR Y TIEMPO ---
-        const MATCH_DURATION = 180; // 3 minutos
-        let timeLeft = MATCH_DURATION;
-        let timerInterval = null;
-        let isRunning = false;
-        let scores = { blue: 0, red: 0 };
-
-        const timerDisplay = document.getElementById('timer-display');
-        const startPauseBtn = document.getElementById('start-pause-btn');
-        const startPauseText = document.getElementById('start-pause-text');
-
-        let audioCtx = null;
-        function getAudioContext() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            return audioCtx;
-        }
-
-        function playBeep(freq = 600, duration = 0.12) {
-            try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.frequency.setValueAtTime(freq, ctx.currentTime);
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + duration);
-            } catch(e){}
-        }
-
-        function playEndAlarm() {
-            for(let i = 0; i < 4; i++) {
-                setTimeout(() => playBeep(800, 0.3), i * 300);
-            }
-        }
-
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60);
-            const s = sec % 60;
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function updateTimerDisplay() {
-            if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft);
-        }
-
-        function toggleTimer() {
-            getAudioContext();
-            if (isRunning) pauseTimer();
-            else startTimer();
-        }
-
-        function startTimer() {
-            if (timeLeft <= 0) return;
-            isRunning = true;
-            if (startPauseText) startPauseText.textContent = 'PAUSA';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-amber-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(700, 0.1);
-
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else {
-                    endTimer();
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-            if (startPauseText) startPauseText.textContent = 'REANUDAR';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(450, 0.1);
-        }
-
-        function endTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            if (startPauseText) startPauseText.textContent = 'FIN';
-            if (timerDisplay) timerDisplay.classList.add('timer-ended');
-            playEndAlarm();
-            showWinnerModal();
-        }
-
-        function addPoints(side, points) {
-            getAudioContext();
-            scores[side] += points;
-            document.getElementById(`${side}-score`).textContent = scores[side];
-            playBeep(900, 0.08);
-        }
-
-        function subtractPoint(side) {
-            getAudioContext();
-            if (scores[side] > 0) {
-                scores[side] -= 1;
-                document.getElementById(`${side}-score`).textContent = scores[side];
-                playBeep(350, 0.08);
-            }
-        }
-
-        function resetMatch() {
-            pauseTimer();
-            timeLeft = MATCH_DURATION;
-            updateTimerDisplay();
-            scores.blue = 0;
-            scores.red = 0;
-            document.getElementById('blue-score').textContent = '0';
-            document.getElementById('red-score').textContent = '0';
-            if (timerDisplay) timerDisplay.classList.remove('timer-ended');
-            if (startPauseText) startPauseText.textContent = 'INICIAR';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(500, 0.15);
-        }
-
-        function showWinnerModal() {
-            const blueName = document.getElementById('blue-name').value || 'LUKE';
-            const redName = document.getElementById('red-name').value || 'VADER';
-            let winnerText = '¡EMPATE!';
-
-            if (scores.blue > scores.red) {
-                winnerText = `¡GANADOR: ${blueName}!`;
-            } else if (scores.red > scores.blue) {
-                winnerText = `¡GANADOR: ${redName}!`;
-            }
-
-            document.getElementById('winner-title').textContent = winnerText;
-            document.getElementById('winner-score-display').textContent = `SCORE FINAL: ${scores.blue} - ${scores.red}`;
-            document.getElementById('winner-modal').classList.remove('hidden');
-        }
-
-        function closeWinnerModal() {
-            document.getElementById('winner-modal').classList.add('hidden');
-        }
+        window.addEventListener('DOMContentLoaded', updateUI);
     </script>
 </body>
 </html>
