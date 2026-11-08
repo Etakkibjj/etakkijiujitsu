@@ -3,1084 +3,720 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Submission Only Jiu Jitsu Tournament - Interactive Brackets</title>
+    <title>Cronograma del Torneo - EJJ SUBMISSION ONLY 3</title>
+
+    <!-- Meta Tags para PWA / Mobile (Android & iOS) -->
+    <meta name="theme-color" content="#181e26">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="EJJ 3">
+    
+    <!-- Dynamic Manifest Injection via Data URI -->
+    <link rel="manifest" href="data:application/manifest+json;utf8,%7B%22name%22%3A%22EJJ%20SUBMISSION%20ONLY%203%22%2C%22short_name%22%3A%22EJJ%203%22%2C%22description%22%3A%22Cronograma%20interactivo%20y%20llaves%20del%20Torneo%20EJJ%20Submission%20Only%203%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%23181e26%22%2C%22theme_color%22%3A%22%23181e26%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Butf8%2C%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20viewBox%3D'0%200%20512%20512'%3E%3Crect%20width%3D'512'%20height%3D'512'%20rx%3D'100'%20fill%3D'%23181e26'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'55%25'%20font-size%3D'200'%20font-weight%3D'900'%20fill%3D'%2338bdf8'%20text-anchor%3D'middle'%20dominant-baseline%3D'middle'%3EEJJ%3C%2Ftext%3E%3C%2Fsvg%3E%22%2C%22sizes%22%3A%22512x512%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D">
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
+    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600;700&family=Montserrat:ital,wght@0,400;0,700;0,900;1,800&family=Orbitron:wght@700;900&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    colors: {
-                        neonBlue: '#00f0ff',
-                        electricBlue: '#0066ff',
-                        deepBlue: '#030b1e',
-                        cardBg: 'rgba(5, 18, 48, 0.9)',
-                        whatsappGreen: '#25D366',
-                    },
                     fontFamily: {
-                        heading: ['Orbitron', 'sans-serif'],
-                        subheading: ['Teko', 'sans-serif'],
-                        body: ['Montserrat', 'sans-serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        smooth: {
+                            bg: '#181e26',
+                            card: '#27313e',
+                            cardBorder: '#354354',
+                            banner: '#cbe4f7',
+                            bannerText: '#1b364b',
+                            accent: '#64748b',
+                            greenDot: '#22c55e',
+                            timeBadge: '#323d4d'
+                        }
                     }
                 }
             }
         }
     </script>
-
     <style>
         body {
-            background-color: #020612;
-            background-image: 
-                radial-gradient(circle at 50% 15%, rgba(0, 102, 255, 0.4), transparent 60%),
-                radial-gradient(circle at 50% 65%, rgba(0, 240, 255, 0.25), transparent 50%),
-                radial-gradient(circle at 50% 100%, rgba(2, 6, 18, 0.95), #020612);
-            background-attachment: fixed;
-            color: #ffffff;
-            font-family: 'Montserrat', sans-serif;
-            overflow-x: hidden;
+            background-color: #12171e;
+            color: #f1f5f9;
+            user-select: none;
         }
-
-        #lightning-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.6;
-        }
-
-        .neon-glow-text {
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.8), 0 0 20px rgba(0, 102, 255, 0.6);
-        }
-
-        .neon-glow-box {
-            box-shadow: 0 0 15px rgba(0, 102, 255, 0.4), inset 0 0 10px rgba(0, 240, 255, 0.2);
-            border: 1px solid rgba(0, 240, 255, 0.5);
-        }
-
-        .whatsapp-glow-box {
-            box-shadow: 0 0 20px rgba(37, 211, 102, 0.5), inset 0 0 10px rgba(37, 211, 102, 0.2);
-            border: 1px solid rgba(37, 211, 102, 0.7);
-        }
-
-        .superfight-glow-box {
-            box-shadow: 0 0 30px rgba(255, 0, 127, 0.5), inset 0 0 20px rgba(255, 0, 127, 0.25);
-            border: 2px solid rgba(255, 0, 127, 0.8);
-        }
-
-        .superfight-title {
-            background: linear-gradient(180deg, #ffffff 0%, #ffb6c1 50%, #ff007f 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 12px rgba(255, 0, 127, 0.9));
-        }
-
-        .vs-neon {
-            text-shadow: 0 0 15px rgba(255, 0, 127, 0.9), 0 0 30px rgba(255, 0, 127, 0.6);
-        }
-
-        .champion-glow {
-            box-shadow: 0 0 25px rgba(250, 204, 21, 0.8), inset 0 0 15px rgba(250, 204, 21, 0.4);
-            border: 2px solid #facc15 !important;
-            animation: pulse-glow 1.5s infinite alternate;
-        }
-
-        @keyframes pulse-glow {
-            0% { box-shadow: 0 0 15px rgba(250, 204, 21, 0.6); }
-            100% { box-shadow: 0 0 30px rgba(250, 204, 21, 1); }
-        }
-
-        .metallic-title {
-            background: linear-gradient(180deg, #ffffff 0%, #b0dfff 50%, #0088ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 8px rgba(0, 0, 0, 0.9));
-        }
-
-        .slot-empty {
-            color: #4b5563;
-            border-style: dashed;
-            border-color: #1e3a8a;
-            background: rgba(3, 11, 30, 0.5);
-        }
-
-        .slot-active {
-            cursor: pointer;
-        }
-
-        .slot-defeated {
-            opacity: 0.4;
-            filter: grayscale(80%);
-        }
-
-        .slot-winner {
-            background-color: #00f0ff !important;
-            color: #000000 !important;
-            font-weight: 800;
-            border-color: #ffffff !important;
-            box-shadow: 0 0 12px rgba(0, 240, 255, 0.8);
-        }
-
-        .win-bar-bg {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .win-bar-fill {
-            background: linear-gradient(90deg, #00f0ff, #0066ff);
-            transition: width 0.4s ease-in-out;
-        }
-
-        .win-bar-pink {
-            background: linear-gradient(90deg, #ff007f, #a855f7);
-            transition: width 0.4s ease-in-out;
-        }
-
+        /* Custom Scrollbars */
         ::-webkit-scrollbar {
             width: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #020612;
+            background: #181e26;
         }
         ::-webkit-scrollbar-thumb {
-            background: #0066ff;
+            background: #354354;
             border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        
+        /* Interactive hover highlights */
+        .fighter-card:hover {
+            background-color: rgba(255, 255, 255, 0.07);
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center relative py-6 px-2 sm:px-4">
+<body class="font-sans antialiased min-h-screen pb-16">
 
-    <!-- Canvas de rayos/relámpagos de fondo -->
-    <canvas id="lightning-canvas"></canvas>
-
-    <!-- SECTION PRINCIPAL INTERACTIVA -->
-    <section id="brackets" class="relative z-10 w-full max-w-7xl mx-auto my-4 scroll-mt-10">
-
-        <!-- Barra de Control y Restablecimiento -->
-        <div class="w-full flex flex-col sm:flex-row justify-between items-center gap-4 mb-8 px-2">
-            <span class="flex items-center gap-2 text-xs sm:text-sm text-cyan-300 font-mono">
-                <i class="fa-solid fa-lock text-red-400 text-base"></i> 
-                <span>VOTOS CERRADOS - WIN CHANCE SEGÚN VOTACIÓN FINAL</span>
-            </span>
-
-            <div class="flex flex-wrap items-center gap-3">
-                <span id="total-votes-counter" class="bg-blue-950 border border-cyan-400/50 text-cyan-300 font-mono text-xs font-bold px-4 py-2.5 rounded-xl flex items-center gap-2 shadow-lg">
-                    <i class="fa-solid fa-check-to-slot text-yellow-400"></i> TOTAL VOTOS REGISTRADOS: <span class="text-white font-extrabold text-sm" id="total-votes-num">166</span>
-                </span>
-                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" 
-                   class="bg-gradient-to-r from-cyan-600 via-cyan-500 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-black font-heading font-black px-5 py-2.5 rounded-xl transition duration-300 flex items-center gap-2 shadow-[0_0_20px_rgba(0,240,255,0.6)] text-xs sm:text-sm uppercase tracking-wider transform hover:scale-105">
-                    <i class="fa-solid fa-book-open text-base"></i> Reglamento
-                </a>
-            </div>
+    <!-- Header Banner Notice -->
+    <div class="bg-smooth-banner text-smooth-bannerText px-4 py-3 shadow-md flex flex-wrap items-center justify-between text-center font-medium text-sm md:text-base border-b border-sky-200 gap-2">
+        <div class="flex items-center justify-center mx-auto">
+            <i class="fa-solid fa-comment-dots text-lg mr-2"></i>
+            <span>Times are dynamic and change in real time. Watch this screen for updates.</span>
         </div>
+        <div class="flex items-center gap-2 ml-auto flex-wrap justify-center">
+            <!-- Botón Página Principal / Brackets -->
+            <a href="https://etakkibjj.github.io/etakkijiujitsu/brackets.html" target="_blank" rel="noopener noreferrer" 
+               class="bg-sky-600 hover:bg-sky-500 text-white font-extrabold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md border border-sky-300 transition-all active:scale-95">
+                <i class="fa-solid fa-sitemap text-sm"></i> <span>BRACKETS</span>
+            </a>
+            <!-- Botón al Reglamento -->
+            <a href="https://etakkibjj.github.io/etakkijiujitsu/reglamento.html" target="_blank" rel="noopener noreferrer" 
+               class="bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 shadow-md border border-amber-300 transition-all active:scale-95">
+                <i class="fa-solid fa-book-bookmark text-sm"></i> <span>REGLAMENTO</span>
+            </a>
+            <!-- Live Canvas Editor Mode Toggle -->
+            <button id="toggleEditModeBtn" class="bg-slate-900 hover:bg-slate-800 text-sky-400 font-bold px-3 py-1.5 rounded-lg text-xs flex items-center gap-1.5 border border-sky-400/40 shadow-sm transition-all">
+                <i class="fa-solid fa-pen-to-square"></i> <span id="editModeBtnText">Modo Edición</span>
+            </button>
+        </div>
+    </div>
 
-        <!-- ENCABEZADO -->
-        <header class="text-center w-full mb-8">
-            <h1 class="font-heading text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase metallic-title leading-none mb-1">
-                SUBMISSION ONLY JIU JITSU TOURNAMENT
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-6">
+
+        <!-- Title Section -->
+        <header class="text-center mb-6">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight uppercase text-white mb-1">
+                Cronograma del Torneo
             </h1>
-            <p class="font-subheading text-3xl sm:text-5xl md:text-6xl text-cyan-300 italic font-bold leading-none uppercase drop-shadow-[0_0_12px_rgba(0,240,255,0.7)]">
-                Sábado 14 de noviembre
-            </p>
-            <p class="font-body text-xs sm:text-base md:text-lg text-white font-semibold tracking-wide uppercase mt-1">
-                dos torneos super 8, dos títulos en juego + superfight femenina.
+            <p class="text-sky-400 font-semibold tracking-wider text-sm sm:text-base uppercase">
+                EJJ SUBMISSION ONLY 3
             </p>
         </header>
 
-        <!-- CONTENEDOR DE TORNEOS -->
-        <div class="w-full space-y-12">
+        <!-- Bar Control: Filter, Legend & Reset -->
+        <div class="mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between bg-smooth-card/80 p-3.5 rounded-xl border border-smooth-cardBorder shadow-lg">
+            <!-- Search -->
+            <div class="relative w-full sm:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" placeholder="Buscar luchador o lucha (ej: A-5)..." 
+                    class="w-full bg-slate-900/90 border border-slate-700 text-sm rounded-lg pl-9 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-sky-500 transition-colors">
+            </div>
+            
+            <!-- Legend & Controls -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-3 w-full sm:w-auto text-xs font-medium">
+                <!-- PWA Install Button -->
+                <button id="installAppBtn" onclick="openInstallModal()" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md transition-all text-xs active:scale-95 border border-sky-400">
+                    <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
+                </button>
 
-            <!-- ================= TORNEO 1: INICIANTES (FAIXA BLANCA) ================= -->
-            <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-cyan-500/40 shadow-2xl relative overflow-hidden">
-                <div class="text-center mb-6">
-                    <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
-                        INICIANTES
-                    </h2>
-                    <span class="bg-cyan-950 text-cyan-200 border border-cyan-400/60 text-xs sm:text-sm font-bold tracking-widest px-4 py-1 rounded-full uppercase inline-block">
-                        FAIXA BLANCA
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 bg-blue-950/70 border border-blue-500/50 text-blue-300 px-2.5 py-1 rounded-md">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Pendiente (Azul)
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 px-2.5 py-1 rounded-md">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Finalizada (Verde)
                     </span>
                 </div>
 
-                <div class="grid grid-cols-1 lg:grid-cols-7 gap-3 sm:gap-4 items-center">
+                <button id="resetBtn" title="Reiniciar todos los resultados" class="bg-red-900/40 hover:bg-red-800/60 border border-red-700/60 text-red-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs active:scale-95">
+                    <i class="fa-solid fa-rotate-left"></i> Reiniciar
+                </button>
+            </div>
+        </div>
 
-                    <!-- LADO IZQUIERDO: CUARTOS DE FINAL -->
-                    <div class="lg:col-span-2 space-y-4">
-                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
-                        
-                        <!-- QF 1 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="init-qf0-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 0, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">LAUTARO AGUIRRE</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf0-p0-pct">40%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf0-p0-bar" class="h-full win-bar-fill" style="width: 40%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="init-qf0-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 0, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">JUAN ESPINOZA</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf0-p1-pct">60%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf0-p1-bar" class="h-full win-bar-fill" style="width: 60%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- QF 2 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="init-qf1-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 1, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">GONZALO TUÑON</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf1-p0-pct">63%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf1-p0-bar" class="h-full win-bar-fill" style="width: 63%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="init-qf1-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 1, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">VALENTINO DI ROSA</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf1-p1-pct">37%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf1-p1-bar" class="h-full win-bar-fill" style="width: 37%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+        <!-- Tatami Central Container -->
+        <div class="bg-smooth-bg border border-smooth-cardBorder rounded-2xl p-4 sm:p-6 shadow-2xl">
+            
+            <!-- Tatami Header -->
+            <div class="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-3 h-8 bg-sky-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white tracking-wide">Tatami Central</h2>
+                        <p id="subHeaderText" class="text-xs text-slate-400">Haz clic en un competidor para declararlo GANADOR</p>
                     </div>
-
-                    <!-- SEMIFINAL A + FINAL + SEMIFINAL B -->
-                    <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-2 lg:my-0">
-                        <div class="space-y-2">
-                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
-                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="init-sf0-p0" onclick="advanceFighter('iniciantes', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                                <div id="init-sf0-p1" onclick="advanceFighter('iniciantes', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col items-center justify-center space-y-3 py-2">
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/80 shadow-[0_0_20px_rgba(0,240,255,0.5)]">
-                                <i class="fa-solid fa-shield-halved text-2xl text-cyan-300 mb-0.5"></i>
-                                <span class="font-heading font-black text-sm text-white leading-none">EBI</span>
-                                <span class="font-subheading text-xs text-cyan-400 leading-none">RULES</span>
-                            </div>
-
-                            <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
-                                <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
-                                <div id="init-f0-p0" onclick="advanceFighter('iniciantes', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
-                                    Finalista A
-                                </div>
-                                <div id="init-f0-p1" onclick="advanceFighter('iniciantes', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
-                                    Finalista B
-                                </div>
-                            </div>
-
-                            <div id="init-champion-box" class="w-full text-center hidden">
-                                <div class="bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-500 text-black font-black py-2 px-3 rounded-xl champion-glow text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-crown text-base animate-bounce"></i>
-                                    <span id="init-champion-name">CAMPEÓN</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
-                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="init-sf1-p0" onclick="advanceFighter('iniciantes', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                                <div id="init-sf1-p1" onclick="advanceFighter('iniciantes', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LADO DERECHO: CUARTOS DE FINAL -->
-                    <div class="lg:col-span-2 space-y-4">
-                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
-                        
-                        <!-- QF 3 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="init-qf2-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 2, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">AGUSTIN VELAZQUEZ</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf2-p0-pct">44%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf2-p0-bar" class="h-full win-bar-fill" style="width: 44%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="init-qf2-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 2, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">FEDERICO WANG</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf2-p1-pct">56%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf2-p1-bar" class="h-full win-bar-fill" style="width: 56%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- QF 4 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="init-qf3-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 3, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">BENJAMIN DUVOBSKY</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf3-p0-pct">50%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf3-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="init-qf3-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('iniciantes', 'qf', 3, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">EZEQUIEL ARGÜELLO</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="init-qf3-p1-pct">50%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="init-qf3-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                 </div>
+                <span class="bg-sky-500/10 text-sky-400 border border-sky-500/30 font-semibold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider hidden sm:inline-block">
+                    Sistema Interactivo
+                </span>
             </div>
 
-            <!-- ================= SECCIÓN SUPERFIGHT FEMENINA ================= -->
-            <div class="w-full bg-slate-950/90 backdrop-blur-md p-4 sm:p-8 rounded-2xl superfight-glow-box relative overflow-hidden my-8">
-                <div class="absolute -top-12 left-1/2 -translate-x-1/2 w-96 h-96 bg-pink-600/20 rounded-full blur-3xl pointer-events-none"></div>
-
-                <div class="text-center relative z-10 mb-6">
-                    <span class="bg-gradient-to-r from-pink-600 to-purple-600 text-white font-heading text-xs sm:text-sm font-black tracking-[0.2em] px-4 py-1.5 rounded-full uppercase shadow-[0_0_15px_rgba(255,0,127,0.8)] inline-block mb-2">
-                        <i class="fa-solid fa-fire text-yellow-300 mr-1 animate-pulse"></i> SPECIAL MATCH - FEMALE SUPERFIGHT
-                    </span>
-                    <h2 class="font-heading text-3xl sm:text-5xl md:text-6xl font-black superfight-title uppercase tracking-widest my-1">
-                        SUPERFIGHT FEMENINA
-                    </h2>
-                    <div class="flex items-center justify-center gap-2 mt-1">
-                        <span class="bg-blue-600 text-white font-bold text-xs sm:text-sm px-3 py-0.5 rounded border border-cyan-300 shadow-[0_0_8px_rgba(0,240,255,0.7)]">
-                            FAIXA AZUL
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Banner Ganadora Superfight -->
-                <div id="sf-winner-box" class="w-full max-w-lg mx-auto mb-6 text-center">
-                    <div class="bg-gradient-to-r from-pink-600 via-purple-600 to-pink-600 text-white font-black py-2.5 px-4 rounded-xl shadow-[0_0_20px_rgba(255,0,127,0.8)] border border-pink-300 uppercase tracking-wider text-xs sm:text-sm">
-                        <div class="flex items-center justify-center gap-2 mb-0.5">
-                            <i class="fa-solid fa-trophy text-yellow-300"></i>
-                            <span>GANADORA SUPERFIGHT: <span id="sf-winner-name" class="underline decoration-pink-300">JULIA GRANATA</span></span>
-                        </div>
-                        <div id="sf-winner-pct" class="text-[10px] sm:text-xs font-mono text-pink-200">
-                            WIN CHANCE SEGÚN VOTACIÓN: 57% DE LOS VOTOS
-                        </div>
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-11 gap-4 items-center max-w-5xl mx-auto relative z-10">
-                    
-                    <!-- LUCHADORA 1: JULIA GRANATA -->
-                    <div class="md:col-span-5 bg-gradient-to-br from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center shadow-[0_0_20px_rgba(255,0,127,0.3)]">
-                        <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
-                            VIBRUM
-                        </div>
-                        <h3 class="font-heading text-2xl sm:text-3xl font-black text-white tracking-wide uppercase">
-                            JULIA GRANATA
-                        </h3>
-                        <div class="flex items-center justify-center gap-1 mt-1 text-cyan-300 text-xs font-semibold mb-3">
-                            <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
-                        </div>
-
-                        <!-- Barra Win Chance -->
-                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-pink-500/40 mb-3">
-                            <div class="flex justify-between text-xs font-mono text-pink-300 font-bold mb-1">
-                                <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                <span id="sf-p0-pct">57%</span>
-                            </div>
-                            <div class="w-full h-2 win-bar-bg rounded-full overflow-hidden">
-                                <div id="sf-p0-bar" class="h-full win-bar-pink" style="width: 57%;"></div>
-                            </div>
-                        </div>
-
-                        <div class="w-full bg-slate-900/90 text-red-400 border border-red-500/40 font-bold py-2 rounded-lg text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 opacity-90">
-                            <i class="fa-solid fa-lock"></i> Votos Cerrados
-                        </div>
-                    </div>
-
-                    <!-- VS CENTRO ANIMADO -->
-                    <div class="md:col-span-1 flex flex-col items-center justify-center py-2 md:py-0">
-                        <span class="font-heading text-4xl sm:text-5xl font-black text-pink-500 vs-neon tracking-tighter italic">
-                            VS
-                        </span>
-                    </div>
-
-                    <!-- LUCHADORA 2: MARIA VICTORIA BENITEZ -->
-                    <div class="md:col-span-5 bg-gradient-to-bl from-blue-950/90 via-purple-950/40 to-slate-900 border-2 border-pink-500/70 rounded-xl p-4 sm:p-6 text-center shadow-[0_0_20px_rgba(255,0,127,0.3)]">
-                        <div class="inline-block bg-pink-500/20 text-pink-300 border border-pink-400 text-[10px] sm:text-xs font-bold px-3 py-0.5 rounded-full mb-2 uppercase">
-                            CASTAÑO JIU JITSU
-                        </div>
-                        <h3 class="font-heading text-xl sm:text-2xl md:text-3xl font-black text-white tracking-wide uppercase">
-                            MARIA VICTORIA BENITEZ
-                        </h3>
-                        <div class="flex items-center justify-center gap-1 mt-1 text-cyan-300 text-xs font-semibold mb-3">
-                            <i class="fa-solid fa-circle text-[8px] text-blue-500"></i> Faixa Azul
-                        </div>
-
-                        <!-- Barra Win Chance -->
-                        <div class="bg-slate-900/80 p-2.5 rounded-lg border border-pink-500/40 mb-3">
-                            <div class="flex justify-between text-xs font-mono text-pink-300 font-bold mb-1">
-                                <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                <span id="sf-p1-pct">43%</span>
-                            </div>
-                            <div class="w-full h-2 win-bar-bg rounded-full overflow-hidden">
-                                <div id="sf-p1-bar" class="h-full win-bar-pink" style="width: 43%;"></div>
-                            </div>
-                        </div>
-
-                        <div class="w-full bg-slate-900/90 text-red-400 border border-red-500/40 font-bold py-2 rounded-lg text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2 opacity-90">
-                            <i class="fa-solid fa-lock"></i> Votos Cerrados
-                        </div>
-                    </div>
-
-                </div>
+            <!-- Matches List Container -->
+            <div id="matchesContainer" class="space-y-3">
+                <!-- Dynamically Rendered via JS -->
             </div>
 
-            <!-- ================= TORNEO 2: AVANZADOS (AZUL - ROXA) ================= -->
-            <div class="w-full bg-deepBlue/50 backdrop-blur-md p-3 sm:p-6 rounded-2xl border border-blue-600/40 shadow-2xl relative overflow-hidden">
-                <div class="text-center mb-6">
-                    <h2 class="font-heading text-3xl sm:text-5xl font-black text-cyan-400 tracking-wider neon-glow-text uppercase">
-                        AVANZADOS
-                    </h2>
-                    <span class="bg-blue-950 text-cyan-200 border border-blue-400/60 text-xs sm:text-sm font-bold tracking-widest px-4 py-1 rounded-full uppercase inline-block">
-                        AZUL – ROXA
-                    </span>
-                </div>
-
-                <div class="grid grid-cols-1 lg:grid-cols-7 gap-3 sm:gap-4 items-center">
-
-                    <!-- LADO IZQUIERDO: CUARTOS DE FINAL -->
-                    <div class="lg:col-span-2 space-y-4">
-                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO A</div>
-                        
-                        <!-- QF 1 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="av-qf0-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 0, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">EZEQUIEL MURACCIOLE</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf0-p0-pct">54%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf0-p0-bar" class="h-full win-bar-fill" style="width: 54%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="av-qf0-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 0, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">DANIEL GOLDSMAN</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf0-p1-pct">46%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf0-p1-bar" class="h-full win-bar-fill" style="width: 46%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- QF 2 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="av-qf1-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 1, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">CIRO CESPEDES</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf1-p0-pct">50%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf1-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="av-qf1-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 1, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">AXEL FURLAN</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf1-p1-pct">50%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf1-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- SEMIFINAL A + FINAL + SEMIFINAL B -->
-                    <div class="lg:col-span-3 grid grid-cols-1 sm:grid-cols-3 gap-2 items-center my-2 lg:my-0">
-                        <div class="space-y-2">
-                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL A</div>
-                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="av-sf0-p0" onclick="advanceFighter('avanzados', 'sf', 0, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                                <div id="av-sf0-p1" onclick="advanceFighter('avanzados', 'sf', 0, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col items-center justify-center space-y-3 py-2">
-                            <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-cyan-400 flex flex-col items-center justify-center bg-blue-950/90 shadow-[0_0_20px_rgba(0,102,255,0.6)] p-1 text-center">
-                                <i class="fa-solid fa-ring text-cyan-300 text-xl mb-0.5"></i>
-                                <span class="font-heading text-[8px] font-bold text-white tracking-widest uppercase leading-none">ETAKKI DOJO</span>
-                            </div>
-
-                            <div class="w-full bg-blue-950/90 border border-yellow-500/60 rounded-xl p-2 text-center space-y-1.5 shadow-xl">
-                                <div class="text-[10px] font-mono text-yellow-400 font-bold uppercase tracking-wider"><i class="fa-solid fa-trophy"></i> GRAN FINAL</div>
-                                <div id="av-f0-p0" onclick="advanceFighter('avanzados', 'f', 0, 0)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
-                                    Finalista A
-                                </div>
-                                <div id="av-f0-p1" onclick="advanceFighter('avanzados', 'f', 0, 1)" class="fighter-slot slot-empty py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer">
-                                    Finalista B
-                                </div>
-                            </div>
-
-                            <div id="av-champion-box" class="w-full text-center hidden">
-                                <div class="bg-gradient-to-r from-yellow-500 via-amber-300 to-yellow-500 text-black font-black py-2 px-3 rounded-xl champion-glow text-xs sm:text-sm uppercase tracking-wider flex items-center justify-center gap-2">
-                                    <i class="fa-solid fa-crown text-base animate-bounce"></i>
-                                    <span id="av-champion-name">CAMPEÓN</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="space-y-2">
-                            <div class="text-center text-[11px] font-mono text-cyan-300">SEMIFINAL B</div>
-                            <div class="bg-cardBg/90 rounded-xl p-2 border border-cyan-500/40 space-y-1.5">
-                                <div id="av-sf1-p0" onclick="advanceFighter('avanzados', 'sf', 1, 0)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                                <div id="av-sf1-p1" onclick="advanceFighter('avanzados', 'sf', 1, 1)" class="fighter-slot slot-empty py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer">
-                                    Avanzar Cuartos
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- LADO DERECHO: CUARTOS DE FINAL -->
-                    <div class="lg:col-span-2 space-y-4">
-                        <div class="text-center text-xs font-mono text-cyan-400 font-bold border-b border-cyan-500/30 pb-1">CUARTOS - LADO B</div>
-                        
-                        <!-- QF 3 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="av-qf2-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 2, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">FELIPE ORTIZ</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf2-p0-pct">38%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf2-p0-bar" class="h-full win-bar-fill" style="width: 38%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="av-qf2-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 2, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">IAN CESPEDES</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf2-p1-pct">62%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf2-p1-bar" class="h-full win-bar-fill" style="width: 62%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- QF 4 -->
-                        <div class="bg-cardBg rounded-xl p-2.5 neon-glow-box space-y-2">
-                            <div id="av-qf3-p0-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 3, 0)" class="cursor-pointer hover:text-cyan-300 flex-1">ALEJANDRO DELGADO</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf3-p0-pct">50%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf3-p0-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div id="av-qf3-p1-box" class="fighter-slot bg-blue-950/90 rounded-lg p-2 border border-blue-500/40 transition">
-                                <div class="flex justify-between items-center text-xs sm:text-sm font-bold">
-                                    <span onclick="advanceFighter('avanzados', 'qf', 3, 1)" class="cursor-pointer hover:text-cyan-300 flex-1">ANTONIO OLCESE</span>
-                                    <span class="ml-2 bg-red-950/80 text-red-400 border border-red-500/60 text-[10px] px-2 py-0.5 rounded font-mono flex items-center gap-1 opacity-80">
-                                        <i class="fa-solid fa-lock text-[9px]"></i> Cerrados
-                                    </span>
-                                </div>
-                                <div class="mt-1.5">
-                                    <div class="flex justify-between text-[9px] font-mono text-cyan-300 mb-0.5 uppercase tracking-tighter">
-                                        <span>WIN CHANCE SEGÚN VOTACIÓN:</span>
-                                        <span id="av-qf3-p1-pct">50%</span>
-                                    </div>
-                                    <div class="w-full h-1.5 win-bar-bg rounded-full overflow-hidden">
-                                        <div id="av-qf3-p1-bar" class="h-full win-bar-fill" style="width: 50%;"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+            <!-- Empty Search State -->
+            <div id="noResults" class="hidden text-center py-12 text-gray-400">
+                <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 text-amber-400"></i>
+                <p>No se encontraron luchas con ese término de búsqueda.</p>
             </div>
 
         </div>
 
-        <!-- PIE DE PÁGINA E INFORMACIÓN GENERAL -->
-        <footer class="w-full text-center mt-12 space-y-4 flex flex-col items-center">
-            
-            <div class="bg-blue-950/90 border border-cyan-400/50 rounded-2xl py-3 px-8 inline-block shadow-2xl">
-                <p class="font-heading text-lg sm:text-2xl text-white font-bold tracking-wide">
-                    Entradas disponibles al público <span class="text-cyan-300 font-extrabold">10k</span>
-                </p>
-            </div>
-
-            <a href="https://wa.me/5491131977287?text=Hola%2C%20quiero%20comprar%20entradas%20para%20el%20Torneo%20de%20EJJ%20del%2014%20de%20Noviembre" 
-               target="_blank" 
-               rel="noopener noreferrer"
-               class="bg-emerald-950/90 hover:bg-emerald-800 border-2 border-emerald-400 text-emerald-300 hover:text-white rounded-2xl py-3.5 px-6 sm:px-8 flex items-center justify-center gap-3 shadow-lg hover:shadow-emerald-500/60 transition-all duration-300 transform hover:-translate-y-0.5 whatsapp-glow-box group max-w-lg w-full">
-                <i class="fa-brands fa-whatsapp text-emerald-400 text-2xl sm:text-3xl group-hover:scale-110 transition-transform"></i>
-                <span class="font-heading font-extrabold text-sm sm:text-base md:text-lg tracking-wider text-center uppercase text-white">
-                    CONSIGUE TU ENTRADA X WHATSAPP AQUI
-                </span>
-            </a>
-
-            <div class="text-sm sm:text-base text-cyan-200 font-semibold tracking-wide pt-2">
-                <span>Inicio 13:00 hs</span>
-                <span class="mx-3 text-cyan-500">|</span>
-                <span>Puertas abren 12:15 hs</span>
-            </div>
-
-            <div>
-                <h3 class="font-subheading text-3xl sm:text-5xl font-black italic metallic-title uppercase tracking-wider">
-                    AMBROSETTI 826 - CABALLITO
-                </h3>
-            </div>
-
-            <div class="w-full max-w-sm mx-auto mt-6 bg-cardBg/80 border border-cyan-500/30 rounded-xl p-2 shadow-lg backdrop-blur-sm opacity-90 hover:opacity-100 transition-opacity">
-                <div class="flex items-center justify-center gap-2 mb-1 text-[10px] text-cyan-300 font-mono">
-                    <i class="fa-solid fa-music text-cyan-400"></i>
-                    <span>Soundtrack - Sirius</span>
-                </div>
-                <div class="rounded-lg overflow-hidden border border-cyan-500/20">
-                    <iframe width="100%" height="90" scrolling="no" frameborder="no" allow="autoplay; encrypted-media" src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/264805093&color=%2300f0ff&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false"></iframe>
-                </div>
-            </div>
+        <!-- Footer Info -->
+        <footer class="mt-8 text-center text-xs text-gray-500">
+            <p>© EJJ Submission Only 3 • Sistema de Llaves e Live Canvas Interactivo</p>
         </footer>
 
-    </section>
+    </main>
 
-    <!-- Canvas Animation & Bracket Logic Script -->
+    <!-- PWA Install Modal / Instructions -->
+    <div id="installGuideModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-start border-b border-slate-700 pb-2">
+                <h3 class="text-base font-black text-sky-400 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-download"></i> Instalar App en tu Celular
+                </h3>
+                <button onclick="closeInstallModal()" class="text-slate-400 hover:text-white font-bold text-lg leading-none">&times;</button>
+            </div>
+            
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Para instalar esta app en la pantalla de inicio de tu teléfono y usarla sin barra de navegador:
+            </p>
+
+            <!-- Instructions Android vs iOS -->
+            <div class="space-y-3 text-xs">
+                <!-- Android Instructions -->
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
+                    <div class="font-bold text-emerald-400 flex items-center gap-1.5">
+                        <i class="fa-brands fa-android text-sm"></i> Android / Chrome
+                    </div>
+                    <p class="text-slate-300">Presiona el botón <strong>"Instalar Ahora"</strong> abajo o abre el menú (<strong>⋮</strong>) y selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a la pantalla principal"</strong>.</p>
+                </div>
+
+                <!-- iOS Instructions -->
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
+                    <div class="font-bold text-sky-400 flex items-center gap-1.5">
+                        <i class="fa-brands fa-apple text-sm"></i> iPhone / iPad (Safari)
+                    </div>
+                    <p class="text-slate-300">Toca el botón <strong>Compartir</strong> (<i class="fa-solid fa-share-from-square text-sky-400"></i> en la parte inferior) y luego selecciona <strong>"Agregar a inicio"</strong> (<i class="fa-regular fa-square-plus text-sky-400"></i>).</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-2 pt-2">
+                <button id="nativeInstallPromptBtn" onclick="triggerNativePrompt()" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 py-2 rounded-lg text-xs hidden shadow-md">
+                    Instalar Ahora
+                </button>
+                <button onclick="closeInstallModal()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 font-semibold px-4 py-2 rounded-lg text-xs">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Notificaciones / Confirmaciones Generales -->
+    <div id="modalOverlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-700 rounded-2xl p-6 max-w-sm w-full shadow-2xl text-center space-y-4">
+            <div id="modalIcon" class="text-3xl text-sky-400">
+                <i class="fa-solid fa-circle-info"></i>
+            </div>
+            <h3 id="modalTitle" class="text-lg font-bold text-white">Notificación</h3>
+            <p id="modalMessage" class="text-sm text-slate-300"></p>
+            <div class="flex justify-center gap-3 pt-2">
+                <button id="modalConfirmBtn" class="bg-sky-600 hover:bg-sky-500 text-white font-semibold px-4 py-2 rounded-lg text-xs transition-all">Aceptar</button>
+                <button id="modalCancelBtn" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold px-4 py-2 rounded-lg text-xs border border-slate-600 transition-all hidden">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Application Logic -->
     <script>
-        // Lightning Background Canvas Animation
-        window.addEventListener('load', function () {
-            const canvas = document.getElementById('lightning-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            if (!ctx) return;
+        // Initial Matches State Model
+        const defaultMatches = [
+            { id: "A1", time: "13:00 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Lautaro", last: "Aguirre" }, f2: { first: "Juan", last: "Espinoza" }, winner: null },
+            { id: "A2", time: "13:10 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Gonzalo", last: "Tuñon" }, f2: { first: "Valentino", last: "di Rosa" }, winner: null },
+            { id: "A3", time: "13:20 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Agustin", last: "Velazquez" }, f2: { first: "Federico", last: "Wang" }, winner: null },
+            { id: "A4", time: "13:30 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Benjamin", last: "Duvobsky" }, f2: { first: "Ezequiel", last: "Arguello" }, winner: null },
+            { id: "A5", time: "13:40 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Ezequiel", last: "Muracciole" }, f2: { first: "Daniel", last: "Goldsman" }, winner: null },
+            { id: "A6", time: "13:50 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Ciro", last: "Cespedes" }, f2: { first: "Axel", last: "Furlan" }, winner: null },
+            { id: "A7", time: "14:00 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Felipe", last: "Ortiz" }, f2: { first: "Ian", last: "Cespedes" }, winner: null },
+            { id: "A8", time: "14:10 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Alejandro", last: "Delgado" }, f2: { first: "Antonio", last: "Olcese" }, winner: null },
 
-            function resize() {
-                canvas.width = window.innerWidth;
-                canvas.height = window.innerHeight;
-            }
-            resize();
-            window.addEventListener('resize', resize);
+            // Semifinals (Calculated automatically from A1-A8)
+            { id: "A9", time: "14:20 hs", category: "Men / Absoluto / Semifinal Iniciantes", f1Ref: { type: 'winner', matchId: 'A1', placeholder: { first: "GAN Lucha", last: "A1" } }, f2Ref: { type: 'winner', matchId: 'A2', placeholder: { first: "GAN Lucha", last: "A2" } }, winner: null },
+            { id: "A10", time: "14:30 hs", category: "Men / Absoluto / Semifinal Iniciantes", f1Ref: { type: 'winner', matchId: 'A3', placeholder: { first: "GAN Lucha", last: "A3" } }, f2Ref: { type: 'winner', matchId: 'A4', placeholder: { first: "GAN Lucha", last: "A4" } }, winner: null },
+            { id: "A11", time: "14:40 hs", category: "Men / Absoluto / Semifinal Avanzados", f1Ref: { type: 'winner', matchId: 'A5', placeholder: { first: "GAN Lucha", last: "A5" } }, f2Ref: { type: 'winner', matchId: 'A6', placeholder: { first: "GAN Lucha", last: "A6" } }, winner: null },
+            { id: "A12", time: "14:50 hs", category: "Men / Absoluto / Semifinal Avanzados", f1Ref: { type: 'winner', matchId: 'A7', placeholder: { first: "GAN Lucha", last: "A7" } }, f2Ref: { type: 'winner', matchId: 'A8', placeholder: { first: "GAN Lucha", last: "A8" } }, winner: null },
 
-            let bolts = [];
+            // Superfight
+            { id: "A13", time: "15:00 hs", category: "Superfight Femenina / Blue Belt Challenge / Absoluto", f1: { first: "Julia", last: "GRANATA" }, f2: { first: "Maria Victoria", last: "BENITEZ" }, winner: null, isSuperfight: true },
 
-            function createBolt() {
-                const startX = Math.random() * canvas.width;
-                const bolt = {
-                    path: [{ x: startX, y: 0 }],
-                    life: 0,
-                    maxLife: Math.floor(Math.random() * 10) + 5
-                };
-                let currentX = startX;
-                let currentY = 0;
-                while (currentY < canvas.height) {
-                    currentX += (Math.random() - 0.5) * 50;
-                    currentY += Math.random() * 30 + 10;
-                    bolt.path.push({ x: currentX, y: currentY });
-                }
-                bolts.push(bolt);
-            }
+            // Finals and Bronze Matches
+            { id: "A14", time: "15:10 hs", category: "Men / Absoluto / Bronze Medal Match Iniciantes", f1Ref: { type: 'loser', matchId: 'A9', placeholder: { first: "PER Lucha", last: "A9" } }, f2Ref: { type: 'loser', matchId: 'A10', placeholder: { first: "PER Lucha", last: "A10" } }, winner: null },
+            { id: "A15", time: "15:20 hs", category: "Men / Absoluto / Final Iniciantes", f1Ref: { type: 'winner', matchId: 'A9', placeholder: { first: "GAN Lucha", last: "A9" } }, f2Ref: { type: 'winner', matchId: 'A10', placeholder: { first: "GAN Lucha", last: "A10" } }, winner: null },
+            { id: "A16", time: "15:30 hs", category: "Men / Absoluto / Bronze Medal Match Avanzados", f1Ref: { type: 'loser', matchId: 'A11', placeholder: { first: "PER Lucha", last: "A11" } }, f2Ref: { type: 'loser', matchId: 'A12', placeholder: { first: "PER Lucha", last: "A12" } }, winner: null },
+            { id: "A17", time: "15:40 hs", category: "Men / Absoluto / Final Avanzados", f1Ref: { type: 'winner', matchId: 'A11', placeholder: { first: "GAN Lucha", last: "A11" } }, f2Ref: { type: 'winner', matchId: 'A12', placeholder: { first: "GAN Lucha", last: "A12" } }, winner: null }
+        ];
 
-            function animate() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-                if (Math.random() < 0.04) {
-                    createBolt();
-                }
+        // Global Edit Mode Switch
+        let isEditMode = false;
 
-                bolts.forEach((bolt, index) => {
-                    ctx.beginPath();
-                    ctx.strokeStyle = `rgba(0, 240, 255, ${1 - bolt.life / bolt.maxLife})`;
-                    ctx.lineWidth = 2;
-                    ctx.shadowBlur = 15;
-                    ctx.shadowColor = '#00f0ff';
-                    for (let i = 0; i < bolt.path.length; i++) {
-                        if (i === 0) ctx.moveTo(bolt.path[i].x, bolt.path[i].y);
-                        else ctx.lineTo(bolt.path[i].x, bolt.path[i].y);
-                    }
-                    ctx.stroke();
-                    bolt.life++;
-                    if (bolt.life >= bolt.maxLife) {
-                        bolts.splice(index, 1);
-                    }
-                });
+        // Active State Store (with LocalStorage fallback)
+        let state = [];
+        try {
+            const saved = localStorage.getItem('ejj3_matches_state');
+            state = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(defaultMatches));
+        } catch (e) {
+            state = JSON.parse(JSON.stringify(defaultMatches));
+        }
 
-                requestAnimationFrame(animate);
-            }
-            animate();
-        });
-
-        // App State & Bracket Logic
-        const initialVotes = {
-            iniciantes_qf0: [8, 12],   // 20
-            iniciantes_qf1: [15, 9],   // 24
-            iniciantes_qf2: [11, 14],  // 25
-            iniciantes_qf3: [10, 10],  // 20
-            superfight: [24, 18],      // 42
-            avanzados_qf0: [13, 11],   // 24
-            avanzados_qf1: [0, 0],     // 0
-            avanzados_qf2: [9, 15],    // 24
-            avanzados_qf3: [0, 0]      // 0
-        };
-
-        const initialBrackets = {
-            iniciantes: {
-                sf0: [null, null],
-                sf1: [null, null],
-                f0: [null, null],
-                champion: null
-            },
-            avanzados: {
-                sf0: [null, null],
-                sf1: [null, null],
-                f0: [null, null],
-                champion: null
-            }
-        };
-
-        function loadSavedState() {
+        // Save State
+        function saveState() {
             try {
-                const savedVotes = localStorage.getItem("bjj_tournament_votes");
-                const savedBrackets = localStorage.getItem("bjj_tournament_brackets");
-                return {
-                    votes: savedVotes ? JSON.parse(savedVotes) : { ...initialVotes },
-                    brackets: savedBrackets ? JSON.parse(savedBrackets) : JSON.parse(JSON.stringify(initialBrackets))
+                localStorage.setItem('ejj3_matches_state', JSON.stringify(state));
+            } catch(e) {}
+        }
+
+        // Custom UI Modal instead of alert/confirm
+        function showModal(title, message, isConfirm = false, onConfirm = null) {
+            const overlay = document.getElementById('modalOverlay');
+            const mTitle = document.getElementById('modalTitle');
+            const mMsg = document.getElementById('modalMessage');
+            const confirmBtn = document.getElementById('modalConfirmBtn');
+            const cancelBtn = document.getElementById('modalCancelBtn');
+
+            mTitle.textContent = title;
+            mMsg.textContent = message;
+
+            if (isConfirm) {
+                cancelBtn.classList.remove('hidden');
+                confirmBtn.onclick = () => {
+                    overlay.classList.add('hidden');
+                    if (onConfirm) onConfirm();
                 };
-            } catch (e) {
-                return {
-                    votes: { ...initialVotes },
-                    brackets: JSON.parse(JSON.stringify(initialBrackets))
-                };
+                cancelBtn.onclick = () => overlay.classList.add('hidden');
+            } else {
+                cancelBtn.classList.add('hidden');
+                confirmBtn.onclick = () => overlay.classList.add('hidden');
+            }
+
+            overlay.classList.remove('hidden');
+        }
+
+        // Helper to get match by ID
+        function getMatch(id) {
+            return state.find(m => m.id === id);
+        }
+
+        // Helper to get custom badge for a fighter slot based on match type and result
+        function getFighterBadgeHtml(match, slotIndex) {
+            if (!match.winner) return '';
+
+            const isWinner = match.winner === slotIndex;
+            const isLoser = match.winner !== slotIndex;
+
+            // Superfight Winner
+            if (match.isSuperfight && isWinner) {
+                return `<span class="text-amber-300 font-extrabold text-xs bg-amber-950/80 px-2 py-1 rounded-md border border-amber-500/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-medal text-amber-400"></i> SUPERFIGHT WINNER</span>`;
+            }
+
+            // Bronze Medal Match Winner
+            if ((match.id === 'A14' || match.id === 'A16') && isWinner) {
+                return `<span class="text-amber-200 font-extrabold text-xs bg-amber-950/70 px-2 py-1 rounded-md border border-amber-700/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-award text-amber-600"></i> GANADOR BRONZE MEDAL</span>`;
+            }
+
+            // Finals (A15 & A17)
+            if (match.id === 'A15' || match.id === 'A17') {
+                if (isWinner) {
+                    return `<span class="text-amber-300 font-extrabold text-xs bg-gradient-to-r from-amber-950 to-yellow-900 px-2.5 py-1 rounded-md border border-amber-400 flex items-center gap-1.5 shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"><i class="fa-solid fa-trophy text-amber-400"></i> CHAMPION</span>`;
+                }
+                if (isLoser) {
+                    return `<span class="text-slate-200 font-bold text-xs bg-slate-800 px-2 py-1 rounded-md border border-slate-400/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-medal text-slate-300"></i> SILVER MEDAL</span>`;
+                }
+            }
+
+            // Regular Match Winner
+            if (isWinner) {
+                return `<span class="text-emerald-400 font-bold text-xs bg-emerald-950 px-2 py-1 rounded-md border border-emerald-500/50 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-400"></i> GANADOR</span>`;
+            }
+
+            return '';
+        }
+
+        // Helper to resolve fighter from reference or static data
+        function getFighter(match, slotIndex) {
+            if (slotIndex === 1) {
+                if (match.f1) return match.f1;
+                const srcMatch = getMatch(match.f1Ref.matchId);
+                if (!srcMatch) return match.f1Ref.placeholder;
+                if (match.f1Ref.type === 'winner') {
+                    return srcMatch.winner ? getFighter(srcMatch, srcMatch.winner) : match.f1Ref.placeholder;
+                } else {
+                    if (srcMatch.winner) {
+                        const loserIndex = srcMatch.winner === 1 ? 2 : 1;
+                        return getFighter(srcMatch, loserIndex);
+                    }
+                    return match.f1Ref.placeholder;
+                }
+            } else {
+                if (match.f2) return match.f2;
+                const srcMatch = getMatch(match.f2Ref.matchId);
+                if (!srcMatch) return match.f2Ref.placeholder;
+                if (match.f2Ref.type === 'winner') {
+                    return srcMatch.winner ? getFighter(srcMatch, srcMatch.winner) : match.f2Ref.placeholder;
+                } else {
+                    if (srcMatch.winner) {
+                        const loserIndex = srcMatch.winner === 1 ? 2 : 1;
+                        return getFighter(srcMatch, loserIndex);
+                    }
+                    return match.f2Ref.placeholder;
+                }
             }
         }
 
-        const loaded = loadSavedState();
-        let globalVotes = loaded.votes;
-        let globalBrackets = loaded.brackets;
-
-        window.voteFighter = function() {
-            alert("Las votaciones para el torneo están oficialmente cerradas.");
-        };
-
-        window.advanceFighter = function(category, round, matchIdx, playerIdx) {
-            const names = {
-                iniciantes: {
-                    qf: [
-                        ["LAUTARO AGUIRRE", "JUAN ESPINOZA"],
-                        ["GONZALO TUÑON", "VALENTINO DI ROSA"],
-                        ["AGUSTIN VELAZQUEZ", "FEDERICO WANG"],
-                        ["BENJAMIN DUVOBSKY", "EZEQUIEL ARGÜELLO"]
-                    ]
-                },
-                avanzados: {
-                    qf: [
-                        ["EZEQUIEL MURACCIOLE", "DANIEL GOLDSMAN"],
-                        ["CIRO CESPEDES", "AXEL FURLAN"],
-                        ["FELIPE ORTIZ", "IAN CESPEDES"],
-                        ["ALEJANDRO DELGADO", "ANTONIO OLCESE"]
-                    ]
-                }
-            };
-
-            let selectedName = "";
-
-            if (round === 'qf') {
-                selectedName = names[category].qf[matchIdx][playerIdx];
-                if (matchIdx === 0) globalBrackets[category].sf0[0] = selectedName;
-                if (matchIdx === 1) globalBrackets[category].sf0[1] = selectedName;
-                if (matchIdx === 2) globalBrackets[category].sf1[0] = selectedName;
-                if (matchIdx === 3) globalBrackets[category].sf1[1] = selectedName;
-            } else if (round === 'sf') {
-                selectedName = matchIdx === 0 ? globalBrackets[category].sf0[playerIdx] : globalBrackets[category].sf1[playerIdx];
-                if (!selectedName || selectedName === "Avanzar Cuartos") return;
-
-                if (matchIdx === 0) globalBrackets[category].f0[0] = selectedName;
-                if (matchIdx === 1) globalBrackets[category].f0[1] = selectedName;
-            } else if (round === 'f') {
-                selectedName = globalBrackets[category].f0[playerIdx];
-                if (!selectedName || selectedName === "Finalista A" || selectedName === "Finalista B") return;
-
-                globalBrackets[category].champion = selectedName;
-            }
-
-            try {
-                localStorage.setItem("bjj_tournament_brackets", JSON.stringify(globalBrackets));
-            } catch (e) {}
-            updateUI();
-        };
-
-        function calculatePercentages(p0Votes, p1Votes) {
-            const v0 = parseInt(p0Votes) || 0;
-            const v1 = parseInt(p1Votes) || 0;
-            const total = v0 + v1;
-            if (total === 0) return [50, 50];
-            const pct0 = Math.round((v0 / total) * 100);
-            const pct1 = 100 - pct0;
-            return [pct0, pct1];
+        // Check if fighter slot is valid/clickable (not a placeholder)
+        function isRealFighter(fighter) {
+            return fighter && fighter.first && !fighter.first.startsWith('GAN') && !fighter.first.startsWith('PER');
         }
 
-        function updateUI() {
-            let totalVotesSum = 0;
+        // Select winner logic
+        function setWinner(matchId, fighterIndex) {
+            if (isEditMode) return; // In edit mode, clicking inputs edits text instead
 
-            Object.keys(globalVotes).forEach(matchId => {
-                const votes = globalVotes[matchId] || [0, 0];
-                totalVotesSum += (parseInt(votes[0]) || 0) + (parseInt(votes[1]) || 0);
-            });
+            const match = getMatch(matchId);
+            const fighter = getFighter(match, fighterIndex);
 
-            const totalNumEl = document.getElementById("total-votes-num");
-            if (totalNumEl) totalNumEl.innerText = totalVotesSum;
+            // Cannot select a placeholder as winner
+            if (!isRealFighter(fighter)) return;
 
-            Object.keys(globalVotes).forEach(matchId => {
-                const votes = globalVotes[matchId] || [1, 1];
-                const [pct0, pct1] = calculatePercentages(votes[0], votes[1]);
+            // Toggle or change winner
+            if (match.winner === fighterIndex) {
+                match.winner = null; // Unselect
+            } else {
+                match.winner = fighterIndex; // Set winner
+            }
 
-                let prefix = "";
-                if (matchId.startsWith("iniciantes")) prefix = "init-";
-                else if (matchId.startsWith("avanzados")) prefix = "av-";
-                else if (matchId === "superfight") prefix = "sf-";
+            // Clean dependent matches if winner was removed/changed
+            cleanDependentMatches();
+            saveState();
+            render();
+        }
 
-                let key = matchId.replace("iniciantes_", "").replace("avanzados_", "");
-
-                if (matchId === "superfight") {
-                    const el0Pct = document.getElementById("sf-p0-pct");
-                    const el0Bar = document.getElementById("sf-p0-bar");
-                    const el1Pct = document.getElementById("sf-p1-pct");
-                    const el1Bar = document.getElementById("sf-p1-bar");
-
-                    if (el0Pct) el0Pct.innerText = `${pct0}%`;
-                    if (el0Bar) el0Bar.style.width = `${pct0}%`;
-                    if (el1Pct) el1Pct.innerText = `${pct1}%`;
-                    if (el1Bar) el1Bar.style.width = `${pct1}%`;
-
-                    const winnerBox = document.getElementById("sf-winner-box");
-                    const winnerName = document.getElementById("sf-winner-name");
-                    const winnerPct = document.getElementById("sf-winner-pct");
-
-                    if (winnerBox && (votes[0] + votes[1] > 0)) {
-                        winnerBox.classList.remove("hidden");
-                        if (pct0 >= pct1) {
-                            winnerName.innerText = "JULIA GRANATA";
-                            winnerPct.innerText = `WIN CHANCE SEGÚN VOTACIÓN: ${pct0}% DE LOS VOTOS`;
-                        } else {
-                            winnerName.innerText = "MARIA VICTORIA BENITEZ";
-                            winnerPct.innerText = `WIN CHANCE SEGÚN VOTACIÓN: ${pct1}% DE LOS VOTOS`;
+        // Re-evaluate downstream matches to ensure consistent bracket logic
+        function cleanDependentMatches() {
+            let changed = true;
+            while(changed) {
+                changed = false;
+                state.forEach(m => {
+                    if (m.winner) {
+                        const f1 = getFighter(m, 1);
+                        const f2 = getFighter(m, 2);
+                        if (!isRealFighter(f1) || !isRealFighter(f2)) {
+                            m.winner = null;
+                            changed = true;
                         }
                     }
-                } else {
-                    const el0Pct = document.getElementById(`${prefix}${key}-p0-pct`);
-                    const el0Bar = document.getElementById(`${prefix}${key}-p0-bar`);
-                    const el1Pct = document.getElementById(`${prefix}${key}-p1-pct`);
-                    const el1Bar = document.getElementById(`${prefix}${key}-p1-bar`);
-
-                    if (el0Pct) el0Pct.innerText = `${pct0}%`;
-                    if (el0Bar) el0Bar.style.width = `${pct0}%`;
-                    if (el1Pct) el1Pct.innerText = `${pct1}%`;
-                    if (el1Bar) el1Bar.style.width = `${pct1}%`;
-                }
-            });
-
-            ["iniciantes", "avanzados"].forEach(cat => {
-                const pfx = cat === "iniciantes" ? "init" : "av";
-                const b = globalBrackets[cat];
-
-                const sf0p0 = document.getElementById(`${pfx}-sf0-p0`);
-                const sf0p1 = document.getElementById(`${pfx}-sf0-p1`);
-                const sf1p0 = document.getElementById(`${pfx}-sf1-p0`);
-                const sf1p1 = document.getElementById(`${pfx}-sf1-p1`);
-
-                if (sf0p0 && b.sf0[0]) { sf0p0.innerText = b.sf0[0]; sf0p0.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
-                if (sf0p1 && b.sf0[1]) { sf0p1.innerText = b.sf0[1]; sf0p1.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
-                if (sf1p0 && b.sf1[0]) { sf1p0.innerText = b.sf1[0]; sf1p0.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
-                if (sf1p1 && b.sf1[1]) { sf1p1.innerText = b.sf1[1]; sf1p1.className = "fighter-slot slot-winner py-2 px-2.5 rounded-lg border text-xs text-center font-bold transition truncate cursor-pointer"; }
-
-                const f0p0 = document.getElementById(`${pfx}-f0-p0`);
-                const f0p1 = document.getElementById(`${pfx}-f0-p1`);
-
-                if (f0p0 && b.f0[0]) { f0p0.innerText = b.f0[0]; f0p0.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer"; }
-                if (f0p1 && b.f0[1]) { f0p1.innerText = b.f0[1]; f0p1.className = "fighter-slot slot-winner py-1.5 px-2 rounded-lg border text-xs font-bold transition truncate cursor-pointer"; }
-
-                const champBox = document.getElementById(`${pfx}-champion-box`);
-                const champName = document.getElementById(`${pfx}-champion-name`);
-
-                if (champBox && champName && b.champion) {
-                    champBox.classList.remove("hidden");
-                    let winRateText = "";
-                    const qfVotesMatch = Object.keys(globalVotes).find(k => k.startsWith(cat));
-                    if (qfVotesMatch) {
-                        const votes = globalVotes[qfVotesMatch];
-                        const [p0, p1] = calculatePercentages(votes[0], votes[1]);
-                        winRateText = ` (${Math.max(p0, p1)}% WIN CHANCE SEGÚN VOTACIÓN)`;
-                    }
-                    champName.innerText = `CAMPEÓN: ${b.champion}${winRateText}`;
-                }
-            });
+                });
+            }
         }
 
-        window.addEventListener('DOMContentLoaded', updateUI);
+        // Live Canvas Inline Update Functions
+        function updateMatchField(matchId, field, value) {
+            const match = getMatch(matchId);
+            if (!match) return;
+            match[field] = value;
+            saveState();
+        }
+
+        function updateFighterField(matchId, slot, field, value) {
+            const match = getMatch(matchId);
+            if (!match) return;
+            if (slot === 1) {
+                if (!match.f1) match.f1 = { first: "", last: "" };
+                match.f1[field] = value;
+            } else {
+                if (!match.f2) match.f2 = { first: "", last: "" };
+                match.f2[field] = value;
+            }
+            saveState();
+            // Re-render dependent names in real-time
+            cleanDependentMatches();
+            render();
+        }
+
+        // Render main view
+        function render() {
+            const container = document.getElementById('matchesContainer');
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const noResults = document.getElementById('noResults');
+
+            const filteredMatches = state.filter(m => {
+                const f1 = getFighter(m, 1);
+                const f2 = getFighter(m, 2);
+                const searchStr = `${m.id} A-${m.id} ${f1.first} ${f1.last} ${f2.first} ${f2.last} ${m.category}`.toLowerCase();
+                return searchStr.includes(query);
+            });
+
+            if (filteredMatches.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            container.innerHTML = filteredMatches.map(match => {
+                const f1 = getFighter(match, 1);
+                const f2 = getFighter(match, 2);
+                const isFinished = match.winner !== null;
+
+                // Color Themes strictly aligned with prompt
+                let cardStyle = "";
+                let badgeStyle = "";
+                let iconClass = "";
+
+                if (isFinished) {
+                    // VERDE (Lucha Finalizada)
+                    cardStyle = "bg-emerald-950/40 border-emerald-500/80 shadow-[0_0_15px_rgba(16,185,129,0.15)]";
+                    badgeStyle = "bg-emerald-900/60 text-emerald-300 border-emerald-500/50";
+                    iconClass = "fa-solid fa-circle-check text-emerald-400";
+                } else {
+                    // AZUL (Lucha pendiente o no realizada)
+                    cardStyle = "bg-blue-950/30 border-blue-500/60 shadow-[0_0_15px_rgba(59,130,246,0.1)]";
+                    badgeStyle = "bg-blue-900/50 text-blue-300 border-blue-500/40";
+                    iconClass = "fa-regular fa-clock text-blue-400";
+                }
+
+                // Superfight special border tint if pending
+                if (match.isSuperfight && !isFinished) {
+                    cardStyle = "bg-purple-950/30 border-purple-500/70 shadow-[0_0_15px_rgba(168,85,247,0.15)]";
+                    badgeStyle = "bg-purple-900/50 text-purple-300 border-purple-500/40";
+                    iconClass = "fa-solid fa-star text-purple-400";
+                }
+
+                const canSelectF1 = isRealFighter(f1);
+                const canSelectF2 = isRealFighter(f2);
+                const isStaticF1 = !!match.f1;
+                const isStaticF2 = !!match.f2;
+
+                return `
+                <div class="border ${cardStyle} rounded-xl p-3 sm:p-4 transition-all duration-300 relative overflow-hidden">
+                    
+                    <!-- Category Header -->
+                    <div class="flex items-center justify-between text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-2.5 gap-2">
+                        ${isEditMode ? `
+                            <input type="text" value="${match.category}" 
+                                onchange="updateMatchField('${match.id}', 'category', this.value)" 
+                                class="bg-slate-900/90 border border-slate-600 rounded px-2 py-0.5 text-sky-300 w-full text-xs font-semibold focus:outline-none focus:border-sky-400">
+                        ` : `
+                            <span class="${isFinished ? 'text-emerald-400' : (match.isSuperfight ? 'text-purple-300' : 'text-blue-300')}">
+                                ${match.category}
+                            </span>
+                        `}
+                        
+                        <div class="shrink-0">
+                            ${isFinished ? '<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-700/50"><i class="fa-solid fa-check mr-1"></i> FINALIZADA</span>' : '<span class="text-blue-400 font-bold text-[10px] bg-blue-950 px-2 py-0.5 rounded border border-blue-700/50"><i class="fa-solid fa-hourglass-start mr-1"></i> PENDIENTE</span>'}
+                        </div>
+                    </div>
+
+                    <!-- Match Main Body -->
+                    <div class="flex items-center justify-between gap-2">
+                        
+                        <!-- Match ID Badge -->
+                        <div class="flex items-center space-x-2 sm:space-x-3 shrink-0 pr-2 border-r border-slate-700/50">
+                            <i class="${iconClass} text-lg sm:text-xl w-5 text-center"></i>
+                            <span class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                                A-${match.id.replace('A', '')}
+                            </span>
+                        </div>
+
+                        <!-- Competitors Grid -->
+                        <div class="flex-1 px-2 sm:px-4 space-y-2">
+                            
+                            <!-- Fighter 1 -->
+                            <div ${!isEditMode ? `onclick="setWinner('${match.id}', 1)"` : ''} 
+                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? (canSelectF1 ? 'hover:scale-[1.01] cursor-pointer' : 'opacity-60 cursor-not-allowed') : ''} ${match.winner === 1 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : (match.winner === 2 && (match.id === 'A15' || match.id === 'A17') ? 'bg-slate-800/60 border-slate-500/50' : 'bg-slate-900/40')} border border-slate-700/40">
+                                
+                                <div class="flex items-center space-x-2.5 w-full">
+                                    <!-- Green Dot -->
+                                    <span class="w-2.5 h-2.5 rounded-full ${isRealFighter(f1) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]' : 'bg-slate-600'} shrink-0"></span>
+                                    
+                                    <div class="leading-tight w-full">
+                                        ${isEditMode && isStaticF1 ? `
+                                            <div class="flex flex-col gap-1 pr-2">
+                                                <input type="text" placeholder="Nombre" value="${f1.first}" onchange="updateFighterField('${match.id}', 1, 'first', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none focus:border-sky-400">
+                                                <input type="text" placeholder="Apellido" value="${f1.last}" onchange="updateFighterField('${match.id}', 1, 'last', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white font-bold uppercase focus:outline-none focus:border-sky-400">
+                                            </div>
+                                        ` : `
+                                            <div class="text-xs sm:text-sm font-medium ${match.winner === 1 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}">${f1.first}</div>
+                                            <div class="text-xs sm:text-sm font-extrabold ${match.winner === 1 ? 'text-white' : 'text-slate-100'} uppercase tracking-wide">${f1.last}</div>
+                                        `}
+                                    </div>
+                                </div>
+
+                                <div class="shrink-0">
+                                    ${getFighterBadgeHtml(match, 1)}
+                                </div>
+                            </div>
+
+                            <!-- Fighter 2 -->
+                            <div ${!isEditMode ? `onclick="setWinner('${match.id}', 2)"` : ''} 
+                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? (canSelectF2 ? 'hover:scale-[1.01] cursor-pointer' : 'opacity-60 cursor-not-allowed') : ''} ${match.winner === 2 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : (match.winner === 1 && (match.id === 'A15' || match.id === 'A17') ? 'bg-slate-800/60 border-slate-500/50' : 'bg-slate-900/40')} border border-slate-700/40">
+                                
+                                <div class="flex items-center space-x-2.5 w-full">
+                                    <!-- Green Dot -->
+                                    <span class="w-2.5 h-2.5 rounded-full ${isRealFighter(f2) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]' : 'bg-slate-600'} shrink-0"></span>
+                                    
+                                    <div class="leading-tight w-full">
+                                        ${isEditMode && isStaticF2 ? `
+                                            <div class="flex flex-col gap-1 pr-2">
+                                                <input type="text" placeholder="Nombre" value="${f2.first}" onchange="updateFighterField('${match.id}', 2, 'first', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white focus:outline-none focus:border-sky-400">
+                                                <input type="text" placeholder="Apellido" value="${f2.last}" onchange="updateFighterField('${match.id}', 2, 'last', this.value)" class="bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-xs text-white font-bold uppercase focus:outline-none focus:border-sky-400">
+                                            </div>
+                                        ` : `
+                                            <div class="text-xs sm:text-sm font-medium ${match.winner === 2 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}">${f2.first}</div>
+                                            <div class="text-xs sm:text-sm font-extrabold ${match.winner === 2 ? 'text-white' : 'text-slate-100'} uppercase tracking-wide">${f2.last}</div>
+                                        `}
+                                    </div>
+                                </div>
+
+                                <div class="shrink-0">
+                                    ${getFighterBadgeHtml(match, 2)}
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Scheduled Time -->
+                        <div class="shrink-0 pl-1">
+                            ${isEditMode ? `
+                                <input type="text" value="${match.time}" 
+                                    onchange="updateMatchField('${match.id}', 'time', this.value)" 
+                                    class="bg-slate-900 border border-slate-600 font-extrabold text-xs sm:text-sm px-2 py-1.5 rounded-lg text-center min-w-[70px] text-sky-300 focus:outline-none focus:border-sky-400">
+                            ` : `
+                                <div class="border ${badgeStyle} font-extrabold text-xs sm:text-sm px-2.5 py-2 rounded-lg text-center min-w-[70px] shadow-sm">
+                                    ${match.time}
+                                </div>
+                            `}
+                        </div>
+
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Toggle Edit Mode
+        document.getElementById('toggleEditModeBtn').addEventListener('click', () => {
+            isEditMode = !isEditMode;
+            const btnText = document.getElementById('editModeBtnText');
+            const subHeaderText = document.getElementById('subHeaderText');
+            
+            if (isEditMode) {
+                btnText.textContent = "Ver Modo Torneo";
+                subHeaderText.textContent = "MODO EDICIÓN ACTIVO: Edita nombres, horarios y categorías directamente en los campos";
+            } else {
+                btnText.textContent = "Modo Edición";
+                subHeaderText.textContent = "Haz clic en un competidor para declararlo GANADOR";
+            }
+            render();
+        });
+
+        // Search Input Listener
+        document.getElementById('searchInput').addEventListener('input', render);
+
+        // Reset Button Listener with Modal Confirmation
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            showModal(
+                "¿Reiniciar Torneo?", 
+                "Esta acción restablecerá todos los resultados y competidores a su estado inicial por defecto.", 
+                true, 
+                () => {
+                    state = JSON.parse(JSON.stringify(defaultMatches));
+                    saveState();
+                    render();
+                }
+            );
+        });
+
+        // First Render
+        render();
+
+        /* =========================================================
+           PWA SERVICE WORKER & BEFOREINSTALLPROMPT / MODAL LOGIC
+           ========================================================= */
+        let deferredPrompt = null;
+
+        function openInstallModal() {
+            const modal = document.getElementById('installGuideModal');
+            const nativeBtn = document.getElementById('nativeInstallPromptBtn');
+            
+            if (deferredPrompt) {
+                nativeBtn.classList.remove('hidden');
+            } else {
+                nativeBtn.classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installGuideModal').classList.add('hidden');
+        }
+
+        async function triggerNativePrompt() {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                closeInstallModal();
+            }
+            deferredPrompt = null;
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+        });
+
+        // Register Service Worker via Blob
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'ejj3-pwa-v3';
+                self.addEventListener('install', (e) => {
+                    self.skipWaiting();
+                });
+                self.addEventListener('activate', (e) => {
+                    e.waitUntil(clients.claim());
+                });
+                self.addEventListener('fetch', (e) => {
+                    e.respondWith(
+                        caches.match(e.request).then((res) => {
+                            return res || fetch(e.request).then((netRes) => {
+                                return caches.open(CACHE_NAME).then((cache) => {
+                                    cache.put(e.request, netRes.clone());
+                                    return netRes;
+                                });
+                            }).catch(() => res);
+                        })
+                    );
+                });
+            `;
+
+            const blob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(blob);
+
+            navigator.serviceWorker.register(swUrl)
+                .then(() => console.log('PWA Service Worker registrado con éxito'))
+                .catch(err => console.log('PWAServiceWorker fallback error:', err));
+        }
     </script>
 </body>
 </html>
