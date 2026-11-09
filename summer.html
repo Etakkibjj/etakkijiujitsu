@@ -1,0 +1,992 @@
+<!DOCTYPE html>
+<html lang="es" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>EJJ SUMMER GAUNTLET - Strength & Combat Training</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        neonPink: '#ff007f',
+                        neonCyan: '#00f3ff',
+                        neonYellow: '#ffe600',
+                        neonPurple: '#9d00ff',
+                        synthDark: '#070312',
+                        synthCard: '#13082a',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        mono: ['Courier New', 'monospace']
+                    },
+                    boxShadow: {
+                        'neon-pink': '0 0 15px rgba(255, 0, 127, 0.6), 0 0 30px rgba(255, 0, 127, 0.3)',
+                        'neon-cyan': '0 0 15px rgba(0, 243, 255, 0.6), 0 0 30px rgba(0, 243, 255, 0.3)',
+                        'neon-yellow': '0 0 15px rgba(255, 230, 0, 0.6), 0 0 30px rgba(255, 230, 0, 0.3)',
+                        'neon-purple': '0 0 15px rgba(157, 0, 255, 0.6), 0 0 30px rgba(157, 0, 255, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Titillium+Web:ital,wght@0,700;0,900;1,900&display=swap');
+
+        body {
+            background-color: #070312;
+            color: #f8fafc;
+            font-family: 'Titillium Web', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* 80s / 90s Synthwave Horizon Grid Background */
+        .synth-grid {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: 
+                linear-gradient(180deg, rgba(7, 3, 18, 0.85) 0%, rgba(19, 8, 42, 0.95) 60%, rgba(255, 0, 127, 0.25) 100%),
+                linear-gradient(90deg, rgba(255,0,127,0.15) 1px, transparent 1px),
+                linear-gradient(0deg, rgba(0,243,255,0.15) 1px, transparent 1px);
+            background-size: 100% 100%, 40px 40px, 40px 40px;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Scanline Overlay */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(
+                rgba(18, 16, 16, 0) 50%, 
+                rgba(0, 0, 0, 0.35) 50%
+            );
+            background-size: 100% 4px;
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.6;
+        }
+
+        /* Dynamic Animated Lightning Canvas */
+        #lightningCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Miami Neon Text Glows */
+        .neon-text-pink {
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #ff007f,
+                0 0 20px #ff007f,
+                0 0 40px #ff007f;
+        }
+
+        .neon-text-cyan {
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #00f3ff,
+                0 0 20px #00f3ff,
+                0 0 40px #00f3ff;
+        }
+
+        .neon-text-yellow {
+            color: #fff;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #ffe600,
+                0 0 20px #ffe600,
+                0 0 35px #ffe600;
+        }
+
+        /* Accordion Smooth Transition */
+        .accordion-content {
+            transition: max-height 0.35s ease-in-out, opacity 0.25s ease-in-out;
+            max-height: 2000px;
+            opacity: 1;
+            overflow: hidden;
+        }
+
+        .accordion-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            margin-top: 0 !important;
+            margin-bottom: 0 !important;
+            border: none !important;
+        }
+
+        .chevron-icon {
+            transition: transform 0.3s ease;
+        }
+
+        .chevron-icon.rotated {
+            transform: rotate(180deg);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #070312;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #ff007f;
+            border-radius: 3px;
+            box-shadow: 0 0 10px #ff007f;
+        }
+
+        /* Checkbox neon custom styling */
+        .neon-checkbox:checked {
+            background-color: #00f3ff;
+            border-color: #00f3ff;
+            box-shadow: 0 0 12px #00f3ff;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-24 text-slate-100 select-none">
+
+    <!-- Retro Horizon Background & Scanlines -->
+    <div class="synth-grid"></div>
+    <div class="scanlines"></div>
+    <canvas id="lightningCanvas"></canvas>
+
+    <!-- Header Navigation & Neon Branding -->
+    <header class="sticky top-0 z-40 bg-slate-950/95 backdrop-blur-md border-b-2 border-pink-500/80 px-3 py-3 shadow-[0_4px_25px_rgba(255,0,127,0.4)]">
+        <div class="max-w-3xl mx-auto flex flex-col gap-3">
+            
+            <!-- Top Row: Title, Neon Dumbbell & Profile Badge -->
+            <div class="flex items-center justify-between gap-3 flex-wrap sm:flex-nowrap">
+                <div class="flex items-center gap-3.5">
+                    <!-- Custom SVG Animated Neon Dumbbell -->
+                    <div class="relative w-14 h-14 flex items-center justify-center bg-slate-900/90 rounded-2xl border-2 border-pink-500/70 p-2 shadow-[0_0_20px_rgba(255,0,127,0.5)]">
+                        <svg class="w-full h-full neon-dumbbell-svg" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Left Plate Outer -->
+                            <rect x="8" y="16" width="8" height="32" rx="2" fill="#ff007f" stroke="#ffffff" stroke-width="1.5" />
+                            <!-- Left Plate Inner -->
+                            <rect x="18" y="22" width="6" height="20" rx="1" fill="#00f3ff" stroke="#ffffff" stroke-width="1" />
+                            <!-- Center Bar -->
+                            <rect x="24" y="29" width="16" height="6" rx="1" fill="#ffe600" stroke="#ffffff" stroke-width="1" />
+                            <!-- Right Plate Inner -->
+                            <rect x="40" y="22" width="6" height="20" rx="1" fill="#00f3ff" stroke="#ffffff" stroke-width="1" />
+                            <!-- Right Plate Outer -->
+                            <rect x="48" y="16" width="8" height="32" rx="2" fill="#ff007f" stroke="#ffffff" stroke-width="1.5" />
+                            <!-- Neon Glow Accents -->
+                            <circle cx="12" cy="32" r="2" fill="#ffffff" />
+                            <circle cx="52" cy="32" r="2" fill="#ffffff" />
+                        </svg>
+                    </div>
+
+                    <div>
+                        <h1 class="text-2xl sm:text-3xl font-black italic tracking-wider uppercase leading-none text-transparent bg-clip-text bg-gradient-to-r from-pink-500 via-cyan-400 to-yellow-300 drop-shadow-[0_3px_10px_rgba(255,0,127,0.8)]">
+                            EJJ SUMMER GAUNTLET
+                            <span class="text-sm sm:text-base font-extrabold tracking-widest text-cyan-300 block italic mt-0.5">FUERZA & ACONDICIONAMIENTO</span>
+                        </h1>
+                    </div>
+                </div>
+
+                <!-- Profile Badge & Flag -->
+                <div class="flex items-center gap-2.5 bg-slate-900/90 border-2 border-cyan-400/60 px-3.5 py-2 rounded-xl text-xs sm:text-sm font-black text-cyan-200 shadow-[0_0_12px_rgba(0,243,255,0.3)]">
+                    <span class="tracking-wide">MATIAS MAGENTA | BJJ BLACK BELT | 84 KG - 183 CM | IMC: 25.1</span>
+                    <svg class="w-6 h-4 rounded-xs flex-shrink-0 border border-yellow-400/50" viewBox="0 0 750 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="750" height="500" fill="#74ACDF"/>
+                        <rect y="166.6" width="750" height="166.6" fill="#FFFFFF"/>
+                        <circle cx="375" cy="250" r="35" fill="#F6B40E"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Session Timer & Actions Row -->
+            <div class="flex items-center justify-between bg-slate-900/90 p-2.5 rounded-xl border border-purple-500/60 shadow-[inset_0_0_15px_rgba(157,0,255,0.25)] flex-wrap gap-2.5">
+                <!-- Session Timer -->
+                <div class="flex items-center gap-2.5">
+                    <span class="text-xs sm:text-sm font-black uppercase text-pink-400 tracking-widest">TIEMPO SESIÓN:</span>
+                    <span id="sessionTimerDisplay" class="font-mono text-xl sm:text-2xl font-black text-yellow-300 tracking-wider neon-text-yellow">00:00:00</span>
+                    <button onclick="toggleSessionTimer()" id="sessionTimerBtn" class="bg-pink-600/40 hover:bg-pink-500/60 text-pink-200 border-2 border-pink-500 text-xs sm:text-sm px-3 py-1.5 rounded-lg font-black transition-all shadow-[0_0_12px_rgba(255,0,127,0.4)] active:scale-95">
+                        INICIAR
+                    </button>
+                    <button onclick="resetSessionTimer()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 text-xs sm:text-sm px-2.5 py-1.5 rounded-lg font-bold transition-all active:scale-95">
+                        RESET
+                    </button>
+                </div>
+
+                <!-- Install PWA Button -->
+                <button id="pwaInstallBtn" onclick="openInstallModal()" class="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 px-3.5 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all shadow-[0_0_15px_rgba(0,243,255,0.6)] active:scale-95">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                    </svg>
+                    INSTALAR APP
+                </button>
+            </div>
+
+            <!-- Day Selector Tabs -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar text-xs sm:text-sm font-black" id="dayTabs">
+                <!-- Day buttons populated via JS -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-3xl mx-auto px-3 pt-5">
+        <!-- Progress Bar & Expand/Collapse All Actions -->
+        <div class="bg-slate-900/95 rounded-2xl p-4 mb-5 border-2 border-pink-500/60 shadow-[0_0_25px_rgba(255,0,127,0.3)] relative overflow-hidden space-y-3">
+            <div class="flex justify-between items-center text-sm sm:text-base font-black tracking-wider flex-wrap gap-2">
+                <span id="activeDayTitle" class="text-cyan-300 uppercase neon-text-cyan">DÍA 1</span>
+                <div class="flex items-center gap-3">
+                    <button onclick="toggleAllAccordions()" id="toggleAllBtn" class="bg-purple-900/60 hover:bg-purple-800 text-cyan-300 border border-cyan-400/50 text-xs px-2.5 py-1 rounded-lg font-black transition-all active:scale-95">
+                        PLEGAR TODOS
+                    </button>
+                    <span id="progressPercent" class="text-yellow-300 neon-text-yellow">0% COMPLETADO</span>
+                </div>
+            </div>
+            <div class="w-full bg-slate-950 h-4 rounded-full p-0.5 border border-purple-500/80 overflow-hidden">
+                <div id="progressBar" class="bg-gradient-to-r from-pink-500 via-purple-500 to-cyan-400 h-full rounded-full transition-all duration-500 w-0 shadow-[0_0_15px_#00f3ff]"></div>
+            </div>
+        </div>
+
+        <!-- Exercises List -->
+        <div id="exercisesContainer" class="space-y-5">
+            <!-- Dynamically Rendered Exercises with Accordions -->
+        </div>
+    </main>
+
+    <!-- Rest Timer Overlay / Modal -->
+    <div id="restTimerModal" class="fixed inset-x-0 bottom-0 z-50 bg-slate-950/95 border-t-4 border-pink-500 p-5 shadow-[0_-10px_40px_rgba(255,0,127,0.7)] backdrop-blur-lg hidden">
+        <div class="max-w-3xl mx-auto flex items-center justify-between gap-4">
+            <div>
+                <p class="text-xs uppercase text-pink-400 font-black tracking-widest">DESCANSO RECOMENDADO</p>
+                <div id="restTimerDisplay" class="text-4xl sm:text-5xl font-black font-mono text-cyan-300 neon-text-cyan">01:30</div>
+            </div>
+            <div class="flex items-center gap-2.5">
+                <button onclick="addRestTime(30)" class="bg-purple-900/80 border-2 border-purple-400 text-purple-100 text-xs sm:text-sm font-black px-4 py-3 rounded-xl active:scale-95 shadow-[0_0_12px_rgba(157,0,255,0.5)] hover:bg-purple-800 transition-all">+30s</button>
+                <button onclick="skipRestTimer()" class="bg-pink-600/40 text-pink-200 border-2 border-pink-500 text-xs sm:text-sm font-black px-5 py-3 rounded-xl active:scale-95 shadow-[0_0_12px_rgba(255,0,127,0.5)] hover:bg-pink-600/60 transition-all">OMITIR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA Install Modal / Instructions -->
+    <div id="installGuideModal" class="fixed inset-0 z-50 bg-slate-950/90 backdrop-blur-md flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border-2 border-cyan-400 rounded-2xl p-6 max-w-sm w-full shadow-[0_0_40px_rgba(0,243,255,0.5)] space-y-4">
+            <div class="flex justify-between items-start">
+                <h3 class="text-xl font-black text-cyan-300 uppercase neon-text-cyan tracking-wider">Instalar App en Tu Móvil</h3>
+                <button onclick="closeInstallModal()" class="text-pink-400 hover:text-white font-black text-xl">✕</button>
+            </div>
+            <p class="text-sm text-slate-200 leading-relaxed font-semibold">
+                Instala esta aplicación directamente en la pantalla de inicio de tu celular para un acceso instantáneo en el gimnasio:
+            </p>
+            <div class="space-y-3 text-sm">
+                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-yellow-400/50">
+                    <p class="font-black text-yellow-300 mb-1">Android (Chrome):</p>
+                    <p class="text-slate-300">Presiona los <strong>3 puntos (⋮)</strong> arriba a la derecha y elige <strong>"Agregar a la pantalla principal"</strong> o <strong>"Instalar app"</strong>.</p>
+                </div>
+                <div class="bg-slate-950/80 p-3.5 rounded-xl border border-pink-500/50">
+                    <p class="font-black text-pink-400 mb-1">iPhone (Safari):</p>
+                    <p class="text-slate-300">Presiona el botón <strong>Compartir (⎋)</strong> en la barra inferior y elige <strong>"Agregar a inicio"</strong>.</p>
+                </div>
+            </div>
+            <button onclick="triggerNativeInstall()" id="nativeInstallPromptBtn" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black py-3.5 rounded-xl text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(255,0,127,0.6)] hidden">
+                ¡Instalar Ahora Directamente!
+            </button>
+        </div>
+    </div>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Lightning Animation Canvas Effect
+        const canvas = document.getElementById('lightningCanvas');
+        const ctx = canvas.getContext('2d');
+        let width = canvas.width = window.innerWidth;
+        let height = canvas.height = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            width = canvas.width = window.innerWidth;
+            height = canvas.height = window.innerHeight;
+        });
+
+        function createLightning() {
+            if (Math.random() > 0.96) {
+                ctx.strokeStyle = Math.random() > 0.5 ? '#ff007f' : '#00f3ff';
+                ctx.lineWidth = Math.random() * 2 + 1;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = ctx.strokeStyle;
+                ctx.beginPath();
+                
+                let x = Math.random() * width;
+                let y = 0;
+                ctx.moveTo(x, y);
+
+                while (y < height * 0.5) {
+                    x += (Math.random() - 0.5) * 40;
+                    y += Math.random() * 30 + 10;
+                    ctx.lineTo(x, y);
+                }
+                ctx.stroke();
+
+                setTimeout(() => {
+                    ctx.clearRect(0, 0, width, height);
+                }, 80);
+            }
+            requestAnimationFrame(createLightning);
+        }
+        createLightning();
+
+        // Workout Data Schema (Days 1 to 6)
+        const workoutData = {
+            1: {
+                title: "DÍA 1: ZERCHER, TRÍCEPS, REMO & DOMINADAS",
+                exercises: [
+                    {
+                        name: "Sentadilla Zercher",
+                        sets: [
+                            { reps: "5", weight: "32.5 kg" },
+                            { reps: "4", weight: "45 kg" },
+                            { reps: "3", weight: "52.5 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "5", weight: "32.5 kg" },
+                            { reps: "4", weight: "45 kg" },
+                            { reps: "3", weight: "52.5 kg" },
+                            { reps: "2", weight: "60 kg" },
+                            { reps: "2", weight: "60 kg" },
+                            { reps: "2", weight: "60 kg" },
+                            { reps: "2", weight: "60 kg" }
+                        ]
+                    },
+                    {
+                        name: "Tríceps",
+                        sets: [
+                            { reps: "8", weight: "Corporal / Mancuerna" },
+                            { reps: "8", weight: "Corporal / Mancuerna" },
+                            { reps: "8", weight: "Corporal / Mancuerna" }
+                        ]
+                    },
+                    {
+                        name: "Remo KB 21 kg",
+                        sets: [
+                            { reps: "5", weight: "21 kg" },
+                            { reps: "5", weight: "21 kg" },
+                            { reps: "5", weight: "21 kg" },
+                            { reps: "5", weight: "21 kg" }
+                        ]
+                    },
+                    {
+                        name: "Dominadas",
+                        sets: [
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" }
+                        ]
+                    }
+                ]
+            },
+            2: {
+                title: "DÍA 2: PRESS PLANO, PM & LANDMINE",
+                exercises: [
+                    {
+                        name: "Press Plano con Pausa",
+                        sets: [
+                            { reps: "3", weight: "42.5 kg" },
+                            { reps: "3", weight: "50 kg" },
+                            { reps: "3", weight: "57.5 kg" },
+                            { reps: "2", weight: "62.5 kg" },
+                            { reps: "2", weight: "62.5 kg" },
+                            { reps: "2", weight: "62.5 kg" },
+                            { reps: "2", weight: "62.5 kg" }
+                        ]
+                    },
+                    {
+                        name: "Peso Muerto con Barra",
+                        sets: [
+                            { reps: "3", weight: "65 kg" },
+                            { reps: "3", weight: "80 kg" },
+                            { reps: "4", weight: "90 kg" },
+                            { reps: "4", weight: "90 kg" },
+                            { reps: "3", weight: "100 kg" },
+                            { reps: "3", weight: "100 kg" },
+                            { reps: "3", weight: "100 kg" },
+                            { reps: "2", weight: "110 kg" },
+                            { reps: "2", weight: "110 kg" },
+                            { reps: "2", weight: "110 kg" }
+                        ]
+                    },
+                    {
+                        name: "Buenos Días con Barra",
+                        sets: [
+                            { reps: "5", weight: "Barra" },
+                            { reps: "5", weight: "Barra" },
+                            { reps: "5", weight: "Barra" },
+                            { reps: "5", weight: "Barra" },
+                            { reps: "5", weight: "Barra" }
+                        ]
+                    },
+                    {
+                        name: "Press Militar Unilateral con Landmine",
+                        sets: [
+                            { reps: "6", weight: "12.5 kg" },
+                            { reps: "6", weight: "12.5 kg" },
+                            { reps: "6", weight: "12.5 kg" },
+                            { reps: "6", weight: "12.5 kg" }
+                        ]
+                    }
+                ]
+            },
+            3: {
+                title: "DÍA 3: SENTADILLA, REMO LANDMINE & PRESS",
+                exercises: [
+                    {
+                        name: "Sentadilla",
+                        sets: [
+                            { reps: "5", weight: "32.5 kg" },
+                            { reps: "4", weight: "45 kg" },
+                            { reps: "3", weight: "52.5 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "65 kg" },
+                            { reps: "3", weight: "65 kg" },
+                            { reps: "3", weight: "65 kg" },
+                            { reps: "3", weight: "65 kg" }
+                        ]
+                    },
+                    {
+                        name: "Remo Landmine",
+                        sets: [
+                            { reps: "3", weight: "10 kg" },
+                            { reps: "3", weight: "15 kg" },
+                            { reps: "3", weight: "20 kg" },
+                            { reps: "4", weight: "22.5 kg" },
+                            { reps: "4", weight: "22.5 kg" },
+                            { reps: "3", weight: "25 kg" },
+                            { reps: "3", weight: "25 kg" },
+                            { reps: "3", weight: "25 kg" }
+                        ]
+                    },
+                    {
+                        name: "Press Plano",
+                        sets: [
+                            { reps: "3", weight: "47.5 kg" },
+                            { reps: "3", weight: "57.5 kg" },
+                            { reps: "3", weight: "57.5 kg" },
+                            { reps: "4", weight: "65 kg" },
+                            { reps: "4", weight: "65 kg" },
+                            { reps: "4", weight: "65 kg" },
+                            { reps: "3", weight: "75 kg" }
+                        ]
+                    },
+                    {
+                        name: "Coactivación Zona Media",
+                        sets: [
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" }
+                        ]
+                    },
+                    {
+                        name: "Hiperextensiones",
+                        sets: [
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" }
+                        ]
+                    }
+                ]
+            },
+            4: {
+                title: "DÍA 4: PRESS PLANO, PM & PUSH PRESS",
+                exercises: [
+                    {
+                        name: "Press Plano con Barra",
+                        sets: [
+                            { reps: "5", weight: "40 kg" },
+                            { reps: "4", weight: "50 kg" },
+                            { reps: "4", weight: "55 kg" },
+                            { reps: "4", weight: "55 kg" },
+                            { reps: "3", weight: "62.5 kg" },
+                            { reps: "3", weight: "62.5 kg" },
+                            { reps: "3", weight: "62.5 kg" },
+                            { reps: "3", weight: "62.5 kg" },
+                            { reps: "3", weight: "62.5 kg" }
+                        ]
+                    },
+                    {
+                        name: "Peso Muerto",
+                        sets: [
+                            { reps: "5", weight: "50 kg" },
+                            { reps: "5", weight: "60 kg" },
+                            { reps: "5", weight: "70 kg" },
+                            { reps: "5", weight: "70 kg" },
+                            { reps: "4", weight: "80 kg" },
+                            { reps: "4", weight: "80 kg" },
+                            { reps: "4", weight: "80 kg" },
+                            { reps: "4", weight: "80 kg" },
+                            { reps: "4", weight: "80 kg" },
+                            { reps: "3", weight: "85 kg" },
+                            { reps: "3", weight: "85 kg" }
+                        ]
+                    },
+                    {
+                        name: "Push Press",
+                        sets: [
+                            { reps: "5", weight: "30 kg" },
+                            { reps: "4", weight: "35 kg" },
+                            { reps: "3", weight: "35 kg" },
+                            { reps: "3", weight: "35 kg" },
+                            { reps: "3", weight: "35 kg" }
+                        ]
+                    },
+                    {
+                        name: "Vuelos Posteriores con Mancuerna",
+                        sets: [
+                            { reps: "10", weight: "Mancuernas" },
+                            { reps: "10", weight: "Mancuernas" },
+                            { reps: "10", weight: "Mancuernas" },
+                            { reps: "10", weight: "Mancuernas" }
+                        ]
+                    },
+                    {
+                        name: "Extensión de Tríceps con Mancuerna",
+                        sets: [
+                            { reps: "10", weight: "Mancuerna" },
+                            { reps: "10", weight: "Mancuerna" },
+                            { reps: "10", weight: "Mancuerna" },
+                            { reps: "10", weight: "Mancuerna" }
+                        ]
+                    }
+                ]
+            },
+            5: {
+                title: "DÍA 5: SENTADILLAS, REMO CON BARRA & ACCESORIOS",
+                exercises: [
+                    {
+                        name: "Sentadillas (Bloque 1)",
+                        sets: [
+                            { reps: "5", weight: "45 kg" },
+                            { reps: "5", weight: "52.5 kg" },
+                            { reps: "5", weight: "52.5 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "60 kg" }
+                        ]
+                    },
+                    {
+                        name: "Remo con Barra",
+                        sets: [
+                            { reps: "4", weight: "35 kg" },
+                            { reps: "4", weight: "35 kg" },
+                            { reps: "4", weight: "40 kg" },
+                            { reps: "4", weight: "40 kg" },
+                            { reps: "3", weight: "45 kg" },
+                            { reps: "3", weight: "45 kg" },
+                            { reps: "3", weight: "45 kg" },
+                            { reps: "2", weight: "55 kg" },
+                            { reps: "2", weight: "55 kg" },
+                            { reps: "2", weight: "55 kg" }
+                        ]
+                    },
+                    {
+                        name: "Sentadillas (Bloque 2)",
+                        sets: [
+                            { reps: "4", weight: "45 kg" },
+                            { reps: "4", weight: "52.5 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "60 kg" },
+                            { reps: "3", weight: "65 kg" },
+                            { reps: "3", weight: "65 kg" },
+                            { reps: "3", weight: "65 kg" }
+                        ]
+                    },
+                    {
+                        name: "Dominadas",
+                        sets: [
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" },
+                            { reps: "6", weight: "Corporal" }
+                        ]
+                    },
+                    {
+                        name: "Curl de Bíceps Martillo",
+                        sets: [
+                            { reps: "10", weight: "Mancuernas" },
+                            { reps: "10", weight: "Mancuernas" },
+                            { reps: "10", weight: "Mancuernas" },
+                            { reps: "10", weight: "Mancuernas" }
+                        ]
+                    },
+                    {
+                        name: "Puente Glúteo",
+                        sets: [
+                            { reps: "10", weight: "Corporal / Carga" },
+                            { reps: "10", weight: "Corporal / Carga" },
+                            { reps: "10", weight: "Corporal / Carga" },
+                            { reps: "10", weight: "Corporal / Carga" }
+                        ]
+                    }
+                ]
+            },
+            6: {
+                title: "DÍA 6: MILITAR, PM, PRESS PLANO & HIP THRUST",
+                exercises: [
+                    {
+                        name: "Press Militar con Barra",
+                        sets: [
+                            { reps: "5", weight: "20 kg" },
+                            { reps: "4", weight: "25 kg" },
+                            { reps: "4", weight: "28 kg" },
+                            { reps: "4", weight: "28 kg" },
+                            { reps: "3", weight: "32.5 kg" },
+                            { reps: "3", weight: "32.5 kg" },
+                            { reps: "3", weight: "32.5 kg" }
+                        ]
+                    },
+                    {
+                        name: "Peso Muerto con Barra",
+                        sets: [
+                            { reps: "5", weight: "50 kg" },
+                            { reps: "4", weight: "60 kg" },
+                            { reps: "3", weight: "70 kg" },
+                            { reps: "3", weight: "70 kg" },
+                            { reps: "3", weight: "80 kg" },
+                            { reps: "3", weight: "80 kg" },
+                            { reps: "3", weight: "80 kg" }
+                        ]
+                    },
+                    {
+                        name: "Press Plano con Barra",
+                        sets: [
+                            { reps: "5", weight: "40 kg" },
+                            { reps: "4", weight: "50 kg" },
+                            { reps: "4", weight: "50 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "3", weight: "55 kg" },
+                            { reps: "3", weight: "65 kg" }
+                        ]
+                    },
+                    {
+                        name: "Hip Thrust (3s Pausa)",
+                        sets: [
+                            { reps: "10", weight: "80 kg" },
+                            { reps: "10", weight: "80 kg" },
+                            { reps: "10", weight: "80 kg" },
+                            { reps: "10", weight: "80 kg" },
+                            { reps: "10", weight: "80 kg" }
+                        ]
+                    },
+                    {
+                        name: "Hiperextensiones",
+                        sets: [
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" },
+                            { reps: "10", weight: "Corporal" }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        // State Variables
+        let currentDay = 1;
+        let completedState = JSON.parse(localStorage.getItem('combat_strength_progress')) || {};
+        let accordionStates = {}; // Tracks accordion open/close per exercise
+
+        // Session Timer State
+        let sessionSeconds = 0;
+        let sessionTimerInterval = null;
+        let isSessionTimerRunning = false;
+
+        // Rest Timer State
+        let restSeconds = 90;
+        let restTimerInterval = null;
+
+        // PWA Deferred Prompt
+        let deferredPrompt;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            renderDayTabs();
+            renderDayContent(currentDay);
+            setupPWAIntegration();
+        });
+
+        function renderDayTabs() {
+            const tabsContainer = document.getElementById('dayTabs');
+            tabsContainer.innerHTML = '';
+
+            for (let day = 1; day <= 6; day++) {
+                const btn = document.createElement('button');
+                const isSelected = day === currentDay;
+                
+                btn.className = `px-4 py-2.5 rounded-xl border-2 text-xs sm:text-sm font-black transition-all whitespace-nowrap active:scale-95 ${
+                    isSelected
+                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white border-pink-400 shadow-[0_0_18px_rgba(255,0,127,0.7)]'
+                        : 'bg-slate-900/90 text-cyan-300 border-cyan-500/40 hover:border-cyan-400 hover:bg-slate-800'
+                }`;
+                btn.innerText = `DÍA ${day}`;
+                btn.onclick = () => switchDay(day);
+                tabsContainer.appendChild(btn);
+            }
+        }
+
+        function switchDay(day) {
+            currentDay = day;
+            renderDayTabs();
+            renderDayContent(day);
+        }
+
+        function renderDayContent(day) {
+            const dayData = workoutData[day];
+            document.getElementById('activeDayTitle').innerText = dayData.title;
+
+            const container = document.getElementById('exercisesContainer');
+            container.innerHTML = '';
+
+            let totalSets = 0;
+            let completedSets = 0;
+
+            dayData.exercises.forEach((ex, exIdx) => {
+                const accordionKey = `d${day}_ex${exIdx}`;
+                // Default accordions to open if not set
+                if (accordionStates[accordionKey] === undefined) {
+                    accordionStates[accordionKey] = true;
+                }
+                const isOpen = accordionStates[accordionKey];
+
+                const exCard = document.createElement('div');
+                exCard.className = 'bg-slate-900/90 rounded-2xl border-2 border-purple-500/50 shadow-[0_4px_25px_rgba(157,0,255,0.25)] overflow-hidden backdrop-blur-sm transition-all';
+
+                // Accordion Header (Clickable Trigger)
+                const exHeader = document.createElement('button');
+                exHeader.type = 'button';
+                exHeader.onclick = () => toggleAccordion(accordionKey);
+                exHeader.className = 'w-full flex items-center justify-between p-4 bg-slate-950/80 hover:bg-slate-900/90 text-left transition-colors cursor-pointer border-b border-purple-500/30';
+                exHeader.innerHTML = `
+                    <div class="flex items-center gap-3 pr-2">
+                        <span class="text-pink-400 text-sm transform transition-transform chevron-icon ${isOpen ? '' : 'rotated'}">▼</span>
+                        <h2 class="text-base sm:text-xl font-black text-pink-400 tracking-wider uppercase drop-shadow-[0_0_8px_rgba(255,0,127,0.5)]">${ex.name}</h2>
+                    </div>
+                    <span class="text-xs sm:text-sm font-black text-cyan-300 bg-slate-900 px-3 py-1.5 rounded-xl border border-cyan-400/50 shadow-[0_0_10px_rgba(0,243,255,0.3)] flex-shrink-0">${ex.sets.length} SERIES</span>
+                `;
+                exCard.appendChild(exHeader);
+
+                // Collapsible Sets Body Container
+                const setsList = document.createElement('div');
+                setsList.className = `p-4 space-y-2.5 accordion-content ${isOpen ? '' : 'collapsed'}`;
+                setsList.id = `content_${accordionKey}`;
+
+                ex.sets.forEach((set, setIdx) => {
+                    totalSets++;
+                    const setKey = `d${day}_e${exIdx}_s${setIdx}`;
+                    const isChecked = !!completedState[setKey];
+                    if (isChecked) completedSets++;
+
+                    const setRow = document.createElement('div');
+                    setRow.className = `flex items-center justify-between p-3 sm:p-4 rounded-xl border-2 transition-all ${
+                        isChecked 
+                            ? 'bg-gradient-to-r from-cyan-950/80 to-purple-950/80 border-cyan-400 text-cyan-200 shadow-[0_0_15px_rgba(0,243,255,0.4)]' 
+                            : 'bg-slate-950/90 border-purple-500/30 text-slate-100 hover:border-pink-500/60'
+                    }`;
+
+                    setRow.innerHTML = `
+                        <!-- Left side: Set Number & Repetitions -->
+                        <div class="flex items-center gap-4">
+                            <span class="text-pink-400 font-mono font-black text-sm sm:text-base bg-slate-900 px-2.5 py-1 rounded-lg border border-pink-500/40 shadow-[0_0_8px_rgba(255,0,127,0.3)]">S${setIdx + 1}</span>
+                            <span class="text-slate-100 font-black text-lg sm:text-2xl flex items-baseline gap-2">
+                                ${set.reps} <span class="text-xs sm:text-sm text-cyan-400 font-extrabold uppercase tracking-wider">REPS</span>
+                            </span>
+                        </div>
+
+                        <!-- Right side: Weight & Checkbox -->
+                        <div class="flex items-center gap-4 ml-auto">
+                            <span class="font-black text-yellow-300 text-lg sm:text-2xl tracking-wide text-right drop-shadow-[0_0_8px_rgba(255,230,0,0.5)]">${set.weight}</span>
+                            <input type="checkbox" ${isChecked ? 'checked' : ''} 
+                                onclick="toggleSet('${setKey}')"
+                                class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-slate-900 border-2 border-pink-500 text-cyan-400 focus:ring-0 cursor-pointer accent-cyan-400 flex-shrink-0 neon-checkbox shadow-[0_0_10px_rgba(255,0,127,0.5)]">
+                        </div>
+                    `;
+                    setsList.appendChild(setRow);
+                });
+
+                exCard.appendChild(setsList);
+                container.appendChild(exCard);
+            });
+
+            // Update Progress Bar
+            const percent = totalSets > 0 ? Math.round((completedSets / totalSets) * 100) : 0;
+            document.getElementById('progressPercent').innerText = `${percent}% COMPLETADO`;
+            document.getElementById('progressBar').style.width = `${percent}%`;
+            
+            updateToggleAllBtnState();
+        }
+
+        function toggleAccordion(key) {
+            accordionStates[key] = !accordionStates[key];
+            const contentEl = document.getElementById(`content_${key}`);
+            if (contentEl) {
+                contentEl.classList.toggle('collapsed', !accordionStates[key]);
+            }
+            renderDayContent(currentDay);
+        }
+
+        function toggleAllAccordions() {
+            const dayData = workoutData[currentDay];
+            const keys = dayData.exercises.map((_, idx) => `d${currentDay}_ex${idx}`);
+            const areAllOpen = keys.every(k => accordionStates[k]);
+
+            keys.forEach(k => {
+                accordionStates[k] = !areAllOpen;
+            });
+
+            renderDayContent(currentDay);
+        }
+
+        function updateToggleAllBtnState() {
+            const dayData = workoutData[currentDay];
+            const keys = dayData.exercises.map((_, idx) => `d${currentDay}_ex${idx}`);
+            const areAllOpen = keys.every(k => accordionStates[k]);
+            const btn = document.getElementById('toggleAllBtn');
+            if (btn) {
+                btn.innerText = areAllOpen ? 'PLEGAR TODOS' : 'DESPLEGAR TODOS';
+            }
+        }
+
+        function toggleSet(key) {
+            completedState[key] = !completedState[key];
+            localStorage.setItem('combat_strength_progress', JSON.stringify(completedState));
+            
+            if (completedState[key]) {
+                startRestTimer();
+            }
+            
+            renderDayContent(currentDay);
+        }
+
+        // --- Session Timer Logic ---
+        function toggleSessionTimer() {
+            const btn = document.getElementById('sessionTimerBtn');
+            if (isSessionTimerRunning) {
+                clearInterval(sessionTimerInterval);
+                isSessionTimerRunning = false;
+                btn.innerText = 'REANUDAR';
+                btn.className = 'bg-yellow-500/30 hover:bg-yellow-500/50 text-yellow-300 border border-yellow-400 text-xs px-2.5 py-1 rounded-md font-black transition-all shadow-[0_0_10px_rgba(255,230,0,0.4)] active:scale-95';
+            } else {
+                sessionTimerInterval = setInterval(() => {
+                    sessionSeconds++;
+                    updateSessionDisplay();
+                }, 1000);
+                isSessionTimerRunning = true;
+                btn.innerText = 'PAUSAR';
+                btn.className = 'bg-pink-600/30 hover:bg-pink-500/50 text-pink-300 border border-pink-500 text-xs px-2.5 py-1 rounded-md font-black transition-all shadow-[0_0_10px_rgba(255,0,127,0.4)] active:scale-95';
+            }
+        }
+
+        function resetSessionTimer() {
+            clearInterval(sessionTimerInterval);
+            isSessionTimerRunning = false;
+            sessionSeconds = 0;
+            updateSessionDisplay();
+            const btn = document.getElementById('sessionTimerBtn');
+            btn.innerText = 'INICIAR';
+            btn.className = 'bg-pink-600/30 hover:bg-pink-500/50 text-pink-300 border border-pink-500 text-xs px-2.5 py-1 rounded-md font-black transition-all shadow-[0_0_10px_rgba(255,0,127,0.4)] active:scale-95';
+        }
+
+        function updateSessionDisplay() {
+            const hrs = String(Math.floor(sessionSeconds / 3600)).padStart(2, '0');
+            const mins = String(Math.floor((sessionSeconds % 3600) / 60)).padStart(2, '0');
+            const secs = String(sessionSeconds % 60).padStart(2, '0');
+            document.getElementById('sessionTimerDisplay').innerText = `${hrs}:${mins}:${secs}`;
+        }
+
+        // --- Rest Timer Logic ---
+        function startRestTimer() {
+            clearInterval(restTimerInterval);
+            restSeconds = 90;
+            updateRestDisplay();
+            document.getElementById('restTimerModal').classList.remove('hidden');
+
+            restTimerInterval = setInterval(() => {
+                restSeconds--;
+                updateRestDisplay();
+                if (restSeconds <= 0) {
+                    clearInterval(restTimerInterval);
+                    skipRestTimer();
+                }
+            }, 1000);
+        }
+
+        function updateRestDisplay() {
+            const mins = String(Math.floor(restSeconds / 60)).padStart(2, '0');
+            const secs = String(restSeconds % 60).padStart(2, '0');
+            document.getElementById('restTimerDisplay').innerText = `${mins}:${secs}`;
+        }
+
+        function addRestTime(seconds) {
+            restSeconds += seconds;
+            updateRestDisplay();
+        }
+
+        function skipRestTimer() {
+            clearInterval(restTimerInterval);
+            document.getElementById('restTimerModal').classList.add('hidden');
+        }
+
+        // --- PWA Installation Modal Handling ---
+        function setupPWAIntegration() {
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                const nativeBtn = document.getElementById('nativeInstallPromptBtn');
+                if (nativeBtn) nativeBtn.classList.remove('hidden');
+            });
+        }
+
+        function openInstallModal() {
+            document.getElementById('installGuideModal').classList.remove('hidden');
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installGuideModal').classList.add('hidden');
+        }
+
+        function triggerNativeInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted the PWA install prompt');
+                    }
+                    deferredPrompt = null;
+                    closeInstallModal();
+                });
+            }
+        }
+    </script>
+</body>
+</html>
