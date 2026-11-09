@@ -256,19 +256,19 @@
             
             <!-- BOTONES LADO AZUL -->
             <div class="flex flex-col space-y-1.5 sm:space-y-2">
-                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
                     <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+2</span>
                 </button>
-                <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
                     <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+3</span>
                 </button>
-                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
                     <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+4</span>
                 </button>
-                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
+                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
                     <span class="font-oswald text-base text-red-400 font-bold">-1</span>
                 </button>
@@ -276,19 +276,19 @@
 
             <!-- BOTONES LADO ROJO -->
             <div class="flex flex-col space-y-1.5 sm:space-y-2">
-                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
                     <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+2</span>
                 </button>
-                <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
                     <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+3</span>
                 </button>
-                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
+                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
                     <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+4</span>
                 </button>
-                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
+                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow cursor-pointer">
                     <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
                     <span class="font-oswald text-base text-red-400 font-bold">-1</span>
                 </button>
@@ -304,12 +304,12 @@
         <!-- Bloque de Botones a la Izquierda: REINICIAR + INSTALAR APP -->
         <div class="flex items-center space-x-2">
             <!-- Botón Reiniciar -->
-            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-base px-3 sm:px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider">
+            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-base px-3 sm:px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider cursor-pointer">
                 REINICIAR
             </button>
 
             <!-- Botón de instalación PWA -->
-            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-base font-bold px-3 sm:px-3.5 py-2 rounded-lg shadow flex items-center space-x-1.5 border border-emerald-400 transition-colors">
+            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-base font-bold px-3 sm:px-3.5 py-2 rounded-lg shadow flex items-center space-x-1.5 border border-emerald-400 transition-colors cursor-pointer">
                 <i class="fa-solid fa-mobile-screen-button"></i>
                 <span class="font-condensed font-extrabold tracking-wider uppercase whitespace-nowrap">INSTALAR APP</span>
             </button>
@@ -323,7 +323,7 @@
         </div>
 
         <!-- Botón Iniciar / Pausa -->
-        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider">
+        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider cursor-pointer">
             <span id="start-pause-text">INICIAR</span>
         </button>
     </footer>
@@ -341,10 +341,10 @@
                 SCORE: 0 - 0
             </div>
             <div class="w-full space-y-2.5">
-                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-condensed font-extrabold text-lg py-2.5 rounded-lg w-full border border-blue-400 uppercase shadow-lg tracking-wider">
+                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-condensed font-extrabold text-lg py-2.5 rounded-lg w-full border border-blue-400 uppercase shadow-lg tracking-wider cursor-pointer">
                     NUEVA LUCHA
                 </button>
-                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-condensed font-bold text-sm py-2 rounded-lg w-full border border-slate-600 uppercase tracking-wider">
+                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-condensed font-bold text-sm py-2 rounded-lg w-full border border-slate-600 uppercase tracking-wider cursor-pointer">
                     CERRAR
                 </button>
             </div>
@@ -358,7 +358,7 @@
                 <h3 class="text-sm font-black text-emerald-400 uppercase flex items-center gap-2 font-condensed text-lg">
                     <i class="fa-solid fa-mobile-screen-button"></i> Instalar ETAKKI BJJ App
                 </h3>
-                <button onclick="closePwaModal()" class="text-slate-400 hover:text-white font-bold text-base">✕</button>
+                <button onclick="closePwaModal()" class="text-slate-400 hover:text-white font-bold text-base cursor-pointer">✕</button>
             </div>
             
             <p class="font-condensed text-xs sm:text-sm text-slate-300 text-center mb-4">
@@ -368,7 +368,7 @@
             <div class="w-full space-y-3 mb-5 text-left font-condensed text-xs sm:text-sm">
                 <!-- Botón de instalación nativa en Android (si el navegador lo permite) -->
                 <div id="nativeInstallContainer" class="hidden">
-                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md mb-2 border border-emerald-400">
+                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md mb-2 border border-emerald-400 cursor-pointer">
                         <i class="fa-solid fa-download"></i> Confirmar Instalación Automática
                     </button>
                 </div>
@@ -406,7 +406,7 @@
                 </div>
             </div>
 
-            <button onclick="closePwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider">
+            <button onclick="closePwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider cursor-pointer">
                 ¡ENTENDIDO!
             </button>
         </div>
@@ -528,6 +528,7 @@
         let isRunning = false;
 
         const scores = { blue: 0, red: 0 };
+        const scoreHistory = []; // Para la función de deshacer
 
         const timerDisplay = document.getElementById('timer-display');
         const startPauseBtn = document.getElementById('start-pause-btn');
@@ -582,16 +583,24 @@
             if (timeLeft <= 0) return;
             isRunning = true;
             if (startPauseText) startPauseText.textContent = 'PAUSA';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-amber-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(700, 0.1);
+            if (startPauseBtn) {
+                startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-amber-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider cursor-pointer';
+            }
 
-            clearInterval(timerInterval);
             timerInterval = setInterval(() => {
                 if (timeLeft > 0) {
                     timeLeft--;
                     updateTimerDisplay();
-                } else {
-                    endTimer();
+                    if (timeLeft <= 10 && timeLeft > 0) {
+                        playBeep(500, 0.1);
+                    }
+                }
+
+                if (timeLeft <= 0) {
+                    pauseTimer();
+                    playEndAlarm();
+                    if (timerDisplay) timerDisplay.classList.add('timer-ended');
+                    showWinnerModal();
                 }
             }, 1000);
         }
@@ -599,81 +608,72 @@
         function pauseTimer() {
             isRunning = false;
             clearInterval(timerInterval);
-            if (startPauseText) startPauseText.textContent = 'REANUDAR';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(450, 0.1);
-        }
-
-        function endTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            if (startPauseText) startPauseText.textContent = 'FIN';
-            if (timerDisplay) timerDisplay.classList.add('timer-ended');
-            playEndAlarm();
-            checkWinner(true);
-        }
-
-        function addPoints(fighter, pts) {
-            getAudioContext();
-            scores[fighter] += pts;
-            document.getElementById(`${fighter}-score`).textContent = scores[fighter];
-            playBeep(900, 0.08);
-        }
-
-        function subtractPoint(fighter) {
-            getAudioContext();
-            if (scores[fighter] > 0) {
-                scores[fighter] -= 1;
-                document.getElementById(`${fighter}-score`).textContent = scores[fighter];
-                playBeep(350, 0.08);
+            if (startPauseText) startPauseText.textContent = 'INICIAR';
+            if (startPauseBtn) {
+                startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider cursor-pointer';
             }
         }
 
         function resetMatch() {
-            clearInterval(timerInterval);
-            isRunning = false;
+            pauseTimer();
             timeLeft = MATCH_DURATION;
-            scores.blue = 0;
-            scores.red = 0;
             updateTimerDisplay();
             if (timerDisplay) timerDisplay.classList.remove('timer-ended');
+            scores.blue = 0;
+            scores.red = 0;
+            scoreHistory.length = 0;
             document.getElementById('blue-score').textContent = '0';
             document.getElementById('red-score').textContent = '0';
-            if (startPauseText) startPauseText.textContent = 'INICIAR';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(500, 0.15);
         }
 
-        function checkWinner(timeOut = false) {
+        function addPoints(fighter, pts) {
+            getAudioContext();
+            playBeep(750, 0.08);
+            scoreHistory.push({ fighter, pts });
+            scores[fighter] += pts;
+            document.getElementById(`${fighter}-score`).textContent = scores[fighter];
+        }
+
+        function subtractPoint(fighter) {
+            getAudioContext();
+            playBeep(400, 0.1);
+            const lastIndex = scoreHistory.map(h => h.fighter).lastIndexOf(fighter);
+            if (lastIndex !== -1) {
+                const removed = scoreHistory.splice(lastIndex, 1)[0];
+                scores[fighter] = Math.max(0, scores[fighter] - removed.pts);
+            } else {
+                scores[fighter] = Math.max(0, scores[fighter] - 1);
+            }
+            document.getElementById(`${fighter}-score`).textContent = scores[fighter];
+        }
+
+        function showWinnerModal() {
             const blueName = document.getElementById('blue-name').value || 'LUKE';
             const redName = document.getElementById('red-name').value || 'VADER';
             const winnerTitle = document.getElementById('winner-title');
-            const winnerNameDisplay = document.getElementById('winner-name-display');
             const winnerScoreDisplay = document.getElementById('winner-score-display');
-            const winnerModal = document.getElementById('winner-modal');
-            const winnerCard = document.getElementById('winner-card');
-
-            winnerScoreDisplay.textContent = `SCORE: ${scores.blue} - ${scores.red}`;
 
             if (scores.blue > scores.red) {
-                winnerNameDisplay.textContent = 'GANADOR POR PUNTOS';
-                winnerTitle.textContent = blueName;
-                winnerCard.className = 'bg-[#19202D] border-2 border-blue-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+                winnerTitle.textContent = `¡${blueName} GANADOR!`;
+                winnerTitle.className = 'font-oswald text-3xl sm:text-4xl font-extrabold tracking-wide uppercase leading-tight mb-3 text-blue-400';
             } else if (scores.red > scores.blue) {
-                winnerNameDisplay.textContent = 'GANADOR POR PUNTOS';
-                winnerTitle.textContent = redName;
-                winnerCard.className = 'bg-[#19202D] border-2 border-red-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+                winnerTitle.textContent = `¡${redName} GANADOR!`;
+                winnerTitle.className = 'font-oswald text-3xl sm:text-4xl font-extrabold tracking-wide uppercase leading-tight mb-3 text-red-400';
             } else {
-                winnerNameDisplay.textContent = 'EMPATE';
-                winnerTitle.textContent = timeOut ? '¡TIEMPO AGOTADO (EBI OT PRONTO)!' : 'EMPATE';
-                winnerCard.className = 'bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+                winnerTitle.textContent = '¡EMPATE!';
+                winnerTitle.className = 'font-oswald text-3xl sm:text-4xl font-extrabold tracking-wide uppercase leading-tight mb-3 text-amber-400';
             }
-            winnerModal.classList.remove('hidden');
+
+            winnerScoreDisplay.textContent = `SCORE: ${blueName} (${scores.blue}) - (${scores.red}) ${redName}`;
+            document.getElementById('winner-modal').classList.remove('hidden');
         }
 
         function closeWinnerModal() {
             document.getElementById('winner-modal').classList.add('hidden');
         }
+
+        // Inicializar display de tiempo al cargar
+        updateTimerDisplay();
     </script>
 </body>
 </html>
