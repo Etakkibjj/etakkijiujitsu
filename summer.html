@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>EJJ SUMMER GAUNTLET - Strength & Combat Training</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -230,13 +232,27 @@
                     </button>
                 </div>
 
-                <!-- Install PWA Button -->
-                <button id="pwaInstallBtn" onclick="openInstallModal()" class="flex items-center gap-2 bg-gradient-to-r from-cyan-400 to-blue-600 hover:from-cyan-300 hover:to-blue-500 text-slate-950 px-3.5 py-1.5 rounded-lg font-black text-xs sm:text-sm transition-all shadow-[0_0_15px_rgba(0,243,255,0.6)] active:scale-95">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                    </svg>
-                    INSTALAR APP
-                </button>
+                <!-- Controls & PWA Section -->
+                <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2 text-xs font-bold">
+                    <!-- PWA Install Button -->
+                    <button id="installAppBtn" onclick="handleInstallClick()" 
+                            class="bg-emerald-600 hover:bg-emerald-500 text-white font-black px-3.5 py-2 rounded-xl flex items-center gap-1.5 shadow-[0_0_15px_rgba(16,185,129,0.5)] transition-all text-xs sm:text-sm active:scale-95 border border-emerald-400">
+                        <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
+                    </button>
+
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center gap-1.5 bg-blue-950/80 border border-blue-500/60 text-blue-300 px-2.5 py-1.5 rounded-xl font-black text-xs shadow-[0_0_8px_rgba(59,130,246,0.3)]">
+                            <span class="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse"></span> Pendiente
+                        </span>
+                        <span class="inline-flex items-center gap-1.5 bg-emerald-950/80 border border-emerald-500/60 text-emerald-300 px-2.5 py-1.5 rounded-xl font-black text-xs shadow-[0_0_8px_rgba(16,185,129,0.3)]">
+                            <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Finalizada
+                        </span>
+                    </div>
+
+                    <button id="resetBtn" onclick="resetAllProgress()" title="Reiniciar todos los resultados" class="bg-red-900/50 hover:bg-red-800/80 border border-red-500/70 text-red-200 px-3 py-2 rounded-xl flex items-center gap-1.5 transition-all text-xs sm:text-sm font-black active:scale-95 shadow-[0_0_10px_rgba(239,68,68,0.4)]">
+                        <i class="fa-solid fa-rotate-left"></i> Reiniciar
+                    </button>
+                </div>
             </div>
 
             <!-- Day Selector Tabs -->
@@ -305,7 +321,7 @@
                 </div>
             </div>
             <button onclick="triggerNativeInstall()" id="nativeInstallPromptBtn" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-400 hover:to-purple-500 text-white font-black py-3.5 rounded-xl text-sm uppercase tracking-widest shadow-[0_0_15px_rgba(255,0,127,0.6)] hidden">
-                ¡Instalar Ahora Directamente!
+                <i class="fa-solid fa-download mr-1"></i> ¡Instalar Ahora Directamente!
             </button>
         </div>
     </div>
@@ -727,7 +743,7 @@
         let restTimerInterval = null;
 
         // PWA Deferred Prompt
-        let deferredPrompt;
+        let deferredPrompt = null;
 
         // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
@@ -736,22 +752,12 @@
             setupPWAIntegration();
         });
 
-        function renderDayTabs() {
-            const tabsContainer = document.getElementById('dayTabs');
-            tabsContainer.innerHTML = '';
-
-            for (let day = 1; day <= 6; day++) {
-                const btn = document.createElement('button');
-                const isSelected = day === currentDay;
-                
-                btn.className = `px-4 py-2.5 rounded-xl border-2 text-xs sm:text-sm font-black transition-all whitespace-nowrap active:scale-95 ${
-                    isSelected
-                        ? 'bg-gradient-to-r from-pink-500 to-purple-600 text-white border-pink-400 shadow-[0_0_18px_rgba(255,0,127,0.7)]'
-                        : 'bg-slate-900/90 text-cyan-300 border-cyan-500/40 hover:border-cyan-400 hover:bg-slate-800'
-                }`;
-                btn.innerText = `DÍA ${day}`;
-                btn.onclick = () => switchDay(day);
-                tabsContainer.appendChild(btn);
+        // Reset All Progress Functionality
+        function resetAllProgress() {
+            if (confirm('¿Estás seguro de que deseas reiniciar todo el progreso de la rutina?')) {
+                completedState = {};
+                localStorage.removeItem('combat_strength_progress');
+                renderDayContent(currentDay);
             }
         }
 
@@ -957,7 +963,7 @@
             document.getElementById('restTimerModal').classList.add('hidden');
         }
 
-        // --- PWA Installation Modal Handling ---
+        // --- PWA Installation & Event Logic ---
         function setupPWAIntegration() {
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
@@ -965,6 +971,30 @@
                 const nativeBtn = document.getElementById('nativeInstallPromptBtn');
                 if (nativeBtn) nativeBtn.classList.remove('hidden');
             });
+
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                const installBtn = document.getElementById('installAppBtn');
+                if (installBtn) {
+                    installBtn.innerHTML = '<i class="fa-solid fa-circle-check"></i> App Instalada';
+                    installBtn.classList.replace('bg-emerald-600', 'bg-slate-800');
+                    installBtn.disabled = true;
+                }
+            });
+        }
+
+        function handleInstallClick() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('El usuario aceptó la instalación.');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                openInstallModal();
+            }
         }
 
         function openInstallModal() {
@@ -980,7 +1010,7 @@
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choiceResult) => {
                     if (choiceResult.outcome === 'accepted') {
-                        console.log('User accepted the PWA install prompt');
+                        console.log('El usuario aceptó la instalación.');
                     }
                     deferredPrompt = null;
                     closeInstallModal();
