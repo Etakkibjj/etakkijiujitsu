@@ -1,40 +1,33 @@
 <!DOCTYPE html>
-<html lang="es" class="h-full w-full">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>ETAKKI BJJ Referee Scoreboard</title>
-    
-    <!-- Configuración PWA Meta Tags -->
-    <meta name="theme-color" content="#111620">
+    <title>Cronograma del Torneo - EJJ SUBMISSION ONLY 3</title>
+
+    <!-- Meta Tags para PWA / Mobile (Android & iOS) -->
+    <meta name="theme-color" content="#181e26">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="ETAKKI BJJ">
-    <meta name="application-name" content="ETAKKI BJJ Scoreboard">
-    <meta name="description" content="Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules">
+    <meta name="apple-mobile-web-app-title" content="EJJ 3">
+    <meta name="application-name" content="EJJ 3 Cronograma">
 
-    <!-- Web App Manifest Embebido Completo y Válido PWA -->
+    <!-- Web App Manifest Embebido (Válido PWA) -->
     <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{
-        "id": "etakki-bjj-scoreboard-v4",
-        "name": "ETAKKI BJJ Referee Scoreboard",
-        "short_name": "ETAKKI BJJ",
-        "description": "Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules",
+        "id": "ejj3-cronograma-v1",
+        "name": "EJJ SUBMISSION ONLY 3",
+        "short_name": "EJJ 3",
+        "description": "Cronograma interactivo y llaves del Torneo EJJ Submission Only 3",
         "start_url": "./",
         "scope": "./",
         "display": "standalone",
-        "background_color": "#161C26",
-        "theme_color": "#111620",
+        "background_color": "#181e26",
+        "theme_color": "#181e26",
         "orientation": "any",
         "icons": [
             {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22><rect width=%22192%22 height=%22192%22 rx=%2232%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%2280%22 font-weight=%22900%22 fill=%22%2300F0FF%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
-                "sizes": "192x192",
-                "type": "image/svg+xml",
-                "purpose": "any maskable"
-            },
-            {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%2264%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%22200%22 font-weight=%22900%22 fill=%22%2300F0FF%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
+                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%22100%22 fill=%22%23181e26%22/><text x=%2250%25%22 y=%2255%25%22 font-size=%22200%22 font-weight=%22900%22 fill=%22%2338bdf8%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22>EJJ</text></svg>",
                 "sizes": "512x512",
                 "type": "image/svg+xml",
                 "purpose": "any maskable"
@@ -42,638 +35,615 @@
         ]
     }'>
 
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- FontAwesome Icons para los modales y botones -->
+    <!-- FontAwesome icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
-    <!-- Google Fonts: Barlow Condensed, Montserrat & Oswald -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&family=Montserrat:wght@800;900&family=Oswald:wght@700&display=swap" rel="stylesheet">
-
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        smooth: {
+                            bg: '#181e26',
+                            card: '#27313e',
+                            cardBorder: '#354354',
+                            banner: '#cbe4f7',
+                            bannerText: '#1b364b',
+                            accent: '#64748b',
+                            greenDot: '#22c55e',
+                            timeBadge: '#323d4d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* Tipografías y estilos base */
         body {
-            font-family: 'Barlow Condensed', sans-serif;
-            background-color: #161C26;
-            color: #FFFFFF;
+            background-color: #12171e;
+            color: #f1f5f9;
             user-select: none;
             -webkit-user-select: none;
             touch-action: manipulation;
         }
-
-        .font-condensed {
-            font-family: 'Barlow Condensed', sans-serif;
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-
-        .font-smooth {
-            font-family: 'Montserrat', sans-serif;
+        ::-webkit-scrollbar-track {
+            background: #181e26;
         }
-
-        .font-oswald {
-            font-family: 'Oswald', sans-serif;
+        ::-webkit-scrollbar-thumb {
+            background: #354354;
+            border-radius: 4px;
         }
-
-        /* Colores de interfaz */
-        .bg-smooth-dark { background-color: #19202D; }
-        .bg-smooth-card { background-color: #212B3B; }
-        .bg-smooth-blue { background-color: #1360EF; }
-        .bg-smooth-red { background-color: #D32F2F; }
-
-        /* Efecto feedback táctil en botones */
-        .btn-tap:active {
-            transform: scale(0.96);
-            filter: brightness(1.2);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
         }
-
-        /* Animaciones y efectos de neón pulsante */
-        @keyframes neon-blue-pulse {
-            0%, 100% {
-                color: #00F0FF;
-                text-shadow: 
-                    0 0 7px #00F0FF,
-                    0 0 15px #00F0FF,
-                    0 0 30px rgba(0, 240, 255, 0.8),
-                    0 0 50px rgba(0, 240, 255, 0.5);
-            }
-            50% {
-                color: #E0FFFF;
-                text-shadow: 
-                    0 0 12px #00F0FF,
-                    0 0 25px #00F0FF,
-                    0 0 45px rgba(0, 240, 255, 1),
-                    0 0 70px rgba(0, 240, 255, 0.8);
-            }
-        }
-
-        @keyframes neon-red-pulse {
-            0%, 100% {
-                color: #FF0055;
-                text-shadow: 
-                    0 0 7px #FF0055,
-                    0 0 15px #FF0055,
-                    0 0 30px rgba(255, 0, 85, 0.8),
-                    0 0 50px rgba(255, 0, 85, 0.5);
-            }
-            50% {
-                color: #FFE6EE;
-                text-shadow: 
-                    0 0 12px #FF0055,
-                    0 0 25px #FF0055,
-                    0 0 45px rgba(255, 0, 85, 1),
-                    0 0 70px rgba(255, 0, 85, 0.8);
-            }
-        }
-
-        .neon-blue-glow {
-            animation: neon-blue-pulse 2.2s infinite ease-in-out;
-        }
-
-        .neon-red-glow {
-            animation: neon-red-pulse 2.2s infinite ease-in-out;
-        }
-
-        /* Flash al terminar temporizador */
-        @keyframes flash-timer {
-            0%, 100% { opacity: 1; color: #FF4D4D; }
-            50% { opacity: 0.3; color: #FFFFFF; }
-        }
-        .timer-ended {
-            animation: flash-timer 0.6s infinite;
+        .fighter-card:hover {
+            background-color: rgba(255, 255, 255, 0.07);
         }
     </style>
 </head>
-<body class="min-h-screen w-screen bg-[#161C26] text-white flex flex-col justify-between overflow-x-hidden select-none">
+<body class="font-sans antialiased min-h-screen pb-16">
 
-    <!-- HEADER SUPERIOR CENTRADO CON LOGO EJJ -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2.5 flex items-center justify-between shrink-0 z-20 shadow-md relative">
-        
-        <!-- Logo EJJ Vectorial a la izquierda -->
-        <div class="flex items-center space-x-2 shrink-0 z-10">
-            <div class="w-9 h-7 flex items-center justify-center">
-                <svg viewBox="0 0 120 70" class="w-full h-full text-white fill-current drop-shadow">
-                    <path d="M 15 5 L 115 5 Q 118 5 116 12 L 105 62 Q 103 68 95 68 L 5 68 Q 2 68 4 61 L 15 12 Q 17 5 25 5 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-                    <text x="58" y="52" font-family="'Montserrat', sans-serif" font-weight="900" font-style="italic" font-size="44" fill="currentColor" text-anchor="middle" letter-spacing="-2">EJJ</text>
-                </svg>
+    <!-- Navigation Header & Banner -->
+    <header class="bg-smooth-card/90 border-b border-smooth-cardBorder sticky top-0 z-40 backdrop-blur-md">
+        <div class="max-w-4xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-between gap-2">
+            
+            <!-- Left Branding -->
+            <div class="flex items-center space-x-2">
+                <span class="bg-sky-500 text-slate-950 font-black text-xs px-2 py-1 rounded tracking-wider uppercase">EJJ 3</span>
+                <span class="text-xs font-bold text-slate-300 hidden sm:inline">Cronograma Interactivo</span>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- Brackets Main Page Button -->
+                <a href="https://etakkibjj.github.io/etakkijiujitsu/brackets.html" target="_blank" rel="noopener noreferrer" 
+                   class="bg-slate-800 hover:bg-slate-700 text-sky-400 border border-sky-500/50 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-sitemap"></i>
+                    <span>Brackets</span>
+                </a>
+
+                <!-- Reglamento Button -->
+                <a href="https://etakkibjj.github.io/etakkijiujitsu/reglamento.html" target="_blank" rel="noopener noreferrer" 
+                   class="bg-amber-600 hover:bg-amber-500 text-white border border-amber-400 font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-95 shadow-sm">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Reglamento</span>
+                </a>
+
+                <!-- Edit Mode Toggle -->
+                <button id="toggleEditBtn" onclick="toggleEditMode()" 
+                        class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all active:scale-95 shadow-sm border border-indigo-400">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span id="editBtnText">Modo Edición</span>
+                </button>
             </div>
         </div>
-
-        <!-- Encabezado Centrado con Tipografía Condensada Grande -->
-        <div class="flex-1 flex items-center justify-center px-2">
-            <h1 class="font-condensed font-black text-sm sm:text-2xl md:text-3xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
-                ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
-            </h1>
-        </div>
-
-        <!-- Espaciador de alineación equilibrada -->
-        <div class="w-9 h-7 shrink-0 z-10"></div>
     </header>
 
-    <!-- CONTENEDOR PRINCIPAL -->
-    <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
-        
-        <!-- PANTALLA DE PUNTUACIÓN GIGANTE CON LUCHADORES NEÓN -->
-        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[240px] w-full">
+    <!-- Real-time Banner Notice -->
+    <div class="bg-smooth-banner text-smooth-bannerText px-4 py-2.5 shadow-md flex items-center justify-center text-center font-medium text-xs sm:text-sm border-b border-sky-200">
+        <i class="fa-solid fa-circle-info text-sky-800 mr-2"></i>
+        <span>Los horarios son dinámicos y cambian en tiempo real durante el evento.</span>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-4xl mx-auto px-4 pt-6">
+
+        <!-- Title Section -->
+        <div class="text-center mb-6">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-extrabold tracking-tight uppercase text-white mb-1">
+                Cronograma del Torneo
+            </h1>
+            <p class="text-sky-400 font-semibold tracking-wider text-sm sm:text-base uppercase">
+                EJJ SUBMISSION ONLY 3
+            </p>
+        </div>
+
+        <!-- Bar Control: Filter, Legend, Reset & Install -->
+        <div class="mb-6 flex flex-col sm:flex-row gap-3 items-center justify-between bg-smooth-card/80 p-3.5 rounded-xl border border-smooth-cardBorder shadow-lg">
+            <!-- Search -->
+            <div class="relative w-full sm:w-72">
+                <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                <input type="text" id="searchInput" onkeyup="render()" placeholder="Buscar luchador o lucha (ej: A-5)..." 
+                    class="w-full bg-slate-900/90 border border-slate-700 text-sm rounded-lg pl-9 pr-4 py-2 text-white placeholder-gray-400 focus:outline-none focus:border-sky-500 transition-colors">
+            </div>
             
-            <!-- BLOQUE LUCHADOR AZUL -->
-            <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
-                <!-- Encabezado Azul -->
-                <div class="bg-smooth-blue px-2 py-1.5 text-center shrink-0">
-                    <h2 class="font-condensed text-base sm:text-lg md:text-xl font-extrabold tracking-wider text-white leading-none uppercase">
-                        LUCHADOR AZUL
-                    </h2>
+            <!-- Controls & PWA -->
+            <div class="flex flex-wrap items-center justify-between sm:justify-end gap-2 w-full sm:w-auto text-xs font-medium">
+                <!-- PWA Install Button -->
+                <button id="installAppBtn" onclick="handleInstallClick()" 
+                        class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md transition-all text-xs active:scale-95 border border-emerald-400">
+                    <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
+                </button>
+
+                <div class="flex items-center gap-2">
+                    <span class="inline-flex items-center gap-1.5 bg-blue-950/70 border border-blue-500/50 text-blue-300 px-2.5 py-1 rounded-md">
+                        <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Pendiente
+                    </span>
+                    <span class="inline-flex items-center gap-1.5 bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 px-2.5 py-1 rounded-md">
+                        <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Finalizada
+                    </span>
                 </div>
 
-                <!-- Input Nombre Participante con Bandera y Animación Neón Azul -->
-                <div class="bg-[#151C28] px-3 py-2 border-b border-slate-800 flex items-center justify-center space-x-3">
-                    <div class="w-8 h-6 sm:w-11 sm:h-8 shrink-0 rounded shadow overflow-hidden border border-slate-600">
-                        <svg viewBox="0 0 900 600" class="w-full h-full">
-                            <rect width="900" height="600" fill="#74acdf"/>
-                            <rect y="200" width="900" height="200" fill="#ffffff"/>
-                            <circle cx="450" cy="300" r="45" fill="#f6b40e"/>
-                            <path d="M 450 240 L 450 360 M 390 300 L 510 300 M 408 258 L 492 342 M 408 342 L 492 258" stroke="#843b14" stroke-width="6" stroke-linecap="round"/>
-                        </svg>
+                <button id="resetBtn" onclick="resetState()" title="Reiniciar todos los resultados" class="bg-red-900/40 hover:bg-red-800/60 border border-red-700/60 text-red-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs active:scale-95">
+                    <i class="fa-solid fa-rotate-left"></i> Reiniciar
+                </button>
+            </div>
+        </div>
+
+        <!-- Live Editor Toolbar (Hidden by default) -->
+        <div id="editorToolbar" class="hidden mb-6 bg-indigo-950/60 border border-indigo-500/50 p-4 rounded-xl space-y-3">
+            <div class="flex items-center justify-between">
+                <h3 class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                    <i class="fa-solid fa-sliders"></i> Panel de Edición En Vivo
+                </h3>
+                <button onclick="addNewMatch()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold px-3 py-1 rounded-lg transition-all flex items-center gap-1">
+                    <i class="fa-solid fa-plus"></i> Agregar Lucha
+                </button>
+            </div>
+            <p class="text-xs text-slate-300">
+                Puedes cambiar nombres, horarios y categorías directamente haciendo clic en los textos marcados en modo edición.
+            </p>
+        </div>
+
+        <!-- Tatami Central Container -->
+        <div class="bg-smooth-bg border border-smooth-cardBorder rounded-2xl p-4 sm:p-6 shadow-2xl">
+            
+            <div class="flex items-center justify-between border-b border-slate-700/80 pb-4 mb-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-3 h-8 bg-sky-500 rounded-full shadow-[0_0_10px_rgba(14,165,233,0.5)]"></div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white tracking-wide">Tatami Central</h2>
+                        <p class="text-xs text-slate-400">Haz clic en un competidor para declararlo GANADOR</p>
                     </div>
-
-                    <div class="flex flex-1 text-left min-w-0">
-                        <!-- Nombre con Neón Pulsante Azul Cian -->
-                        <input type="text" 
-                               id="blue-name" 
-                               placeholder="NOMBRE LUCHADOR" 
-                               value="LUKE"
-                               class="w-full bg-transparent font-condensed font-bold text-2xl sm:text-4xl md:text-5xl neon-blue-glow focus:outline-none uppercase tracking-wide leading-none truncate">
-                    </div>
                 </div>
-
-                <!-- Puntuación Azul en Tamaño Gigante -->
-                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
-                    <span id="blue-score" class="font-oswald text-[110px] sm:text-[160px] md:text-[200px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
-                </div>
+                <span class="bg-sky-500/10 text-sky-400 border border-sky-500/30 font-semibold text-xs px-3 py-1.5 rounded-full uppercase tracking-wider hidden sm:inline-block">
+                    Sistema Interactivo
+                </span>
             </div>
 
-            <!-- BLOQUE LUCHADOR ROJO -->
-            <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
-                <!-- Encabezado Rojo -->
-                <div class="bg-smooth-red px-2 py-1.5 text-center shrink-0">
-                    <h2 class="font-condensed text-base sm:text-lg md:text-xl font-extrabold tracking-wider text-white leading-none uppercase">
-                        LUCHADOR ROJO
-                    </h2>
-                </div>
+            <!-- Matches List -->
+            <div id="matchesContainer" class="space-y-3"></div>
 
-                <!-- Input Nombre Participante con Bandera y Animación Neón Rojo -->
-                <div class="bg-[#151C28] px-3 py-2 border-b border-slate-800 flex items-center justify-center space-x-3">
-                    <div class="w-8 h-6 sm:w-11 sm:h-8 shrink-0 rounded shadow overflow-hidden border border-slate-600">
-                        <svg viewBox="0 0 900 600" class="w-full h-full">
-                            <rect width="900" height="600" fill="#74acdf"/>
-                            <rect y="200" width="900" height="200" fill="#ffffff"/>
-                            <circle cx="450" cy="300" r="45" fill="#f6b40e"/>
-                            <path d="M 450 240 L 450 360 M 408 258 L 492 342 M 408 342 L 492 258" stroke="#843b14" stroke-width="6" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-
-                    <div class="flex flex-1 text-left min-w-0">
-                        <!-- Nombre con Neón Pulsante Rojo -->
-                        <input type="text" 
-                               id="red-name" 
-                               placeholder="NOMBRE LUCHADOR" 
-                               value="VADER"
-                               class="w-full bg-transparent font-condensed font-bold text-2xl sm:text-4xl md:text-5xl neon-red-glow focus:outline-none uppercase tracking-wide leading-none truncate">
-                    </div>
-                </div>
-
-                <!-- Puntuación Roja en Tamaño Gigante -->
-                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
-                    <span id="red-score" class="font-oswald text-[110px] sm:text-[160px] md:text-[200px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
-                </div>
+            <!-- Empty Search State -->
+            <div id="noResults" class="hidden text-center py-12 text-gray-400">
+                <i class="fa-solid fa-triangle-exclamation text-3xl mb-2 text-amber-400"></i>
+                <p>No se encontraron luchas con ese término de búsqueda.</p>
             </div>
 
         </div>
 
-        <!-- 3 BOTONES DE PUNTUACIÓN POR LADO (+2, +3, +4) Y DESHACER -->
-        <div class="grid grid-cols-2 gap-2 w-full">
-            
-            <!-- BOTONES LADO AZUL -->
-            <div class="flex flex-col space-y-1.5 sm:space-y-2">
-                <button onclick="addPoints('blue', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+2</span>
-                </button>
-                <button onclick="addPoints('blue', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+3</span>
-                </button>
-                <button onclick="addPoints('blue', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-blue-400 ml-1">+4</span>
-                </button>
-                <button onclick="subtractPoint('blue')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
-                    <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
-                    <span class="font-oswald text-base text-red-400 font-bold">-1</span>
-                </button>
-            </div>
-
-            <!-- BOTONES LADO ROJO -->
-            <div class="flex flex-col space-y-1.5 sm:space-y-2">
-                <button onclick="addPoints('red', 2)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">TAKEDOWN / SWEEP / KOB</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+2</span>
-                </button>
-                <button onclick="addPoints('red', 3)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">GUARD PASS</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+3</span>
-                </button>
-                <button onclick="addPoints('red', 4)" class="btn-tap bg-[#212B3B] hover:bg-slate-700 border border-slate-600/90 rounded-lg p-2 flex items-center justify-between text-left shadow">
-                    <span class="font-condensed font-bold text-xs sm:text-sm text-slate-200 tracking-wide uppercase leading-tight">MOUNT / BACK CONTROL</span>
-                    <span class="font-oswald text-2xl sm:text-3xl font-bold text-red-400 ml-1">+4</span>
-                </button>
-                <button onclick="subtractPoint('red')" class="btn-tap bg-slate-900/90 hover:bg-slate-800 border border-slate-700 rounded-lg p-1.5 flex items-center justify-center space-x-2 shadow">
-                    <span class="font-condensed font-bold text-xs text-slate-400 uppercase tracking-wider">DESHACER</span>
-                    <span class="font-oswald text-base text-red-400 font-bold">-1</span>
-                </button>
-            </div>
-
-        </div>
+        <footer class="mt-8 text-center text-xs text-gray-500">
+            <p>© EJJ Submission Only 3 • Sistema de Llaves Interactivo</p>
+        </footer>
 
     </main>
 
-    <!-- BARRA INFERIOR DE CONTROLES Y TEMPORIZADOR DE 3 MINUTOS -->
-    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-3 sm:px-5 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl gap-2">
-        
-        <!-- Bloque de Botones a la Izquierda: REINICIAR + INSTALAR APP -->
-        <div class="flex items-center space-x-2">
-            <!-- Botón Reiniciar -->
-            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-base px-3 sm:px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider">
-                REINICIAR
-            </button>
-
-            <!-- Botón de instalación PWA -->
-            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-base font-bold px-3 sm:px-3.5 py-2 rounded-lg shadow flex items-center space-x-1.5 border border-emerald-400 transition-colors">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                <span class="font-condensed font-extrabold tracking-wider uppercase whitespace-nowrap">INSTALAR APP</span>
-            </button>
-        </div>
-
-        <!-- Reloj Central (3 Minutos) -->
-        <div class="flex items-center justify-center">
-            <div id="timer-display" class="font-oswald text-3xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-3 sm:px-5 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
-                03:00
-            </div>
-        </div>
-
-        <!-- Botón Iniciar / Pausa -->
-        <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider">
-            <span id="start-pause-text">INICIAR</span>
-        </button>
-    </footer>
-
-    <!-- MODAL GANADOR -->
-    <div id="winner-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div id="winner-card" class="bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center">
-            <h2 id="winner-name-display" class="font-condensed text-2xl sm:text-3xl font-black uppercase tracking-wider text-slate-300 mb-1">
-                GANADOR
-            </h2>
-            <h3 id="winner-title" class="font-oswald text-4xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
-                ¡GANADOR!
-            </h3>
-            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
-                SCORE: 0 - 0
-            </div>
-            <div class="w-full space-y-2.5">
-                <button onclick="resetMatch(); closeWinnerModal();" class="btn-tap bg-blue-600 hover:bg-blue-500 text-white font-condensed font-extrabold text-lg py-2.5 rounded-lg w-full border border-blue-400 uppercase shadow-lg tracking-wider">
-                    NUEVA LUCHA
-                </button>
-                <button onclick="closeWinnerModal();" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-300 font-condensed font-bold text-sm py-2 rounded-lg w-full border border-slate-600 uppercase tracking-wider">
-                    CERRAR
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL GUÍA DE INSTALACIÓN PWA -->
-    <div id="pwa-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-[#19202D] border-2 border-emerald-500 rounded-2xl p-5 max-w-md w-full shadow-2xl flex flex-col items-center text-slate-200 my-auto">
-            <div class="flex justify-between items-center w-full border-b border-slate-700 pb-2 mb-3">
-                <h3 class="text-sm font-black text-emerald-400 uppercase flex items-center gap-2 font-condensed text-lg">
-                    <i class="fa-solid fa-mobile-screen-button"></i> Instalar ETAKKI BJJ App
+    <!-- PWA Install Instructions Modal -->
+    <div id="installGuideModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl p-5 max-w-sm w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-start border-b border-slate-700 pb-2">
+                <h3 class="text-sm font-black text-sky-400 uppercase flex items-center gap-2">
+                    <i class="fa-solid fa-mobile-screen-button"></i> Instalar App en tu Celular
                 </h3>
-                <button onclick="closePwaModal()" class="text-slate-400 hover:text-white font-bold text-base">✕</button>
+                <button onclick="closeInstallModal()" class="text-slate-400 hover:text-white font-bold text-sm">✕</button>
             </div>
             
-            <p class="font-condensed text-xs sm:text-sm text-slate-300 text-center mb-4">
-                Instala esta aplicación en tu celular para usarla en pantalla completa, sin barras de navegador y 100% offline.
+            <p class="text-xs text-slate-300 leading-relaxed">
+                Instala esta aplicación en la pantalla de inicio para un acceso rápido en el evento:
             </p>
 
-            <div class="w-full space-y-3 mb-5 text-left font-condensed text-xs sm:text-sm">
-                <!-- Botón de instalación nativa en Android (si el navegador lo permite) -->
+            <div class="space-y-3 text-xs">
+                <!-- Native Button if supported -->
                 <div id="nativeInstallContainer" class="hidden">
-                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md mb-2 border border-emerald-400">
+                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md">
                         <i class="fa-solid fa-download"></i> Confirmar Instalación Automática
                     </button>
+                    <div class="text-center my-2 text-[10px] text-slate-400 uppercase tracking-widest">— o manualmente —</div>
                 </div>
 
-                <!-- Pasos manuales iOS / Safari -->
-                <div class="bg-[#101520] p-3 rounded-lg border border-slate-700 space-y-1.5">
-                    <div class="font-bold text-sky-400 text-sm flex items-center gap-1.5">
-                        <i class="fa-brands fa-apple text-base"></i> En iPhone / iPad (Safari):
+                <!-- iOS Safari Instructions -->
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
+                    <div class="font-bold text-sky-300 flex items-center gap-1.5">
+                        <i class="fa-brands fa-apple text-sm"></i> iPhone / iPad (Safari):
                     </div>
                     <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
-                        <li>Toca el botón <strong>Compartir</strong> <i class="fa-solid fa-share-nodes text-sky-400"></i> en la barra inferior.</li>
+                        <li>Toca el botón <strong>Compartir</strong> <i class="fa-solid fa-share-nodes text-sky-400"></i> abajo.</li>
                         <li>Selecciona <strong>"Agregar a inicio"</strong> <i class="fa-regular fa-square-plus text-sky-400"></i>.</li>
                     </ol>
                 </div>
 
-                <!-- Pasos manuales Android / Chrome -->
-                <div class="bg-[#101520] p-3 rounded-lg border border-slate-700 space-y-1.5">
-                    <div class="font-bold text-emerald-400 text-sm flex items-center gap-1.5">
-                        <i class="fa-brands fa-android text-base"></i> En Android (Chrome / Edge):
+                <!-- Android Chrome Instructions -->
+                <div class="bg-slate-900/80 p-3 rounded-lg border border-slate-700 space-y-1.5">
+                    <div class="font-bold text-emerald-300 flex items-center gap-1.5">
+                        <i class="fa-brands fa-android text-sm"></i> Android (Chrome):
                     </div>
                     <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
-                        <li>Toca los <strong>3 puntos (⋮)</strong> arriba a la derecha.</li>
-                        <li>Selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
-                    </ol>
-                </div>
-
-                <!-- Pasos Computadora -->
-                <div class="bg-[#101520] p-3 rounded-lg border border-slate-700 space-y-1.5">
-                    <div class="font-bold text-purple-400 text-sm flex items-center gap-1.5">
-                        <i class="fa-solid fa-desktop text-base"></i> En Computadora (Chrome / Edge):
-                    </div>
-                    <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
-                        <li>Haz clic en el icono de <strong>Instalar</strong> en la barra de direcciones superior derecha.</li>
+                        <li>Toca los <strong>3 puntos</strong> <i class="fa-solid fa-ellipsis-vertical text-emerald-400"></i> arriba a la derecha.</li>
+                        <li>Toca <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
                     </ol>
                 </div>
             </div>
 
-            <button onclick="closePwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider">
-                ¡ENTENDIDO!
+            <button onclick="closeInstallModal()" class="w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-1.5 text-xs rounded-lg transition-colors">
+                Entendido
             </button>
         </div>
     </div>
 
-    <!-- REGISTRO SERVICE WORKER PWA Y LÓGICA DE LA APLICACIÓN -->
+    <!-- JavaScript Application Logic & PWA -->
     <script>
-        // Manejo del evento PWA para instalación nativa y modal
+        const defaultMatches = [
+            { id: "A1", time: "13:00 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Lautaro", last: "Aguirre" }, f2: { first: "Juan", last: "Espinoza" }, winner: null },
+            { id: "A2", time: "13:10 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Gonzalo", last: "Tuñon" }, f2: { first: "Valentino", last: "di Rosa" }, winner: null },
+            { id: "A3", time: "13:20 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Agustin", last: "Velazquez" }, f2: { first: "Federico", last: "Wang" }, winner: null },
+            { id: "A4", time: "13:30 hs", category: "Men / Absoluto / Iniciantes", f1: { first: "Benjamin", last: "Duvobsky" }, f2: { first: "Ezequiel", last: "Arguello" }, winner: null },
+            { id: "A5", time: "13:40 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Ezequiel", last: "Muracciole" }, f2: { first: "Daniel", last: "Goldsman" }, winner: null },
+            { id: "A6", time: "13:50 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Ciro", last: "Cespedes" }, f2: { first: "Axel", last: "Furlan" }, winner: null },
+            { id: "A7", time: "14:00 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Felipe", last: "Ortiz" }, f2: { first: "Ian", last: "Cespedes" }, winner: null },
+            { id: "A8", time: "14:10 hs", category: "Men / Absoluto / Avanzados", f1: { first: "Alejandro", last: "Delgado" }, f2: { first: "Antonio", last: "Olcese" }, winner: null },
+
+            { id: "A9", time: "14:20 hs", category: "Men / Absoluto / Semifinal Iniciantes", f1Ref: { type: 'winner', matchId: 'A1', placeholder: { first: "GAN Lucha", last: "A1" } }, f2Ref: { type: 'winner', matchId: 'A2', placeholder: { first: "GAN Lucha", last: "A2" } }, winner: null },
+            { id: "A10", time: "14:30 hs", category: "Men / Absoluto / Semifinal Iniciantes", f1Ref: { type: 'winner', matchId: 'A3', placeholder: { first: "GAN Lucha", last: "A3" } }, f2Ref: { type: 'winner', matchId: 'A4', placeholder: { first: "GAN Lucha", last: "A4" } }, winner: null },
+            { id: "A11", time: "14:40 hs", category: "Men / Absoluto / Semifinal Avanzados", f1Ref: { type: 'winner', matchId: 'A5', placeholder: { first: "GAN Lucha", last: "A5" } }, f2Ref: { type: 'winner', matchId: 'A6', placeholder: { first: "GAN Lucha", last: "A6" } }, winner: null },
+            
+            { id: "A12", time: "14:50 hs", category: "Men / Absoluto / Semifinal Avanzados", f1Ref: { type: 'winner', matchId: 'A7', placeholder: { first: "GAN Lucha", last: "A7" } }, f2Ref: { type: 'winner', matchId: 'A8', placeholder: { first: "GAN Lucha", last: "A8" } }, winner: null },
+            { id: "A13", time: "15:00 hs", category: "Superfight Femenina / Blue Belt Challenge / Absoluto", f1: { first: "Julia", last: "GRANATA" }, f2: { first: "Maria Victoria", last: "BENITEZ" }, winner: null, isSuperfight: true },
+            { id: "A14", time: "15:10 hs", category: "Men / Absoluto / Bronze Medal Match Iniciantes", f1Ref: { type: 'loser', matchId: 'A9', placeholder: { first: "PER Lucha", last: "A9" } }, f2Ref: { type: 'loser', matchId: 'A10', placeholder: { first: "PER Lucha", last: "A10" } }, winner: null },
+            { id: "A15", time: "15:20 hs", category: "Men / Absoluto / Final Iniciantes", f1Ref: { type: 'winner', matchId: 'A9', placeholder: { first: "GAN Lucha", last: "A9" } }, f2Ref: { type: 'winner', matchId: 'A10', placeholder: { first: "GAN Lucha", last: "A10" } }, winner: null },
+            { id: "A16", time: "15:30 hs", category: "Men / Absoluto / Bronze Medal Match Avanzados", f1Ref: { type: 'loser', matchId: 'A11', placeholder: { first: "PER Lucha", last: "A11" } }, f2Ref: { type: 'loser', matchId: 'A12', placeholder: { first: "PER Lucha", last: "A12" } }, winner: null },
+            { id: "A17", time: "15:40 hs", category: "Men / Absoluto / Final Avanzados", f1Ref: { type: 'winner', matchId: 'A11', placeholder: { first: "GAN Lucha", last: "A11" } }, f2Ref: { type: 'winner', matchId: 'A12', placeholder: { first: "GAN Lucha", last: "A12" } }, winner: null }
+        ];
+
+        let state = JSON.parse(localStorage.getItem('ejj3_matches_state')) || JSON.parse(JSON.stringify(defaultMatches));
+        let isEditMode = false;
         let deferredPrompt = null;
 
+        function saveState() {
+            localStorage.setItem('ejj3_matches_state', JSON.stringify(state));
+        }
+
+        function resetState() {
+            if (confirm("¿Reiniciar todos los resultados a cero?")) {
+                state = JSON.parse(JSON.stringify(defaultMatches));
+                saveState();
+                render();
+            }
+        }
+
+        // PWA Native Prompt Registration
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             const nativeContainer = document.getElementById('nativeInstallContainer');
-            if (nativeContainer) {
-                nativeContainer.classList.remove('hidden');
-            }
-            const pwaBtn = document.getElementById('pwa-install-btn');
-            if (pwaBtn) {
-                pwaBtn.classList.add('animate-pulse');
-            }
+            if (nativeContainer) nativeContainer.classList.remove('hidden');
         });
 
-        async function triggerNativeInstall() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                const choiceResult = await deferredPrompt.userChoice;
-                if (choiceResult.outcome === 'accepted') {
-                    console.log('App instalada con éxito');
-                }
-                deferredPrompt = null;
-                closePwaModal();
-            }
-        }
-
-        function openPwaModal() {
-            if (deferredPrompt) {
-                triggerNativeInstall();
-            } else {
-                document.getElementById('pwa-modal').classList.remove('hidden');
-            }
-        }
-
-        function closePwaModal() {
-            document.getElementById('pwa-modal').classList.add('hidden');
-        }
-
-        // Registro de Service Worker embebido para funcionamiento 100% Offline (Cache-First)
+        // Service Worker Offline Support Registration
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 try {
                     const swCode = `
-                        const CACHE_NAME = 'bjj-scoreboard-offline-v4';
-                        const urlsToCache = [
-                            './',
-                            'https://cdn.tailwindcss.com',
-                            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-                            'https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&family=Montserrat:wght@800;900&family=Oswald:wght@700&display=swap'
-                        ];
-
+                        const CACHE_NAME = 'ejj3-offline-v1';
+                        const urlsToCache = ['./', 'https://cdn.tailwindcss.com', 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'];
                         self.addEventListener('install', (e) => {
                             self.skipWaiting();
-                            e.waitUntil(
-                                caches.open(CACHE_NAME).then((cache) => {
-                                    return cache.addAll(urlsToCache).catch(() => {});
-                                })
-                            );
+                            e.waitUntil(caches.open(CACHE_NAME).then(c => c.addAll(urlsToCache).catch(()=>{})));
                         });
-
                         self.addEventListener('activate', (e) => {
-                            e.waitUntil(
-                                caches.keys().then((keys) => {
-                                    return Promise.all(
-                                        keys.map((key) => {
-                                            if (key !== CACHE_NAME) return caches.delete(key);
-                                        })
-                                    );
-                                }).then(() => self.clients.claim())
-                            );
+                            e.waitUntil(caches.keys().then(keys => Promise.all(keys.map(k => k !== CACHE_NAME ? caches.delete(k) : null))).then(() => self.clients.claim()));
                         });
-
                         self.addEventListener('fetch', (e) => {
-                            e.respondWith(
-                                caches.match(e.request).then((cachedResponse) => {
-                                    if (cachedResponse) {
-                                        return cachedResponse;
-                                    }
-                                    return fetch(e.request).then((networkResponse) => {
-                                        if (e.request.method === 'GET' && networkResponse.status === 200) {
-                                            const responseClone = networkResponse.clone();
-                                            caches.open(CACHE_NAME).then((cache) => {
-                                                cache.put(e.request, responseClone);
-                                            });
-                                        }
-                                        return networkResponse;
-                                    }).catch(() => {
-                                        return caches.match('./');
-                                    });
-                                })
-                            );
+                            e.respondWith(caches.match(e.request).then(res => res || fetch(e.request).catch(() => caches.match('./'))));
                         });
                     `;
                     const blob = new Blob([swCode], { type: 'application/javascript' });
                     const swUrl = URL.createObjectURL(blob);
-                    
-                    navigator.serviceWorker.register(swUrl)
-                        .then(() => console.log('Service Worker listo para soporte Offline.'))
-                        .catch((err) => console.log('Suscripción SW no iniciada:', err));
-                } catch (e) {
-                    console.log('PWA Service Worker offline fallback activo.');
-                }
+                    navigator.serviceWorker.register(swUrl).catch(() => {});
+                } catch (e) {}
             });
         }
 
-        // Lógica del Marcador y Temporizador
-        const MATCH_DURATION = 180; // 3 minutos en segundos
-        let timeLeft = MATCH_DURATION;
-        let timerInterval = null;
-        let isRunning = false;
-
-        const scores = { blue: 0, red: 0 };
-
-        const timerDisplay = document.getElementById('timer-display');
-        const startPauseBtn = document.getElementById('start-pause-btn');
-        const startPauseText = document.getElementById('start-pause-text');
-
-        // Sintetizador de audio Web Audio API
-        let audioCtx = null;
-        function getAudioContext() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-            return audioCtx;
-        }
-
-        function playBeep(freq = 600, duration = 0.12) {
-            try {
-                const ctx = getAudioContext();
-                const osc = ctx.createOscillator();
-                const gain = ctx.createGain();
-                osc.frequency.setValueAtTime(freq, ctx.currentTime);
-                gain.gain.setValueAtTime(0.2, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(ctx.destination);
-                osc.start();
-                osc.stop(ctx.currentTime + duration);
-            } catch(e){}
-        }
-
-        function playEndAlarm() {
-            for(let i = 0; i < 4; i++) {
-                setTimeout(() => playBeep(800, 0.3), i * 300);
-            }
-        }
-
-        function formatTime(sec) {
-            const m = Math.floor(sec / 60);
-            const s = sec % 60;
-            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-        }
-
-        function updateTimerDisplay() {
-            if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft);
-        }
-
-        function toggleTimer() {
-            getAudioContext();
-            if (isRunning) pauseTimer();
-            else startTimer();
-        }
-
-        function startTimer() {
-            if (timeLeft <= 0) return;
-            isRunning = true;
-            if (startPauseText) startPauseText.textContent = 'PAUSA';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-amber-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(700, 0.1);
-
-            clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                if (timeLeft > 0) {
-                    timeLeft--;
-                    updateTimerDisplay();
-                } else {
-                    endTimer();
-                }
-            }, 1000);
-        }
-
-        function pauseTimer() {
-            isRunning = false;
-            clearInterval(timerInterval);
-            if (startPauseText) startPauseText.textContent = 'REANUDAR';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(450, 0.1);
-        }
-
-        function endTimer() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            if (startPauseText) startPauseText.textContent = 'FIN';
-            if (timerDisplay) timerDisplay.classList.add('timer-ended');
-            playEndAlarm();
-            checkWinner(true);
-        }
-
-        function addPoints(fighter, pts) {
-            getAudioContext();
-            scores[fighter] += pts;
-            document.getElementById(`${fighter}-score`).textContent = scores[fighter];
-            playBeep(900, 0.08);
-        }
-
-        function subtractPoint(fighter) {
-            getAudioContext();
-            if (scores[fighter] > 0) {
-                scores[fighter] -= 1;
-                document.getElementById(`${fighter}-score`).textContent = scores[fighter];
-                playBeep(350, 0.08);
-            }
-        }
-
-        function resetMatch() {
-            clearInterval(timerInterval);
-            isRunning = false;
-            timeLeft = MATCH_DURATION;
-            scores.blue = 0;
-            scores.red = 0;
-            updateTimerDisplay();
-            if (timerDisplay) timerDisplay.classList.remove('timer-ended');
-            document.getElementById('blue-score').textContent = '0';
-            document.getElementById('red-score').textContent = '0';
-            if (startPauseText) startPauseText.textContent = 'INICIAR';
-            if (startPauseBtn) startPauseBtn.className = 'btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider';
-            playBeep(500, 0.15);
-        }
-
-        function checkWinner(timeOut = false) {
-            const blueName = document.getElementById('blue-name').value || 'LUKE';
-            const redName = document.getElementById('red-name').value || 'VADER';
-            const winnerTitle = document.getElementById('winner-title');
-            const winnerNameDisplay = document.getElementById('winner-name-display');
-            const winnerScoreDisplay = document.getElementById('winner-score-display');
-            const winnerModal = document.getElementById('winner-modal');
-            const winnerCard = document.getElementById('winner-card');
-
-            winnerScoreDisplay.textContent = `SCORE: ${scores.blue} - ${scores.red}`;
-
-            if (scores.blue > scores.red) {
-                winnerNameDisplay.textContent = 'GANADOR POR PUNTOS';
-                winnerTitle.textContent = blueName;
-                winnerCard.className = 'bg-[#19202D] border-2 border-blue-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
-            } else if (scores.red > scores.blue) {
-                winnerNameDisplay.textContent = 'GANADOR POR PUNTOS';
-                winnerTitle.textContent = redName;
-                winnerCard.className = 'bg-[#19202D] border-2 border-red-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+        function handleInstallClick() {
+            if (deferredPrompt) {
+                triggerNativeInstall();
             } else {
-                winnerNameDisplay.textContent = 'EMPATE';
-                winnerTitle.textContent = timeOut ? '¡TIEMPO AGOTADO (EBI OT PRONTO)!' : 'EMPATE';
-                winnerCard.className = 'bg-[#19202D] border-2 border-slate-500 rounded-2xl p-6 text-center max-w-sm w-full shadow-2xl flex flex-col items-center';
+                openInstallModal();
             }
-            winnerModal.classList.remove('hidden');
         }
 
-        function closeWinnerModal() {
-            document.getElementById('winner-modal').classList.add('hidden');
+        function openInstallModal() {
+            document.getElementById('installGuideModal').classList.remove('hidden');
         }
+
+        function closeInstallModal() {
+            document.getElementById('installGuideModal').classList.add('hidden');
+        }
+
+        function triggerNativeInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(() => {
+                    deferredPrompt = null;
+                    closeInstallModal();
+                });
+            }
+        }
+
+        function toggleEditMode() {
+            isEditMode = !isEditMode;
+            const btnText = document.getElementById('editBtnText');
+            const toolbar = document.getElementById('editorToolbar');
+            
+            if (isEditMode) {
+                btnText.innerText = "Salir Edición";
+                toolbar.classList.remove('hidden');
+            } else {
+                btnText.innerText = "Modo Edición";
+                toolbar.classList.add('hidden');
+            }
+            render();
+        }
+
+        function getMatch(id) {
+            return state.find(m => m.id === id);
+        }
+
+        function getFighterBadgeHtml(match, slotIndex) {
+            if (!match.winner) return '';
+
+            const isWinner = match.winner === slotIndex;
+            const isLoser = match.winner !== slotIndex;
+
+            if (match.isSuperfight && isWinner) {
+                return `<span class="text-amber-300 font-extrabold text-xs bg-amber-950/80 px-2 py-1 rounded-md border border-amber-500/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-medal text-amber-400"></i> SUPERFIGHT WINNER</span>`;
+            }
+
+            if ((match.id === 'A14' || match.id === 'A16') && isWinner) {
+                return `<span class="text-amber-200 font-extrabold text-xs bg-amber-950/70 px-2 py-1 rounded-md border border-amber-700/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-award text-amber-600"></i> GANADOR BRONZE MEDAL</span>`;
+            }
+
+            if (match.id === 'A15' || match.id === 'A17') {
+                if (isWinner) {
+                    return `<span class="text-amber-300 font-extrabold text-xs bg-gradient-to-r from-amber-950 to-yellow-900 px-2.5 py-1 rounded-md border border-amber-400 flex items-center gap-1.5 shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"><i class="fa-solid fa-trophy text-amber-400"></i> CHAMPION</span>`;
+                }
+                if (isLoser) {
+                    return `<span class="text-slate-200 font-bold text-xs bg-slate-800 px-2 py-1 rounded-md border border-slate-400/60 flex items-center gap-1 shadow-sm"><i class="fa-solid fa-medal text-slate-300"></i> SILVER MEDAL</span>`;
+                }
+            }
+
+            if (isWinner) {
+                return `<span class="text-emerald-400 font-bold text-xs bg-emerald-950 px-2 py-1 rounded-md border border-emerald-500/50 flex items-center gap-1"><i class="fa-solid fa-check text-emerald-400"></i> GANADOR</span>`;
+            }
+
+            return '';
+        }
+
+        function getFighter(match, slotIndex) {
+            if (slotIndex === 1) {
+                if (match.f1) return match.f1;
+                const srcMatch = getMatch(match.f1Ref.matchId);
+                if (match.f1Ref.type === 'winner') {
+                    return srcMatch.winner ? getFighter(srcMatch, srcMatch.winner) : match.f1Ref.placeholder;
+                } else {
+                    if (srcMatch.winner) {
+                        const loserIndex = srcMatch.winner === 1 ? 2 : 1;
+                        return getFighter(srcMatch, loserIndex);
+                    }
+                    return match.f1Ref.placeholder;
+                }
+            } else {
+                if (match.f2) return match.f2;
+                const srcMatch = getMatch(match.f2Ref.matchId);
+                if (match.f2Ref.type === 'winner') {
+                    return srcMatch.winner ? getFighter(srcMatch, srcMatch.winner) : match.f2Ref.placeholder;
+                } else {
+                    if (srcMatch.winner) {
+                        const loserIndex = srcMatch.winner === 1 ? 2 : 1;
+                        return getFighter(srcMatch, loserIndex);
+                    }
+                    return match.f2Ref.placeholder;
+                }
+            }
+        }
+
+        function isRealFighter(fighter) {
+            return fighter && !fighter.first.startsWith('GAN') && !fighter.first.startsWith('PER');
+        }
+
+        function setWinner(matchId, fighterIndex) {
+            if (isEditMode) return;
+            const match = getMatch(matchId);
+            const fighter = getFighter(match, fighterIndex);
+
+            if (!isRealFighter(fighter)) return;
+
+            if (match.winner === fighterIndex) {
+                match.winner = null;
+            } else {
+                match.winner = fighterIndex;
+            }
+
+            cleanDependentMatches();
+            saveState();
+            render();
+        }
+
+        function cleanDependentMatches() {
+            let changed = true;
+            while(changed) {
+                changed = false;
+                state.forEach(m => {
+                    if (m.winner) {
+                        const f1 = getFighter(m, 1);
+                        const f2 = getFighter(m, 2);
+                        if (!isRealFighter(f1) || !isRealFighter(f2)) {
+                            m.winner = null;
+                            changed = true;
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateMatchField(matchId, field, value) {
+            const match = getMatch(matchId);
+            if (!match) return;
+
+            if (field === 'category') match.category = value;
+            if (field === 'time') match.time = value;
+            if (field === 'f1_first') { match.f1 = match.f1 || {}; match.f1.first = value; }
+            if (field === 'f1_last') { match.f1 = match.f1 || {}; match.f1.last = value; }
+            if (field === 'f2_first') { match.f2 = match.f2 || {}; match.f2.first = value; }
+            if (field === 'f2_last') { match.f2 = match.f2 || {}; match.f2.last = value; }
+
+            saveState();
+        }
+
+        function addNewMatch() {
+            const newId = "A" + (state.length + 1);
+            state.push({
+                id: newId,
+                time: "16:00 hs",
+                category: "Men / Absoluto / Nueva Lucha",
+                f1: { first: "Nuevo", last: "Luchador 1" },
+                f2: { first: "Nuevo", last: "Luchador 2" },
+                winner: null
+            });
+            saveState();
+            render();
+        }
+
+        function render() {
+            const container = document.getElementById('matchesContainer');
+            const query = document.getElementById('searchInput').value.toLowerCase().trim();
+            const noResults = document.getElementById('noResults');
+
+            const filteredMatches = state.filter(m => {
+                const f1 = getFighter(m, 1);
+                const f2 = getFighter(m, 2);
+                const searchStr = `${m.id} A-${m.id} ${f1.first} ${f1.last} ${f2.first} ${f2.last} ${m.category}`.toLowerCase();
+                return searchStr.includes(query);
+            });
+
+            if (filteredMatches.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            } else {
+                noResults.classList.add('hidden');
+            }
+
+            container.innerHTML = filteredMatches.map(match => {
+                const f1 = getFighter(match, 1);
+                const f2 = getFighter(match, 2);
+                const isFinished = match.winner !== null;
+
+                let cardStyle = isFinished 
+                    ? "bg-emerald-950/40 border-emerald-500/80 shadow-[0_0_15px_rgba(16,185,129,0.15)]"
+                    : "bg-blue-950/30 border-blue-500/60 shadow-[0_0_15px_rgba(59,130,246,0.1)]";
+
+                let iconClass = isFinished 
+                    ? "fa-solid fa-circle-check text-emerald-400"
+                    : "fa-regular fa-clock text-blue-400";
+
+                if (match.isSuperfight && !isFinished) {
+                    cardStyle = "bg-purple-950/30 border-purple-500/70 shadow-[0_0_15px_rgba(168,85,247,0.15)]";
+                    iconClass = "fa-solid fa-star text-purple-400";
+                }
+
+                const canSelectF1 = isRealFighter(f1);
+                const canSelectF2 = isRealFighter(f2);
+
+                return `
+                <div class="border ${cardStyle} rounded-xl p-3 sm:p-4 transition-all duration-300 relative overflow-hidden">
+                    
+                    <!-- Category Header -->
+                    <div class="flex items-center justify-between text-[11px] sm:text-xs font-semibold uppercase tracking-wider mb-2.5">
+                        <span class="${isFinished ? 'text-emerald-400' : (match.isSuperfight ? 'text-purple-300' : 'text-blue-300')}"
+                              contenteditable="${isEditMode}" 
+                              onblur="updateMatchField('${match.id}', 'category', this.innerText)">
+                            ${match.category}
+                        </span>
+                        ${isFinished 
+                            ? '<span class="text-emerald-400 font-bold text-[10px] bg-emerald-950 px-2 py-0.5 rounded border border-emerald-700/50"><i class="fa-solid fa-check mr-1"></i> FINALIZADA</span>' 
+                            : '<span class="text-blue-400 font-bold text-[10px] bg-blue-950 px-2 py-0.5 rounded border border-blue-700/50"><i class="fa-solid fa-hourglass-start mr-1"></i> PENDIENTE</span>'}
+                    </div>
+
+                    <!-- Match Main Body -->
+                    <div class="flex items-center justify-between gap-2">
+                        
+                        <!-- Match ID Badge -->
+                        <div class="flex items-center space-x-2 sm:space-x-3 shrink-0 pr-2 border-r border-slate-700/50">
+                            <i class="${iconClass} text-lg sm:text-xl w-5 text-center"></i>
+                            <span class="text-xl sm:text-2xl font-black text-white tracking-tight">
+                                A-${match.id.replace('A', '')}
+                            </span>
+                        </div>
+
+                        <!-- Competitors Grid -->
+                        <div class="flex-1 px-2 sm:px-4 space-y-2">
+                            
+                            <!-- Fighter 1 -->
+                            <div onclick="setWinner('${match.id}', 1)" 
+                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? 'cursor-pointer' : ''} ${canSelectF1 ? 'hover:scale-[1.01]' : 'opacity-60 cursor-not-allowed'} ${match.winner === 1 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : 'bg-slate-900/40'} border border-slate-700/40">
+                                
+                                <div class="flex items-center space-x-2.5">
+                                    <span class="w-2.5 h-2.5 rounded-full ${isRealFighter(f1) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]' : 'bg-slate-600'} shrink-0"></span>
+                                    <div class="leading-tight">
+                                        <div class="text-xs sm:text-sm font-medium ${match.winner === 1 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}">
+                                            <span contenteditable="${isEditMode && match.f1}" onblur="updateMatchField('${match.id}', 'f1_first', this.innerText)">${f1.first}</span>
+                                            <span class="font-extrabold uppercase" contenteditable="${isEditMode && match.f1}" onblur="updateMatchField('${match.id}', 'f1_last', this.innerText)">${f1.last}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                ${getFighterBadgeHtml(match, 1)}
+                            </div>
+
+                            <!-- Fighter 2 -->
+                            <div onclick="setWinner('${match.id}', 2)" 
+                                 class="fighter-card flex items-center justify-between p-2 rounded-lg transition-all ${!isEditMode ? 'cursor-pointer' : ''} ${canSelectF2 ? 'hover:scale-[1.01]' : 'opacity-60 cursor-not-allowed'} ${match.winner === 2 ? 'bg-emerald-600/30 ring-2 ring-emerald-400 shadow-inner' : 'bg-slate-900/40'} border border-slate-700/40">
+                                
+                                <div class="flex items-center space-x-2.5">
+                                    <span class="w-2.5 h-2.5 rounded-full ${isRealFighter(f2) ? 'bg-emerald-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]' : 'bg-slate-600'} shrink-0"></span>
+                                    <div class="leading-tight">
+                                        <div class="text-xs sm:text-sm font-medium ${match.winner === 2 ? 'text-emerald-200 font-semibold' : 'text-slate-200'}">
+                                            <span contenteditable="${isEditMode && match.f2}" onblur="updateMatchField('${match.id}', 'f2_first', this.innerText)">${f2.first}</span>
+                                            <span class="font-extrabold uppercase" contenteditable="${isEditMode && match.f2}" onblur="updateMatchField('${match.id}', 'f2_last', this.innerText)">${f2.last}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                ${getFighterBadgeHtml(match, 2)}
+                            </div>
+
+                        </div>
+
+                        <!-- Match Time Badge -->
+                        <div class="shrink-0 text-right pl-2 border-l border-slate-700/50">
+                            <span class="bg-smooth-timeBadge text-slate-200 text-xs font-bold px-2.5 py-1 rounded-md border border-slate-600/60 inline-block"
+                                  contenteditable="${isEditMode}" 
+                                  onblur="updateMatchField('${match.id}', 'time', this.innerText)">
+                                ${match.time}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+                `;
+            }).join('');
+        }
+
+        // Initial Render
+        render();
     </script>
 </body>
 </html>
