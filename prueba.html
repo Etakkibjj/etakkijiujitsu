@@ -14,34 +14,6 @@
     <meta name="application-name" content="ETAKKI BJJ Scoreboard">
     <meta name="description" content="Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules">
 
-    <!-- Web App Manifest Embebido Completo y Válido PWA -->
-    <link rel="manifest" href='data:application/manifest+json;charset=utf-8,{
-        "id": "etakki-bjj-scoreboard-v4",
-        "name": "ETAKKI BJJ Referee Scoreboard",
-        "short_name": "ETAKKI BJJ",
-        "description": "Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules",
-        "start_url": "./",
-        "scope": "./",
-        "display": "standalone",
-        "background_color": "#161C26",
-        "theme_color": "#111620",
-        "orientation": "any",
-        "icons": [
-            {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 192 192%22><rect width=%22192%22 height=%22192%22 rx=%2232%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%2280%22 font-weight=%22900%22 fill=%22%2300F0FF%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
-                "sizes": "192x192",
-                "type": "image/svg+xml",
-                "purpose": "any maskable"
-            },
-            {
-                "src": "data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 512 512%22><rect width=%22512%22 height=%22512%22 rx=%2264%22 fill=%22%23111620%22/><text x=%2250%25%22 y=%2260%25%22 font-size=%22200%22 font-weight=%22900%22 fill=%22%2300F0FF%22 text-anchor=%22middle%22 font-style=%22italic%22 font-family=%22sans-serif%22>EJJ</text></svg>",
-                "sizes": "512x512",
-                "type": "image/svg+xml",
-                "purpose": "any maskable"
-            }
-        ]
-    }'>
-
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     
@@ -147,35 +119,59 @@
 </head>
 <body class="min-h-screen w-screen bg-[#161C26] text-white flex flex-col justify-between overflow-x-hidden select-none">
 
-    <!-- HEADER SUPERIOR CENTRADO CON LOGO EJJ -->
-    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2.5 flex items-center justify-between shrink-0 z-20 shadow-md relative">
+    <!-- HEADER SUPERIOR CON CONTROLES DE ESTADO Y PWA INTEGRADOS -->
+    <header class="w-full bg-[#111620] border-b border-slate-700/60 px-3 py-2.5 flex flex-wrap items-center justify-between shrink-0 z-20 shadow-md gap-2">
         
         <!-- Logo EJJ Vectorial a la izquierda -->
-        <div class="flex items-center space-x-2 shrink-0 z-10">
+        <div class="flex items-center space-x-2 shrink-0">
             <div class="w-9 h-7 flex items-center justify-center">
                 <svg viewBox="0 0 120 70" class="w-full h-full text-white fill-current drop-shadow">
                     <path d="M 15 5 L 115 5 Q 118 5 116 12 L 105 62 Q 103 68 95 68 L 5 68 Q 2 68 4 61 L 15 12 Q 17 5 25 5 Z" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
                     <text x="58" y="52" font-family="'Montserrat', sans-serif" font-weight="900" font-style="italic" font-size="44" fill="currentColor" text-anchor="middle" letter-spacing="-2">EJJ</text>
                 </svg>
             </div>
-        </div>
-
-        <!-- Encabezado Centrado con Tipografía Condensada Grande -->
-        <div class="flex-1 flex items-center justify-center px-2">
-            <h1 class="font-condensed font-black text-sm sm:text-2xl md:text-3xl tracking-widest text-slate-100 uppercase text-center truncate drop-shadow-md">
+            <h1 class="hidden md:block font-condensed font-black text-lg lg:text-xl tracking-widest text-slate-100 uppercase truncate">
                 ETAKKI JIU JITSU - EJJ SUB ONLY 3 - EBI RULES
             </h1>
         </div>
 
-        <!-- Espaciador de alineación equilibrada -->
-        <div class="w-9 h-7 shrink-0 z-10"></div>
+        <!-- Encabezado Móvil Centrado -->
+        <div class="md:hidden flex-1 text-center">
+            <h1 class="font-condensed font-black text-xs sm:text-sm tracking-widest text-slate-100 uppercase truncate">
+                ETAKKI BJJ SUB ONLY 3
+            </h1>
+        </div>
+
+        <!-- Controls & PWA (Snippet Replicado de Control de Estado y PWA) -->
+        <div class="flex flex-wrap items-center justify-end gap-2 w-auto text-xs font-medium">
+            <!-- PWA Install Button -->
+            <button id="installAppBtn" onclick="handleInstallClick()" 
+                    class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold px-3 py-1.5 rounded-lg flex items-center gap-1.5 shadow-md transition-all text-xs active:scale-95 border border-emerald-400 cursor-pointer">
+                <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
+            </button>
+
+            <!-- Status Badges -->
+            <div class="flex items-center gap-1.5 sm:gap-2">
+                <span id="badge-pending" class="inline-flex items-center gap-1.5 bg-blue-950/70 border border-blue-500/50 text-blue-300 px-2 py-1 rounded-md text-[11px] sm:text-xs">
+                    <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span> Pendiente
+                </span>
+                <span id="badge-finished" class="hidden inline-flex items-center gap-1.5 bg-emerald-950/70 border border-emerald-500/50 text-emerald-300 px-2 py-1 rounded-md text-[11px] sm:text-xs">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Finalizada
+                </span>
+            </div>
+
+            <!-- Botón Reiniciar del Header -->
+            <button id="resetBtn" onclick="resetMatch()" title="Reiniciar todos los resultados" class="bg-red-900/40 hover:bg-red-800/60 border border-red-700/60 text-red-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-all text-xs active:scale-95 cursor-pointer">
+                <i class="fa-solid fa-rotate-left"></i> Reiniciar
+            </button>
+        </div>
     </header>
 
     <!-- CONTENEDOR PRINCIPAL -->
     <main class="flex-1 flex flex-col min-h-0 w-full p-2 space-y-2 max-w-7xl mx-auto">
         
         <!-- PANTALLA DE PUNTUACIÓN GIGANTE CON LUCHADORES NEÓN -->
-        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[240px] w-full">
+        <div class="grid grid-cols-2 gap-2 flex-1 min-h-[220px] w-full">
             
             <!-- BLOQUE LUCHADOR AZUL -->
             <div class="flex flex-col bg-[#19202D] rounded-xl overflow-hidden border border-slate-700/80 shadow-lg">
@@ -198,7 +194,6 @@
                     </div>
 
                     <div class="flex flex-1 text-left min-w-0">
-                        <!-- Nombre con Neón Pulsante Azul Cian -->
                         <input type="text" 
                                id="blue-name" 
                                placeholder="NOMBRE LUCHADOR" 
@@ -208,8 +203,8 @@
                 </div>
 
                 <!-- Puntuación Azul en Tamaño Gigante -->
-                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
-                    <span id="blue-score" class="font-oswald text-[110px] sm:text-[160px] md:text-[200px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
+                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[130px] p-2 overflow-hidden">
+                    <span id="blue-score" class="font-oswald text-[100px] sm:text-[150px] md:text-[190px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
                 </div>
             </div>
 
@@ -234,7 +229,6 @@
                     </div>
 
                     <div class="flex flex-1 text-left min-w-0">
-                        <!-- Nombre con Neón Pulsante Rojo -->
                         <input type="text" 
                                id="red-name" 
                                placeholder="NOMBRE LUCHADOR" 
@@ -244,14 +238,14 @@
                 </div>
 
                 <!-- Puntuación Roja en Tamaño Gigante -->
-                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[140px] p-2 overflow-hidden">
-                    <span id="red-score" class="font-oswald text-[110px] sm:text-[160px] md:text-[200px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
+                <div class="flex-1 flex items-center justify-center bg-[#0C1018] min-h-[130px] p-2 overflow-hidden">
+                    <span id="red-score" class="font-oswald text-[100px] sm:text-[150px] md:text-[190px] font-bold text-white leading-none drop-shadow-[0_10px_20px_rgba(0,0,0,0.8)] select-none">0</span>
                 </div>
             </div>
 
         </div>
 
-        <!-- 3 BOTONES DE PUNTUACIÓN POR LADO (+2, +3, +4) Y DESHACER -->
+        <!-- BOTONES DE PUNTUACIÓN POR LADO (+2, +3, +4) Y DESHACER -->
         <div class="grid grid-cols-2 gap-2 w-full">
             
             <!-- BOTONES LADO AZUL -->
@@ -298,31 +292,18 @@
 
     </main>
 
-    <!-- BARRA INFERIOR DE CONTROLES Y TEMPORIZADOR DE 3 MINUTOS -->
-    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-3 sm:px-5 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl gap-2">
-        
-        <!-- Bloque de Botones a la Izquierda: REINICIAR + INSTALAR APP -->
-        <div class="flex items-center space-x-2">
-            <!-- Botón Reiniciar -->
-            <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-base px-3 sm:px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider cursor-pointer">
-                REINICIAR
-            </button>
+    <!-- BARRA INFERIOR DE TEMPORIZADOR DE MATCH -->
+    <footer class="w-full bg-[#111620] border-t border-slate-700/80 px-4 py-2.5 shrink-0 flex items-center justify-between sticky bottom-0 z-30 shadow-2xl">
+        <button onclick="resetMatch()" class="btn-tap bg-slate-800 hover:bg-slate-700 text-slate-200 font-condensed font-bold text-xs sm:text-base px-3 sm:px-4 py-2 rounded-lg border border-slate-600 uppercase shadow tracking-wider cursor-pointer">
+            REINICIAR
+        </button>
 
-            <!-- Botón de instalación PWA -->
-            <button id="pwa-install-btn" onclick="openPwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white text-xs sm:text-base font-bold px-3 sm:px-3.5 py-2 rounded-lg shadow flex items-center space-x-1.5 border border-emerald-400 transition-colors cursor-pointer">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                <span class="font-condensed font-extrabold tracking-wider uppercase whitespace-nowrap">INSTALAR APP</span>
-            </button>
-        </div>
-
-        <!-- Reloj Central (3 Minutos) -->
         <div class="flex items-center justify-center">
-            <div id="timer-display" class="font-oswald text-3xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-3 sm:px-5 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
+            <div id="timer-display" class="font-oswald text-3xl sm:text-5xl font-bold tracking-wider text-slate-100 bg-[#0A0D14] px-4 sm:px-6 py-1 rounded-lg border border-slate-700 leading-none shadow-inner">
                 03:00
             </div>
         </div>
 
-        <!-- Botón Iniciar / Pausa -->
         <button id="start-pause-btn" onclick="toggleTimer()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-emerald-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider cursor-pointer">
             <span id="start-pause-text">INICIAR</span>
         </button>
@@ -337,7 +318,7 @@
             <h3 id="winner-title" class="font-oswald text-4xl sm:text-5xl font-extrabold tracking-wide uppercase leading-tight mb-3">
                 ¡GANADOR!
             </h3>
-            <div id="winner-score-display" class="font-oswald text-3xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
+            <div id="winner-score-display" class="font-oswald text-2xl font-bold text-slate-300 mb-6 bg-[#101520] px-4 py-2 rounded-lg w-full border border-slate-700">
                 SCORE: 0 - 0
             </div>
             <div class="w-full space-y-2.5">
@@ -351,26 +332,27 @@
         </div>
     </div>
 
-    <!-- MODAL GUÍA DE INSTALACIÓN PWA -->
-    <div id="pwa-modal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-        <div class="bg-[#19202D] border-2 border-emerald-500 rounded-2xl p-5 max-w-md w-full shadow-2xl flex flex-col items-center text-slate-200 my-auto">
-            <div class="flex justify-between items-center w-full border-b border-slate-700 pb-2 mb-3">
+    <!-- MODAL GUÍA DE INSTALACIÓN PWA (installGuideModal) -->
+    <div id="installGuideModal" class="hidden fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div class="bg-[#19202D] border-2 border-emerald-500 rounded-2xl p-5 max-w-md w-full shadow-2xl flex flex-col items-center text-slate-200 my-auto space-y-4">
+            <div class="flex justify-between items-center w-full border-b border-slate-700 pb-2">
                 <h3 class="text-sm font-black text-emerald-400 uppercase flex items-center gap-2 font-condensed text-lg">
                     <i class="fa-solid fa-mobile-screen-button"></i> Instalar ETAKKI BJJ App
                 </h3>
-                <button onclick="closePwaModal()" class="text-slate-400 hover:text-white font-bold text-base cursor-pointer">✕</button>
+                <button onclick="closeInstallModal()" class="text-slate-400 hover:text-white font-bold text-base cursor-pointer">✕</button>
             </div>
             
-            <p class="font-condensed text-xs sm:text-sm text-slate-300 text-center mb-4">
-                Instala esta aplicación en tu celular para usarla en pantalla completa, sin barras de navegador y 100% offline.
+            <p class="font-condensed text-xs sm:text-sm text-slate-300 text-center">
+                Instala esta aplicación en tu celular para acceso directo en pantalla completa y 100% offline.
             </p>
 
-            <div class="w-full space-y-3 mb-5 text-left font-condensed text-xs sm:text-sm">
-                <!-- Botón de instalación nativa en Android (si el navegador lo permite) -->
+            <div class="w-full space-y-3 text-left font-condensed text-xs sm:text-sm">
+                <!-- Botón de instalación nativa en Android -->
                 <div id="nativeInstallContainer" class="hidden">
-                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2.5 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md mb-2 border border-emerald-400 cursor-pointer">
+                    <button onclick="triggerNativeInstall()" class="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-3 rounded-lg flex items-center justify-center gap-2 shadow-md border border-emerald-400 cursor-pointer">
                         <i class="fa-solid fa-download"></i> Confirmar Instalación Automática
                     </button>
+                    <div class="text-center my-2 text-[10px] text-slate-400 uppercase tracking-widest">— o manualmente —</div>
                 </div>
 
                 <!-- Pasos manuales iOS / Safari -->
@@ -379,7 +361,7 @@
                         <i class="fa-brands fa-apple text-base"></i> En iPhone / iPad (Safari):
                     </div>
                     <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
-                        <li>Toca el botón <strong>Compartir</strong> <i class="fa-solid fa-share-nodes text-sky-400"></i> en la barra inferior.</li>
+                        <li>Toca el botón <strong>Compartir</strong> <i class="fa-solid fa-share-nodes text-sky-400"></i> abajo.</li>
                         <li>Selecciona <strong>"Agregar a inicio"</strong> <i class="fa-regular fa-square-plus text-sky-400"></i>.</li>
                     </ol>
                 </div>
@@ -391,150 +373,135 @@
                     </div>
                     <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
                         <li>Toca los <strong>3 puntos (⋮)</strong> arriba a la derecha.</li>
-                        <li>Selecciona <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
+                        <li>Toca <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
                     </ol>
                 </div>
 
                 <!-- Pasos Computadora -->
                 <div class="bg-[#101520] p-3 rounded-lg border border-slate-700 space-y-1.5">
                     <div class="font-bold text-purple-400 text-sm flex items-center gap-1.5">
-                        <i class="fa-solid fa-desktop text-base"></i> En Computadora (Chrome / Edge):
+                        <i class="fa-solid fa-desktop text-base"></i> En Computadora:
                     </div>
                     <ol class="list-decimal list-inside text-slate-300 space-y-1 pl-1">
-                        <li>Haz clic en el icono de <strong>Instalar</strong> en la barra de direcciones superior derecha.</li>
+                        <li>Haz clic en el icono de <strong>Instalar</strong> en la barra de navegación superior.</li>
                     </ol>
                 </div>
             </div>
 
-            <button onclick="closePwaModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider cursor-pointer">
+            <button onclick="closeInstallModal()" class="btn-tap bg-emerald-600 hover:bg-emerald-500 text-white font-condensed font-extrabold text-base py-2 rounded-lg w-full border border-emerald-400 uppercase shadow-lg tracking-wider cursor-pointer">
                 ¡ENTENDIDO!
             </button>
         </div>
     </div>
 
-    <!-- REGISTRO SERVICE WORKER PWA Y LÓGICA DE LA APLICACIÓN -->
+    <!-- LÓGICA DE PWA & SERVICE WORKER & MARCADOR -->
     <script>
-        // Manejo del evento PWA para instalación nativa y modal
+        // Dynamic PWA Injection & Installation Flow
         let deferredPrompt = null;
+
+        function initPWA() {
+            // Inyectar Manifest Blob
+            const manifestData = {
+                id: "etakki-bjj-scoreboard-v4",
+                name: "ETAKKI BJJ Referee Scoreboard",
+                short_name: "ETAKKI BJJ",
+                description: "Marcador de arbitraje de Jiu-Jitsu ETAKKI con EBI Rules",
+                start_url: "./",
+                scope: "./",
+                display: "standalone",
+                background_color: "#161C26",
+                theme_color: "#111620",
+                icons: [
+                    {
+                        src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='32' fill='%23111620'/><text x='50%' y='60%' font-size='80' font-weight='900' fill='%2300F0FF' text-anchor='middle' font-style='italic' font-family='sans-serif'>EJJ</text></svg>",
+                        sizes: "192x192",
+                        type: "image/svg+xml",
+                        purpose: "any maskable"
+                    },
+                    {
+                        src: "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='64' fill='%23111620'/><text x='50%' y='60%' font-size='200' font-weight='900' fill='%2300F0FF' text-anchor='middle' font-style='italic' font-family='sans-serif'>EJJ</text></svg>",
+                        sizes: "512x512",
+                        type: "image/svg+xml",
+                        purpose: "any maskable"
+                    }
+                ]
+            };
+
+            const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+            const manifestURL = URL.createObjectURL(manifestBlob);
+            const link = document.createElement('link');
+            link.rel = 'manifest';
+            link.href = manifestURL;
+            document.head.appendChild(link);
+
+            // Registrar Service Worker Inline
+            if ('serviceWorker' in navigator) {
+                const swCode = `
+                    const CACHE_NAME = 'bjj-scoreboard-v4';
+                    self.addEventListener('install', (e) => {
+                        self.skipWaiting();
+                        e.waitUntil(
+                            caches.open(CACHE_NAME).then((cache) => cache.addAll(['./']))
+                        );
+                    });
+                    self.addEventListener('activate', (e) => e.waitUntil(clients.claim()));
+                    self.addEventListener('fetch', (e) => {
+                        e.respondWith(caches.match(e.request).then(res => res || fetch(e.request)));
+                    });
+                `;
+                const swBlob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(swBlob);
+                navigator.serviceWorker.register(swUrl).catch(err => console.error("SW error:", err));
+            }
+        }
 
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
             deferredPrompt = e;
             const nativeContainer = document.getElementById('nativeInstallContainer');
-            if (nativeContainer) {
-                nativeContainer.classList.remove('hidden');
-            }
-            const pwaBtn = document.getElementById('pwa-install-btn');
-            if (pwaBtn) {
-                pwaBtn.classList.add('animate-pulse');
-            }
+            if (nativeContainer) nativeContainer.classList.remove('hidden');
+            const installBtn = document.getElementById('installAppBtn');
+            if (installBtn) installBtn.classList.add('animate-pulse');
         });
+
+        function handleInstallClick() {
+            if (deferredPrompt) {
+                triggerNativeInstall();
+            } else {
+                document.getElementById('installGuideModal').classList.remove('hidden');
+            }
+        }
+
+        function closeInstallModal() {
+            document.getElementById('installGuideModal').classList.add('hidden');
+        }
 
         async function triggerNativeInstall() {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                const choiceResult = await deferredPrompt.userChoice;
-                if (choiceResult.outcome === 'accepted') {
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
                     console.log('App instalada con éxito');
                 }
                 deferredPrompt = null;
-                closePwaModal();
+                closeInstallModal();
             }
         }
 
-        function openPwaModal() {
-            if (deferredPrompt) {
-                triggerNativeInstall();
-            } else {
-                document.getElementById('pwa-modal').classList.remove('hidden');
-            }
-        }
-
-        function closePwaModal() {
-            document.getElementById('pwa-modal').classList.add('hidden');
-        }
-
-        // Registro de Service Worker embebido para funcionamiento 100% Offline (Cache-First)
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                try {
-                    const swCode = `
-                        const CACHE_NAME = 'bjj-scoreboard-offline-v4';
-                        const urlsToCache = [
-                            './',
-                            'https://cdn.tailwindcss.com',
-                            'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
-                            'https://fonts.googleapis.com/css2?family=Barlow+Condensed:ital,wght@0,400;0,600;0,700;0,800;0,900;1,800;1,900&family=Montserrat:wght@800;900&family=Oswald:wght@700&display=swap'
-                        ];
-
-                        self.addEventListener('install', (e) => {
-                            self.skipWaiting();
-                            e.waitUntil(
-                                caches.open(CACHE_NAME).then((cache) => {
-                                    return cache.addAll(urlsToCache).catch(() => {});
-                                })
-                            );
-                        });
-
-                        self.addEventListener('activate', (e) => {
-                            e.waitUntil(
-                                caches.keys().then((keys) => {
-                                    return Promise.all(
-                                        keys.map((key) => {
-                                            if (key !== CACHE_NAME) return caches.delete(key);
-                                        })
-                                    );
-                                }).then(() => self.clients.claim())
-                            );
-                        });
-
-                        self.addEventListener('fetch', (e) => {
-                            e.respondWith(
-                                caches.match(e.request).then((cachedResponse) => {
-                                    if (cachedResponse) {
-                                        return cachedResponse;
-                                    }
-                                    return fetch(e.request).then((networkResponse) => {
-                                        if (e.request.method === 'GET' && networkResponse.status === 200) {
-                                            const responseClone = networkResponse.clone();
-                                            caches.open(CACHE_NAME).then((cache) => {
-                                                cache.put(e.request, responseClone);
-                                            });
-                                        }
-                                        return networkResponse;
-                                    }).catch(() => {
-                                        return caches.match('./');
-                                    });
-                                })
-                            );
-                        });
-                    `;
-                    const blob = new Blob([swCode], { type: 'application/javascript' });
-                    const swUrl = URL.createObjectURL(blob);
-                    
-                    navigator.serviceWorker.register(swUrl)
-                        .then(() => console.log('Service Worker listo para soporte Offline.'))
-                        .catch((err) => console.log('Suscripción SW no iniciada:', err));
-                } catch (e) {
-                    console.log('PWA Service Worker offline fallback activo.');
-                }
-            });
-        }
-
-        // Lógica del Marcador y Temporizador
-        const MATCH_DURATION = 180; // 3 minutos en segundos
+        // Lógica de Marcador y Temporizador
+        const MATCH_DURATION = 180;
         let timeLeft = MATCH_DURATION;
         let timerInterval = null;
         let isRunning = false;
 
         const scores = { blue: 0, red: 0 };
-        const scoreHistory = []; // Para la función de deshacer
+        const scoreHistory = [];
 
         const timerDisplay = document.getElementById('timer-display');
         const startPauseBtn = document.getElementById('start-pause-btn');
         const startPauseText = document.getElementById('start-pause-text');
 
-        // Sintetizador de audio Web Audio API
+        // Web Audio API Synth
         let audioCtx = null;
         function getAudioContext() {
             if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -573,6 +540,18 @@
             if (timerDisplay) timerDisplay.textContent = formatTime(timeLeft);
         }
 
+        function setStatus(status) {
+            const pendingBadge = document.getElementById('badge-pending');
+            const finishedBadge = document.getElementById('badge-finished');
+            if (status === 'finished') {
+                pendingBadge.classList.add('hidden');
+                finishedBadge.classList.remove('hidden');
+            } else {
+                pendingBadge.classList.remove('hidden');
+                finishedBadge.classList.add('hidden');
+            }
+        }
+
         function toggleTimer() {
             getAudioContext();
             if (isRunning) pauseTimer();
@@ -582,6 +561,7 @@
         function startTimer() {
             if (timeLeft <= 0) return;
             isRunning = true;
+            setStatus('pending');
             if (startPauseText) startPauseText.textContent = 'PAUSA';
             if (startPauseBtn) {
                 startPauseBtn.className = 'btn-tap bg-amber-600 hover:bg-amber-500 text-white font-condensed font-black text-xs sm:text-base px-4 sm:px-5 py-2 rounded-lg border border-amber-400 min-w-[90px] sm:min-w-[110px] text-center uppercase shadow-lg transition-colors tracking-wider cursor-pointer';
@@ -599,6 +579,7 @@
                 if (timeLeft <= 0) {
                     pauseTimer();
                     playEndAlarm();
+                    setStatus('finished');
                     if (timerDisplay) timerDisplay.classList.add('timer-ended');
                     showWinnerModal();
                 }
@@ -618,6 +599,7 @@
             pauseTimer();
             timeLeft = MATCH_DURATION;
             updateTimerDisplay();
+            setStatus('pending');
             if (timerDisplay) timerDisplay.classList.remove('timer-ended');
             scores.blue = 0;
             scores.red = 0;
@@ -672,8 +654,10 @@
             document.getElementById('winner-modal').classList.add('hidden');
         }
 
-        // Inicializar display de tiempo al cargar
-        updateTimerDisplay();
+        window.onload = function() {
+            initPWA();
+            updateTimerDisplay();
+        };
     </script>
 </body>
 </html>
