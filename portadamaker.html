@@ -3,764 +3,453 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Generador Render 3D Switch</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Generador de Render 3D Nintendo Switch</title>
 <style>
+:root{color-scheme:dark;--bg:#100e0d;--panel:#211b18;--line:#514238;--accent:#ff7042;--muted:#c0b2a9}
 *{box-sizing:border-box}
-body{margin:0;background:#15100e;color:#fff;font:15px Arial}
-main{max-width:1150px;margin:auto;padding:22px}
-h1{font-size:28px}
-p{color:#c5b6aa;line-height:1.5}
-.layout{display:grid;grid-template-columns:340px 1fr;gap:18px}
-.panel{background:#251e1a;border:1px solid #554237;border-radius:14px;padding:18px}
-.field{margin-bottom:17px}
-label{display:block;font-size:13px;font-weight:bold;margin-bottom:7px}
-input{width:100%;padding:10px;background:#100e0d;color:white;border:1px solid #665044;border-radius:8px}
-input[type=number]{padding:8px}
-button{padding:12px;border:0;border-radius:8px;font-weight:bold;cursor:pointer}
-.primary{background:#ed512e;color:white;width:100%;margin-bottom:9px}
-.secondary{background:#493329;color:white}
-.buttons{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.hint,.status{font-size:11px;color:#baa99e;margin-top:7px}
-.cropgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-.cropgrid label{font-size:11px}
-canvas{width:100%;display:block;height:auto}
-.previewtop{display:flex;justify-content:space-between;margin-bottom:12px;color:#ffad85;font-size:12px}
-.canvaswrap{background:#080707;border-radius:8px;overflow:hidden}
-.status{font-size:12px;min-height:30px}
-@media(max-width:800px){.layout{grid-template-columns:1fr}.preview{order:-1}}
+body{margin:0;background:radial-gradient(ellipse at 50% -10%,#562416 0,#1b1411 48%,#0e0c0b 100%);color:#f8eee8;font:15px/1.45 Arial,sans-serif;min-height:100vh}
+main{max-width:1180px;margin:0 auto;padding:24px}
+.head{margin-bottom:20px}
+h1{font-size:clamp(24px,4vw,34px);margin:0 0 8px}
+p{margin:0;color:var(--muted)}
+.layout{display:grid;grid-template-columns:350px minmax(0,1fr);gap:18px;align-items:start}
+.panel{background:rgba(33,27,24,.96);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:0 18px 50px #0007}
+.field{margin:0 0 18px}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:7px}
+input[type=file]{width:100%;padding:11px;background:#100e0d;border:1px solid #665044;border-radius:9px;color:#f8eee8}
+.hint{font-size:11px;color:#ae9e93;margin-top:6px;line-height:1.45}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.btn{border:0;border-radius:9px;padding:13px 12px;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.primary{grid-column:1/-1;background:linear-gradient(100deg,#ff854d,#d93429);color:white}
+.secondary{background:#392b24;border:1px solid #73513e;color:#ffe3d5}
+.previewtop{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:12px;font-size:12px;font-weight:800;letter-spacing:.08em;color:#ffb18d}
+.canvaswrap{background:#080707;border:1px solid #624b3d;border-radius:10px;overflow:hidden}
+canvas{width:100%;height:auto;display:block}
+.status{min-height:28px;padding-top:10px;font-size:12px;color:#d5c5ba}
+.disclaimer{font-size:11px;color:#ae9e93;border-top:1px solid #493a31;padding-top:13px;margin-top:14px;line-height:1.5}
+.pill{display:inline-block;background:#39251d;color:#ffb38d;padding:4px 8px;border-radius:99px;font-size:11px;margin-bottom:8px}
+@media(max-width:850px){main{padding:14px}.layout{grid-template-columns:1fr}.preview{order:-1}}
 </style>
 </head>
 <body>
 <main>
-
-<h1>Generador de Render 3D — Nintendo Switch</h1>
-<p>Cargá una plantilla 3D y una portada nueva. La aplicación adapta la imagen a la perspectiva de la caja, genera un fondo a partir de sus colores y exporta un JPG con las dimensiones originales.</p>
-
-<div class="layout">
-<section class="panel">
-
-<div class="field">
-<label>1. PLANTILLA BASE 3D</label>
-<input id="baseFile" type="file" accept="image/*">
-<div class="hint">La imagen de la caja 3D. Esta plantilla determina el ángulo y la geometría.</div>
-</div>
-
-<div class="field">
-<label>2. PORTADA DEL JUEGO NUEVO</label>
-<input id="coverFile" type="file" accept="image/*">
-<div class="hint">La ilustración frontal del juego, preferentemente sin la carcasa plástica.</div>
-</div>
-
-<div class="field">
-<label>NOMBRE DEL JUEGO PARA EL LOMO</label>
-<input id="gameTitle" type="text" maxlength="34" placeholder="NOMBRE DEL JUEGO">
-</div>
-
-<div class="field">
-<label>RECORTE DE PORTADA (%)</label>
-<div class="cropgrid">
-<div><label>Izquierda</label><input id="cropL" type="number" value="0" min="0" max="20" step=".1"></div>
-<div><label>Arriba</label><input id="cropT" type="number" value="0" min="0" max="20" step=".1"></div>
-<div><label>Derecha</label><input id="cropR" type="number" value="0" min="0" max="20" step=".1"></div>
-<div><label>Abajo</label><input id="cropB" type="number" value="0" min="0" max="20" step=".1"></div>
-</div>
-<div class="buttons" style="margin-top:8px">
-<button class="secondary" id="sampleCrop">RECORTE EJEMPLO</button>
-<button class="secondary" id="resetCrop">SIN RECORTE</button>
-</div>
-</div>
-
-<button class="primary" id="generate">GENERAR RENDER 3D</button>
-
-<div class="buttons">
-<button class="secondary" id="download" disabled>GUARDAR JPG</button>
-<button class="secondary" id="clear">LIMPIAR</button>
-</div>
-
-<div class="hint">
-La caja 3D se conserva de la plantilla. La portada y el fondo se generan a partir de la segunda imagen. No requiere inteligencia artificial externa.
-</div>
-</section>
-
-<section class="panel preview">
-<div class="previewtop">
-<strong>VISTA PREVIA</strong>
-<span id="dimensions">ESPERANDO PLANTILLA</span>
-</div>
-<div class="canvaswrap">
-<canvas id="output" width="1024" height="1024"></canvas>
-</div>
-<div id="status" class="status">Cargá las dos imágenes para comenzar.</div>
-</section>
-</div>
+ <header class="head">
+  <span class="pill">100% LOCAL · SIN API · SIN INTERNET</span>
+  <h1>Generador de Render 3D — Nintendo Switch</h1>
+  <p>Cargá una plantilla 3D y una portada plana. La nueva portada se adapta a las cuatro esquinas del frente, reemplaza la ilustración anterior y se exporta con las dimensiones de la plantilla.</p>
+ </header>
+ <div class="layout">
+  <section class="panel">
+   <div class="field">
+    <label for="baseFile">1. PLANTILLA BASE 3D</label>
+    <input id="baseFile" type="file" accept="image/png,image/jpeg,image/webp">
+    <div class="hint">Usá siempre la imagen de la caja 3D que elegiste como plantilla. La perspectiva está calibrada para esa composición de 1024 × 1024.</div>
+   </div>
+   <div class="field">
+    <label for="coverFile">2. PORTADA DEL JUEGO NUEVO</label>
+    <input id="coverFile" type="file" accept="image/png,image/jpeg,image/webp">
+    <div class="hint">Cargá la carátula frontal plana, no una foto de la caja en perspectiva. Si tiene un borde plástico claro, la aplicación intenta quitarlo automáticamente.</div>
+   </div>
+   <div class="actions">
+    <button class="btn primary" id="generate" type="button">GENERAR RENDER 3D</button>
+    <button class="btn secondary" id="download" type="button" disabled>GUARDAR JPG</button>
+    <button class="btn secondary" id="clear" type="button">LIMPIAR</button>
+   </div>
+   <div class="disclaimer">Se eliminó la edición del título del lomo. El texto lateral que ya esté impreso en la plantilla base no se modifica. La forma 3D, la caja y sus reflejos provienen de la plantilla; la portada frontal y el fondo se reemplazan.</div>
+  </section>
+  <section class="panel preview">
+   <div class="previewtop"><span>VISTA PREVIA</span><span id="dimensions">ESPERANDO IMÁGENES</span></div>
+   <div class="canvaswrap"><canvas id="output" width="1024" height="1024"></canvas></div>
+   <div class="status" id="status">1) Cargá la plantilla 3D. 2) Cargá una portada. 3) Generá el render.</div>
+  </section>
+ </div>
 </main>
-
 <script>
 'use strict';
 
-const REF_W=1024;
-const REF_H=1024;
+const REF_W = 1024;
+const REF_H = 1024;
+const canvas = document.getElementById('output');
+const ctx = canvas.getContext('2d', {willReadFrequently:true});
+const statusEl = document.getElementById('status');
+let baseImage = null;
+let coverImage = null;
+let coverFileName = 'juego';
 
-const canvas=document.getElementById('output');
-const ctx=canvas.getContext('2d',{willReadFrequently:true});
-
-let baseImage=null;
-let coverImage=null;
-
-function status(message,error=false){
- const el=document.getElementById('status');
- el.textContent=message;
- el.style.color=error?'#ff9580':'#d5c5ba';
+function setStatus(message, error=false){
+  statusEl.textContent = message;
+  statusEl.style.color = error ? '#ff9b87' : '#d5c5ba';
 }
 
-function readImage(file){
- return new Promise((resolve,reject)=>{
-  const url=URL.createObjectURL(file);
-  const img=new Image();
-  img.onload=()=>{
-   URL.revokeObjectURL(url);
-   resolve(img);
-  };
-  img.onerror=()=>{
-   URL.revokeObjectURL(url);
-   reject(new Error('No se pudo cargar la imagen.'));
-  };
-  img.src=url;
- });
+function loadImage(file){
+  return new Promise((resolve,reject)=>{
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = ()=>{ URL.revokeObjectURL(url); resolve(img); };
+    img.onerror = ()=>{ URL.revokeObjectURL(url); reject(new Error('No se pudo abrir la imagen. Probá con otro JPG o PNG.')); };
+    img.src = url;
+  });
 }
 
-function cropValue(id){
- return Math.max(0,Math.min(20,
-  Number(document.getElementById(id).value)||0))/100;
+function clamp(value,min,max){
+  return Math.max(min,Math.min(max,value));
 }
 
-function makeCroppedCover(img){
- const l=cropValue('cropL');
- const t=cropValue('cropT');
- const r=cropValue('cropR');
- const b=cropValue('cropB');
+// Detecta y recorta solamente el marco exterior claro/neutro de una foto de portada.
+// Si la ilustración no tiene marco, conserva la imagen completa.
+function makeCleanCover(img){
+  const w = img.naturalWidth;
+  const h = img.naturalHeight;
+  const temp = document.createElement('canvas');
+  temp.width = w;
+  temp.height = h;
+  const tg = temp.getContext('2d',{willReadFrequently:true});
+  tg.fillStyle = '#fff';
+  tg.fillRect(0,0,w,h);
+  tg.drawImage(img,0,0);
+  const data = tg.getImageData(0,0,w,h).data;
 
- if(l+r>=.8||t+b>=.8)
-  throw Error('El recorte es demasiado grande.');
+  function isFramePixel(i){
+    const r=data[i], g=data[i+1], b=data[i+2], a=data[i+3];
+    if(a < 22) return true;
+    const max=Math.max(r,g,b), min=Math.min(r,g,b);
+    const lum=(r+g+b)/3;
+    return lum>178 && (max-min)<45;
+  }
+  function rowRatio(y){
+    let hits=0,total=0;
+    for(let x=0;x<w;x+=4){ if(isFramePixel((y*w+x)*4)) hits++; total++; }
+    return hits/total;
+  }
+  function colRatio(x){
+    let hits=0,total=0;
+    for(let y=0;y<h;y+=4){ if(isFramePixel((y*w+x)*4)) hits++; total++; }
+    return hits/total;
+  }
 
- const sx=img.width*l;
- const sy=img.height*t;
- const sw=img.width*(1-l-r);
- const sh=img.height*(1-t-b);
+  let top=0, bottom=h-1, left=0, right=w-1;
+  const maxY=Math.floor(h*.18), maxX=Math.floor(w*.18);
+  while(top<maxY && rowRatio(top)>.78) top++;
+  while(bottom>h-maxY && rowRatio(bottom)>.78) bottom--;
+  while(left<maxX && colRatio(left)>.40) left++;
+  while(right>w-maxX && colRatio(right)>.40) right--;
 
- const c=document.createElement('canvas');
- c.width=Math.round(sw);
- c.height=Math.round(sh);
+  // Evita recortes agresivos o detecciones dudosas.
+  if(right-left < w*.45 || bottom-top < h*.45){
+    left=0; top=0; right=w-1; bottom=h-1;
+  }
+  if((right-left+1)/(bottom-top+1) < .30 || (right-left+1)/(bottom-top+1) > 1.15){
+    left=0; top=0; right=w-1; bottom=h-1;
+  }
 
- c.getContext('2d').drawImage(
-  img,sx,sy,sw,sh,0,0,c.width,c.height
- );
-
- return c;
+  const clean=document.createElement('canvas');
+  clean.width=right-left+1;
+  clean.height=bottom-top+1;
+  clean.getContext('2d').drawImage(img,left,top,clean.width,clean.height,0,0,clean.width,clean.height);
+  return {canvas:clean, crop:{left,top,right,bottom}};
 }
 
-// Resuelve el sistema de ecuaciones de perspectiva.
+function getPalette(source){
+  const sample=document.createElement('canvas');
+  sample.width=48; sample.height=48;
+  const sg=sample.getContext('2d');
+  sg.drawImage(source,0,0,48,48);
+  const d=sg.getImageData(0,0,48,48).data;
+  let r=0,g=0,b=0,n=0;
+  const bins=new Map();
+  for(let i=0;i<d.length;i+=16){
+    const rr=d[i],gg=d[i+1],bb=d[i+2];
+    const hi=Math.max(rr,gg,bb),lo=Math.min(rr,gg,bb);
+    if(hi<35 || lo>245) continue;
+    r+=rr;g+=gg;b+=bb;n++;
+    const key=[rr>>5,gg>>5,bb>>5].join(',');
+    bins.set(key,(bins.get(key)||0)+1);
+  }
+  const average=n?[Math.round(r/n),Math.round(g/n),Math.round(b/n)]:[150,55,30];
+  const colors=[...bins.entries()].sort((a,b)=>b[1]-a[1]).slice(0,6)
+    .map(([key])=>key.split(',').map(v=>Math.min(255,Number(v)*32+16)));
+  if(!colors.length) colors.push(average);
+  return {average,colors};
+}
+
+function drawBackground(g,cover,palette){
+  g.save();
+  g.clearRect(0,0,REF_W,REF_H);
+  // Respeta la proporción de la tapa: no la estira para llenar el fondo.
+  const scale=Math.max(REF_W/cover.width,REF_H/cover.height);
+  const dw=cover.width*scale, dh=cover.height*scale;
+  const dx=(REF_W-dw)/2, dy=(REF_H-dh)/2;
+  g.filter='blur(38px) saturate(1.55) contrast(1.08) brightness(.58)';
+  g.drawImage(cover,dx-45,dy-45,dw+90,dh+90);
+  g.filter='none';
+  g.fillStyle='rgba(12,7,6,.52)';
+  g.fillRect(0,0,REF_W,REF_H);
+
+  const [r,gg,b]=palette.average;
+  const glow=g.createRadialGradient(690,340,18,690,340,720);
+  glow.addColorStop(0,`rgba(${Math.min(255,r+78)},${Math.min(255,gg+45)},${Math.min(255,b+22)},.34)`);
+  glow.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=glow;
+  g.fillRect(0,0,REF_W,REF_H);
+
+  let seed=78231;
+  const random=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296;};
+  for(let i=0;i<68;i++){
+    const zone=i%4;
+    let x,y;
+    if(zone===0){x=random()*REF_W;y=random()*180;}
+    else if(zone===1){x=760+random()*300;y=random()*REF_H;}
+    else if(zone===2){x=random()*250;y=180+random()*680;}
+    else{x=random()*REF_W;y=820+random()*220;}
+    const len=12+random()*95, ang=random()*Math.PI*2;
+    const x2=x+Math.cos(ang)*len, y2=y+Math.sin(ang)*len;
+    const x3=x+(random()-.5)*len*1.5, y3=y+(random()-.5)*len*1.5;
+    const col=palette.colors[i%palette.colors.length];
+    g.globalAlpha=.07+random()*.12;
+    g.fillStyle=`rgb(${col[0]},${col[1]},${col[2]})`;
+    g.beginPath();g.moveTo(x,y);g.lineTo(x2,y2);g.lineTo(x3,y3);g.closePath();g.fill();
+  }
+  g.globalAlpha=1;
+
+  const floor=g.createLinearGradient(0,775,0,REF_H);
+  floor.addColorStop(0,'rgba(5,4,4,0)');
+  floor.addColorStop(.24,'rgba(5,4,4,.45)');
+  floor.addColorStop(1,'rgba(5,4,4,.94)');
+  g.fillStyle=floor;g.fillRect(0,770,REF_W,254);
+
+  const vignette=g.createRadialGradient(510,470,250,510,470,760);
+  vignette.addColorStop(0,'rgba(0,0,0,0)');
+  vignette.addColorStop(1,'rgba(0,0,0,.58)');
+  g.fillStyle=vignette;g.fillRect(0,0,REF_W,REF_H);
+  g.restore();
+}
+
+function drawCasePath(g){
+  // Silueta exterior de la caja de la plantilla de referencia.
+  g.beginPath();
+  g.moveTo(290,133);
+  g.lineTo(291,126);
+  g.quadraticCurveTo(294,115,307,115);
+  g.lineTo(731,135);
+  g.quadraticCurveTo(750,136,754,153);
+  g.lineTo(759,175);
+  g.lineTo(759,874);
+  g.quadraticCurveTo(759,899,742,908);
+  g.lineTo(333,945);
+  g.quadraticCurveTo(314,947,307,929);
+  g.closePath();
+}
+
+function drawCaseShadow(g){
+  const sh=g.createRadialGradient(523,918,10,523,918,285);
+  sh.addColorStop(0,'rgba(0,0,0,.72)');
+  sh.addColorStop(.48,'rgba(0,0,0,.42)');
+  sh.addColorStop(1,'rgba(0,0,0,0)');
+  g.fillStyle=sh;
+  g.beginPath();g.ellipse(523,918,285,56,0,0,Math.PI*2);g.fill();
+}
 
 function solveLinear(A,b){
- const n=b.length;
- A=A.map((row,i)=>row.slice().concat(b[i]));
-
- for(let c=0;c<n;c++){
-  let p=c;
-
-  for(let r=c+1;r<n;r++){
-   if(Math.abs(A[r][c])>Math.abs(A[p][c]))p=r;
+  const n=b.length;
+  A=A.map((row,i)=>row.slice().concat([b[i]]));
+  for(let col=0;col<n;col++){
+    let pivot=col;
+    for(let r=col+1;r<n;r++) if(Math.abs(A[r][col])>Math.abs(A[pivot][col])) pivot=r;
+    if(Math.abs(A[pivot][col])<1e-12) throw new Error('No se pudo resolver la perspectiva.');
+    [A[col],A[pivot]]=[A[pivot],A[col]];
+    const div=A[col][col];
+    for(let k=col;k<=n;k++) A[col][k]/=div;
+    for(let r=0;r<n;r++) if(r!==col){
+      const f=A[r][col];
+      for(let k=col;k<=n;k++) A[r][k]-=f*A[col][k];
+    }
   }
-
-  if(Math.abs(A[p][c])<1e-12)
-   throw Error('Perspectiva inválida.');
-
-  [A[c],A[p]]=[A[p],A[c]];
-
-  const d=A[c][c];
-
-  for(let k=c;k<=n;k++)A[c][k]/=d;
-
-  for(let r=0;r<n;r++){
-   if(r!==c){
-    const f=A[r][c];
-    for(let k=c;k<=n;k++)A[r][k]-=f*A[c][k];
-   }
-  }
- }
-
- return A.map(row=>row[n]);
+  return A.map(row=>row[n]);
 }
-
-// Transformación correcta de cuatro esquinas.
 
 function inverseHomography(quad){
-
- const src=[
-  [0,0],[1,0],[1,1],[0,1]
- ];
-
- const A=[];
- const b=[];
-
- for(let i=0;i<4;i++){
-  const [u,v]=src[i];
-  const [x,y]=quad[i];
-
-  A.push([u,v,1,0,0,0,-x*u,-x*v]);
-  b.push(x);
-
-  A.push([0,0,0,u,v,1,-y*u,-y*v]);
-  b.push(y);
- }
-
- const h=solveLinear(A,b);
- const [a,bb,c,d,e,f,g,j]=h;
-
- const det=
-  a*(e-f*j)-bb*(d-f*g)+c*(d*j-e*g);
-
- if(Math.abs(det)<1e-12)
-  throw Error('No se pudo calcular la perspectiva.');
-
- // Matriz inversa 3x3.
-
- return [
-  (e-f*j)/det,
-  (c*j-bb)/det,
-  (bb*f-c*e)/det,
-
-  (f*g-d)/det,
-  (a-c*g)/det,
-  (c*d-a*f)/det,
-
-  (d*j-e*g)/det,
-  (bb*g-a*j)/det,
-  (a*e-bb*d)/det
- ];
+  const src=[[0,0],[1,0],[1,1],[0,1]];
+  const A=[],b=[];
+  for(let i=0;i<4;i++){
+    const [u,v]=src[i], [x,y]=quad[i];
+    A.push([u,v,1,0,0,0,-x*u,-x*v]); b.push(x);
+    A.push([0,0,0,u,v,1,-y*u,-y*v]); b.push(y);
+  }
+  const h=solveLinear(A,b);
+  const [a,bb,c,d,e,f,gg,hh]=h;
+  const det=a*(e-f*hh)-bb*(d-f*gg)+c*(d*hh-e*gg);
+  if(Math.abs(det)<1e-12) throw new Error('La plantilla tiene una perspectiva inválida.');
+  return [
+    (e-f*hh)/det,(c*hh-bb)/det,(bb*f-c*e)/det,
+    (f*gg-d)/det,(a-c*gg)/det,(c*d-a*f)/det,
+    (d*hh-e*gg)/det,(bb*gg-a*hh)/det,(a*e-bb*d)/det
+  ];
 }
-
-function averageColor(img){
- const c=document.createElement('canvas');
- c.width=32;
- c.height=32;
-
- const g=c.getContext('2d');
- g.drawImage(img,0,0,32,32);
-
- const d=g.getImageData(0,0,32,32).data;
-
- let r=0,gr=0,b=0,n=0;
-
- for(let i=0;i<d.length;i+=16){
-  r+=d[i];
-  gr+=d[i+1];
-  b+=d[i+2];
-  n++;
- }
-
- return [
-  Math.round(r/n),
-  Math.round(gr/n),
-  Math.round(b/n)
- ];
-}
-
-// Fondo generado con la portada nueva.
-
-function drawBackground(g,cover){
-
- const [r,gr,b]=averageColor(cover);
-
- g.save();
- g.clearRect(0,0,1024,1024);
-
- g.filter='blur(32px) saturate(1.65) brightness(.58)';
-
- g.drawImage(
-  cover,-90,-75,1204,1174
- );
-
- g.filter='none';
-
- g.fillStyle='rgba(12,7,6,.53)';
- g.fillRect(0,0,1024,1024);
-
- const glow=g.createRadialGradient(
-  690,365,15,690,365,720
- );
-
- glow.addColorStop(
-  0,
-  `rgba(${Math.min(255,r+90)},${Math.min(255,gr+60)},${Math.min(255,b+45)},.42)`
- );
-
- glow.addColorStop(1,'rgba(0,0,0,0)');
-
- g.fillStyle=glow;
- g.fillRect(0,0,1024,1024);
-
- let seed=24681357;
-
- const rand=()=>{
-  seed=(seed*1664525+1013904223)>>>0;
-  return seed/4294967296;
- };
-
- for(let i=0;i<85;i++){
-  const x=rand()*1024;
-  const y=rand()*1024;
-  const s=12+rand()*95;
-
-  g.globalAlpha=.045+rand()*.10;
-  g.fillStyle=`rgb(${r},${gr},${b})`;
-
-  g.beginPath();
-  g.moveTo(x,y);
-  g.lineTo(x+s,y-s*.38);
-  g.lineTo(x+s*.24,y+s*.58);
-  g.closePath();
-  g.fill();
- }
-
- g.globalAlpha=1;
-
- const floor=g.createLinearGradient(0,770,0,1024);
- floor.addColorStop(0,'rgba(0,0,0,0)');
- floor.addColorStop(.35,'rgba(0,0,0,.48)');
- floor.addColorStop(1,'rgba(0,0,0,.94)');
-
- g.fillStyle=floor;
- g.fillRect(0,760,1024,264);
-
- const vignette=g.createRadialGradient(
-  510,455,250,510,455,760
- );
-
- vignette.addColorStop(0,'rgba(0,0,0,0)');
- vignette.addColorStop(1,'rgba(0,0,0,.57)');
-
- g.fillStyle=vignette;
- g.fillRect(0,0,1024,1024);
-
- g.restore();
-}
-
-// Silueta de la caja física original.
-
-function casePath(g){
-
- g.beginPath();
-
- g.moveTo(290,134);
- g.lineTo(291,126);
- g.quadraticCurveTo(294,115,309,115);
-
- g.lineTo(733,135);
- g.quadraticCurveTo(750,136,754,153);
-
- g.lineTo(759,175);
- g.lineTo(759,874);
-
- g.quadraticCurveTo(759,899,742,908);
-
- g.lineTo(333,945);
- g.quadraticCurveTo(314,947,307,929);
-
- g.closePath();
-}
-
-// Conserva el volumen y los bordes de la caja.
-
-function drawCaseFromBase(g,base){
-
- g.save();
-
- casePath(g);
- g.clip();
-
- g.drawImage(base,0,0,1024,1024);
-
- g.restore();
-}
-
-function drawShadow(g){
-
- const sh=g.createRadialGradient(
-  520,918,8,520,918,290
- );
-
- sh.addColorStop(0,'rgba(0,0,0,.72)');
- sh.addColorStop(.52,'rgba(0,0,0,.37)');
- sh.addColorStop(1,'rgba(0,0,0,0)');
-
- g.fillStyle=sh;
-
- g.beginPath();
- g.ellipse(520,919,290,58,0,0,Math.PI*2);
- g.fill();
-}
-
-// PROYECCIÓN DE LA NUEVA PORTADA.
 
 function warpCover(g,cover){
+  // Esquinas ampliadas unos píxeles para tapar toda la impresión anterior.
+  // Orden: arriba izquierda, arriba derecha, abajo derecha, abajo izquierda.
+  const quad=[[318,134],[738,149],[743,895],[307,919]];
+  const inv=inverseHomography(quad);
+  const minX=306,maxX=744,minY=133,maxY=920;
+  const w=maxX-minX+1,h=maxY-minY+1;
 
- // Esquinas exactas de la cara frontal de la plantilla.
- const quad=[
-  [329,136],
-  [733,152],
-  [738,891],
-  [311,916]
- ];
+  const source=cover.getContext('2d',{willReadFrequently:true})
+    .getImageData(0,0,cover.width,cover.height);
+  const sw=source.width,sh=source.height,sd=source.data;
+  const patch=document.createElement('canvas');
+  patch.width=w;patch.height=h;
+  const pg=patch.getContext('2d');
+  const output=pg.createImageData(w,h),od=output.data;
 
- const inv=inverseHomography(quad);
-
- const minX=311,maxX=738;
- const minY=136,maxY=916;
-
- const w=maxX-minX+1;
- const h=maxY-minY+1;
-
- const src=cover.getContext('2d',{
-  willReadFrequently:true
- }).getImageData(0,0,cover.width,cover.height);
-
- const sw=src.width;
- const sh=src.height;
- const sd=src.data;
-
- const patch=document.createElement('canvas');
- patch.width=w;
- patch.height=h;
-
- const pg=patch.getContext('2d');
- const out=pg.createImageData(w,h);
- const od=out.data;
-
- for(let py=0;py<h;py++){
-
-  for(let px=0;px<w;px++){
-
-   const x=minX+px+.5;
-   const y=minY+py+.5;
-
-   const den=inv[6]*x+inv[7]*y+inv[8];
-
-   if(Math.abs(den)<1e-10)continue;
-
-   const u=(inv[0]*x+inv[1]*y+inv[2])/den;
-   const v=(inv[3]*x+inv[4]*y+inv[5])/den;
-
-   if(u<0||u>1||v<0||v>1)continue;
-
-   const fx=u*(sw-1);
-   const fy=v*(sh-1);
-
-   const x0=Math.floor(fx);
-   const y0=Math.floor(fy);
-
-   const x1=Math.min(sw-1,x0+1);
-   const y1=Math.min(sh-1,y0+1);
-
-   const ax=fx-x0;
-   const ay=fy-y0;
-
-   const i00=(y0*sw+x0)*4;
-   const i10=(y0*sw+x1)*4;
-   const i01=(y1*sw+x0)*4;
-   const i11=(y1*sw+x1)*4;
-
-   const o=(py*w+px)*4;
-
-   for(let k=0;k<4;k++){
-
-    const top=sd[i00+k]*(1-ax)+sd[i10+k]*ax;
-    const bot=sd[i01+k]*(1-ax)+sd[i11+k]*ax;
-
-    od[o+k]=top*(1-ay)+bot*ay;
-   }
+  for(let py=0;py<h;py++){
+    const y=minY+py+.5;
+    for(let px=0;px<w;px++){
+      const x=minX+px+.5;
+      const den=inv[6]*x+inv[7]*y+inv[8];
+      if(Math.abs(den)<1e-10) continue;
+      let u=(inv[0]*x+inv[1]*y+inv[2])/den;
+      let v=(inv[3]*x+inv[4]*y+inv[5])/den;
+      // Tolerancia mínima en el borde para evitar líneas de la imagen vieja.
+      if(u<-.002||u>1.002||v<-.002||v>1.002) continue;
+      u=clamp(u,0,1);v=clamp(v,0,1);
+      const fx=u*(sw-1),fy=v*(sh-1);
+      const x0=Math.floor(fx),y0=Math.floor(fy);
+      const x1=Math.min(sw-1,x0+1),y1=Math.min(sh-1,y0+1);
+      const ax=fx-x0,ay=fy-y0;
+      const i00=(y0*sw+x0)*4,i10=(y0*sw+x1)*4;
+      const i01=(y1*sw+x0)*4,i11=(y1*sw+x1)*4;
+      const o=(py*w+px)*4;
+      for(let k=0;k<3;k++){
+        const top=sd[i00+k]*(1-ax)+sd[i10+k]*ax;
+        const bottom=sd[i01+k]*(1-ax)+sd[i11+k]*ax;
+        od[o+k]=Math.round(top*(1-ay)+bottom*ay);
+      }
+      od[o+3]=255;
+    }
   }
- }
+  pg.putImageData(output,0,0);
+  g.drawImage(patch,minX,minY);
 
- pg.putImageData(out,0,0);
+  // Reflejo tenue del plástico encima de la nueva impresión.
+  g.save();
+  g.beginPath();quad.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();g.clip();
+  const shine=g.createLinearGradient(415,135,690,900);
+  shine.addColorStop(0,'rgba(255,255,255,.075)');
+  shine.addColorStop(.25,'rgba(255,255,255,.018)');
+  shine.addColorStop(.72,'rgba(255,255,255,0)');
+  shine.addColorStop(1,'rgba(0,0,0,.10)');
+  g.fillStyle=shine;g.fillRect(minX,minY,w,h);
+  g.restore();
 
- // Reemplaza la ilustración vieja por completo.
-
- g.drawImage(patch,minX,minY);
-
- // Reflejo del plástico transparente.
-
- g.save();
-
- g.beginPath();
-
- quad.forEach((p,i)=>{
-  i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]);
- });
-
- g.closePath();
- g.clip();
-
- const gloss=g.createLinearGradient(
-  410,130,690,900
- );
-
- gloss.addColorStop(0,'rgba(255,255,255,.075)');
- gloss.addColorStop(.34,'rgba(255,255,255,.012)');
- gloss.addColorStop(1,'rgba(0,0,0,.10)');
-
- g.fillStyle=gloss;
- g.fillRect(minX,minY,w,h);
-
- g.restore();
+  // Filete interior muy sutil para cerrar el borde y ocultar píxeles residuales.
+  g.save();
+  g.beginPath();quad.forEach((p,i)=>i?g.lineTo(p[0],p[1]):g.moveTo(p[0],p[1]));g.closePath();
+  g.strokeStyle='rgba(15,8,6,.28)';g.lineWidth=1.35;g.stroke();
+  g.restore();
 }
-
-// Nuevo nombre en el lomo.
-
-function drawSpineTitle(g,title){
-
- g.save();
-
- g.beginPath();
- g.moveTo(302,425);
- g.lineTo(326,425);
- g.lineTo(326,675);
- g.lineTo(302,675);
- g.closePath();
- g.clip();
-
- const red=g.createLinearGradient(302,0,327,0);
-
- red.addColorStop(0,'#a51c21');
- red.addColorStop(.5,'#d42b30');
- red.addColorStop(1,'#a51c21');
-
- g.fillStyle=red;
- g.fillRect(300,420,30,260);
-
- g.translate(314,550);
- g.rotate(-Math.PI/2);
-
- g.textAlign='center';
- g.textBaseline='middle';
- g.font='900 13px Arial';
-
- const txt=(title||'NINTENDO SWITCH')
-  .toUpperCase().slice(0,34);
-
- g.fillStyle='rgba(0,0,0,.4)';
- g.fillText(txt,1.2,1.2,235);
-
- g.fillStyle='#fff1e9';
- g.fillText(txt,0,0,235);
-
- g.restore();
-}
-
-// MOTOR PRINCIPAL.
 
 async function generate(){
+  if(!baseImage||!coverImage){
+    setStatus('Faltan imágenes: cargá una plantilla base y una portada nueva.',true);
+    return;
+  }
+  const button=document.getElementById('generate');
+  button.disabled=true;
+  document.getElementById('download').disabled=true;
+  setStatus('Ajustando la portada y componiendo el render…');
+  await new Promise(requestAnimationFrame);
+  try{
+    const outputW=baseImage.naturalWidth;
+    const outputH=baseImage.naturalHeight;
+    canvas.width=outputW;
+    canvas.height=outputH;
+    ctx.setTransform(outputW/REF_W,0,0,outputH/REF_H,0,0);
 
- if(!baseImage||!coverImage){
-  status('Cargá primero las dos imágenes.',true);
-  return;
- }
+    const clean=makeCleanCover(coverImage);
+    const cover=clean.canvas;
+    const palette=getPalette(cover);
 
- const button=document.getElementById('generate');
- button.disabled=true;
+    drawBackground(ctx,cover,palette);
+    drawCaseShadow(ctx);
 
- status('Generando composición...');
+    // Extrae la caja de la plantilla, sin arrastrar su fondo original.
+    ctx.save();
+    drawCasePath(ctx);
+    ctx.clip();
+    ctx.drawImage(baseImage,0,0,REF_W,REF_H);
+    ctx.restore();
 
- await new Promise(requestAnimationFrame);
+    // Reemplaza toda la superficie frontal con la portada nueva.
+    warpCover(ctx,cover);
 
- try{
-
-  const outputW=baseImage.naturalWidth;
-  const outputH=baseImage.naturalHeight;
-
-  canvas.width=outputW;
-  canvas.height=outputH;
-
-  ctx.setTransform(
-   outputW/REF_W,0,0,outputH/REF_H,0,0
-  );
-
-  const cover=makeCroppedCover(coverImage);
-
-  drawBackground(ctx,cover);
-  drawShadow(ctx);
-  drawCaseFromBase(ctx,baseImage);
-  warpCover(ctx,cover);
-
-  drawSpineTitle(
-   ctx,
-   document.getElementById('gameTitle').value.trim()
-  );
-
-  document.getElementById('download').disabled=false;
-
-  document.getElementById('dimensions').textContent=
-   `${outputW} × ${outputH} · JPG`;
-
-  status(
-   `Render generado correctamente: ${outputW} × ${outputH} px.`
-  );
-
- }catch(err){
-
-  console.error(err);
-  status('Error: '+err.message,true);
-
- }finally{
-
-  button.disabled=false;
- }
+    document.getElementById('dimensions').textContent=`${outputW} × ${outputH} · JPG`;
+    document.getElementById('download').disabled=false;
+    const trimmed=(clean.crop.left+clean.crop.top+(coverImage.naturalWidth-1-clean.crop.right)+(coverImage.naturalHeight-1-clean.crop.bottom))>4;
+    setStatus(`Render generado. ${trimmed?'Se detectó y quitó el marco exterior de la portada. ':'Portada utilizada completa. '}Salida: ${outputW} × ${outputH} px.`);
+  }catch(err){
+    console.error(err);
+    setStatus('No se pudo generar el render: '+err.message,true);
+  }finally{
+    button.disabled=false;
+  }
 }
 
-// CARGA DE IMÁGENES.
+function safeFilePart(name){
+  return (name||'juego').normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .replace(/[^a-zA-Z0-9_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,50)||'juego';
+}
 
-document.getElementById('baseFile').addEventListener(
- 'change',async e=>{
-
+document.getElementById('baseFile').addEventListener('change',async e=>{
+  const file=e.target.files&&e.target.files[0];
+  if(!file)return;
   try{
+    baseImage=await loadImage(file);
+    setStatus(`Plantilla cargada: ${baseImage.naturalWidth} × ${baseImage.naturalHeight}. Ahora cargá la portada.`);
+    document.getElementById('dimensions').textContent=`BASE ${baseImage.naturalWidth} × ${baseImage.naturalHeight}`;
+  }catch(err){setStatus(err.message,true);}
+});
 
-   if(e.target.files[0]){
-
-    baseImage=await readImage(e.target.files[0]);
-
-    document.getElementById('dimensions').textContent=
-     `PLANTILLA ${baseImage.naturalWidth} × ${baseImage.naturalHeight}`;
-
-    status('Plantilla cargada. Ahora seleccioná la portada nueva.');
-   }
-
-  }catch(err){
-   status(err.message,true);
-  }
- }
-);
-
-document.getElementById('coverFile').addEventListener(
- 'change',async e=>{
-
+document.getElementById('coverFile').addEventListener('change',async e=>{
+  const file=e.target.files&&e.target.files[0];
+  if(!file)return;
   try{
+    coverImage=await loadImage(file);
+    coverFileName=file.name.replace(/\.[^.]+$/,'');
+    setStatus(`Portada cargada: ${coverImage.naturalWidth} × ${coverImage.naturalHeight}. Presioná GENERAR RENDER 3D.`);
+  }catch(err){setStatus(err.message,true);}
+});
 
-   if(e.target.files[0]){
+document.getElementById('generate').addEventListener('click',generate);
 
-    coverImage=await readImage(e.target.files[0]);
-
-    const title=document.getElementById('gameTitle');
-
-    if(!title.value){
-     title.value=e.target.files[0].name
-      .replace(/\.[^.]+$/,'')
-      .replace(/[-_]+/g,' ')
-      .toUpperCase()
-      .slice(0,34);
-    }
-
-    status('Portada cargada. Ya podés generar el render.');
-   }
-
-  }catch(err){
-   status(err.message,true);
-  }
- }
-);
-
-// Recorte adaptado a la foto de ejemplo.
-
-document.getElementById('sampleCrop').addEventListener(
- 'click',()=>{
-
-  document.getElementById('cropL').value='.6';
-  document.getElementById('cropT').value='2.5';
-  document.getElementById('cropR').value='4.7';
-  document.getElementById('cropB').value='2.7';
-
-  status('Recorte de ejemplo aplicado.');
- }
-);
-
-document.getElementById('resetCrop').addEventListener(
- 'click',()=>{
-
-  ['cropL','cropT','cropR','cropB'].forEach(id=>{
-   document.getElementById(id).value='0';
-  });
-
-  status('Se utilizará la imagen completa.');
- }
-);
-
-document.getElementById('generate').addEventListener(
- 'click',generate
-);
-
-// EXPORTAR JPG.
-
-document.getElementById('download').addEventListener(
- 'click',()=>{
-
+document.getElementById('download').addEventListener('click',()=>{
   if(!baseImage)return;
-
-  const title=(document.getElementById('gameTitle').value||'juego')
-   .normalize('NFD')
-   .replace(/[\u0300-\u036f]/g,'')
-   .replace(/[^a-z0-9_-]+/gi,'-');
-
   canvas.toBlob(blob=>{
-
-   if(!blob){
-    status('No se pudo crear el JPG.',true);
-    return;
-   }
-
-   const url=URL.createObjectURL(blob);
-   const a=document.createElement('a');
-
-   a.href=url;
-   a.download=`render-3d-${title}.jpg`;
-
-   document.body.appendChild(a);
-   a.click();
-   a.remove();
-
-   setTimeout(()=>URL.revokeObjectURL(url),1500);
-
+    if(!blob){setStatus('No se pudo crear el JPG.',true);return;}
+    const url=URL.createObjectURL(blob);
+    const a=document.createElement('a');
+    a.href=url;
+    a.download=`render-3d-${safeFilePart(coverFileName)}.jpg`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),1500);
   },'image/jpeg',.95);
- }
-);
+});
 
-// LIMPIAR.
-
-document.getElementById('clear').addEventListener(
- 'click',()=>{
-
-  baseImage=null;
-  coverImage=null;
-
+document.getElementById('clear').addEventListener('click',()=>{
+  baseImage=null;coverImage=null;coverFileName='juego';
   document.getElementById('baseFile').value='';
   document.getElementById('coverFile').value='';
-  document.getElementById('gameTitle').value='';
-
-  ['cropL','cropT','cropR','cropB'].forEach(id=>{
-   document.getElementById(id).value='0';
-  });
-
-  canvas.width=1024;
-  canvas.height=1024;
-
+  canvas.width=1024;canvas.height=1024;
   ctx.setTransform(1,0,0,1,0,0);
   ctx.clearRect(0,0,1024,1024);
-
   document.getElementById('download').disabled=true;
-  document.getElementById('dimensions').textContent='ESPERANDO PLANTILLA';
-
-  status('Listo para empezar nuevamente.');
- }
-);
+  document.getElementById('dimensions').textContent='ESPERANDO IMÁGENES';
+  setStatus('Listo para empezar nuevamente.');
+});
 </script>
 </body>
 </html>
