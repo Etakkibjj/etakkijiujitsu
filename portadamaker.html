@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PortMaster 3D Box Generator</title>
+    <!-- Tailwind CSS para un diseño profesional y rápido -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col items-center justify-center p-4">
+
+    <div class="max-w-xl w-full bg-slate-800 p-8 rounded-2xl shadow-2xl border border-slate-700">
+        <h1 class="text-2xl font-bold text-center mb-2 text-indigo-400">PortMaster 3D Box Generator</h1>
+        <p class="text-sm text-slate-400 text-center mb-6">Genera renders 3D profesionales para tu biblioteca sin bordes blancos.</p>
+
+        <!-- Formulario -->
+        <form id="generator-form" class="space-y-5">
+            <!-- Selector de plataforma -->
+            <div>
+                <label class="block text-sm font-medium mb-2 text-slate-300">Plataforma de la Caja:</label>
+                <select id="platform" class="w-full bg-slate-900 border border-slate-750 rounded-lg p-3 text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                    <option value="Nintendo Switch">Nintendo Switch</option>
+                    <option value="Nintendo Switch Platinum">Nintendo Switch Platinum</option>
+                    <option value="Nintendo Switch 2">Nintendo Switch 2</option>
+                    <option value="PlayStation 2">PlayStation 2 (PS2)</option>
+                    <option value="Xbox 360">Xbox 360</option>
+                    <option value="Xbox One">Xbox One</option>
+                    <option value="Nintendo Wii">Nintendo Wii</option>
+                    <option value="Steam">Steam</option>
+                    <option value="Android">Android</option>
+                </select>
+            </div>
+
+            <!-- Subir imagen de portada -->
+            <div>
+                <label class="block text-sm font-medium mb-2 text-slate-300">Imagen de la Portada Original:</label>
+                <input type="file" id="cover-image" accept="image/*" required
+                    class="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-600 file:text-white hover:file:bg-indigo-700 cursor-pointer">
+            </div>
+
+            <!-- Botón de envío -->
+            <button type="submit" id="submit-btn"
+                class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-3 rounded-lg transition-all shadow-lg shadow-indigo-600/30">
+                Generar Portada 3D
+            </button>
+        </form>
+
+        <!-- Estado de carga -->
+        <div id="loading" class="hidden text-center mt-6">
+            <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-500 border-t-transparent"></div>
+            <p class="text-sm text-slate-400 mt-2">Renderizando caja en 3D con IA...</p>
+        </div>
+
+        <!-- Resultado -->
+        <div id="result-container" class="hidden mt-6 text-center">
+            <h2 class="text-sm font-medium text-slate-300 mb-2">Resultado Final:</h2>
+            <img id="result-image" src="" alt="Portada 3D Generada" class="mx-auto rounded-lg shadow-md max-h-96 border border-slate-700">
+            <a id="download-btn" href="#" download="portmaster-box.jpg"
+                class="inline-block mt-4 bg-emerald-600 hover:bg-emerald-500 text-white text-sm font-medium py-2 px-4 rounded-lg transition-all">
+                Descargar Imagen
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Aquí añadiremos la lógica de JavaScript en el siguiente paso
+        document.getElementById('generator-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            alert('¡Interfaz conectada! En el siguiente paso programaremos la conexión con la API.');
+        });
+    </script>
+</body>
+</html>
