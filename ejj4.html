@@ -1,40 +1,34 @@
 <!DOCTYPE html>
-<html lang="es" class="dark">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EJJ 4 Invitational - Torneo No-Gi Submission Only | Verano 2027</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Tipografías Retro 80s/90s & Miami -->
+    <!-- Google Fonts: Orbitron (Sci-Fi/Retro), Rajdhani (Tech), Yellowtail (Miami Script) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Orbitron:wght@500;700;900&family=Outfit:wght@300;400;600;800&family=Yellowtail&display=swap" rel="stylesheet">
-    <!-- FontAwesome para iconos deportivos y de interfaz -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&family=Yellowtail&display=swap" rel="stylesheet">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <script>
         tailwind.config = {
-            darkMode: 'class',
             theme: {
                 extend: {
                     fontFamily: {
-                        'retro': ['Orbitron', 'sans-serif'],
-                        'script': ['Yellowtail', 'cursive'],
-                        'neon': ['Monoton', 'cursive'],
-                        'sans': ['Outfit', 'sans-serif'],
+                        orbitron: ['Orbitron', 'sans-serif'],
+                        rajdhani: ['Rajdhani', 'sans-serif'],
+                        miami: ['Yellowtail', 'cursive'],
                     },
                     colors: {
-                        vice: {
-                            bg: '#090314',
-                            card: '#130726',
-                            pink: '#ff007f',
-                            cyan: '#00f3ff',
-                            purple: '#9d00ff',
-                            orange: '#ff7b00',
-                            yellow: '#ffe600',
-                            emerald: '#00ff9d'
-                        }
+                        vicePink: '#ff007f',
+                        viceCyan: '#00f3ff',
+                        vicePurple: '#b537f2',
+                        viceGold: '#ffe600',
+                        viceDark: '#070312',
+                        viceCard: '#110826',
                     }
                 }
             }
@@ -42,359 +36,298 @@
     </script>
 
     <style>
-        /* Estilos personalizados Neon Retro Miami 90s / GTA 6 */
         :root {
             --neon-pink: #ff007f;
             --neon-cyan: #00f3ff;
-            --neon-purple: #9d00ff;
-            --neon-orange: #ff7b00;
-            --neon-emerald: #00ff9d;
-            --bg-dark: #070210;
+            --neon-purple: #b537f2;
+            --neon-gold: #ffe600;
+            --neon-green: #00ff9d;
+            --bg-dark: #070312;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
             background-color: var(--bg-dark);
-            color: #ffffff;
+            color: #f8fafc;
+            font-family: 'Rajdhani', sans-serif;
             overflow-x: hidden;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(157, 0, 255, 0.25) 0%, transparent 60%),
-                radial-gradient(circle at 85% 20%, rgba(255, 0, 127, 0.2) 0%, transparent 45%),
-                radial-gradient(circle at 15% 30%, rgba(0, 243, 255, 0.15) 0%, transparent 45%);
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
         }
 
-        /* Grilla Retrowave en Perspectiva 3D */
-        .synthwave-grid-container {
+        /* =========================================================
+           FONDO OUTRUN / MIAMI 90s / GRILLA SYNTHWAVE ANIMADA
+        ========================================================= */
+        .retro-bg {
             position: fixed;
+            inset: 0;
+            z-index: -3;
+            background: radial-gradient(circle at 50% 25%, #2b094d 0%, #120428 45%, #070312 100%);
+            overflow: hidden;
+        }
+
+        .outrun-sun {
+            position: absolute;
+            top: 8%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 340px;
+            height: 340px;
+            border-radius: 50%;
+            background: linear-gradient(180deg, #ffe600 0%, #ff5e00 45%, #ff007f 85%, #b537f2 100%);
+            box-shadow: 0 0 80px rgba(255, 0, 127, 0.55), 0 0 140px rgba(255, 230, 0, 0.25);
+            opacity: 0.32;
+            -webkit-mask-image: repeating-linear-gradient(
+                to bottom,
+                #000 0px,
+                #000 14px,
+                transparent 14px,
+                transparent 19px
+            );
+            mask-image: repeating-linear-gradient(
+                to bottom,
+                #000 0px,
+                #000 14px,
+                transparent 14px,
+                transparent 19px
+            );
+            animation: sunPulse 7s ease-in-out infinite alternate;
+        }
+
+        @keyframes sunPulse {
+            0% { transform: translateX(-50%) scale(0.97); opacity: 0.28; }
+            100% { transform: translateX(-50%) scale(1.04); opacity: 0.38; }
+        }
+
+        .synth-grid-wrapper {
+            position: absolute;
             bottom: 0;
             left: 0;
-            width: 100%;
-            height: 42vh;
+            right: 0;
+            height: 45vh;
             perspective: 450px;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .synth-grid {
+            position: absolute;
+            inset: -50% -50% 0 -50%;
+            background-image:
+                linear-gradient(to right, rgba(0, 243, 255, 0.24) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 0, 127, 0.28) 1px, transparent 1px);
+            background-size: 56px 42px;
+            transform: rotateX(68deg);
+            transform-origin: center top;
+            animation: gridScroll 3.5s linear infinite;
+        }
+
+        @keyframes gridScroll {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 42px; }
+        }
+
+        /* Siluetas de Palmeras Laterales Animadas */
+        .palm-left, .palm-right {
+            position: fixed;
+            bottom: -10px;
+            width: 240px;
+            height: 360px;
             z-index: -2;
             pointer-events: none;
-            overflow: hidden;
+            opacity: 0.32;
+            filter: drop-shadow(0 0 12px rgba(255, 0, 127, 0.5));
         }
 
-        .synthwave-grid {
-            position: absolute;
-            top: 0;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background-image: 
-                linear-gradient(to right, rgba(255, 0, 127, 0.35) 2px, transparent 2px),
-                linear-gradient(to bottom, rgba(0, 243, 255, 0.35) 2px, transparent 2px);
-            background-size: 60px 45px;
-            transform: rotateX(72deg);
-            transform-origin: top center;
-            animation: gridMove 3.5s linear infinite;
-            mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 35%, rgba(0,0,0,1) 100%);
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.8) 35%, rgba(0,0,0,1) 100%);
+        .palm-left {
+            left: -25px;
+            transform-origin: bottom left;
+            animation: palmSwayLeft 6s ease-in-out infinite alternate;
         }
 
-        @keyframes gridMove {
-            0% { background-position: 0 0; }
-            100% { background-position: 0 45px; }
+        .palm-right {
+            right: -25px;
+            transform: scaleX(-1);
+            transform-origin: bottom right;
+            animation: palmSwayRight 6.8s ease-in-out infinite alternate;
         }
 
-        /* Tubos Finos de Neón Decorativos en el Fondo / Hero */
-        .neon-tube-line {
-            height: 2px;
-            border-radius: 999px;
-            animation: tubeColorShift 7s ease-in-out infinite alternate;
-        }
-
-        .neon-tube-vertical {
-            width: 2px;
-            border-radius: 999px;
-            animation: tubeColorShiftVertical 8s ease-in-out infinite alternate;
-        }
-
-        @keyframes tubeColorShift {
-            0% {
-                background: linear-gradient(90deg, transparent, #00f3ff, #ffffff, #00f3ff, transparent);
-                box-shadow: 0 0 8px #00f3ff, 0 0 18px #00f3ff;
-            }
-            33% {
-                background: linear-gradient(90deg, transparent, #ff007f, #ffffff, #ff007f, transparent);
-                box-shadow: 0 0 8px #ff007f, 0 0 18px #ff007f;
-            }
-            66% {
-                background: linear-gradient(90deg, transparent, #9d00ff, #ffffff, #9d00ff, transparent);
-                box-shadow: 0 0 8px #9d00ff, 0 0 18px #9d00ff;
-            }
-            100% {
-                background: linear-gradient(90deg, transparent, #ff7b00, #ffe600, #ff7b00, transparent);
-                box-shadow: 0 0 8px #ff7b00, 0 0 18px #ff7b00;
-            }
-        }
-
-        @keyframes tubeColorShiftVertical {
-            0% {
-                background: linear-gradient(180deg, transparent, #ff007f, #00f3ff, transparent);
-                box-shadow: 0 0 10px #ff007f, 0 0 22px #00f3ff;
-            }
-            50% {
-                background: linear-gradient(180deg, transparent, #00f3ff, #9d00ff, transparent);
-                box-shadow: 0 0 10px #00f3ff, 0 0 22px #9d00ff;
-            }
-            100% {
-                background: linear-gradient(180deg, transparent, #ff7b00, #ff007f, transparent);
-                box-shadow: 0 0 10px #ff7b00, 0 0 22px #ff007f;
-            }
-        }
-
-        /* Sol Atardecer Miami Outrun */
-        .outrun-sun {
-            width: 245px;
-            height: 245px;
-            border-radius: 50%;
-            background: linear-gradient(180deg, #ffe600 0%, #ff7b00 45%, #ff007f 85%, #9d00ff 100%);
-            box-shadow: 0 0 60px rgba(255, 0, 127, 0.6), 0 0 110px rgba(255, 123, 0, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .outrun-sun::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: repeating-linear-gradient(
-                to bottom,
-                transparent 0%,
-                transparent 52%,
-                #090314 52%,
-                #090314 55%,
-                transparent 55%,
-                transparent 63%,
-                #090314 63%,
-                #090314 67%,
-                transparent 67%,
-                transparent 74%,
-                #090314 74%,
-                #090314 79%,
-                transparent 79%,
-                transparent 85%,
-                #090314 85%,
-                #090314 92%
-            );
-        }
-
-        /* Efectos de Texto Neón Animado */
-        .neon-text-pink {
-            color: #fff;
-            text-shadow:
-                0 0 5px #fff,
-                0 0 12px var(--neon-pink),
-                0 0 25px var(--neon-pink),
-                0 0 45px var(--neon-pink);
-            animation: neonFlicker 4s infinite alternate;
-        }
-
-        .neon-text-cyan {
-            color: #fff;
-            text-shadow:
-                0 0 5px #fff,
-                0 0 10px var(--neon-cyan),
-                0 0 22px var(--neon-cyan),
-                0 0 40px var(--neon-cyan);
-        }
-
-        @keyframes neonFlicker {
-            0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
-                opacity: 1;
-                text-shadow:
-                    0 0 5px #fff,
-                    0 0 12px var(--neon-pink),
-                    0 0 25px var(--neon-pink),
-                    0 0 45px var(--neon-pink);
-            }
-            20%, 24%, 55% {
-                opacity: 0.85;
-                text-shadow:
-                    0 0 2px #fff,
-                    0 0 6px var(--neon-pink);
-            }
-        }
-
-        /* Animación sutil de palmeras con brisa de Miami */
-        .palm-sway-left {
-            transform-origin: bottom center;
-            animation: swayLeft 6s ease-in-out infinite alternate;
-        }
-        .palm-sway-right {
-            transform-origin: bottom center;
-            animation: swayRight 7s ease-in-out infinite alternate;
-        }
-
-        @keyframes swayLeft {
+        @keyframes palmSwayLeft {
             0% { transform: rotate(-2deg); }
             100% { transform: rotate(3deg); }
         }
-        @keyframes swayRight {
-            0% { transform: rotate(2deg); }
-            100% { transform: rotate(-3deg); }
+
+        @keyframes palmSwayRight {
+            0% { transform: scaleX(-1) rotate(-2deg); }
+            100% { transform: scaleX(-1) rotate(3deg); }
         }
 
-        /* Tarjetas Glassmorphism estándar */
-        .vice-card {
-            background: rgba(17, 7, 36, 0.82);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(0, 243, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), inset 0 0 18px rgba(157, 0, 255, 0.15);
-            transition: all 0.3s ease;
+        /* =========================================================
+           TUBOS FINOS DE NEÓN ANIMADOS (CIRCULANDO Y CAMBIANDO COLOR)
+        ========================================================= */
+        .neon-tube-horizontal {
+            height: 3px;
+            width: 100%;
+            border-radius: 999px;
+            background: linear-gradient(90deg, #ff007f, #00f3ff, #b537f2, #ffe600, #00ff9d, #ff007f);
+            background-size: 300% 100%;
+            animation: tubeFlow 4.5s linear infinite, tubeColorGlow 6s ease-in-out infinite alternate;
         }
 
-        .vice-card:hover {
-            border-color: rgba(255, 0, 127, 0.6);
-            box-shadow: 0 8px 36px rgba(255, 0, 127, 0.2), inset 0 0 22px rgba(0, 243, 255, 0.15);
+        @keyframes tubeFlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
         }
 
-        /* Contenedor con Tubo Fino de Neón Circulante en los Bordes */
-        .neon-tube-frame {
+        @keyframes tubeColorGlow {
+            0% { box-shadow: 0 0 8px #ff007f, 0 0 18px rgba(255, 0, 127, 0.7); }
+            50% { box-shadow: 0 0 10px #00f3ff, 0 0 22px rgba(0, 243, 255, 0.8); }
+            100% { box-shadow: 0 0 10px #b537f2, 0 0 22px rgba(181, 55, 242, 0.8); }
+        }
+
+        /* Contenedor con borde de tubo fino de neón circulante */
+        @property --tube-angle {
+            syntax: '<angle>';
+            initial-value: 0deg;
+            inherits: false;
+        }
+
+        .neon-border-runner {
             position: relative;
-            border-radius: 1.5rem;
-            padding: 2px; /* Grosor fino del tubo de neón */
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(157, 0, 255, 0.25);
-        }
-
-        .neon-tube-frame::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            border-radius: 1.25rem;
+            padding: 2px;
             background: conic-gradient(
-                from 0deg,
-                transparent 0deg,
-                #00f3ff 65deg,
-                #ffffff 90deg,
-                #ff007f 135deg,
-                transparent 180deg,
-                #9d00ff 245deg,
-                #ff7b00 285deg,
-                #ffe600 310deg,
-                transparent 360deg
+                from var(--tube-angle),
+                #ff007f 0%,
+                #00f3ff 25%,
+                #b537f2 50%,
+                #ffe600 75%,
+                #ff007f 100%
             );
-            animation: rotateNeonTube 5s linear infinite;
-            z-index: 0;
+            animation: spinNeonTube 6s linear infinite;
+            box-shadow: 0 0 25px rgba(255, 0, 127, 0.25), 0 0 35px rgba(0, 243, 255, 0.15);
         }
 
-        .neon-tube-frame-reverse::before {
-            animation: rotateNeonTubeReverse 6s linear infinite;
+        @keyframes spinNeonTube {
+            0% { --tube-angle: 0deg; }
+            100% { --tube-angle: 360deg; }
         }
 
-        .neon-tube-inner {
-            position: relative;
-            z-index: 1;
-            background: rgba(15, 6, 33, 0.92);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: calc(1.5rem - 2px);
+        .neon-card-inner {
+            background: rgba(14, 7, 32, 0.92);
+            backdrop-filter: blur(14px);
+            border-radius: calc(1.25rem - 2px);
             height: 100%;
             width: 100%;
         }
 
-        @keyframes rotateNeonTube {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        /* Textos con brillo de neón */
+        .text-neon-pink {
+            color: #ff4da6;
+            text-shadow: 0 0 8px rgba(255, 0, 127, 0.8), 0 0 20px rgba(255, 0, 127, 0.5);
         }
 
-        @keyframes rotateNeonTubeReverse {
-            0% { transform: rotate(360deg); }
-            100% { transform: rotate(0deg); }
+        .text-neon-cyan {
+            color: #5ceeff;
+            text-shadow: 0 0 8px rgba(0, 243, 255, 0.8), 0 0 20px rgba(0, 243, 255, 0.5);
         }
 
-        /* Botón Reglamento estilo Tubo de Neón Brillante */
-        .btn-reglamento-neon {
+        .text-neon-gold {
+            color: #fff066;
+            text-shadow: 0 0 8px rgba(255, 230, 0, 0.8), 0 0 18px rgba(255, 165, 0, 0.5);
+        }
+
+        /* Botón Reglamento Oficial estilo Tubo Neón */
+        .btn-reglamento {
             position: relative;
-            background: rgba(13, 5, 29, 0.85);
-            border: 1.5px solid #00f3ff;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.65rem;
+            padding: 0.85rem 1.8rem;
+            border-radius: 999px;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            letter-spacing: 0.08em;
             color: #ffffff;
-            box-shadow: 
-                0 0 10px rgba(0, 243, 255, 0.5),
-                inset 0 0 10px rgba(0, 243, 255, 0.25);
-            animation: pulseReglamentoTube 3.5s ease-in-out infinite alternate;
-            transition: all 0.3s ease;
-        }
-
-        .btn-reglamento-neon:hover {
-            background: rgba(0, 243, 255, 0.15);
-            border-color: #ffffff;
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 
-                0 0 18px #00f3ff,
-                0 0 32px #ff007f,
-                inset 0 0 14px rgba(0, 243, 255, 0.45);
-        }
-
-        @keyframes pulseReglamentoTube {
-            0% {
-                border-color: #00f3ff;
-                box-shadow: 0 0 10px rgba(0, 243, 255, 0.55), inset 0 0 8px rgba(0, 243, 255, 0.2);
-            }
-            50% {
-                border-color: #ff007f;
-                box-shadow: 0 0 14px rgba(255, 0, 127, 0.65), inset 0 0 10px rgba(255, 0, 127, 0.25);
-            }
-            100% {
-                border-color: #ff7b00;
-                box-shadow: 0 0 12px rgba(255, 123, 0, 0.6), inset 0 0 8px rgba(255, 123, 0, 0.2);
-            }
-        }
-
-        /* Inputs Estilizados */
-        .vice-input {
-            background: rgba(9, 3, 20, 0.88);
-            border: 1px solid rgba(157, 0, 255, 0.55);
-            color: #fff;
+            background: linear-gradient(90deg, rgba(255, 0, 127, 0.25), rgba(0, 243, 255, 0.25));
+            border: 2px solid #00f3ff;
+            box-shadow: 0 0 14px rgba(0, 243, 255, 0.65), inset 0 0 12px rgba(255, 0, 127, 0.45);
             transition: all 0.25s ease;
+            text-decoration: none;
+            animation: reglamentoPulse 3s infinite alternate;
         }
+
+        .btn-reglamento:hover {
+            transform: translateY(-2px) scale(1.03);
+            background: linear-gradient(90deg, rgba(255, 0, 127, 0.45), rgba(0, 243, 255, 0.45));
+            border-color: #ff007f;
+            box-shadow: 0 0 24px rgba(255, 0, 127, 0.9), 0 0 40px rgba(0, 243, 255, 0.6);
+        }
+
+        @keyframes reglamentoPulse {
+            0% { border-color: #00f3ff; box-shadow: 0 0 12px rgba(0, 243, 255, 0.6); }
+            100% { border-color: #ff007f; box-shadow: 0 0 18px rgba(255, 0, 127, 0.75); }
+        }
+
+        /* Inputs estilizados */
+        .vice-input {
+            background: rgba(8, 4, 20, 0.85);
+            border: 1.5px solid rgba(0, 243, 255, 0.35);
+            color: #ffffff;
+            border-radius: 0.75rem;
+            padding: 0.72rem 1rem;
+            width: 100%;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
         .vice-input:focus {
             outline: none;
-            border-color: #00f3ff;
-            box-shadow: 0 0 14px rgba(0, 243, 255, 0.45);
+            border-color: #ff007f;
+            box-shadow: 0 0 14px rgba(255, 0, 127, 0.45);
         }
 
-        /* Botón Neón Principal */
-        .btn-vice-primary {
-            background: linear-gradient(90deg, #ff007f 0%, #9d00ff 50%, #00f3ff 100%);
-            background-size: 200% auto;
-            color: #fff;
-            text-shadow: 0 1px 3px rgba(0,0,0,0.6);
-            box-shadow: 0 0 18px rgba(255, 0, 127, 0.55);
-            transition: all 0.35s ease;
-        }
-        .btn-vice-primary:hover {
-            background-position: right center;
-            box-shadow: 0 0 26px rgba(0, 243, 255, 0.75);
-            transform: translateY(-2px);
+        .vice-input option {
+            background-color: #110826;
+            color: #ffffff;
         }
 
-        /* Scanlines sutiles estilo monitor CRT 90s */
-        .crt-scanlines {
-            position: fixed;
-            inset: 0;
-            background: linear-gradient(
-                rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.16) 50%
-            );
-            background-size: 100% 4px;
-            z-index: 50;
-            pointer-events: none;
-            opacity: 0.42;
+        /* Badges de Categoría */
+        .badge-iniciante {
+            background: rgba(0, 255, 157, 0.14);
+            color: #00ff9d;
+            border: 1px solid rgba(0, 255, 157, 0.55);
+            box-shadow: 0 0 10px rgba(0, 255, 157, 0.25);
         }
 
-        /* Custom Scrollbar */
+        .badge-intermedio {
+            background: rgba(181, 55, 242, 0.18);
+            color: #e09eff;
+            border: 1px solid rgba(181, 55, 242, 0.65);
+            box-shadow: 0 0 10px rgba(181, 55, 242, 0.3);
+        }
+
+        .badge-avanzado {
+            background: rgba(255, 0, 127, 0.18);
+            color: #ff66b2;
+            border: 1px solid rgba(255, 0, 127, 0.65);
+            box-shadow: 0 0 10px rgba(255, 0, 127, 0.35);
+        }
+
+        /* Scrollbar personalizada */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
         ::-webkit-scrollbar-track {
-            background: #090314;
+            background: #070312;
         }
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, #ff007f, #00f3ff);
@@ -402,105 +335,71 @@
         }
     </style>
 </head>
-<body class="min-h-screen font-sans antialiased selection:bg-vice-pink selection:text-white pb-16">
+<body class="antialiased selection:bg-pink-500 selection:text-white">
 
-    <!-- Efecto CRT retro y Grilla 3D de fondo -->
-    <div class="crt-scanlines"></div>
-    <div class="synthwave-grid-container">
-        <div class="synthwave-grid"></div>
-    </div>
-
-    <!-- Tubos Finos de Neón Verticales Decorativos en los Laterales -->
-    <div class="hidden xl:block fixed top-16 left-6 h-[75vh] neon-tube-vertical pointer-events-none z-[-1] opacity-75"></div>
-    <div class="hidden xl:block fixed top-24 left-9 h-[60vh] neon-tube-vertical pointer-events-none z-[-1] opacity-50" style="animation-delay: -2.5s;"></div>
-    <div class="hidden xl:block fixed top-16 right-6 h-[75vh] neon-tube-vertical pointer-events-none z-[-1] opacity-75" style="animation-delay: -4s;"></div>
-    <div class="hidden xl:block fixed top-24 right-9 h-[60vh] neon-tube-vertical pointer-events-none z-[-1] opacity-50" style="animation-delay: -1.5s;"></div>
-
-    <!-- Siluetas de Palmeras Decorativas Laterales (SVG) -->
-    <div class="fixed bottom-0 left-0 w-44 md:w-72 pointer-events-none z-[-1] opacity-75 palm-sway-left">
-        <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M25 300 C35 220, 55 150, 85 95 L95 98 C68 155, 50 225, 42 300 Z" fill="#0d031c"/>
-            <path d="M88 96 C50 65, 15 80, 0 105 C25 90, 55 85, 88 96 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
-            <path d="M90 95 C55 45, 15 45, -5 65 C25 55, 58 65, 90 95 Z" fill="#0d031c" stroke="#00f3ff" stroke-width="1.5"/>
-            <path d="M92 94 C85 40, 55 15, 30 20 C55 30, 75 55, 92 94 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
-            <path d="M93 95 C120 45, 160 40, 185 60 C155 52, 125 65, 93 95 Z" fill="#0d031c" stroke="#00f3ff" stroke-width="1.5"/>
-            <path d="M92 97 C135 75, 170 90, 190 120 C162 100, 130 92, 92 97 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
-        </svg>
-    </div>
-
-    <div class="fixed bottom-0 right-0 w-44 md:w-72 pointer-events-none z-[-1] opacity-75 palm-sway-right scale-x-[-1]">
-        <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M25 300 C35 220, 55 150, 85 95 L95 98 C68 155, 50 225, 42 300 Z" fill="#0d031c"/>
-            <path d="M88 96 C50 65, 15 80, 0 105 C25 90, 55 85, 88 96 Z" fill="#0d031c" stroke="#00f3ff" stroke-width="1.5"/>
-            <path d="M90 95 C55 45, 15 45, -5 65 C25 55, 58 65, 90 95 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
-            <path d="M92 94 C85 40, 55 15, 30 20 C55 30, 75 55, 92 94 Z" fill="#0d031c" stroke="#00f3ff" stroke-width="1.5"/>
-            <path d="M93 95 C120 45, 160 40, 185 60 C155 52, 125 65, 93 95 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
-            <path d="M92 97 C135 75, 170 90, 190 120 C162 100, 130 92, 92 97 Z" fill="#0d031c" stroke="#00f3ff" stroke-width="1.5"/>
-        </svg>
-    </div>
-
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
-
-    <!-- Modal de Confirmación Personalizado -->
-    <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-        <div class="vice-card rounded-2xl max-w-md w-full p-6 border-2 border-vice-pink shadow-[0_0_30px_rgba(255,0,127,0.45)]">
-            <div class="flex items-center gap-3 mb-3">
-                <div class="w-10 h-10 rounded-full bg-vice-pink/20 border border-vice-pink flex items-center justify-center text-vice-pink">
-                    <i class="fa-solid fa-triangle-exclamation text-lg"></i>
-                </div>
-                <h3 id="confirm-title" class="font-retro text-lg font-bold text-white tracking-wider">CONFIRMAR ACCIÓN</h3>
-            </div>
-            <p id="confirm-message" class="text-gray-300 text-sm mb-6 leading-relaxed">¿Estás seguro de que deseas continuar?</p>
-            <div class="flex justify-end gap-3">
-                <button id="confirm-cancel" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 font-semibold text-sm transition cursor-pointer">
-                    Cancelar
-                </button>
-                <button id="confirm-ok" class="px-5 py-2 rounded-xl bg-vice-pink hover:bg-pink-600 text-white font-bold text-sm shadow-[0_0_15px_rgba(255,0,127,0.6)] transition cursor-pointer">
-                    Sí, eliminar
-                </button>
-            </div>
+    <!-- =========================================================
+         ESCENARIO RETRO MIAMI 90s DE FONDO
+    ========================================================= -->
+    <div class="retro-bg" aria-hidden="true">
+        <div class="outrun-sun"></div>
+        <div class="synth-grid-wrapper">
+            <div class="synth-grid"></div>
         </div>
     </div>
 
-    <!-- HEADER / HERO SECTION CON LOGO CUSTOM EJJ 4 -->
-    <header class="relative pt-6 pb-6 px-4 max-w-7xl mx-auto text-center">
-        <!-- Tubo Fino de Neón Superior -->
-        <div class="max-w-3xl mx-auto neon-tube-line mb-5 opacity-85"></div>
+    <!-- Palmera SVG Izquierda -->
+    <svg class="palm-left hidden sm:block" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M55 300 C60 220, 75 150, 95 95" stroke="#ff007f" stroke-width="8" stroke-linecap="round"/>
+        <path d="M95 95 C65 70, 30 75, 10 100" stroke="#00f3ff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C75 50, 45 35, 20 45" stroke="#ff007f" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C115 50, 145 40, 175 55" stroke="#00f3ff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C130 75, 165 85, 185 115" stroke="#ff007f" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C95 45, 95 25, 105 10" stroke="#b537f2" stroke-width="4" stroke-linecap="round"/>
+    </svg>
 
-        <!-- Badge Superior Oficial -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-vice-card/90 border border-vice-cyan/50 shadow-[0_0_15px_rgba(0,243,255,0.3)] mb-4">
-            <span class="w-2.5 h-2.5 rounded-full bg-vice-pink animate-ping"></span>
-            <span class="font-retro text-xs md:text-sm tracking-[0.2em] text-vice-cyan font-bold uppercase">
-                PRE-INSCRIPCIÓN OFICIAL • VERANO 2027
-            </span>
-        </div>
+    <!-- Palmera SVG Derecha -->
+    <svg class="palm-right hidden sm:block" viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M55 300 C60 220, 75 150, 95 95" stroke="#00f3ff" stroke-width="8" stroke-linecap="round"/>
+        <path d="M95 95 C65 70, 30 75, 10 100" stroke="#ff007f" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C75 50, 45 35, 20 45" stroke="#00f3ff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C115 50, 145 40, 175 55" stroke="#ff007f" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C130 75, 165 85, 185 115" stroke="#00f3ff" stroke-width="4" stroke-linecap="round"/>
+        <path d="M95 95 C95 45, 95 25, 105 10" stroke="#ffe600" stroke-width="4" stroke-linecap="round"/>
+    </svg>
 
-        <!-- Contenedor Central del Logotipo Custom SVG + Sol Outrun -->
-        <div class="relative flex flex-col items-center justify-center my-1">
-            <!-- Sol Retro de Fondo -->
-            <div class="outrun-sun absolute -z-10 opacity-85 scale-90 md:scale-110"></div>
+    <!-- Tubo de neón superior -->
+    <div class="neon-tube-horizontal sticky top-0 z-40"></div>
 
-            <!-- Logotipo Custom SVG de EJJ 4 / INVITATIONAL / NOGI SUBMISSION ONLY -->
-            <div class="w-full max-w-2xl mx-auto drop-shadow-[0_0_25px_rgba(0,0,0,0.9)]">
-                <svg viewBox="0 0 640 270" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+    <!-- =========================================================
+         CONTENEDOR PRINCIPAL
+    ========================================================= -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 relative z-10">
+
+        <!-- HEADER Y LOGOTIPO CUSTOM SVG: EJJ 4 / Invitational / NOGI SUBMISSION ONLY -->
+        <header class="text-center mb-10">
+            <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-950/70 border border-cyan-400/50 text-xs sm:text-sm font-orbitron tracking-widest text-cyan-300 mb-4 shadow-lg">
+                <span class="w-2 h-2 rounded-full bg-pink-500 animate-ping"></span>
+                <span>EDICIÓN VERANO 2027 • GRAPPLING PROFESIONAL & AMATEUR</span>
+            </div>
+
+            <!-- Logotipo Oficial SVG -->
+            <div class="flex justify-center my-2">
+                <svg class="w-full max-w-[540px] h-auto drop-shadow-[0_0_24px_rgba(255,0,127,0.55)]" viewBox="0 0 640 270" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <!-- Gradiente Cromo / Retro 90s -->
                         <linearGradient id="chromeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="#ffffff"/>
-                            <stop offset="45%" stop-color="#00f3ff"/>
-                            <stop offset="52%" stop-color="#14052e"/>
-                            <stop offset="75%" stop-color="#ff007f"/>
-                            <stop offset="100%" stop-color="#ffe600"/>
+                            <stop offset="45%" stop-color="#a5f3fc"/>
+                            <stop offset="52%" stop-color="#1e1b4b"/>
+                            <stop offset="75%" stop-color="#f472b6"/>
+                            <stop offset="100%" stop-color="#fde047"/>
                         </linearGradient>
-                        <!-- Gradiente Neón Rosa-Naranja -->
-                        <linearGradient id="neonPinkOrange" x1="0%" y1="0%" x2="100%" y2="100%">
-                            <stop offset="0%" stop-color="#ff007f"/>
-                            <stop offset="100%" stop-color="#ff7b00"/>
+                        <linearGradient id="triNeon" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#00f3ff"/>
+                            <stop offset="50%" stop-color="#b537f2"/>
+                            <stop offset="100%" stop-color="#ff007f"/>
                         </linearGradient>
-                        <!-- Filtro Resplandor Neón -->
-                        <filter id="neonGlow" x="-25%" y="-25%" width="150%" height="150%">
-                            <feGaussianBlur stdDeviation="4" result="blur" />
+                        <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="4" result="blur"/>
                             <feMerge>
                                 <feMergeNode in="blur"/>
                                 <feMergeNode in="SourceGraphic"/>
@@ -508,217 +407,182 @@
                         </filter>
                     </defs>
 
-                    <!-- Triángulo Invertido Retrowave -->
-                    <polygon points="320,248 115,24 525,24" fill="rgba(13, 4, 28, 0.74)" stroke="#00f3ff" stroke-width="4" filter="url(#neonGlow)"/>
-                    <polygon points="320,234 134,32 506,32" fill="none" stroke="#ff007f" stroke-width="2"/>
+                    <!-- Triángulo invertido retro Miami -->
+                    <polygon points="150,24 490,24 320,235" fill="rgba(17, 8, 38, 0.72)" stroke="url(#triNeon)" stroke-width="4" filter="url(#neonGlow)"/>
+                    <polygon points="168,34 472,34 320,218" fill="none" stroke="#00f3ff" stroke-width="1.2" stroke-dasharray="8 6" opacity="0.7"/>
 
-                    <!-- Silueta de Grappling / Llave No-Gi estilizada dentro del triángulo -->
-                    <g opacity="0.35" stroke="#00f3ff" stroke-width="2.5" fill="none" stroke-linecap="round">
-                        <circle cx="295" cy="62" r="10"/>
-                        <circle cx="342" cy="66" r="10"/>
-                        <path d="M285 76 Q315 69 335 82 L355 106"/>
-                        <path d="M350 79 Q320 86 300 102 L280 112"/>
-                    </g>
+                    <!-- Líneas horizontales neón laterales -->
+                    <line x1="35" y1="95" x2="155" y2="95" stroke="#00f3ff" stroke-width="3" filter="url(#neonGlow)"/>
+                    <line x1="60" y1="107" x2="162" y2="107" stroke="#ff007f" stroke-width="2"/>
+                    <line x1="485" y1="95" x2="605" y2="95" stroke="#00f3ff" stroke-width="3" filter="url(#neonGlow)"/>
+                    <line x1="478" y1="107" x2="580" y2="107" stroke="#ff007f" stroke-width="2"/>
 
-                    <!-- Palmeras integradas en el emblema -->
-                    <g transform="translate(142, 62) scale(0.46)" fill="#090314" stroke="#00f3ff" stroke-width="3">
-                        <path d="M40 160 Q50 100 75 50 L85 55 Q62 105 55 160 Z"/>
-                        <path d="M78 52 C40 30, 10 45, 0 65 C25 52, 50 48, 78 52 Z"/>
-                        <path d="M80 50 C50 10, 15 10, 0 28 C25 20, 52 28, 80 50 Z"/>
-                        <path d="M82 52 C115 15, 150 15, 165 35 C140 25, 112 32, 82 52 Z"/>
-                    </g>
-                    <g transform="translate(498, 62) scale(-0.46, 0.46)" fill="#090314" stroke="#ff007f" stroke-width="3">
-                        <path d="M40 160 Q50 100 75 50 L85 55 Q62 105 55 160 Z"/>
-                        <path d="M78 52 C40 30, 10 45, 0 65 C25 52, 50 48, 78 52 Z"/>
-                        <path d="M80 50 C50 10, 15 10, 0 28 C25 20, 52 28, 80 50 Z"/>
-                        <path d="M82 52 C115 15, 150 15, 165 35 C140 25, 112 32, 82 52 Z"/>
-                    </g>
-
-                    <!-- Texto Principal EJJ -->
-                    <text x="275" y="138" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="94" letter-spacing="8" fill="url(#chromeGrad)" stroke="#ffffff" stroke-width="2" filter="url(#neonGlow)">
-                        EJJ
+                    <!-- Título Principal: EJJ 4 -->
+                    <text x="320" y="114" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="82" letter-spacing="6" fill="url(#chromeGrad)" stroke="#ff007f" stroke-width="2.5" filter="url(#neonGlow)">
+                        EJJ 4
                     </text>
 
-                    <!-- Número 4 Estilo GTA / Neón Intenso -->
-                    <text x="455" y="146" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="110" fill="url(#neonPinkOrange)" stroke="#ffe600" stroke-width="3" filter="url(#neonGlow)">
-                        4
-                    </text>
-
-                    <!-- Debajo de EJJ 4: Invitational (solo inicial mayúscula) en tipografía script/neón vibrante -->
-                    <text x="320" y="188" text-anchor="middle" font-family="'Yellowtail', cursive" font-size="50" letter-spacing="1.5" fill="#ff9ce3" stroke="#ff007f" stroke-width="0.9" filter="url(#neonGlow)">
+                    <!-- Subtítulo Script: Invitational (Solo primera letra Mayúscula) -->
+                    <text x="320" y="168" text-anchor="middle" font-family="'Yellowtail', cursive" font-size="58" fill="#ff4da6" stroke="#ffffff" stroke-width="0.9" filter="url(#neonGlow)">
                         Invitational
                     </text>
 
-                    <!-- Debajo de Invitational: NOGI SUBMISSION ONLY -->
-                    <text x="320" y="218" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="18" letter-spacing="4.5" fill="#00f3ff" stroke="#ffffff" stroke-width="0.4" filter="url(#neonGlow)">
+                    <!-- Pill Inferior: NOGI SUBMISSION ONLY -->
+                    <rect x="145" y="192" width="350" height="34" rx="17" fill="#090418" stroke="#00f3ff" stroke-width="2.2" filter="url(#neonGlow)"/>
+                    <text x="320" y="214" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="700" font-size="16" letter-spacing="3.5" fill="#5ceeff">
                         NOGI SUBMISSION ONLY
                     </text>
                 </svg>
             </div>
 
-            <!-- Información de Reglas EBI + Botón Reglamento Oficial -->
-            <div class="mt-2 flex flex-col items-center">
-                <h1 class="font-retro text-xl sm:text-3xl md:text-4xl font-black tracking-wider uppercase neon-text-cyan">
-                    REGLAS EBI • OVERTIME POR PUNTOS • VERANO 2027
-                </h1>
-
-                <div class="mt-4 flex flex-wrap items-center justify-center gap-4">
-                    <!-- Badge Verano 2027 -->
-                    <span class="px-4 py-2 rounded-xl bg-vice-pink/20 border border-vice-pink font-retro text-xs sm:text-sm font-bold text-white shadow-[0_0_15px_rgba(255,0,127,0.45)]">
-                        <i class="fa-solid fa-sun text-vice-yellow mr-1.5"></i> VERANO 2027
+            <!-- Reglas EBI + Overtime por Puntos + Botón al Reglamento Oficial -->
+            <div class="mt-3 flex flex-col items-center gap-4">
+                <div class="flex flex-wrap items-center justify-center gap-2 sm:gap-4 text-sm sm:text-base font-orbitron font-bold tracking-wider">
+                    <span class="px-3.5 py-1.5 rounded-lg bg-pink-500/15 border border-pink-500/50 text-neon-pink">
+                        <i class="fa-solid fa-fire-flame-curved mr-1.5"></i>REGLAS EBI
                     </span>
-
-                    <!-- Botón Destacado Tubo de Neón al Reglamento Oficial -->
-                    <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="btn-reglamento-neon px-5 py-2.5 rounded-xl font-retro text-xs sm:text-sm font-black tracking-wider uppercase inline-flex items-center gap-2.5 cursor-pointer">
-                        <i class="fa-solid fa-file-lines text-vice-cyan text-base"></i>
-                        <span>VER REGLAMENTO OFICIAL</span>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-vice-pink"></i>
-                    </a>
+                    <span class="text-cyan-400 hidden sm:inline">•</span>
+                    <span class="px-3.5 py-1.5 rounded-lg bg-cyan-500/15 border border-cyan-400/50 text-neon-cyan">
+                        <i class="fa-solid fa-stopwatch mr-1.5"></i>OVERTIME POR PUNTOS
+                    </span>
+                    <span class="text-pink-400 hidden sm:inline">•</span>
+                    <span class="px-3.5 py-1.5 rounded-lg bg-yellow-400/15 border border-yellow-400/50 text-neon-gold">
+                        <i class="fa-solid fa-sun mr-1.5"></i>VERANO 2027
+                    </span>
                 </div>
+
+                <!-- Botón Link al Reglamento Oficial -->
+                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" target="_blank" rel="noopener noreferrer" class="btn-reglamento text-xs sm:text-sm">
+                    <i class="fa-solid fa-book-open text-cyan-300 text-base"></i>
+                    <span>VER REGLAMENTO OFICIAL (EBI / OT PUNTOS)</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square text-pink-400 text-xs"></i>
+                </a>
             </div>
-        </div>
+        </header>
 
-        <!-- Tubo Fino de Neón Inferior del Header -->
-        <div class="max-w-4xl mx-auto neon-tube-line mt-6 opacity-85" style="animation-delay: -3.5s;"></div>
-    </header>
-
-    <!-- CONTENIDO PRINCIPAL -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
-
-        <!-- BARRA DE ESTADÍSTICAS EN VIVO POR CATEGORÍA (TOTAL, INICIANTE, INTERMEDIO, AVANZADO) -->
-        <section aria-label="Estadísticas en vivo">
-            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
-                <!-- Total Atletas -->
-                <div class="vice-card rounded-2xl p-4 sm:p-5 border-vice-cyan/60 relative overflow-hidden group">
-                    <div class="absolute -right-3 -top-3 text-vice-cyan/10 text-6xl group-hover:scale-110 transition-transform">
+        <!-- =========================================================
+             TARJETAS DE ESTADÍSTICAS EN VIVO
+        ========================================================= -->
+        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8">
+            <div class="neon-border-runner">
+                <div class="neon-card-inner p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-orbitron uppercase tracking-wider text-cyan-300">Total Inscriptos</p>
+                        <p id="stat-total" class="text-3xl sm:text-4xl font-orbitron font-black text-white mt-1">0</p>
+                    </div>
+                    <div class="w-11 h-11 rounded-xl bg-cyan-500/20 border border-cyan-400/40 flex items-center justify-center text-cyan-300 text-xl">
                         <i class="fa-solid fa-users"></i>
                     </div>
-                    <p class="text-xs font-retro uppercase tracking-wider text-vice-cyan">Total Atletas</p>
-                    <p id="stat-total" class="text-3xl sm:text-4xl font-retro font-black text-white mt-1 neon-text-cyan">0</p>
                 </div>
+            </div>
 
-                <!-- Categoría Iniciante (Verde / Cyan Neón) -->
-                <div class="vice-card rounded-2xl p-4 sm:p-5 border-emerald-400/60 relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-emerald-300">Iniciante</p>
-                        <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_#00ff9d]"></span>
+            <div class="neon-border-runner">
+                <div class="neon-card-inner p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-orbitron uppercase tracking-wider text-emerald-300">Iniciante</p>
+                        <p id="stat-iniciante" class="text-3xl sm:text-4xl font-orbitron font-black text-emerald-400 mt-1">0</p>
                     </div>
-                    <p id="stat-INICIANTE" class="text-3xl sm:text-4xl font-retro font-black text-emerald-400 mt-1 drop-shadow-[0_0_8px_rgba(0,255,157,0.5)]">0</p>
+                    <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 text-xl">
+                        <i class="fa-solid fa-seedling"></i>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Categoría Intermedio (Magenta / Violeta Eléctrico) -->
-                <div class="vice-card rounded-2xl p-4 sm:p-5 border-vice-pink/60 relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-pink-300">Intermedio</p>
-                        <span class="w-3 h-3 rounded-full bg-vice-pink shadow-[0_0_10px_#ff007f]"></span>
+            <div class="neon-border-runner">
+                <div class="neon-card-inner p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-orbitron uppercase tracking-wider text-purple-300">Intermedio</p>
+                        <p id="stat-intermedio" class="text-3xl sm:text-4xl font-orbitron font-black text-purple-300 mt-1">0</p>
                     </div>
-                    <p id="stat-INTERMEDIO" class="text-3xl sm:text-4xl font-retro font-black text-vice-pink mt-1 drop-shadow-[0_0_8px_rgba(255,0,127,0.55)]">0</p>
+                    <div class="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 text-xl">
+                        <i class="fa-solid fa-bolt"></i>
+                    </div>
                 </div>
+            </div>
 
-                <!-- Categoría Avanzado (Naranja / Oro Fuego) -->
-                <div class="vice-card rounded-2xl p-4 sm:p-5 border-orange-500/60 relative overflow-hidden">
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-amber-300">Avanzado</p>
-                        <span class="w-3 h-3 rounded-full bg-vice-orange shadow-[0_0_10px_#ff7b00]"></span>
+            <div class="neon-border-runner">
+                <div class="neon-card-inner p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs font-orbitron uppercase tracking-wider text-pink-300">Avanzado</p>
+                        <p id="stat-avanzado" class="text-3xl sm:text-4xl font-orbitron font-black text-pink-400 mt-1">0</p>
                     </div>
-                    <p id="stat-AVANZADO" class="text-3xl sm:text-4xl font-retro font-black text-vice-orange mt-1 drop-shadow-[0_0_8px_rgba(255,123,0,0.6)]">0</p>
+                    <div class="w-11 h-11 rounded-xl bg-pink-500/20 border border-pink-400/40 flex items-center justify-center text-pink-400 text-xl">
+                        <i class="fa-solid fa-crown"></i>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- GRID PRINCIPAL: FORMULARIO DE REGISTRO + LISTA DE PARTICIPANTES CON TUBOS DE NEÓN CIRCULANTES -->
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <!-- =========================================================
+             GRID PRINCIPAL: FORMULARIO + LISTA DE PRE-INSCRIPTOS
+        ========================================================= -->
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 items-start">
 
-            <!-- COLUMNA IZQUIERDA: FORMULARIO DE PRE-INSCRIPCIÓN (5 cols) -->
-            <section class="lg:col-span-5 neon-tube-frame">
-                <div class="neon-tube-inner p-6 sm:p-7">
-                    <div class="flex items-center justify-between mb-5">
+            <!-- COLUMNA IZQUIERDA: FORMULARIO DE PRE-INSCRIPCIÓN -->
+            <div class="lg:col-span-5 neon-border-runner">
+                <div class="neon-card-inner p-5 sm:p-7">
+                    <div class="flex items-center justify-between gap-2 pb-4 mb-5 border-b border-cyan-500/25">
                         <div>
-                            <h2 class="font-retro text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-                                <i class="fa-solid fa-id-card-clip text-vice-pink"></i>
-                                <span>PRE-INSCRIPCIÓN</span>
+                            <h2 class="font-orbitron font-bold text-lg sm:text-xl text-neon-cyan tracking-wide">
+                                <i class="fa-solid fa-user-plus mr-2 text-pink-500"></i>PRE-INSCRIPCIÓN
                             </h2>
-                            <p class="text-xs text-gray-300 mt-1">Registra atletas para EJJ 4 Invitational 2027</p>
+                            <p class="text-xs sm:text-sm text-slate-300 mt-0.5">Registra atletas en tiempo real para EJJ 4</p>
                         </div>
-                        <span class="px-2.5 py-1 rounded-md bg-vice-cyan/15 border border-vice-cyan/40 text-vice-cyan font-retro text-[10px] font-bold">
-                            GUARDADO AUTO
-                        </span>
+
+                        <!-- Indicador Estado Nube + Botón Config Externa -->
+                        <div class="flex items-center gap-1.5">
+                            <span id="cloud-status-badge" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-orbitron font-bold bg-cyan-950/80 border border-cyan-400/40 text-cyan-300">
+                                <span id="cloud-status-dot" class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                                <span id="cloud-status-text">NUBE</span>
+                            </span>
+                            <button id="btn-open-cloud-cfg" type="button" title="Configurar conexión externa de base de datos (GitHub Pages)" class="p-1.5 rounded-lg bg-slate-900/90 border border-slate-700 hover:border-pink-500 text-slate-300 hover:text-pink-400 transition">
+                                <i class="fa-solid fa-gear text-xs"></i>
+                            </button>
+                        </div>
                     </div>
 
                     <form id="registration-form" class="space-y-4">
-                        <!-- Nombre Completo -->
+                        <!-- Nombre y Apellido -->
                         <div>
-                            <label for="athlete-name" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                Nombre y Apellido *
+                            <label for="athlete-name" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                Nombre y Apellido <span class="text-pink-500">*</span>
                             </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-pink">
-                                    <i class="fa-solid fa-user-ninja"></i>
-                                </span>
-                                <input type="text" id="athlete-name" required placeholder="Ej: Tommy Vercetti"
-                                    class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
-                            </div>
+                            <input type="text" id="athlete-name" required placeholder="Ej: Marcos Almeida" class="vice-input">
                         </div>
 
                         <!-- Academia / Equipo -->
                         <div>
-                            <label for="athlete-team" class="block text-xs font-retro uppercase tracking-wider text-gray-300 mb-1.5">
-                                Academia / Equipo <span class="text-gray-500">(Opcional)</span>
+                            <label for="athlete-team" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                Academia / Equipo
                             </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-purple">
-                                    <i class="fa-solid fa-shield-halved"></i>
-                                </span>
-                                <input type="text" id="athlete-team" placeholder="Ej: Etakki Jiu-Jitsu"
-                                    class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
-                            </div>
+                            <input type="text" id="athlete-team" placeholder="Ej: Etakki Jiu-Jitsu (o Independiente)" class="vice-input">
                         </div>
 
-                        <!-- Categoría de Nivel (Iniciante - Intermedio - Avanzado) -->
+                        <!-- Nivel / Categoría: INICIANTE - INTERMEDIO - AVANZADO -->
                         <div>
-                            <label for="athlete-level" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                Categoría de Nivel *
+                            <label for="athlete-level" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                Categoría de Nivel <span class="text-pink-500">*</span>
                             </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-yellow">
-                                    <i class="fa-solid fa-bolt"></i>
-                                </span>
-                                <select id="athlete-level" required
-                                    class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-bold appearance-none cursor-pointer">
-                                    <option value="INICIANTE">🟢 INICIANTE</option>
-                                    <option value="INTERMEDIO">🟣 INTERMEDIO</option>
-                                    <option value="AVANZADO">🔥 AVANZADO</option>
-                                </select>
-                                <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
-                                    <i class="fa-solid fa-chevron-down text-xs"></i>
-                                </span>
-                            </div>
+                            <select id="athlete-level" required class="vice-input">
+                                <option value="INICIANTE">INICIANTE (Hasta 1.5 años / Faixa Blanca)</option>
+                                <option value="INTERMEDIO" selected>INTERMEDIO (1.5 a 4 años / Azul - Violeta)</option>
+                                <option value="AVANZADO">AVANZADO (+4 años / Marrón - Negra / Pro)</option>
+                            </select>
                         </div>
 
-                        <!-- Fila Doble: Peso en KG + Categoría Oficial Auto-calculada -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Peso Exacto + Categoría de Peso -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label for="athlete-weight-kg" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                    Peso Exacto (kg) *
+                                <label for="athlete-weight-kg" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                    Peso Actual (kg) <span class="text-pink-500">*</span>
                                 </label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-orange">
-                                        <i class="fa-solid fa-weight-scale"></i>
-                                    </span>
-                                    <input type="number" id="athlete-weight-kg" step="0.1" min="35" max="180" required placeholder="Ej: 76.5"
-                                        class="vice-input w-full pl-10 pr-3 py-3 rounded-xl text-sm font-bold placeholder-gray-500">
-                                </div>
+                                <input type="number" id="athlete-weight-kg" step="0.1" min="40" max="180" required placeholder="Ej: 75.5" class="vice-input">
                             </div>
-
                             <div>
-                                <label for="athlete-weight-cat" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                    Categoría Peso *
+                                <label for="athlete-weight-cat" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                    División de Peso
                                 </label>
-                                <select id="athlete-weight-cat" required
-                                    class="vice-input w-full px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer">
+                                <select id="athlete-weight-cat" class="vice-input">
                                     <option value="Gallo (-57.5 kg)">Gallo (-57.5 kg)</option>
                                     <option value="Pluma (-64 kg)">Pluma (-64 kg)</option>
                                     <option value="Pena (-70 kg)">Pena (-70 kg)</option>
@@ -728,307 +592,804 @@
                                     <option value="Pesado (-94.3 kg)">Pesado (-94.3 kg)</option>
                                     <option value="Super-Pesado (-100.5 kg)">Super-Pesado (-100.5 kg)</option>
                                     <option value="Pesadísimo (+100.5 kg)">Pesadísimo (+100.5 kg)</option>
+                                    <option value="Absoluto (Open Weight)">Absoluto (Open Weight)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Fila Doble: Edad + División Etaria -->
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Edad + División por Edad -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label for="athlete-age" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                    Edad (años) *
+                                <label for="athlete-age" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                    Edad (años) <span class="text-pink-500">*</span>
                                 </label>
-                                <div class="relative">
-                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-pink">
-                                        <i class="fa-solid fa-cake-candles"></i>
-                                    </span>
-                                    <input type="number" id="athlete-age" min="14" max="75" required placeholder="Ej: 26"
-                                        class="vice-input w-full pl-10 pr-3 py-3 rounded-xl text-sm font-bold placeholder-gray-500">
-                                </div>
+                                <input type="number" id="athlete-age" min="14" max="75" required placeholder="Ej: 27" class="vice-input">
                             </div>
-
                             <div>
-                                <label for="athlete-division" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                    División *
+                                <label for="athlete-division" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                    Categoría Edad
                                 </label>
-                                <select id="athlete-division" required
-                                    class="vice-input w-full px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer">
-                                    <option value="Juvenil (14-17)">Juvenil (14-17)</option>
+                                <select id="athlete-division" class="vice-input">
+                                    <option value="Juvenil (16-17)">Juvenil (16-17)</option>
                                     <option value="Adulto (18-29)" selected>Adulto (18-29)</option>
                                     <option value="Master 1 (30-35)">Master 1 (30-35)</option>
                                     <option value="Master 2 (36-40)">Master 2 (36-40)</option>
-                                    <option value="Master 3+ (+41)">Master 3+ (+41)</option>
+                                    <option value="Master 3+ (41+)">Master 3+ (41+)</option>
                                 </select>
                             </div>
                         </div>
 
-                        <!-- Notas Opcionales -->
+                        <!-- Notas / Superfight opcional -->
                         <div>
-                            <label for="athlete-notes" class="block text-xs font-retro uppercase tracking-wider text-gray-300 mb-1.5">
-                                Notas / Observaciones <span class="text-gray-500">(Opcional)</span>
+                            <label for="athlete-notes" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                Notas / Disponibilidad Superfight (Opcional)
                             </label>
-                            <input type="text" id="athlete-notes" placeholder="Ej: Disponible para superfight / absoluto"
-                                class="vice-input w-full px-3.5 py-2.5 rounded-xl text-sm placeholder-gray-500">
+                            <input type="text" id="athlete-notes" placeholder="Ej: Disponible también para Absoluto" class="vice-input">
                         </div>
 
-                        <!-- Botón de Envío -->
-                        <div class="pt-2">
-                            <button type="submit"
-                                class="btn-vice-primary w-full py-3.5 px-6 rounded-xl font-retro font-bold text-sm sm:text-base tracking-wider uppercase flex items-center justify-center gap-2.5 cursor-pointer">
-                                <i class="fa-solid fa-plus-circle text-lg"></i>
-                                <span>REGISTRAR EN EJJ 4</span>
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Botón rápido para cargar atletas de demostración -->
-                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
-                        <span>¿Quieres probar la tabla?</span>
-                        <button type="button" id="btn-seed-demo" class="text-vice-cyan hover:text-vice-pink underline font-semibold transition cursor-pointer">
-                            + Cargar 4 atletas de ejemplo
+                        <!-- Botón Registrar -->
+                        <button type="submit" id="btn-submit-athlete" class="w-full py-3.5 px-6 rounded-xl font-orbitron font-bold text-sm sm:text-base tracking-wider text-white bg-gradient-to-r from-pink-600 via-purple-600 to-cyan-500 hover:from-pink-500 hover:to-cyan-400 shadow-[0_0_20px_rgba(255,0,127,0.5)] hover:shadow-[0_0_28px_rgba(0,243,255,0.75)] transition-all transform active:scale-[0.99] flex items-center justify-center gap-2 cursor-pointer">
+                            <i class="fa-solid fa-bolt text-yellow-300"></i>
+                            <span>CONFIRMAR PRE-INSCRIPCIÓN</span>
                         </button>
-                    </div>
+                    </form>
                 </div>
-            </section>
+            </div>
 
-            <!-- COLUMNA DERECHA: LISTADO EN VIVO, FILTROS Y EXPORTACIÓN (7 cols) -->
-            <section class="lg:col-span-7 neon-tube-frame neon-tube-frame-reverse flex flex-col">
-                <div class="neon-tube-inner p-6 sm:p-7 flex flex-col">
-                    <!-- Cabecera de la Lista y Botones de Exportación -->
-                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+            <!-- COLUMNA DERECHA: LISTADO EN VIVO Y HERRAMIENTAS -->
+            <div class="lg:col-span-7 neon-border-runner">
+                <div class="neon-card-inner p-5 sm:p-7">
+                    <!-- Cabecera Lista + Acciones -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 mb-4 border-b border-pink-500/25">
                         <div>
-                            <h2 class="font-retro text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-                                <i class="fa-solid fa-list-ol text-vice-cyan"></i>
-                                <span>ATLETAS PRE-INSCRIPTOS</span>
+                            <h2 class="font-orbitron font-bold text-lg sm:text-xl text-neon-pink tracking-wide">
+                                <i class="fa-solid fa-list-check mr-2 text-cyan-400"></i>ATLETAS PRE-INSCRIPTOS
                             </h2>
-                            <p class="text-xs text-gray-300 mt-1">Roster oficial actualizado en tiempo real</p>
-                        </div>
-
-                        <!-- Controles de Exportación -->
-                        <div class="flex flex-wrap items-center gap-2">
-                            <button type="button" id="btn-export-csv"
-                                class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/50 text-emerald-300 font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-                                title="Descargar planilla compatible con Excel">
-                                <i class="fa-solid fa-file-csv"></i>
-                                <span>CSV</span>
-                            </button>
-                            <button type="button" id="btn-export-json"
-                                class="px-3.5 py-2 rounded-xl bg-vice-cyan/20 hover:bg-vice-cyan/35 border border-vice-cyan/50 text-vice-cyan font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-                                title="Descargar respaldo de datos JSON">
-                                <i class="fa-solid fa-file-code"></i>
-                                <span>JSON</span>
-                            </button>
-                            <button type="button" id="btn-clear-all"
-                                class="px-3.5 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/35 border border-red-500/50 text-red-300 font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-                                title="Vaciar toda la lista">
-                                <i class="fa-solid fa-trash-can"></i>
-                                <span class="hidden sm:inline">Limpiar</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Barra de Búsqueda y Filtros por Categoría -->
-                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-5">
-                        <div class="sm:col-span-7 relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
-                                <i class="fa-solid fa-magnifying-glass"></i>
-                            </span>
-                            <input type="text" id="search-input" placeholder="Buscar por nombre, equipo o peso..."
-                                class="vice-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm placeholder-gray-500">
-                        </div>
-
-                        <div class="sm:col-span-5 relative">
-                            <select id="filter-level"
-                                class="vice-input w-full px-3.5 py-2.5 rounded-xl text-sm font-semibold appearance-none cursor-pointer">
-                                <option value="ALL">⚡ Todas las Categorías</option>
-                                <option value="INICIANTE">🟢 Solo INICIANTE</option>
-                                <option value="INTERMEDIO">🟣 Solo INTERMEDIO</option>
-                                <option value="AVANZADO">🔥 Solo AVANZADO</option>
-                            </select>
-                            <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
-                                <i class="fa-solid fa-filter text-xs"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Contenedor de la Tabla Responsiva -->
-                    <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/35">
-                        <table class="w-full text-left border-collapse">
-                            <thead>
-                                <tr class="border-b border-vice-purple/40 bg-vice-purple/20 font-retro text-[11px] uppercase tracking-wider text-vice-cyan">
-                                    <th class="py-3.5 px-4">#</th>
-                                    <th class="py-3.5 px-4">Atleta</th>
-                                    <th class="py-3.5 px-4">Categoría</th>
-                                    <th class="py-3.5 px-4">Peso / Cat.</th>
-                                    <th class="py-3.5 px-4">Edad / Div.</th>
-                                    <th class="py-3.5 px-4 text-right">Acción</th>
-                                </tr>
-                            </thead>
-                            <tbody id="athletes-tbody" class="divide-y divide-white/10 text-sm">
-                                <!-- Filas renderizadas dinámicamente por JS -->
-                            </tbody>
-                        </table>
-
-                        <!-- Estado Vacío -->
-                        <div id="empty-state" class="hidden py-12 px-4 text-center">
-                            <div class="w-16 h-16 mx-auto rounded-full bg-vice-purple/20 border border-vice-purple/50 flex items-center justify-center text-vice-pink text-2xl mb-3 shadow-[0_0_20px_rgba(157,0,255,0.3)]">
-                                <i class="fa-solid fa-person-falling-burst"></i>
-                            </div>
-                            <h3 class="font-retro text-base font-bold text-white">TATAMI VACÍO</h3>
-                            <p class="text-xs text-gray-400 max-w-xs mx-auto mt-1">
-                                No hay atletas registrados con los filtros actuales. ¡Inscribe al primer competidor en el formulario!
+                            <p id="sync-footer-label" class="text-xs text-emerald-300 font-semibold mt-0.5">
+                                <i class="fa-solid fa-cloud mr-1"></i>Sincronización multi-dispositivo activa
                             </p>
                         </div>
+
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button id="btn-seed-demo" type="button" class="px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-purple-900/60 hover:bg-purple-800/80 border border-purple-400/50 text-purple-200 transition cursor-pointer" title="Cargar 4 atletas de ejemplo">
+                                <i class="fa-solid fa-wand-magic-sparkles mr-1 text-yellow-300"></i>Demo
+                            </button>
+                            <button id="btn-export-csv" type="button" class="px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-cyan-950/80 hover:bg-cyan-900 border border-cyan-400/50 text-cyan-300 transition cursor-pointer">
+                                <i class="fa-solid fa-file-csv mr-1"></i>CSV
+                            </button>
+                            <button id="btn-export-json" type="button" class="px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-pink-950/80 hover:bg-pink-900 border border-pink-400/50 text-pink-300 transition cursor-pointer">
+                                <i class="fa-solid fa-file-code mr-1"></i>JSON
+                            </button>
+                            <button id="btn-clear-all" type="button" class="px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-red-950/70 hover:bg-red-900/90 border border-red-500/50 text-red-300 transition cursor-pointer" title="Vaciar lista">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </button>
+                        </div>
                     </div>
 
-                    <!-- Pie de Tabla Informativo -->
-                    <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-gray-400 gap-2">
-                        <span id="showing-count">Mostrando 0 atletas</span>
-                        <span class="flex items-center gap-1.5">
-                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                            Sincronizado en almacenamiento local
-                        </span>
+                    <!-- Buscador y Filtros por Categoría -->
+                    <div class="flex flex-col sm:flex-row gap-3 mb-5">
+                        <div class="relative flex-1">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-cyan-400 text-sm"></i>
+                            <input type="text" id="search-input" placeholder="Buscar por nombre, academia o peso..." class="vice-input pl-10 py-2 text-sm">
+                        </div>
+
+                        <div class="flex flex-wrap gap-1.5" id="filter-buttons">
+                            <button type="button" data-filter="ALL" class="filter-btn active px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-cyan-500/25 border border-cyan-400 text-white transition cursor-pointer">
+                                TODOS
+                            </button>
+                            <button type="button" data-filter="INICIANTE" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 transition cursor-pointer">
+                                INICIANTE
+                            </button>
+                            <button type="button" data-filter="INTERMEDIO" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-purple-500/40 text-purple-300 hover:bg-purple-500/20 transition cursor-pointer">
+                                INTERMEDIO
+                            </button>
+                            <button type="button" data-filter="AVANZADO" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-pink-500/40 text-pink-300 hover:bg-pink-500/20 transition cursor-pointer">
+                                AVANZADO
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tabla Responsiva de Inscriptos -->
+                    <div class="overflow-x-auto rounded-xl border border-cyan-500/20 bg-slate-950/60">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-cyan-500/30 bg-purple-950/50 text-[11px] font-orbitron uppercase tracking-wider text-cyan-300">
+                                    <th class="py-3 px-3.5">Atleta / Academia</th>
+                                    <th class="py-3 px-3">Categoría</th>
+                                    <th class="py-3 px-3">Peso</th>
+                                    <th class="py-3 px-3">Edad</th>
+                                    <th class="py-3 px-3 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="athletes-tbody" class="divide-y divide-slate-800/80 text-sm">
+                                <!-- Renderizado dinámico -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Estado Vacío -->
+                    <div id="empty-state" class="hidden text-center py-10 px-4">
+                        <div class="w-14 h-14 mx-auto rounded-full bg-pink-500/15 border border-pink-500/40 flex items-center justify-center text-pink-400 text-2xl mb-3">
+                            <i class="fa-solid fa-user-ninja"></i>
+                        </div>
+                        <p class="font-orbitron font-bold text-base text-slate-200">Aún no hay atletas en esta vista</p>
+                        <p class="text-sm text-slate-400 mt-1">Completa el formulario de pre-inscripción o presiona <strong>Demo</strong> para probar.</p>
                     </div>
                 </div>
-            </section>
+            </div>
         </div>
-    </main>
 
-    <!-- FOOTER RETRO -->
-    <footer class="mt-16 text-center px-4 text-xs text-gray-400">
-        <div class="max-w-2xl mx-auto">
-            <div class="neon-tube-line mb-6 opacity-60"></div>
-            <p class="font-retro tracking-widest text-vice-cyan">
+        <!-- FOOTER -->
+        <footer class="mt-12 text-center text-xs sm:text-sm text-slate-400 pb-6">
+            <div class="neon-tube-horizontal mb-6 opacity-70"></div>
+            <p class="font-orbitron tracking-wider text-cyan-300/90">
                 EJJ 4 Invitational • NOGI SUBMISSION ONLY • VERANO 2027
             </p>
-            <p class="mt-1 text-gray-500">
-                Reglas EBI • Overtime por Puntos • Todos los derechos reservados
+            <p class="mt-1 text-slate-400">
+                Reglas Oficiales EBI con Overtime por Puntos •
+                <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html" target="_blank" rel="noopener noreferrer" class="text-pink-400 hover:text-cyan-300 underline transition">
+                    Consultar Reglamento Completo
+                </a>
             </p>
+        </footer>
+    </div>
+
+    <!-- =========================================================
+         MODAL PERSONALIZADO DE CONFIRMACIÓN (SIN alert/confirm)
+    ========================================================= -->
+    <div id="confirm-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="neon-border-runner max-w-md w-full">
+            <div class="neon-card-inner p-6 text-center">
+                <div class="w-12 h-12 mx-auto rounded-full bg-pink-500/20 border border-pink-500/50 flex items-center justify-center text-pink-400 text-xl mb-3">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+                <h3 id="confirm-title" class="font-orbitron font-bold text-lg text-white">Confirmar acción</h3>
+                <p id="confirm-message" class="text-sm text-slate-300 mt-2">¿Estás seguro de continuar?</p>
+                <div class="flex items-center justify-center gap-3 mt-6">
+                    <button id="btn-confirm-cancel" type="button" class="px-4 py-2 rounded-lg font-orbitron text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 transition cursor-pointer">
+                        CANCELAR
+                    </button>
+                    <button id="btn-confirm-ok" type="button" class="px-4 py-2 rounded-lg font-orbitron text-xs font-bold bg-gradient-to-r from-pink-600 to-red-600 hover:from-pink-500 hover:to-red-500 text-white shadow-lg transition cursor-pointer">
+                        CONFIRMAR
+                    </button>
+                </div>
+            </div>
         </div>
-    </footer>
+    </div>
 
-    <!-- LÓGICA DE LA APLICACIÓN EN JAVASCRIPT -->
-    <script>
-        (() => {
-            // Nueva clave de almacenamiento persistente para evitar conflictos con datos anteriores
-            const STORAGE_KEY = 'ejj4_registrations';
+    <!-- =========================================================
+         MODAL DE CONFIGURACIÓN FIREBASE EXTERNA (GITHUB PAGES)
+    ========================================================= -->
+    <div id="cloud-cfg-modal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+        <div class="neon-border-runner max-w-lg w-full">
+            <div class="neon-card-inner p-6">
+                <div class="flex items-center justify-between pb-3 mb-4 border-b border-cyan-500/30">
+                    <h3 class="font-orbitron font-bold text-base sm:text-lg text-neon-cyan">
+                        <i class="fa-solid fa-cloud-arrow-up mr-2 text-pink-400"></i>Sincronización Nube (Opcional)
+                    </h3>
+                    <button id="btn-close-cloud-cfg" type="button" class="text-slate-400 hover:text-white cursor-pointer">
+                        <i class="fa-solid fa-xmark text-lg"></i>
+                    </button>
+                </div>
+                <p class="text-xs sm:text-sm text-slate-300 mb-3">
+                    En este entorno la nube ya se conecta automáticamente. Si descargas este HTML para subirlo a <strong>GitHub Pages</strong>, puedes pegar aquí el objeto JSON <code class="text-pink-400">firebaseConfig</code> de tu proyecto Firebase para mantener la sincronización entre dispositivos:
+                </p>
+                <textarea id="cloud-cfg-textarea" rows="5" placeholder='{"apiKey": "...", "authDomain": "...", "projectId": "..."}' class="vice-input font-mono text-xs"></textarea>
+                <div class="flex flex-wrap items-center justify-end gap-2 mt-4">
+                    <button id="btn-clear-cloud-cfg" type="button" class="px-3.5 py-2 rounded-lg font-orbitron text-xs font-bold bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-600 cursor-pointer">
+                        USAR POR DEFECTO
+                    </button>
+                    <button id="btn-save-cloud-cfg" type="button" class="px-4 py-2 rounded-lg font-orbitron text-xs font-bold bg-gradient-to-r from-cyan-500 to-pink-600 text-white shadow-lg cursor-pointer">
+                        GUARDAR Y CONECTAR
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            // Estado principal de la aplicación
-            let athletes = [];
+    <!-- =========================================================
+         NOTIFICACIONES TOAST
+    ========================================================= -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none px-4 sm:px-0"></div>
 
-            // Referencias al DOM
-            const form = document.getElementById('registration-form');
-            const nameInput = document.getElementById('athlete-name');
-            const teamInput = document.getElementById('athlete-team');
-            const levelInput = document.getElementById('athlete-level');
-            const weightKgInput = document.getElementById('athlete-weight-kg');
-            const weightCatInput = document.getElementById('athlete-weight-cat');
-            const ageInput = document.getElementById('athlete-age');
-            const divisionInput = document.getElementById('athlete-division');
-            const notesInput = document.getElementById('athlete-notes');
+    <!-- =========================================================
+         SCRIPT PRINCIPAL: UI + SINCRONIZACIÓN EN TIEMPO REAL
+    ========================================================= -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, doc, addDoc, deleteDoc, onSnapshot, writeBatch } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-            const tbody = document.getElementById('athletes-tbody');
-            const emptyState = document.getElementById('empty-state');
-            const showingCount = document.getElementById('showing-count');
+        // Variables de estado global
+        const appId = typeof window.__app_id !== 'undefined' ? window.__app_id : 'ejj4-invitational-2027';
+        const LOCAL_BACKUP_KEY = 'ejj4_invitational_athletes_backup_v1';
+        const CUSTOM_CLOUD_CFG_KEY = 'ejj4_custom_firebase_cfg_v1';
 
-            const searchInput = document.getElementById('search-input');
-            const filterLevelSelect = document.getElementById('filter-level');
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let isCloudActive = false;
+        let unsubscribeSnapshot = null;
 
-            const btnExportCsv = document.getElementById('btn-export-csv');
-            const btnExportJson = document.getElementById('btn-export-json');
-            const btnClearAll = document.getElementById('btn-clear-all');
-            const btnSeedDemo = document.getElementById('btn-seed-demo');
+        let athletes = [];
+        let activeFilter = 'ALL';
+        let searchQuery = '';
+        let confirmCallback = null;
 
-            // Referencias Modal Confirmación
-            const confirmModal = document.getElementById('confirm-modal');
-            const confirmTitle = document.getElementById('confirm-title');
-            const confirmMessage = document.getElementById('confirm-message');
-            const confirmCancel = document.getElementById('confirm-cancel');
-            const confirmOk = document.getElementById('confirm-ok');
-            let pendingConfirmCallback = null;
+        // Referencias DOM
+        const form = document.getElementById('registration-form');
+        const nameInput = document.getElementById('athlete-name');
+        const teamInput = document.getElementById('athlete-team');
+        const levelInput = document.getElementById('athlete-level');
+        const weightKgInput = document.getElementById('athlete-weight-kg');
+        const weightCatInput = document.getElementById('athlete-weight-cat');
+        const ageInput = document.getElementById('athlete-age');
+        const divisionInput = document.getElementById('athlete-division');
+        const notesInput = document.getElementById('athlete-notes');
 
-            // Estilos visuales neón por Categoría (INICIANTE - INTERMEDIO - AVANZADO)
-            const LEVEL_STYLES = {
-                'INICIANTE': {
-                    badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-400 shadow-[0_0_12px_rgba(0,255,157,0.45)]',
-                    dot: 'bg-emerald-400 shadow-[0_0_6px_#00ff9d]'
-                },
-                'INTERMEDIO': {
-                    badge: 'bg-vice-pink/20 text-pink-200 border-vice-pink shadow-[0_0_12px_rgba(255,0,127,0.5)]',
-                    dot: 'bg-vice-pink shadow-[0_0_6px_#ff007f]'
-                },
-                'AVANZADO': {
-                    badge: 'bg-orange-500/25 text-amber-200 border-vice-orange shadow-[0_0_14px_rgba(255,123,0,0.55)]',
-                    dot: 'bg-vice-orange shadow-[0_0_6px_#ff7b00]'
-                }
+        const tbody = document.getElementById('athletes-tbody');
+        const emptyState = document.getElementById('empty-state');
+        const searchInput = document.getElementById('search-input');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        const btnSeedDemo = document.getElementById('btn-seed-demo');
+        const btnExportCsv = document.getElementById('btn-export-csv');
+        const btnExportJson = document.getElementById('btn-export-json');
+        const btnClearAll = document.getElementById('btn-clear-all');
+
+        // Modal Confirmación
+        const confirmModal = document.getElementById('confirm-modal');
+        const confirmTitle = document.getElementById('confirm-title');
+        const confirmMessage = document.getElementById('confirm-message');
+        const btnConfirmCancel = document.getElementById('btn-confirm-cancel');
+        const btnConfirmOk = document.getElementById('btn-confirm-ok');
+
+        // Modal Config Nube
+        const cloudCfgModal = document.getElementById('cloud-cfg-modal');
+        const btnOpenCloudCfg = document.getElementById('btn-open-cloud-cfg');
+        const btnCloseCloudCfg = document.getElementById('btn-close-cloud-cfg');
+        const btnSaveCloudCfg = document.getElementById('btn-save-cloud-cfg');
+        const btnClearCloudCfg = document.getElementById('btn-clear-cloud-cfg');
+        const cloudCfgTextarea = document.getElementById('cloud-cfg-textarea');
+
+        // ==========================================
+        // 1. UTILIDADES UI (TOASTS Y MODALES)
+        // ==========================================
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            const styles = {
+                success: 'border-emerald-400 bg-slate-950/95 text-emerald-200 shadow-[0_0_18px_rgba(0,255,157,0.35)]',
+                error: 'border-pink-500 bg-slate-950/95 text-pink-200 shadow-[0_0_18px_rgba(255,0,127,0.45)]',
+                info: 'border-cyan-400 bg-slate-950/95 text-cyan-200 shadow-[0_0_18px_rgba(0,243,255,0.35)]'
+            };
+            const icons = {
+                success: 'fa-circle-check text-emerald-400',
+                error: 'fa-circle-exclamation text-pink-400',
+                info: 'fa-circle-info text-cyan-400'
             };
 
-            // ==========================================
-            // 1. UTILIDADES DE NOTIFICACIÓN Y MODAL
-            // ==========================================
-            function showToast(message, type = 'success') {
-                const container = document.getElementById('toast-container');
-                const toast = document.createElement('div');
-                
-                const colors = {
-                    success: 'border-vice-cyan bg-vice-card/95 text-white shadow-[0_0_20px_rgba(0,243,255,0.4)]',
-                    pink: 'border-vice-pink bg-vice-card/95 text-white shadow-[0_0_20px_rgba(255,0,127,0.4)]',
-                    error: 'border-red-500 bg-vice-card/95 text-red-200 shadow-[0_0_20px_rgba(239,68,68,0.4)]'
-                };
+            toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${styles[type] || styles.info} text-sm font-semibold transition-all duration-300 transform translate-y-2 opacity-0`;
+            toast.innerHTML = `<i class="fa-solid ${icons[type] || icons.info} text-base"></i><span>${escapeHtml(message)}</span>`;
+            container.appendChild(toast);
 
-                const icons = {
-                    success: '<i class="fa-solid fa-circle-check text-vice-cyan text-lg"></i>',
-                    pink: '<i class="fa-solid fa-bolt text-vice-pink text-lg"></i>',
-                    error: '<i class="fa-solid fa-circle-exclamation text-red-400 text-lg"></i>'
-                };
+            requestAnimationFrame(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            });
 
-                toast.className = `pointer-events-auto flex items-center gap-3 px-4 py-3 rounded-xl border ${colors[type] || colors.success} backdrop-blur-md transition-all duration-300 transform translate-x-full opacity-0`;
-                toast.innerHTML = `
-                    ${icons[type] || icons.success}
-                    <span class="text-xs sm:text-sm font-semibold">${message}</span>
-                `;
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3400);
+        }
 
-                container.appendChild(toast);
+        function openConfirmModal(title, message, onConfirm) {
+            if (!confirmModal) return;
+            confirmTitle.textContent = title;
+            confirmMessage.textContent = message;
+            confirmCallback = onConfirm;
+            confirmModal.classList.remove('hidden');
+            confirmModal.classList.add('flex');
+        }
 
-                requestAnimationFrame(() => {
-                    toast.classList.remove('translate-x-full', 'opacity-0');
-                });
+        function closeConfirmModal() {
+            if (!confirmModal) return;
+            confirmModal.classList.add('hidden');
+            confirmModal.classList.remove('flex');
+            confirmCallback = null;
+        }
 
-                setTimeout(() => {
-                    toast.classList.add('translate-x-full', 'opacity-0');
-                    setTimeout(() => toast.remove(), 300);
-                }, 3200);
-            }
-
-            function openConfirmModal(title, message, onConfirm) {
-                confirmTitle.textContent = title;
-                confirmMessage.textContent = message;
-                pendingConfirmCallback = onConfirm;
-                confirmModal.classList.remove('hidden');
-                confirmModal.classList.add('flex');
-            }
-
-            function closeConfirmModal() {
-                confirmModal.classList.add('hidden');
-                confirmModal.classList.remove('flex');
-                pendingConfirmCallback = null;
-            }
-
-            confirmCancel.addEventListener('click', closeConfirmModal);
-            confirmOk.addEventListener('click', () => {
-                if (typeof pendingConfirmCallback === 'function') {
-                    pendingConfirmCallback();
+        if (btnConfirmCancel) btnConfirmCancel.addEventListener('click', closeConfirmModal);
+        if (btnConfirmOk) {
+            btnConfirmOk.addEventListener('click', async () => {
+                if (typeof confirmCallback === 'function') {
+                    await confirmCallback();
                 }
                 closeConfirmModal();
             });
+        }
 
-            // ==========================================
-            // 2. AUTO-SELECCIÓN INTELIGENTE DE PESO Y DIVISIÓN
-            // ==========================================
+        // Eventos Modal Config Nube
+        if (btnOpenCloudCfg && cloudCfgModal) {
+            btnOpenCloudCfg.addEventListener('click', () => {
+                const saved = localStorage.getItem(CUSTOM_CLOUD_CFG_KEY) || '';
+                if (cloudCfgTextarea) cloudCfgTextarea.value = saved;
+                cloudCfgModal.classList.remove('hidden');
+                cloudCfgModal.classList.add('flex');
+            });
+        }
+
+        if (btnCloseCloudCfg && cloudCfgModal) {
+            btnCloseCloudCfg.addEventListener('click', () => {
+                cloudCfgModal.classList.add('hidden');
+                cloudCfgModal.classList.remove('flex');
+            });
+        }
+
+        if (btnSaveCloudCfg) {
+            btnSaveCloudCfg.addEventListener('click', () => {
+                const raw = (cloudCfgTextarea?.value || '').trim();
+                try {
+                    const parsed = JSON.parse(raw);
+                    if (!parsed.projectId || !parsed.apiKey) {
+                        showToast('El JSON debe incluir al menos apiKey y projectId.', 'error');
+                        return;
+                    }
+                    localStorage.setItem(CUSTOM_CLOUD_CFG_KEY, JSON.stringify(parsed));
+                    cloudCfgModal.classList.add('hidden');
+                    cloudCfgModal.classList.remove('flex');
+                    showToast('Configuración guardada. Reconectando...', 'info');
+                    initCloudSync();
+                } catch (e) {
+                    showToast('Formato JSON inválido. Revisa las llaves y comillas.', 'error');
+                }
+            });
+        }
+
+        if (btnClearCloudCfg) {
+            btnClearCloudCfg.addEventListener('click', () => {
+                localStorage.removeItem(CUSTOM_CLOUD_CFG_KEY);
+                if (cloudCfgTextarea) cloudCfgTextarea.value = '';
+                cloudCfgModal.classList.add('hidden');
+                cloudCfgModal.classList.remove('flex');
+                showToast('Restaurada configuración automática.', 'info');
+                initCloudSync();
+            });
+        }
+
+        function setConnectionUI(mode, labelText) {
+            const badge = document.getElementById('cloud-status-badge');
+            const dot = document.getElementById('cloud-status-dot');
+            const text = document.getElementById('cloud-status-text');
+            const footerLabel = document.getElementById('sync-footer-label');
+
+            isCloudActive = (mode === 'cloud');
+
+            if (text) text.textContent = mode === 'cloud' ? 'NUBE EN VIVO' : (mode === 'connecting' ? 'CONECTANDO' : 'LOCAL');
+
+            if (badge && dot) {
+                if (mode === 'cloud') {
+                    badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-orbitron font-bold bg-emerald-950/90 border border-emerald-400/60 text-emerald-300 shadow-[0_0_12px_rgba(0,255,157,0.3)]';
+                    dot.className = 'w-2 h-2 rounded-full bg-emerald-400 animate-ping';
+                } else if (mode === 'connecting') {
+                    badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-orbitron font-bold bg-cyan-950/90 border border-cyan-400/50 text-cyan-300';
+                    dot.className = 'w-2 h-2 rounded-full bg-cyan-400 animate-pulse';
+                } else {
+                    badge.className = 'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-orbitron font-bold bg-amber-950/90 border border-amber-400/50 text-amber-300';
+                    dot.className = 'w-2 h-2 rounded-full bg-amber-400';
+                }
+            }
+
+            if (footerLabel && labelText) {
+                footerLabel.innerHTML = `<i class="fa-solid ${mode === 'cloud' ? 'fa-cloud text-emerald-400' : 'fa-database text-amber-400'} mr-1.5"></i>${escapeHtml(labelText)}`;
+            }
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // ==========================================
+        // 2. RENDERIZADO DE TABLA Y FILTROS
+        // ==========================================
+        function getLevelBadgeClass(level) {
+            const norm = (level || '').toUpperCase();
+            if (norm === 'INICIANTE') return 'badge-iniciante';
+            if (norm === 'AVANZADO') return 'badge-avanzado';
+            return 'badge-intermedio';
+        }
+
+        function renderTable() {
+            updateStats();
+            if (!tbody) return;
+
+            const filtered = athletes.filter((a) => {
+                const matchesFilter = activeFilter === 'ALL' || (a.level || '').toUpperCase() === activeFilter;
+                const q = searchQuery.trim().toLowerCase();
+                if (!q) return matchesFilter;
+
+                const haystack = `${a.name || ''} ${a.team || ''} ${a.level || ''} ${a.weightCategory || ''} ${a.weightKg || ''} ${a.division || ''}`.toLowerCase();
+                return matchesFilter && haystack.includes(q);
+            });
+
+            tbody.innerHTML = '';
+
+            if (filtered.length === 0) {
+                if (emptyState) emptyState.classList.remove('hidden');
+                return;
+            }
+
+            if (emptyState) emptyState.classList.add('hidden');
+
+            filtered.forEach((athlete) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-purple-900/25 transition-colors group';
+
+                const badgeCls = getLevelBadgeClass(athlete.level);
+                const notesHtml = athlete.notes
+                    ? `<div class="text-[11px] text-pink-300/90 mt-0.5"><i class="fa-solid fa-note-sticky mr-1"></i>${escapeHtml(athlete.notes)}</div>`
+                    : '';
+
+                tr.innerHTML = `
+                    <td class="py-3 px-3.5">
+                        <div class="font-bold text-white text-base leading-tight">${escapeHtml(athlete.name)}</div>
+                        <div class="text-xs text-cyan-300/85 font-semibold">${escapeHtml(athlete.team || 'Independiente')}</div>
+                        ${notesHtml}
+                    </td>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                        <span class="inline-block px-2.5 py-1 rounded-md text-[11px] font-orbitron font-bold tracking-wider ${badgeCls}">
+                            ${escapeHtml(athlete.level)}
+                        </span>
+                    </td>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                        <div class="font-orbitron font-bold text-white text-xs sm:text-sm">${escapeHtml(athlete.weightKg)} kg</div>
+                        <div class="text-[11px] text-slate-400">${escapeHtml(athlete.weightCategory)}</div>
+                    </td>
+                    <td class="py-3 px-3 whitespace-nowrap">
+                        <div class="font-bold text-slate-200">${escapeHtml(athlete.age)} años</div>
+                        <div class="text-[11px] text-purple-300">${escapeHtml(athlete.division)}</div>
+                    </td>
+                    <td class="py-3 px-3 text-right whitespace-nowrap">
+                        <button type="button" data-delete-id="${escapeHtml(athlete.id)}" class="btn-delete-athlete p-2 rounded-lg bg-red-950/50 hover:bg-red-600/80 border border-red-500/40 text-red-300 hover:text-white transition cursor-pointer" title="Eliminar pre-inscripción">
+                            <i class="fa-solid fa-trash-can text-xs"></i>
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(tr);
+            });
+
+            // Enlazar botones de eliminar
+            document.querySelectorAll('.btn-delete-athlete').forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const id = btn.getAttribute('data-delete-id');
+                    const target = athletes.find(item => item.id === id);
+                    openConfirmModal(
+                        'Eliminar Pre-inscripción',
+                        `¿Deseas quitar a "${target ? target.name : 'este atleta'}" de la lista oficial?`,
+                        async () => {
+                            await deleteAthleteById(id);
+                        }
+                    );
+                });
+            });
+        }
+
+        // ==========================================
+        // 3. ALTAS Y BAJAS (NUBE + RESPALDO LOCAL)
+        // ==========================================
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const name = nameInput.value.trim();
+                const team = teamInput.value.trim() || 'Independiente';
+                const level = levelInput.value;
+                const weightKg = parseFloat(weightKgInput.value).toFixed(1);
+                const weightCategory = weightCatInput.value;
+                const age = parseInt(ageInput.value, 10);
+                const division = divisionInput.value;
+                const notes = notesInput.value.trim();
+
+                if (!name || isNaN(parseFloat(weightKg)) || isNaN(age)) {
+                    showToast('Por favor completa nombre, peso y edad válidos.', 'error');
+                    return;
+                }
+
+                const newAthlete = {
+                    name,
+                    team,
+                    level,
+                    weightKg,
+                    weightCategory,
+                    age,
+                    division,
+                    notes,
+                    registeredAt: new Date().toISOString()
+                };
+
+                try {
+                    if (isCloudActive && db && currentUser) {
+                        await addDoc(getPublicCollectionRef(), newAthlete);
+                        showToast(`${name} registrado y sincronizado en la nube.`, 'success');
+                    } else {
+                        const localEntry = { id: 'local-' + Date.now(), ...newAthlete };
+                        athletes = [localEntry, ...athletes];
+                        saveLocalBackup();
+                        renderTable();
+                        showToast(`${name} registrado en memoria local.`, 'success');
+                    }
+
+                    form.reset();
+                    levelInput.value = 'INTERMEDIO';
+                    divisionInput.value = 'Adulto (18-29)';
+                    weightCatInput.value = 'Ligero (-76 kg)';
+                    nameInput.focus();
+                } catch (err) {
+                    console.error('Error registrando atleta:', err);
+                    showToast('No se pudo guardar el registro. Intenta nuevamente.', 'error');
+                }
+            });
+        }
+
+        async function deleteAthleteById(id) {
+            try {
+                if (isCloudActive && db && currentUser && !id.startsWith('local-')) {
+                    const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'ejj4_inscriptos', id);
+                    await deleteDoc(docRef);
+                    showToast('Atleta eliminado de la nube.', 'info');
+                } else {
+                    athletes = athletes.filter(a => a.id !== id);
+                    saveLocalBackup();
+                    renderTable();
+                    showToast('Atleta eliminado localmente.', 'info');
+                }
+            } catch (err) {
+                console.error('Error eliminando atleta:', err);
+                showToast('Error al eliminar el atleta.', 'error');
+            }
+        }
+
+        // Vaciar toda la lista
+        if (btnClearAll) {
+            btnClearAll.addEventListener('click', () => {
+                if (athletes.length === 0) {
+                    showToast('La lista ya está vacía.', 'info');
+                    return;
+                }
+
+                openConfirmModal(
+                    'Vaciar Lista de Inscriptos',
+                    `Se eliminarán los ${athletes.length} atletas registrados. Esta acción no se puede deshacer.`,
+                    async () => {
+                        try {
+                            if (isCloudActive && db && currentUser) {
+                                const batch = writeBatch(db);
+                                athletes.forEach((a) => {
+                                    if (!a.id.startsWith('local-')) {
+                                        const docRef = doc(db, 'artifacts', appId, 'public', 'data', 'ejj4_inscriptos', a.id);
+                                        batch.delete(docRef);
+                                    }
+                                });
+                                await batch.commit();
+                            }
+                            athletes = [];
+                            saveLocalBackup();
+                            renderTable();
+                            showToast('Lista vaciada correctamente.', 'info');
+                        } catch (err) {
+                            console.error('Error vaciando lista:', err);
+                            showToast('Error al vaciar los registros.', 'error');
+                        }
+                    }
+                );
+            });
+        }
+
+        // Cargar 4 atletas de ejemplo
+        if (btnSeedDemo) {
+            btnSeedDemo.addEventListener('click', async () => {
+                const now = Date.now();
+                const demoAthletes = [
+                    {
+                        name: 'Tommy Vercetti',
+                        team: 'Etakki Jiu-Jitsu',
+                        level: 'AVANZADO',
+                        weightKg: '81.5',
+                        weightCategory: 'Medio (-82.3 kg)',
+                        age: 34,
+                        division: 'Master 1 (30-35)',
+                        notes: 'Superfight 82kg',
+                        registeredAt: new Date(now + 400).toISOString()
+                    },
+                    {
+                        name: 'Lucia Caminos',
+                        team: 'Miami Top Team',
+                        level: 'AVANZADO',
+                        weightKg: '63.2',
+                        weightCategory: 'Pluma (-64 kg)',
+                        age: 26,
+                        division: 'Adulto (18-29)',
+                        notes: '',
+                        registeredAt: new Date(now + 300).toISOString()
+                    },
+                    {
+                        name: 'Jason Duval',
+                        team: 'Leonida Grappling',
+                        level: 'INTERMEDIO',
+                        weightKg: '87.8',
+                        weightCategory: 'Medio-Pesado (-88.3 kg)',
+                        age: 28,
+                        division: 'Adulto (18-29)',
+                        notes: '',
+                        registeredAt: new Date(now + 200).toISOString()
+                    },
+                    {
+                        name: 'Lance Vance',
+                        team: 'Ocean Drive BJJ',
+                        level: 'INICIANTE',
+                        weightKg: '75.4',
+                        weightCategory: 'Ligero (-76 kg)',
+                        age: 23,
+                        division: 'Adulto (18-29)',
+                        notes: 'Primer torneo No-Gi',
+                        registeredAt: new Date(now + 100).toISOString()
+                    }
+                ];
+
+                try {
+                    if (isCloudActive && db && currentUser) {
+                        const batch = writeBatch(db);
+                        const colRef = getPublicCollectionRef();
+                        demoAthletes.forEach((item) => {
+                            const newDocRef = doc(colRef);
+                            batch.set(newDocRef, item);
+                        });
+                        await batch.commit();
+                        showToast('4 atletas de ejemplo cargados a la nube en vivo.', 'success');
+                    } else {
+                        const localDemos = demoAthletes.map((item, idx) => ({
+                            id: `local-demo-${idx}-${Date.now()}`,
+                            ...item
+                        }));
+                        athletes = [...localDemos, ...athletes];
+                        saveLocalBackup();
+                        renderTable();
+                        showToast('4 atletas de ejemplo cargados localmente.', 'success');
+                    }
+                } catch (err) {
+                    console.error('Error cargando ejemplos:', err);
+                    showToast('No se pudieron cargar los ejemplos.', 'error');
+                }
+            });
+        }
+
+        // ==========================================
+        // 4. BÚSQUEDA Y BOTONES DE FILTRO
+        // ==========================================
+        if (searchInput) {
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderTable();
+            });
+        }
+
+        filterButtons.forEach((btn) => {
+            btn.addEventListener('click', () => {
+                filterButtons.forEach(b => {
+                    b.classList.remove('active', 'bg-cyan-500/25', 'border-cyan-400', 'text-white');
+                });
+                btn.classList.add('active', 'bg-cyan-500/25', 'border-cyan-400', 'text-white');
+                activeFilter = btn.getAttribute('data-filter') || 'ALL';
+                renderTable();
+            });
+        });
+
+        // ==========================================
+        // 5. EXPORTACIÓN A CSV Y JSON
+        // ==========================================
+        function triggerDownload(content, filename, mimeType) {
+            const blob = new Blob([content], { type: mimeType });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        if (btnExportCsv) {
+            btnExportCsv.addEventListener('click', () => {
+                if (athletes.length === 0) {
+                    showToast('No hay atletas para exportar.', 'info');
+                    return;
+                }
+                const headers = ['Nombre', 'Academia', 'Categoria', 'Peso_kg', 'Division_Peso', 'Edad', 'Division_Edad', 'Notas', 'Fecha_Registro'];
+                const rows = athletes.map(a => [
+                    `"${(a.name || '').replace(/"/g, '""')}"`,
+                    `"${(a.team || '').replace(/"/g, '""')}"`,
+                    `"${(a.level || '').replace(/"/g, '""')}"`,
+                    `"${a.weightKg || ''}"`,
+                    `"${(a.weightCategory || '').replace(/"/g, '""')}"`,
+                    `"${a.age || ''}"`,
+                    `"${(a.division || '').replace(/"/g, '""')}"`,
+                    `"${(a.notes || '').replace(/"/g, '""')}"`,
+                    `"${a.registeredAt || ''}"`
+                ].join(','));
+
+                const csvContent = '\uFEFF' + [headers.join(','), ...rows].join('\n');
+                triggerDownload(csvContent, 'EJJ4_Invitational_PreInscriptos_2027.csv', 'text/csv;charset=utf-8;');
+                showToast('Archivo CSV descargado.', 'success');
+            });
+        }
+
+        if (btnExportJson) {
+            btnExportJson.addEventListener('click', () => {
+                if (athletes.length === 0) {
+                    showToast('No hay atletas para exportar.', 'info');
+                    return;
+                }
+                const jsonContent = JSON.stringify(athletes, null, 2);
+                triggerDownload(jsonContent, 'EJJ4_Invitational_PreInscriptos_2027.json', 'application/json');
+                showToast('Archivo JSON descargado.', 'success');
+            });
+        }
+
+        // ==========================================
+        // 6. INICIALIZACIÓN DE FIREBASE, STATS Y HELPERS
+        // ==========================================
+        function getPublicCollectionRef() {
+            return collection(db, 'artifacts', appId, 'public', 'data', 'ejj4_inscriptos');
+        }
+
+        function saveLocalBackup() {
+            try {
+                localStorage.setItem(LOCAL_BACKUP_KEY, JSON.stringify(athletes));
+            } catch (e) {
+                console.warn('No se pudo guardar respaldo local:', e);
+            }
+        }
+
+        function loadLocalBackup() {
+            try {
+                const raw = localStorage.getItem(LOCAL_BACKUP_KEY);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) {
+                        athletes = parsed;
+                    }
+                }
+            } catch (e) {
+                console.warn('Error leyendo respaldo local:', e);
+            }
+        }
+
+        function updateStats() {
+            const totalEl = document.getElementById('stat-total');
+            const incEl = document.getElementById('stat-iniciante');
+            const intEl = document.getElementById('stat-intermedio');
+            const avaEl = document.getElementById('stat-avanzado');
+
+            if (totalEl) totalEl.textContent = athletes.length;
+            if (incEl) incEl.textContent = athletes.filter(a => a.level === 'INICIANTE').length;
+            if (intEl) intEl.textContent = athletes.filter(a => a.level === 'INTERMEDIO').length;
+            if (avaEl) avaEl.textContent = athletes.filter(a => a.level === 'AVANZADO').length;
+        }
+
+        // Auto-sugerencia de categoría de peso y división según edad/peso
+        if (weightKgInput && weightCatInput) {
             weightKgInput.addEventListener('input', () => {
                 const kg = parseFloat(weightKgInput.value);
                 if (isNaN(kg)) return;
-
                 if (kg <= 57.5) weightCatInput.value = 'Gallo (-57.5 kg)';
                 else if (kg <= 64.0) weightCatInput.value = 'Pluma (-64 kg)';
                 else if (kg <= 70.0) weightCatInput.value = 'Pena (-70 kg)';
@@ -1039,356 +1400,92 @@
                 else if (kg <= 100.5) weightCatInput.value = 'Super-Pesado (-100.5 kg)';
                 else weightCatInput.value = 'Pesadísimo (+100.5 kg)';
             });
+        }
 
+        if (ageInput && divisionInput) {
             ageInput.addEventListener('input', () => {
                 const age = parseInt(ageInput.value, 10);
                 if (isNaN(age)) return;
-
-                if (age < 18) divisionInput.value = 'Juvenil (14-17)';
+                if (age < 18) divisionInput.value = 'Juvenil (16-17)';
                 else if (age <= 29) divisionInput.value = 'Adulto (18-29)';
                 else if (age <= 35) divisionInput.value = 'Master 1 (30-35)';
                 else if (age <= 40) divisionInput.value = 'Master 2 (36-40)';
-                else divisionInput.value = 'Master 3+ (+41)';
+                else divisionInput.value = 'Master 3+ (41+)';
             });
+        }
 
-            // ==========================================
-            // 3. PERSISTENCIA EN LOCALSTORAGE
-            // ==========================================
-            function loadAthletes() {
-                try {
-                    const saved = localStorage.getItem(STORAGE_KEY);
-                    if (saved) {
-                        athletes = JSON.parse(saved);
-                    }
-                } catch (err) {
-                    console.error('Error leyendo localStorage:', err);
-                    athletes = [];
+        async function initCloudSync() {
+            if (typeof unsubscribeSnapshot === 'function') {
+                unsubscribeSnapshot();
+                unsubscribeSnapshot = null;
+            }
+
+            let firebaseConfig = null;
+            try {
+                const manualCfg = localStorage.getItem(CUSTOM_CLOUD_CFG_KEY);
+                if (manualCfg) {
+                    firebaseConfig = JSON.parse(manualCfg);
+                } else if (typeof window.__firebase_config !== 'undefined' && window.__firebase_config) {
+                    firebaseConfig = typeof window.__firebase_config === 'string'
+                        ? JSON.parse(window.__firebase_config)
+                        : window.__firebase_config;
                 }
+            } catch (e) {
+                console.warn('Configuración Firebase inválida:', e);
             }
 
-            function saveAthletes() {
-                try {
-                    localStorage.setItem(STORAGE_KEY, JSON.stringify(athletes));
-                } catch (err) {
-                    console.error('Error guardando en localStorage:', err);
-                    showToast('No se pudo guardar en el navegador.', 'error');
-                }
+            if (!firebaseConfig || !firebaseConfig.projectId) {
+                setConnectionUI('local', 'MODO LOCAL (CONFIGURA NUBE)');
+                return;
             }
 
-            // ==========================================
-            // 4. ACTUALIZACIÓN DE CONTADORES Y RENDERIZADO
-            // ==========================================
-            function updateStats() {
-                document.getElementById('stat-total').textContent = athletes.length;
-                
-                const levels = ['INICIANTE', 'INTERMEDIO', 'AVANZADO'];
-                levels.forEach(lvl => {
-                    const count = athletes.filter(a => a.level === lvl).length;
-                    const el = document.getElementById(`stat-${lvl}`);
-                    if (el) el.textContent = count;
-                });
-            }
+            setConnectionUI('connecting', 'CONECTANDO A LA NUBE...');
 
-            function escapeHTML(str) {
-                const div = document.createElement('div');
-                div.textContent = str;
-                return div.innerHTML;
-            }
+            try {
+                const app = initializeApp(firebaseConfig, 'ejj4-app-' + Date.now());
+                auth = getAuth(app);
+                db = getFirestore(app);
 
-            function renderTable() {
-                const query = searchInput.value.trim().toLowerCase();
-                const levelFilter = filterLevelSelect.value;
-
-                // Filtrar atletas
-                const filtered = athletes.filter(athlete => {
-                    const matchesLevel = levelFilter === 'ALL' || athlete.level === levelFilter;
-                    const matchesText = 
-                        athlete.name.toLowerCase().includes(query) ||
-                        (athlete.team && athlete.team.toLowerCase().includes(query)) ||
-                        athlete.weightCategory.toLowerCase().includes(query) ||
-                        athlete.division.toLowerCase().includes(query) ||
-                        (athlete.notes && athlete.notes.toLowerCase().includes(query));
-                    return matchesLevel && matchesText;
-                });
-
-                tbody.innerHTML = '';
-
-                if (filtered.length === 0) {
-                    emptyState.classList.remove('hidden');
+                if (typeof window.__initial_auth_token !== 'undefined' && window.__initial_auth_token) {
+                    await signInWithCustomToken(auth, window.__initial_auth_token);
                 } else {
-                    emptyState.classList.add('hidden');
-                    
-                    filtered.forEach((athlete, index) => {
-                        const style = LEVEL_STYLES[athlete.level] || LEVEL_STYLES['INICIANTE'];
-                        const tr = document.createElement('tr');
-                        tr.className = 'hover:bg-white/5 transition-colors group';
+                    await signInAnonymously(auth);
+                }
 
-                        tr.innerHTML = `
-                            <td class="py-3.5 px-4 font-retro text-xs text-gray-400">
-                                ${String(index + 1).padStart(2, '0')}
-                            </td>
-                            <td class="py-3.5 px-4">
-                                <div class="font-bold text-white group-hover:text-vice-cyan transition-colors">
-                                    ${escapeHTML(athlete.name)}
-                                </div>
-                                <div class="text-xs text-gray-400">
-                                    ${athlete.team ? escapeHTML(athlete.team) : '<span class="italic text-gray-500">Independiente</span>'}
-                                </div>
-                                ${athlete.notes ? `<div class="text-[11px] text-vice-cyan/80 mt-0.5"><i class="fa-solid fa-comment-dots mr-1"></i>${escapeHTML(athlete.notes)}</div>` : ''}
-                            </td>
-                            <td class="py-3.5 px-4">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-retro font-bold border ${style.badge}">
-                                    <span class="w-2 h-2 rounded-full ${style.dot}"></span>
-                                    ${escapeHTML(athlete.level)}
-                                </span>
-                            </td>
-                            <td class="py-3.5 px-4">
-                                <div class="font-retro text-xs font-bold text-vice-orange">
-                                    ${athlete.weightKg} kg
-                                </div>
-                                <div class="text-xs text-gray-300">
-                                    ${escapeHTML(athlete.weightCategory)}
-                                </div>
-                            </td>
-                            <td class="py-3.5 px-4">
-                                <div class="font-bold text-white text-xs">
-                                    ${athlete.age} años
-                                </div>
-                                <div class="text-[11px] text-vice-pink font-medium">
-                                    ${escapeHTML(athlete.division)}
-                                </div>
-                            </td>
-                            <td class="py-3.5 px-4 text-right">
-                                <button type="button" data-id="${athlete.id}"
-                                    class="btn-delete-athlete p-2 rounded-lg bg-red-500/10 hover:bg-red-500/30 text-red-400 hover:text-red-200 border border-transparent hover:border-red-500/40 transition cursor-pointer"
-                                    title="Eliminar registro">
-                                    <i class="fa-solid fa-trash-can"></i>
-                                </button>
-                            </td>
-                        `;
-                        tbody.appendChild(tr);
+                onAuthStateChanged(auth, (user) => {
+                    if (!user) return;
+                    currentUser = user;
+                    setConnectionUI('cloud', 'NUBE SINCRONIZADA EN VIVO');
+
+                    const colRef = getPublicCollectionRef();
+                    unsubscribeSnapshot = onSnapshot(colRef, (snapshot) => {
+                        const cloudList = [];
+                        snapshot.forEach((docSnap) => {
+                            cloudList.push({ id: docSnap.id, ...docSnap.data() });
+                        });
+                        cloudList.sort((a, b) => {
+                            const tA = a.registeredAt ? new Date(a.registeredAt).getTime() : 0;
+                            const tB = b.registeredAt ? new Date(b.registeredAt).getTime() : 0;
+                            return tB - tA;
+                        });
+                        athletes = cloudList;
+                        saveLocalBackup();
+                        renderTable();
+                    }, (err) => {
+                        console.error('Error en snapshot Firestore:', err);
+                        setConnectionUI('local', 'ERROR DE SINCRONIZACIÓN');
                     });
-                }
-
-                showingCount.textContent = `Mostrando ${filtered.length} de ${athletes.length} atletas`;
-                updateStats();
+                });
+            } catch (err) {
+                console.error('Error iniciando Firebase:', err);
+                setConnectionUI('local', 'MODO LOCAL DE RESPALDO');
             }
+        }
 
-            // ==========================================
-            // 5. EVENTOS DE FORMULARIO Y ACCIONES
-            // ==========================================
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-
-                const name = nameInput.value.trim();
-                const team = teamInput.value.trim();
-                const level = levelInput.value;
-                const weightKg = parseFloat(weightKgInput.value);
-                const weightCategory = weightCatInput.value;
-                const age = parseInt(ageInput.value, 10);
-                const division = divisionInput.value;
-                const notes = notesInput.value.trim();
-
-                if (!name || isNaN(weightKg) || isNaN(age)) {
-                    showToast('Por favor completa todos los campos obligatorios.', 'error');
-                    return;
-                }
-
-                const newAthlete = {
-                    id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
-                    name,
-                    team,
-                    level,
-                    weightKg: weightKg.toFixed(1),
-                    weightCategory,
-                    age,
-                    division,
-                    notes,
-                    registeredAt: new Date().toISOString()
-                };
-
-                athletes.unshift(newAthlete);
-                saveAthletes();
-                renderTable();
-
-                // Limpiar campos de texto/número manteniendo selecciones cómodas
-                nameInput.value = '';
-                teamInput.value = '';
-                weightKgInput.value = '';
-                ageInput.value = '';
-                notesInput.value = '';
-                nameInput.focus();
-
-                showToast(`¡${name} (${level}) pre-inscripto en EJJ 4!`, 'pink');
-            });
-
-            // Delegación de evento para eliminar atleta individual
-            tbody.addEventListener('click', (e) => {
-                const btn = e.target.closest('.btn-delete-athlete');
-                if (!btn) return;
-
-                const id = btn.getAttribute('data-id');
-                const target = athletes.find(a => a.id === id);
-                if (!target) return;
-
-                openConfirmModal(
-                    'ELIMINAR ATLETA',
-                    `¿Deseas quitar a "${target.name}" (${target.level} - ${target.weightCategory}) de la lista de pre-inscriptos?`,
-                    () => {
-                        athletes = athletes.filter(a => a.id !== id);
-                        saveAthletes();
-                        renderTable();
-                        showToast(`Registro de ${target.name} eliminado.`, 'success');
-                    }
-                );
-            });
-
-            // Filtros en tiempo real
-            searchInput.addEventListener('input', renderTable);
-            filterLevelSelect.addEventListener('change', renderTable);
-
-            // Vaciar toda la lista
-            btnClearAll.addEventListener('click', () => {
-                if (athletes.length === 0) {
-                    showToast('La lista ya se encuentra vacía.', 'error');
-                    return;
-                }
-                openConfirmModal(
-                    'VACIAR LISTA COMPLETA',
-                    `Estás a punto de eliminar los ${athletes.length} atletas registrados. Esta acción no se puede deshacer.`,
-                    () => {
-                        athletes = [];
-                        saveAthletes();
-                        renderTable();
-                        showToast('Lista de pre-inscriptos vaciada.', 'pink');
-                    }
-                );
-            });
-
-            // Cargar 4 atletas de ejemplo con las categorías INICIANTE - INTERMEDIO - AVANZADO
-            btnSeedDemo.addEventListener('click', () => {
-                const demoAthletes = [
-                    {
-                        id: 'demo1-' + Date.now(),
-                        name: 'Tommy Vercetti',
-                        team: 'Etakki Jiu-Jitsu',
-                        level: 'AVANZADO',
-                        weightKg: '81.5',
-                        weightCategory: 'Medio (-82.3 kg)',
-                        age: 34,
-                        division: 'Master 1 (30-35)',
-                        notes: 'Superfight 82kg',
-                        registeredAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'demo2-' + Date.now(),
-                        name: 'Lucia Caminos',
-                        team: 'Miami Top Team',
-                        level: 'AVANZADO',
-                        weightKg: '63.2',
-                        weightCategory: 'Pluma (-64 kg)',
-                        age: 26,
-                        division: 'Adulto (18-29)',
-                        notes: '',
-                        registeredAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'demo3-' + Date.now(),
-                        name: 'Jason Duval',
-                        team: 'Leonida Grappling',
-                        level: 'INTERMEDIO',
-                        weightKg: '87.8',
-                        weightCategory: 'Medio-Pesado (-88.3 kg)',
-                        age: 28,
-                        division: 'Adulto (18-29)',
-                        notes: '',
-                        registeredAt: new Date().toISOString()
-                    },
-                    {
-                        id: 'demo4-' + Date.now(),
-                        name: 'Lance Vance',
-                        team: 'Ocean Drive BJJ',
-                        level: 'INICIANTE',
-                        weightKg: '75.4',
-                        weightCategory: 'Ligero (-76 kg)',
-                        age: 23,
-                        division: 'Adulto (18-29)',
-                        notes: 'Primer torneo No-Gi',
-                        registeredAt: new Date().toISOString()
-                    }
-                ];
-
-                athletes = [...demoAthletes, ...athletes];
-                saveAthletes();
-                renderTable();
-                showToast('4 atletas de ejemplo cargados a EJJ 4.', 'success');
-            });
-
-            // ==========================================
-            // 6. EXPORTACIÓN A CSV Y JSON
-            // ==========================================
-            function downloadFile(content, filename, mimeType) {
-                const blob = new Blob([content], { type: mimeType });
-                const url = URL.createObjectURL(blob);
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = filename;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-            }
-
-            btnExportCsv.addEventListener('click', () => {
-                if (athletes.length === 0) {
-                    showToast('No hay atletas para exportar.', 'error');
-                    return;
-                }
-
-                // Cabeceras CSV con BOM UTF-8 para compatibilidad total con Excel en español
-                const headers = ['Nro', 'Nombre Completo', 'Academia/Equipo', 'Categoria', 'Peso (kg)', 'Categoria Peso', 'Edad', 'Division', 'Notas', 'Fecha Registro'];
-                const rows = athletes.map((a, idx) => [
-                    idx + 1,
-                    `"${a.name.replace(/"/g, '""')}"`,
-                    `"${(a.team || 'Independiente').replace(/"/g, '""')}"`,
-                    `"${a.level}"`,
-                    a.weightKg,
-                    `"${a.weightCategory}"`,
-                    a.age,
-                    `"${a.division}"`,
-                    `"${(a.notes || '').replace(/"/g, '""')}"`,
-                    `"${new Date(a.registeredAt).toLocaleString('es-AR')}"`
-                ]);
-
-                const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-                downloadFile(csvContent, 'EJJ4_Invitational_PreInscriptos_2027.csv', 'text/csv;charset=utf-8;');
-                showToast('Planilla CSV descargada correctamente.', 'success');
-            });
-
-            btnExportJson.addEventListener('click', () => {
-                if (athletes.length === 0) {
-                    showToast('No hay atletas para exportar.', 'error');
-                    return;
-                }
-
-                const payload = {
-                    torneo: 'EJJ 4 Invitational - NoGi Submission Only',
-                    reglas: 'Reglas EBI • Overtime por Puntos',
-                    edicion: 'Verano 2027',
-                    exportadoEl: new Date().toISOString(),
-                    totalInscriptos: athletes.length,
-                    atletas: athletes
-                };
-
-                const jsonContent = JSON.stringify(payload, null, 2);
-                downloadFile(jsonContent, 'EJJ4_Invitational_Roster_2027.json', 'application/json');
-                showToast('Archivo JSON descargado correctamente.', 'success');
-            });
-
-            // Inicializar aplicación al cargar
-            loadAthletes();
-            renderTable();
-        })();
+        // Iniciar aplicación y conexión en la nube al cargar
+        loadLocalBackup();
+        renderTable();
+        initCloudSync();
     </script>
 </body>
 </html>
