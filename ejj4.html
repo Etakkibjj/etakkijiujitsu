@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EJJI 4 - Torneo No-Gi Submission Only | Verano 2027</title>
+    <title>EJJ 4 Invitational - Torneo No-Gi Submission Only | Verano 2027</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Tipografías Retro 80s/90s & Vice City -->
+    <!-- Google Fonts: Tipografías Retro 80s/90s & Miami -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Monoton&family=Orbitron:wght@500;700;900&family=Outfit:wght@300;400;600;800&family=Yellowtail&display=swap" rel="stylesheet">
@@ -32,7 +32,8 @@
                             cyan: '#00f3ff',
                             purple: '#9d00ff',
                             orange: '#ff7b00',
-                            yellow: '#ffe600'
+                            yellow: '#ffe600',
+                            emerald: '#00ff9d'
                         }
                     }
                 }
@@ -41,12 +42,13 @@
     </script>
 
     <style>
-        /* Estilos personalizados Neon Retro Miami 90s / Vice City */
+        /* Estilos personalizados Neon Retro Miami 90s / GTA 6 */
         :root {
             --neon-pink: #ff007f;
             --neon-cyan: #00f3ff;
             --neon-purple: #9d00ff;
-            --neon-orange: #ff6a00;
+            --neon-orange: #ff7b00;
+            --neon-emerald: #00ff9d;
             --bg-dark: #070210;
         }
 
@@ -95,10 +97,57 @@
             100% { background-position: 0 45px; }
         }
 
+        /* Tubos Finos de Neón Decorativos en el Fondo / Hero */
+        .neon-tube-line {
+            height: 2px;
+            border-radius: 999px;
+            animation: tubeColorShift 7s ease-in-out infinite alternate;
+        }
+
+        .neon-tube-vertical {
+            width: 2px;
+            border-radius: 999px;
+            animation: tubeColorShiftVertical 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes tubeColorShift {
+            0% {
+                background: linear-gradient(90deg, transparent, #00f3ff, #ffffff, #00f3ff, transparent);
+                box-shadow: 0 0 8px #00f3ff, 0 0 18px #00f3ff;
+            }
+            33% {
+                background: linear-gradient(90deg, transparent, #ff007f, #ffffff, #ff007f, transparent);
+                box-shadow: 0 0 8px #ff007f, 0 0 18px #ff007f;
+            }
+            66% {
+                background: linear-gradient(90deg, transparent, #9d00ff, #ffffff, #9d00ff, transparent);
+                box-shadow: 0 0 8px #9d00ff, 0 0 18px #9d00ff;
+            }
+            100% {
+                background: linear-gradient(90deg, transparent, #ff7b00, #ffe600, #ff7b00, transparent);
+                box-shadow: 0 0 8px #ff7b00, 0 0 18px #ff7b00;
+            }
+        }
+
+        @keyframes tubeColorShiftVertical {
+            0% {
+                background: linear-gradient(180deg, transparent, #ff007f, #00f3ff, transparent);
+                box-shadow: 0 0 10px #ff007f, 0 0 22px #00f3ff;
+            }
+            50% {
+                background: linear-gradient(180deg, transparent, #00f3ff, #9d00ff, transparent);
+                box-shadow: 0 0 10px #00f3ff, 0 0 22px #9d00ff;
+            }
+            100% {
+                background: linear-gradient(180deg, transparent, #ff7b00, #ff007f, transparent);
+                box-shadow: 0 0 10px #ff7b00, 0 0 22px #ff007f;
+            }
+        }
+
         /* Sol Atardecer Miami Outrun */
         .outrun-sun {
-            width: 240px;
-            height: 240px;
+            width: 245px;
+            height: 245px;
             border-radius: 50%;
             background: linear-gradient(180deg, #ffe600 0%, #ff7b00 45%, #ff007f 85%, #9d00ff 100%);
             box-shadow: 0 0 60px rgba(255, 0, 127, 0.6), 0 0 110px rgba(255, 123, 0, 0.4);
@@ -151,16 +200,6 @@
                 0 0 40px var(--neon-cyan);
         }
 
-        .neon-script-vice {
-            color: #ff9ce3;
-            text-shadow:
-                0 0 4px #fff,
-                0 0 12px #ff007f,
-                0 0 28px #ff007f,
-                0 0 45px #9d00ff;
-            transform: rotate(-4deg);
-        }
-
         @keyframes neonFlicker {
             0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
                 opacity: 1;
@@ -171,7 +210,7 @@
                     0 0 45px var(--neon-pink);
             }
             20%, 24%, 55% {
-                opacity: 0.82;
+                opacity: 0.85;
                 text-shadow:
                     0 0 2px #fff,
                     0 0 6px var(--neon-pink);
@@ -197,25 +236,120 @@
             100% { transform: rotate(-3deg); }
         }
 
-        /* Tarjetas Glassmorphism con borde Neón GTA VI / Vice City */
+        /* Tarjetas Glassmorphism estándar */
         .vice-card {
-            background: rgba(17, 7, 36, 0.78);
+            background: rgba(17, 7, 36, 0.82);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(0, 243, 255, 0.35);
+            border: 1px solid rgba(0, 243, 255, 0.3);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.65), inset 0 0 18px rgba(157, 0, 255, 0.15);
             transition: all 0.3s ease;
         }
 
         .vice-card:hover {
-            border-color: rgba(255, 0, 127, 0.65);
+            border-color: rgba(255, 0, 127, 0.6);
             box-shadow: 0 8px 36px rgba(255, 0, 127, 0.2), inset 0 0 22px rgba(0, 243, 255, 0.15);
+        }
+
+        /* Contenedor con Tubo Fino de Neón Circulante en los Bordes */
+        .neon-tube-frame {
+            position: relative;
+            border-radius: 1.5rem;
+            padding: 2px; /* Grosor fino del tubo de neón */
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(157, 0, 255, 0.25);
+        }
+
+        .neon-tube-frame::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(
+                from 0deg,
+                transparent 0deg,
+                #00f3ff 65deg,
+                #ffffff 90deg,
+                #ff007f 135deg,
+                transparent 180deg,
+                #9d00ff 245deg,
+                #ff7b00 285deg,
+                #ffe600 310deg,
+                transparent 360deg
+            );
+            animation: rotateNeonTube 5s linear infinite;
+            z-index: 0;
+        }
+
+        .neon-tube-frame-reverse::before {
+            animation: rotateNeonTubeReverse 6s linear infinite;
+        }
+
+        .neon-tube-inner {
+            position: relative;
+            z-index: 1;
+            background: rgba(15, 6, 33, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-radius: calc(1.5rem - 2px);
+            height: 100%;
+            width: 100%;
+        }
+
+        @keyframes rotateNeonTube {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes rotateNeonTubeReverse {
+            0% { transform: rotate(360deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        /* Botón Reglamento estilo Tubo de Neón Brillante */
+        .btn-reglamento-neon {
+            position: relative;
+            background: rgba(13, 5, 29, 0.85);
+            border: 1.5px solid #00f3ff;
+            color: #ffffff;
+            box-shadow: 
+                0 0 10px rgba(0, 243, 255, 0.5),
+                inset 0 0 10px rgba(0, 243, 255, 0.25);
+            animation: pulseReglamentoTube 3.5s ease-in-out infinite alternate;
+            transition: all 0.3s ease;
+        }
+
+        .btn-reglamento-neon:hover {
+            background: rgba(0, 243, 255, 0.15);
+            border-color: #ffffff;
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 
+                0 0 18px #00f3ff,
+                0 0 32px #ff007f,
+                inset 0 0 14px rgba(0, 243, 255, 0.45);
+        }
+
+        @keyframes pulseReglamentoTube {
+            0% {
+                border-color: #00f3ff;
+                box-shadow: 0 0 10px rgba(0, 243, 255, 0.55), inset 0 0 8px rgba(0, 243, 255, 0.2);
+            }
+            50% {
+                border-color: #ff007f;
+                box-shadow: 0 0 14px rgba(255, 0, 127, 0.65), inset 0 0 10px rgba(255, 0, 127, 0.25);
+            }
+            100% {
+                border-color: #ff7b00;
+                box-shadow: 0 0 12px rgba(255, 123, 0, 0.6), inset 0 0 8px rgba(255, 123, 0, 0.2);
+            }
         }
 
         /* Inputs Estilizados */
         .vice-input {
-            background: rgba(9, 3, 20, 0.85);
-            border: 1px solid rgba(157, 0, 255, 0.5);
+            background: rgba(9, 3, 20, 0.88);
+            border: 1px solid rgba(157, 0, 255, 0.55);
             color: #fff;
             transition: all 0.25s ease;
         }
@@ -246,12 +380,12 @@
             inset: 0;
             background: linear-gradient(
                 rgba(18, 16, 16, 0) 50%, 
-                rgba(0, 0, 0, 0.18) 50%
+                rgba(0, 0, 0, 0.16) 50%
             );
             background-size: 100% 4px;
             z-index: 50;
             pointer-events: none;
-            opacity: 0.45;
+            opacity: 0.42;
         }
 
         /* Custom Scrollbar */
@@ -276,11 +410,16 @@
         <div class="synthwave-grid"></div>
     </div>
 
+    <!-- Tubos Finos de Neón Verticales Decorativos en los Laterales -->
+    <div class="hidden xl:block fixed top-16 left-6 h-[75vh] neon-tube-vertical pointer-events-none z-[-1] opacity-75"></div>
+    <div class="hidden xl:block fixed top-24 left-9 h-[60vh] neon-tube-vertical pointer-events-none z-[-1] opacity-50" style="animation-delay: -2.5s;"></div>
+    <div class="hidden xl:block fixed top-16 right-6 h-[75vh] neon-tube-vertical pointer-events-none z-[-1] opacity-75" style="animation-delay: -4s;"></div>
+    <div class="hidden xl:block fixed top-24 right-9 h-[60vh] neon-tube-vertical pointer-events-none z-[-1] opacity-50" style="animation-delay: -1.5s;"></div>
+
     <!-- Siluetas de Palmeras Decorativas Laterales (SVG) -->
     <div class="fixed bottom-0 left-0 w-44 md:w-72 pointer-events-none z-[-1] opacity-75 palm-sway-left">
         <svg viewBox="0 0 200 300" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M25 300 C35 220, 55 150, 85 95 L95 98 C68 155, 50 225, 42 300 Z" fill="#0d031c"/>
-            <!-- Hojas de palmera con brillo neón -->
             <path d="M88 96 C50 65, 15 80, 0 105 C25 90, 55 85, 88 96 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
             <path d="M90 95 C55 45, 15 45, -5 65 C25 55, 58 65, 90 95 Z" fill="#0d031c" stroke="#00f3ff" stroke-width="1.5"/>
             <path d="M92 94 C85 40, 55 15, 30 20 C55 30, 75 55, 92 94 Z" fill="#0d031c" stroke="#ff007f" stroke-width="1.5"/>
@@ -300,7 +439,7 @@
         </svg>
     </div>
 
-    <!-- Toast Notification Container (Reemplazo elegante de alert/confirm) -->
+    <!-- Toast Notification Container -->
     <div id="toast-container" class="fixed top-5 right-5 z-50 flex flex-col gap-3 pointer-events-none"></div>
 
     <!-- Modal de Confirmación Personalizado -->
@@ -314,36 +453,39 @@
             </div>
             <p id="confirm-message" class="text-gray-300 text-sm mb-6 leading-relaxed">¿Estás seguro de que deseas continuar?</p>
             <div class="flex justify-end gap-3">
-                <button id="confirm-cancel" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 font-semibold text-sm transition">
+                <button id="confirm-cancel" class="px-4 py-2 rounded-xl bg-white/10 hover:bg-white/20 text-gray-200 font-semibold text-sm transition cursor-pointer">
                     Cancelar
                 </button>
-                <button id="confirm-ok" class="px-5 py-2 rounded-xl bg-vice-pink hover:bg-pink-600 text-white font-bold text-sm shadow-[0_0_15px_rgba(255,0,127,0.6)] transition">
+                <button id="confirm-ok" class="px-5 py-2 rounded-xl bg-vice-pink hover:bg-pink-600 text-white font-bold text-sm shadow-[0_0_15px_rgba(255,0,127,0.6)] transition cursor-pointer">
                     Sí, eliminar
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- HEADER / HERO SECTION CON LOGO CUSTOM EJJI 4 -->
-    <header class="relative pt-8 pb-6 px-4 max-w-7xl mx-auto text-center">
-        <!-- Badge Superior estilo GTA VI / Vice City -->
-        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-vice-card/90 border border-vice-cyan/50 shadow-[0_0_15px_rgba(0,243,255,0.3)] mb-6">
+    <!-- HEADER / HERO SECTION CON LOGO CUSTOM EJJ 4 -->
+    <header class="relative pt-6 pb-6 px-4 max-w-7xl mx-auto text-center">
+        <!-- Tubo Fino de Neón Superior -->
+        <div class="max-w-3xl mx-auto neon-tube-line mb-5 opacity-85"></div>
+
+        <!-- Badge Superior Oficial -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-vice-card/90 border border-vice-cyan/50 shadow-[0_0_15px_rgba(0,243,255,0.3)] mb-4">
             <span class="w-2.5 h-2.5 rounded-full bg-vice-pink animate-ping"></span>
             <span class="font-retro text-xs md:text-sm tracking-[0.2em] text-vice-cyan font-bold uppercase">
-                PRE-INSCRIPCIÓN OFICIAL • EDICIÓN VICE EDITION
+                PRE-INSCRIPCIÓN OFICIAL • VERANO 2027
             </span>
         </div>
 
         <!-- Contenedor Central del Logotipo Custom SVG + Sol Outrun -->
-        <div class="relative flex flex-col items-center justify-center my-2">
+        <div class="relative flex flex-col items-center justify-center my-1">
             <!-- Sol Retro de Fondo -->
             <div class="outrun-sun absolute -z-10 opacity-85 scale-90 md:scale-110"></div>
 
-            <!-- Logotipo Custom SVG de EJJI 4 -->
-            <div class="w-full max-w-xl mx-auto drop-shadow-[0_0_25px_rgba(0,0,0,0.9)]">
-                <svg viewBox="0 0 600 230" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+            <!-- Logotipo Custom SVG de EJJ 4 / INVITATIONAL / NOGI SUBMISSION ONLY -->
+            <div class="w-full max-w-2xl mx-auto drop-shadow-[0_0_25px_rgba(0,0,0,0.9)]">
+                <svg viewBox="0 0 640 270" class="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
                     <defs>
-                        <!-- Gradiente Cromo / Vice City -->
+                        <!-- Gradiente Cromo / Retro 90s -->
                         <linearGradient id="chromeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                             <stop offset="0%" stop-color="#ffffff"/>
                             <stop offset="45%" stop-color="#00f3ff"/>
@@ -357,7 +499,7 @@
                             <stop offset="100%" stop-color="#ff7b00"/>
                         </linearGradient>
                         <!-- Filtro Resplandor Neón -->
-                        <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <filter id="neonGlow" x="-25%" y="-25%" width="150%" height="150%">
                             <feGaussianBlur stdDeviation="4" result="blur" />
                             <feMerge>
                                 <feMergeNode in="blur"/>
@@ -367,378 +509,386 @@
                     </defs>
 
                     <!-- Triángulo Invertido Retrowave -->
-                    <polygon points="300,215 110,28 490,28" fill="rgba(13, 4, 28, 0.72)" stroke="#00f3ff" stroke-width="4" filter="url(#neonGlow)"/>
-                    <polygon points="300,202 128,36 472,36" fill="none" stroke="#ff007f" stroke-width="2"/>
+                    <polygon points="320,248 115,24 525,24" fill="rgba(13, 4, 28, 0.74)" stroke="#00f3ff" stroke-width="4" filter="url(#neonGlow)"/>
+                    <polygon points="320,234 134,32 506,32" fill="none" stroke="#ff007f" stroke-width="2"/>
 
                     <!-- Silueta de Grappling / Llave No-Gi estilizada dentro del triángulo -->
                     <g opacity="0.35" stroke="#00f3ff" stroke-width="2.5" fill="none" stroke-linecap="round">
-                        <circle cx="275" cy="68" r="10"/>
-                        <circle cx="322" cy="72" r="10"/>
-                        <path d="M265 82 Q295 75 315 88 L335 112"/>
-                        <path d="M330 85 Q300 92 280 108 L260 118"/>
+                        <circle cx="295" cy="62" r="10"/>
+                        <circle cx="342" cy="66" r="10"/>
+                        <path d="M285 76 Q315 69 335 82 L355 106"/>
+                        <path d="M350 79 Q320 86 300 102 L280 112"/>
                     </g>
 
                     <!-- Palmeras integradas en el emblema -->
-                    <g transform="translate(135, 65) scale(0.45)" fill="#090314" stroke="#00f3ff" stroke-width="3">
+                    <g transform="translate(142, 62) scale(0.46)" fill="#090314" stroke="#00f3ff" stroke-width="3">
                         <path d="M40 160 Q50 100 75 50 L85 55 Q62 105 55 160 Z"/>
                         <path d="M78 52 C40 30, 10 45, 0 65 C25 52, 50 48, 78 52 Z"/>
                         <path d="M80 50 C50 10, 15 10, 0 28 C25 20, 52 28, 80 50 Z"/>
                         <path d="M82 52 C115 15, 150 15, 165 35 C140 25, 112 32, 82 52 Z"/>
                     </g>
-                    <g transform="translate(465, 65) scale(-0.45, 0.45)" fill="#090314" stroke="#ff007f" stroke-width="3">
+                    <g transform="translate(498, 62) scale(-0.46, 0.46)" fill="#090314" stroke="#ff007f" stroke-width="3">
                         <path d="M40 160 Q50 100 75 50 L85 55 Q62 105 55 160 Z"/>
                         <path d="M78 52 C40 30, 10 45, 0 65 C25 52, 50 48, 78 52 Z"/>
                         <path d="M80 50 C50 10, 15 10, 0 28 C25 20, 52 28, 80 50 Z"/>
                         <path d="M82 52 C115 15, 150 15, 165 35 C140 25, 112 32, 82 52 Z"/>
                     </g>
 
-                    <!-- Texto Principal EJJI -->
-                    <text x="265" y="148" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="94" letter-spacing="6" fill="url(#chromeGrad)" stroke="#ffffff" stroke-width="2" filter="url(#neonGlow)">
-                        EJJI
+                    <!-- Texto Principal EJJ -->
+                    <text x="275" y="138" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="94" letter-spacing="8" fill="url(#chromeGrad)" stroke="#ffffff" stroke-width="2" filter="url(#neonGlow)">
+                        EJJ
                     </text>
 
                     <!-- Número 4 Estilo GTA / Neón Intenso -->
-                    <text x="448" y="158" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="112" fill="url(#neonPinkOrange)" stroke="#ffe600" stroke-width="3" filter="url(#neonGlow)">
+                    <text x="455" y="146" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="110" fill="url(#neonPinkOrange)" stroke="#ffe600" stroke-width="3" filter="url(#neonGlow)">
                         4
                     </text>
 
-                    <!-- Cinta / Subtítulo Script estilo Vice City -->
-                    <text x="300" y="186" text-anchor="middle" font-family="'Yellowtail', cursive" font-size="36" fill="#ff9ce3" stroke="#ff007f" stroke-width="0.8" filter="url(#neonGlow)">
-                        No-Gi Submission Only
+                    <!-- Debajo de EJJ 4: INVITATIONAL en tipografía script/neón vibrante -->
+                    <text x="320" y="186" text-anchor="middle" font-family="'Yellowtail', cursive" font-size="44" letter-spacing="2" fill="#ff9ce3" stroke="#ff007f" stroke-width="0.9" filter="url(#neonGlow)">
+                        INVITATIONAL
+                    </text>
+
+                    <!-- Debajo de INVITATIONAL: NOGI SUBMISSION ONLY -->
+                    <text x="320" y="216" text-anchor="middle" font-family="'Orbitron', sans-serif" font-weight="900" font-size="18" letter-spacing="4.5" fill="#00f3ff" stroke="#ffffff" stroke-width="0.4" filter="url(#neonGlow)">
+                        NOGI SUBMISSION ONLY
                     </text>
                 </svg>
             </div>
 
-            <!-- Título Secundario y Fecha Verano 2027 -->
+            <!-- Información de Reglas EBI + Botón Reglamento Oficial -->
             <div class="mt-2 flex flex-col items-center">
-                <h1 class="font-retro text-2xl sm:text-4xl md:text-5xl font-black tracking-wider uppercase neon-text-cyan">
-                    TORNEO NO-GI SUBMISSION ONLY
+                <h1 class="font-retro text-xl sm:text-3xl md:text-4xl font-black tracking-wider uppercase neon-text-cyan">
+                    REGLAS EBI • OVERTIME POR PUNTOS • VERANO 2027
                 </h1>
-                <div class="mt-3 flex flex-wrap items-center justify-center gap-3">
-                    <span class="px-4 py-1 rounded-lg bg-vice-pink/20 border border-vice-pink font-retro text-sm sm:text-base font-bold text-white shadow-[0_0_15px_rgba(255,0,127,0.5)]">
+
+                <div class="mt-4 flex flex-wrap items-center justify-center gap-4">
+                    <!-- Badge Verano 2027 -->
+                    <span class="px-4 py-2 rounded-xl bg-vice-pink/20 border border-vice-pink font-retro text-xs sm:text-sm font-bold text-white shadow-[0_0_15px_rgba(255,0,127,0.45)]">
                         <i class="fa-solid fa-sun text-vice-yellow mr-1.5"></i> VERANO 2027
                     </span>
-                    <span class="px-4 py-1 rounded-lg bg-vice-purple/25 border border-vice-purple font-retro text-sm sm:text-base font-bold text-vice-cyan shadow-[0_0_15px_rgba(157,0,255,0.4)]">
-                        <i class="fa-solid fa-fire-flame-curved text-vice-orange mr-1.5"></i> REGLAS ADCC / EBI OVERTIME
-                    </span>
+
+                    <!-- Botón Destacado Tubo de Neón al Reglamento Oficial -->
+                    <a href="http://etakkibjj.github.io/etakkijiujitsu/reglamento.html"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn-reglamento-neon px-5 py-2.5 rounded-xl font-retro text-xs sm:text-sm font-black tracking-wider uppercase inline-flex items-center gap-2.5 cursor-pointer">
+                        <i class="fa-solid fa-file-lines text-vice-cyan text-base"></i>
+                        <span>VER REGLAMENTO OFICIAL</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-xs text-vice-pink"></i>
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!-- Tubo Fino de Neón Inferior del Header -->
+        <div class="max-w-4xl mx-auto neon-tube-line mt-6 opacity-85" style="animation-delay: -3.5s;"></div>
     </header>
 
     <!-- CONTENIDO PRINCIPAL -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
 
-        <!-- BARRA DE ESTADÍSTICAS EN VIVO POR FAIXA -->
+        <!-- BARRA DE ESTADÍSTICAS EN VIVO POR CATEGORÍA (TOTAL, INICIANTE, INTERMEDIO, AVANZADO) -->
         <section aria-label="Estadísticas en vivo">
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-                <!-- Total Inscriptos -->
-                <div class="vice-card rounded-2xl p-4 border-vice-cyan/60 relative overflow-hidden group">
-                    <div class="absolute -right-3 -top-3 text-vice-cyan/10 text-5xl group-hover:scale-110 transition-transform">
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5">
+                <!-- Total Atletas -->
+                <div class="vice-card rounded-2xl p-4 sm:p-5 border-vice-cyan/60 relative overflow-hidden group">
+                    <div class="absolute -right-3 -top-3 text-vice-cyan/10 text-6xl group-hover:scale-110 transition-transform">
                         <i class="fa-solid fa-users"></i>
                     </div>
-                    <p class="text-xs font-retro uppercase tracking-wider text-vice-cyan">Total Inscriptos</p>
+                    <p class="text-xs font-retro uppercase tracking-wider text-vice-cyan">Total Atletas</p>
                     <p id="stat-total" class="text-3xl sm:text-4xl font-retro font-black text-white mt-1 neon-text-cyan">0</p>
                 </div>
 
-                <!-- Faixa Blanca -->
-                <div class="vice-card rounded-2xl p-4 border-white/40">
+                <!-- Categoría Iniciante (Verde / Cyan Neón) -->
+                <div class="vice-card rounded-2xl p-4 sm:p-5 border-emerald-400/60 relative overflow-hidden">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-gray-200">Blanca</p>
-                        <span class="w-4 h-2.5 rounded-sm bg-white border border-gray-400"></span>
+                        <p class="text-xs font-retro uppercase tracking-wider text-emerald-300">Iniciante</p>
+                        <span class="w-3 h-3 rounded-full bg-emerald-400 shadow-[0_0_10px_#00ff9d]"></span>
                     </div>
-                    <p id="stat-Blanca" class="text-2xl sm:text-3xl font-retro font-bold text-white mt-1">0</p>
+                    <p id="stat-INICIANTE" class="text-3xl sm:text-4xl font-retro font-black text-emerald-400 mt-1 drop-shadow-[0_0_8px_rgba(0,255,157,0.5)]">0</p>
                 </div>
 
-                <!-- Faixa Azul -->
-                <div class="vice-card rounded-2xl p-4 border-blue-500/50">
+                <!-- Categoría Intermedio (Magenta / Violeta Eléctrico) -->
+                <div class="vice-card rounded-2xl p-4 sm:p-5 border-vice-pink/60 relative overflow-hidden">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-blue-300">Azul</p>
-                        <span class="w-4 h-2.5 rounded-sm bg-blue-500 shadow-[0_0_8px_#3b82f6]"></span>
+                        <p class="text-xs font-retro uppercase tracking-wider text-pink-300">Intermedio</p>
+                        <span class="w-3 h-3 rounded-full bg-vice-pink shadow-[0_0_10px_#ff007f]"></span>
                     </div>
-                    <p id="stat-Azul" class="text-2xl sm:text-3xl font-retro font-bold text-blue-400 mt-1">0</p>
+                    <p id="stat-INTERMEDIO" class="text-3xl sm:text-4xl font-retro font-black text-vice-pink mt-1 drop-shadow-[0_0_8px_rgba(255,0,127,0.55)]">0</p>
                 </div>
 
-                <!-- Faixa Violeta -->
-                <div class="vice-card rounded-2xl p-4 border-purple-500/50">
+                <!-- Categoría Avanzado (Naranja / Oro Fuego) -->
+                <div class="vice-card rounded-2xl p-4 sm:p-5 border-orange-500/60 relative overflow-hidden">
                     <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-purple-300">Violeta</p>
-                        <span class="w-4 h-2.5 rounded-sm bg-purple-500 shadow-[0_0_8px_#a855f7]"></span>
+                        <p class="text-xs font-retro uppercase tracking-wider text-amber-300">Avanzado</p>
+                        <span class="w-3 h-3 rounded-full bg-vice-orange shadow-[0_0_10px_#ff7b00]"></span>
                     </div>
-                    <p id="stat-Violeta" class="text-2xl sm:text-3xl font-retro font-bold text-purple-400 mt-1">0</p>
-                </div>
-
-                <!-- Faixa Marrón -->
-                <div class="vice-card rounded-2xl p-4 border-amber-700/60">
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-amber-400">Marrón</p>
-                        <span class="w-4 h-2.5 rounded-sm bg-amber-700 shadow-[0_0_8px_#b45309]"></span>
-                    </div>
-                    <p id="stat-Marrón" class="text-2xl sm:text-3xl font-retro font-bold text-amber-500 mt-1">0</p>
-                </div>
-
-                <!-- Faixa Negra -->
-                <div class="vice-card rounded-2xl p-4 border-vice-pink/60">
-                    <div class="flex items-center justify-between">
-                        <p class="text-xs font-retro uppercase tracking-wider text-vice-pink">Negra</p>
-                        <span class="w-4 h-2.5 rounded-sm bg-neutral-900 border border-vice-pink shadow-[0_0_8px_#ff007f]"></span>
-                    </div>
-                    <p id="stat-Negra" class="text-2xl sm:text-3xl font-retro font-bold text-vice-pink mt-1">0</p>
+                    <p id="stat-AVANZADO" class="text-3xl sm:text-4xl font-retro font-black text-vice-orange mt-1 drop-shadow-[0_0_8px_rgba(255,123,0,0.6)]">0</p>
                 </div>
             </div>
         </section>
 
-        <!-- GRID PRINCIPAL: FORMULARIO DE REGISTRO + LISTA DE PARTICIPANTES -->
+        <!-- GRID PRINCIPAL: FORMULARIO DE REGISTRO + LISTA DE PARTICIPANTES CON TUBOS DE NEÓN CIRCULANTES -->
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
 
             <!-- COLUMNA IZQUIERDA: FORMULARIO DE PRE-INSCRIPCIÓN (5 cols) -->
-            <section class="lg:col-span-5 vice-card rounded-3xl p-6 sm:p-7 border-t-4 border-t-vice-pink">
-                <div class="flex items-center justify-between mb-5">
-                    <div>
-                        <h2 class="font-retro text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-                            <i class="fa-solid fa-id-card-clip text-vice-pink"></i>
-                            <span>PRE-INSCRIPCIÓN</span>
-                        </h2>
-                        <p class="text-xs text-gray-300 mt-1">Registra atletas para el cuadro oficial No-Gi 2027</p>
-                    </div>
-                    <span class="px-2.5 py-1 rounded-md bg-vice-cyan/15 border border-vice-cyan/40 text-vice-cyan font-retro text-[10px] font-bold">
-                        GUARDADO AUTO
-                    </span>
-                </div>
-
-                <form id="registration-form" class="space-y-4">
-                    <!-- Nombre Completo -->
-                    <div>
-                        <label for="athlete-name" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                            Nombre y Apellido *
-                        </label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-pink">
-                                <i class="fa-solid fa-user-ninja"></i>
-                            </span>
-                            <input type="text" id="athlete-name" required placeholder="Ej: Tommy Vercetti"
-                                class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
-                        </div>
-                    </div>
-
-                    <!-- Academia / Equipo (Opcional pero le da realismo al torneo) -->
-                    <div>
-                        <label for="athlete-team" class="block text-xs font-retro uppercase tracking-wider text-gray-300 mb-1.5">
-                            Academia / Equipo <span class="text-gray-500">(Opcional)</span>
-                        </label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-purple">
-                                <i class="fa-solid fa-shield-halved"></i>
-                            </span>
-                            <input type="text" id="athlete-team" placeholder="Ej: Vice City Grappling Club"
-                                class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
-                        </div>
-                    </div>
-
-                    <!-- Faixa / Cinturón -->
-                    <div>
-                        <label for="athlete-belt" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                            Faixa / Cinturón *
-                        </label>
-                        <div class="relative">
-                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-yellow">
-                                <i class="fa-solid fa-award"></i>
-                            </span>
-                            <select id="athlete-belt" required
-                                class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-semibold appearance-none cursor-pointer">
-                                <option value="Blanca">⚪ Faixa Blanca (Principiante)</option>
-                                <option value="Azul">🔵 Faixa Azul (Intermedio)</option>
-                                <option value="Violeta">🟣 Faixa Violeta (Avanzado)</option>
-                                <option value="Marrón">🟤 Faixa Marrón (Pro)</option>
-                                <option value="Negra">⚫ Faixa Negra (Élite)</option>
-                            </select>
-                            <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
-                                <i class="fa-solid fa-chevron-down text-xs"></i>
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Fila Doble: Peso en KG + Categoría Oficial Auto-calculada o seleccionable -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <section class="lg:col-span-5 neon-tube-frame">
+                <div class="neon-tube-inner p-6 sm:p-7">
+                    <div class="flex items-center justify-between mb-5">
                         <div>
-                            <label for="athlete-weight-kg" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                Peso Exacto (kg) *
-                            </label>
-                            <div class="relative">
-                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-orange">
-                                    <i class="fa-solid fa-weight-scale"></i>
-                                </span>
-                                <input type="number" id="athlete-weight-kg" step="0.1" min="35" max="180" required placeholder="Ej: 76.5"
-                                    class="vice-input w-full pl-10 pr-3 py-3 rounded-xl text-sm font-bold placeholder-gray-500">
-                            </div>
+                            <h2 class="font-retro text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
+                                <i class="fa-solid fa-id-card-clip text-vice-pink"></i>
+                                <span>PRE-INSCRIPCIÓN</span>
+                            </h2>
+                            <p class="text-xs text-gray-300 mt-1">Registra atletas para EJJ 4 Invitational 2027</p>
                         </div>
-
-                        <div>
-                            <label for="athlete-weight-cat" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                Categoría Peso *
-                            </label>
-                            <select id="athlete-weight-cat" required
-                                class="vice-input w-full px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer">
-                                <option value="Gallo (-57.5 kg)">Gallo (-57.5 kg)</option>
-                                <option value="Pluma (-64 kg)">Pluma (-64 kg)</option>
-                                <option value="Pena (-70 kg)">Pena (-70 kg)</option>
-                                <option value="Ligero (-76 kg)" selected>Ligero (-76 kg)</option>
-                                <option value="Medio (-82.3 kg)">Medio (-82.3 kg)</option>
-                                <option value="Medio-Pesado (-88.3 kg)">Medio-Pesado (-88.3 kg)</option>
-                                <option value="Pesado (-94.3 kg)">Pesado (-94.3 kg)</option>
-                                <option value="Super-Pesado (-100.5 kg)">Super-Pesado (-100.5 kg)</option>
-                                <option value="Pesadísimo (+100.5 kg)">Pesadísimo (+100.5 kg)</option>
-                            </select>
-                        </div>
+                        <span class="px-2.5 py-1 rounded-md bg-vice-cyan/15 border border-vice-cyan/40 text-vice-cyan font-retro text-[10px] font-bold">
+                            GUARDADO AUTO
+                        </span>
                     </div>
 
-                    <!-- Fila Doble: Edad + División Etaria -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <form id="registration-form" class="space-y-4">
+                        <!-- Nombre Completo -->
                         <div>
-                            <label for="athlete-age" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                Edad (años) *
+                            <label for="athlete-name" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
+                                Nombre y Apellido *
                             </label>
                             <div class="relative">
                                 <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-pink">
-                                    <i class="fa-solid fa-cake-candles"></i>
+                                    <i class="fa-solid fa-user-ninja"></i>
                                 </span>
-                                <input type="number" id="athlete-age" min="14" max="75" required placeholder="Ej: 26"
-                                    class="vice-input w-full pl-10 pr-3 py-3 rounded-xl text-sm font-bold placeholder-gray-500">
+                                <input type="text" id="athlete-name" required placeholder="Ej: Tommy Vercetti"
+                                    class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
                             </div>
                         </div>
 
+                        <!-- Academia / Equipo -->
                         <div>
-                            <label for="athlete-division" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
-                                División *
+                            <label for="athlete-team" class="block text-xs font-retro uppercase tracking-wider text-gray-300 mb-1.5">
+                                Academia / Equipo <span class="text-gray-500">(Opcional)</span>
                             </label>
-                            <select id="athlete-division" required
-                                class="vice-input w-full px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer">
-                                <option value="Juvenil (14-17)">Juvenil (14-17)</option>
-                                <option value="Adulto (18-29)" selected>Adulto (18-29)</option>
-                                <option value="Master 1 (30-35)">Master 1 (30-35)</option>
-                                <option value="Master 2 (36-40)">Master 2 (36-40)</option>
-                                <option value="Master 3+ (+41)">Master 3+ (+41)</option>
-                            </select>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-purple">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </span>
+                                <input type="text" id="athlete-team" placeholder="Ej: Etakki Jiu-Jitsu"
+                                    class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-medium placeholder-gray-500">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Botón de Envío -->
-                    <div class="pt-2">
-                        <button type="submit"
-                            class="btn-vice-primary w-full py-3.5 px-6 rounded-xl font-retro font-bold text-sm sm:text-base tracking-wider uppercase flex items-center justify-center gap-2.5 cursor-pointer">
-                            <i class="fa-solid fa-plus-circle text-lg"></i>
-                            <span>REGISTRAR EN EJJI 4</span>
+                        <!-- Categoría de Nivel (Iniciante - Intermedio - Avanzado) -->
+                        <div>
+                            <label for="athlete-level" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
+                                Categoría de Nivel *
+                            </label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-yellow">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </span>
+                                <select id="athlete-level" required
+                                    class="vice-input w-full pl-10 pr-4 py-3 rounded-xl text-sm font-bold appearance-none cursor-pointer">
+                                    <option value="INICIANTE">🟢 INICIANTE</option>
+                                    <option value="INTERMEDIO">🟣 INTERMEDIO</option>
+                                    <option value="AVANZADO">🔥 AVANZADO</option>
+                                </select>
+                                <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Fila Doble: Peso en KG + Categoría Oficial Auto-calculada -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="athlete-weight-kg" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
+                                    Peso Exacto (kg) *
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-orange">
+                                        <i class="fa-solid fa-weight-scale"></i>
+                                    </span>
+                                    <input type="number" id="athlete-weight-kg" step="0.1" min="35" max="180" required placeholder="Ej: 76.5"
+                                        class="vice-input w-full pl-10 pr-3 py-3 rounded-xl text-sm font-bold placeholder-gray-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="athlete-weight-cat" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
+                                    Categoría Peso *
+                                </label>
+                                <select id="athlete-weight-cat" required
+                                    class="vice-input w-full px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer">
+                                    <option value="Gallo (-57.5 kg)">Gallo (-57.5 kg)</option>
+                                    <option value="Pluma (-64 kg)">Pluma (-64 kg)</option>
+                                    <option value="Pena (-70 kg)">Pena (-70 kg)</option>
+                                    <option value="Ligero (-76 kg)" selected>Ligero (-76 kg)</option>
+                                    <option value="Medio (-82.3 kg)">Medio (-82.3 kg)</option>
+                                    <option value="Medio-Pesado (-88.3 kg)">Medio-Pesado (-88.3 kg)</option>
+                                    <option value="Pesado (-94.3 kg)">Pesado (-94.3 kg)</option>
+                                    <option value="Super-Pesado (-100.5 kg)">Super-Pesado (-100.5 kg)</option>
+                                    <option value="Pesadísimo (+100.5 kg)">Pesadísimo (+100.5 kg)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fila Doble: Edad + División Etaria -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="athlete-age" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
+                                    Edad (años) *
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-vice-pink">
+                                        <i class="fa-solid fa-cake-candles"></i>
+                                    </span>
+                                    <input type="number" id="athlete-age" min="14" max="75" required placeholder="Ej: 26"
+                                        class="vice-input w-full pl-10 pr-3 py-3 rounded-xl text-sm font-bold placeholder-gray-500">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="athlete-division" class="block text-xs font-retro uppercase tracking-wider text-vice-cyan mb-1.5">
+                                    División *
+                                </label>
+                                <select id="athlete-division" required
+                                    class="vice-input w-full px-3 py-3 rounded-xl text-sm font-semibold cursor-pointer">
+                                    <option value="Juvenil (14-17)">Juvenil (14-17)</option>
+                                    <option value="Adulto (18-29)" selected>Adulto (18-29)</option>
+                                    <option value="Master 1 (30-35)">Master 1 (30-35)</option>
+                                    <option value="Master 2 (36-40)">Master 2 (36-40)</option>
+                                    <option value="Master 3+ (+41)">Master 3+ (+41)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Notas Opcionales -->
+                        <div>
+                            <label for="athlete-notes" class="block text-xs font-retro uppercase tracking-wider text-gray-300 mb-1.5">
+                                Notas / Observaciones <span class="text-gray-500">(Opcional)</span>
+                            </label>
+                            <input type="text" id="athlete-notes" placeholder="Ej: Disponible para superfight / absoluto"
+                                class="vice-input w-full px-3.5 py-2.5 rounded-xl text-sm placeholder-gray-500">
+                        </div>
+
+                        <!-- Botón de Envío -->
+                        <div class="pt-2">
+                            <button type="submit"
+                                class="btn-vice-primary w-full py-3.5 px-6 rounded-xl font-retro font-bold text-sm sm:text-base tracking-wider uppercase flex items-center justify-center gap-2.5 cursor-pointer">
+                                <i class="fa-solid fa-plus-circle text-lg"></i>
+                                <span>REGISTRAR EN EJJ 4</span>
+                            </button>
+                        </div>
+                    </form>
+
+                    <!-- Botón rápido para cargar atletas de demostración -->
+                    <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
+                        <span>¿Quieres probar la tabla?</span>
+                        <button type="button" id="btn-seed-demo" class="text-vice-cyan hover:text-vice-pink underline font-semibold transition cursor-pointer">
+                            + Cargar 4 atletas de ejemplo
                         </button>
                     </div>
-                </form>
-
-                <!-- Botón rápido para cargar atletas de demostración si la lista está vacía -->
-                <div class="mt-4 pt-4 border-t border-white/10 flex items-center justify-between text-xs text-gray-400">
-                    <span>¿Quieres probar la tabla?</span>
-                    <button type="button" id="btn-seed-demo" class="text-vice-cyan hover:text-vice-pink underline font-semibold transition cursor-pointer">
-                        + Cargar 4 atletas de ejemplo
-                    </button>
                 </div>
             </section>
 
             <!-- COLUMNA DERECHA: LISTADO EN VIVO, FILTROS Y EXPORTACIÓN (7 cols) -->
-            <section class="lg:col-span-7 vice-card rounded-3xl p-6 sm:p-7 border-t-4 border-t-vice-cyan flex flex-col">
-                <!-- Cabecera de la Lista y Botones de Exportación -->
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
-                    <div>
-                        <h2 class="font-retro text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
-                            <i class="fa-solid fa-list-ol text-vice-cyan"></i>
-                            <span>ATLETAS PRE-INSCRIPTOS</span>
-                        </h2>
-                        <p class="text-xs text-gray-300 mt-1">Roster oficial actualizado en tiempo real</p>
-                    </div>
-
-                    <!-- Controles de Exportación -->
-                    <div class="flex flex-wrap items-center gap-2">
-                        <button type="button" id="btn-export-csv"
-                            class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/50 text-emerald-300 font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-                            title="Descargar planilla compatible con Excel">
-                            <i class="fa-solid fa-file-csv"></i>
-                            <span>CSV</span>
-                        </button>
-                        <button type="button" id="btn-export-json"
-                            class="px-3.5 py-2 rounded-xl bg-vice-cyan/20 hover:bg-vice-cyan/35 border border-vice-cyan/50 text-vice-cyan font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-                            title="Descargar respaldo de datos JSON">
-                            <i class="fa-solid fa-file-code"></i>
-                            <span>JSON</span>
-                        </button>
-                        <button type="button" id="btn-clear-all"
-                            class="px-3.5 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/35 border border-red-500/50 text-red-300 font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
-                            title="Vaciar toda la lista">
-                            <i class="fa-solid fa-trash-can"></i>
-                            <span class="hidden sm:inline">Limpiar</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Barra de Búsqueda y Filtros -->
-                <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-5">
-                    <div class="sm:col-span-7 relative">
-                        <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                        </span>
-                        <input type="text" id="search-input" placeholder="Buscar por nombre, equipo o categoría..."
-                            class="vice-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm placeholder-gray-500">
-                    </div>
-
-                    <div class="sm:col-span-5 relative">
-                        <select id="filter-belt"
-                            class="vice-input w-full px-3.5 py-2.5 rounded-xl text-sm font-semibold appearance-none cursor-pointer">
-                            <option value="ALL">🥋 Todas las Faixas</option>
-                            <option value="Blanca">⚪ Solo Blanca</option>
-                            <option value="Azul">🔵 Solo Azul</option>
-                            <option value="Violeta">🟣 Solo Violeta</option>
-                            <option value="Marrón">🟤 Solo Marrón</option>
-                            <option value="Negra">⚫ Solo Negra</option>
-                        </select>
-                        <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
-                            <i class="fa-solid fa-filter text-xs"></i>
-                        </span>
-                    </div>
-                </div>
-
-                <!-- Contenedor de la Tabla Responsiva -->
-                <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b border-vice-purple/40 bg-vice-purple/20 font-retro text-[11px] uppercase tracking-wider text-vice-cyan">
-                                <th class="py-3.5 px-4">#</th>
-                                <th class="py-3.5 px-4">Atleta</th>
-                                <th class="py-3.5 px-4">Faixa</th>
-                                <th class="py-3.5 px-4">Peso / Cat.</th>
-                                <th class="py-3.5 px-4">Edad / Div.</th>
-                                <th class="py-3.5 px-4 text-right">Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody id="athletes-tbody" class="divide-y divide-white/10 text-sm">
-                            <!-- Filas renderizadas dinámicamente por JS -->
-                        </tbody>
-                    </table>
-
-                    <!-- Estado Vacío -->
-                    <div id="empty-state" class="hidden py-12 px-4 text-center">
-                        <div class="w-16 h-16 mx-auto rounded-full bg-vice-purple/20 border border-vice-purple/50 flex items-center justify-center text-vice-pink text-2xl mb-3 shadow-[0_0_20px_rgba(157,0,255,0.3)]">
-                            <i class="fa-solid fa-person-falling-burst"></i>
+            <section class="lg:col-span-7 neon-tube-frame neon-tube-frame-reverse flex flex-col">
+                <div class="neon-tube-inner p-6 sm:p-7 flex flex-col">
+                    <!-- Cabecera de la Lista y Botones de Exportación -->
+                    <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-5">
+                        <div>
+                            <h2 class="font-retro text-xl sm:text-2xl font-bold text-white flex items-center gap-2.5">
+                                <i class="fa-solid fa-list-ol text-vice-cyan"></i>
+                                <span>ATLETAS PRE-INSCRIPTOS</span>
+                            </h2>
+                            <p class="text-xs text-gray-300 mt-1">Roster oficial actualizado en tiempo real</p>
                         </div>
-                        <h3 class="font-retro text-base font-bold text-white">TATAMI VACÍO</h3>
-                        <p class="text-xs text-gray-400 max-w-xs mx-auto mt-1">
-                            No hay atletas registrados con los filtros actuales. ¡Inscribe al primer competidor en el formulario!
-                        </p>
-                    </div>
-                </div>
 
-                <!-- Pie de Tabla Informativo -->
-                <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-gray-400 gap-2">
-                    <span id="showing-count">Mostrando 0 atletas</span>
-                    <span class="flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                        Sincronizado en almacenamiento local
-                    </span>
+                        <!-- Controles de Exportación -->
+                        <div class="flex flex-wrap items-center gap-2">
+                            <button type="button" id="btn-export-csv"
+                                class="px-3.5 py-2 rounded-xl bg-emerald-500/20 hover:bg-emerald-500/35 border border-emerald-400/50 text-emerald-300 font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                                title="Descargar planilla compatible con Excel">
+                                <i class="fa-solid fa-file-csv"></i>
+                                <span>CSV</span>
+                            </button>
+                            <button type="button" id="btn-export-json"
+                                class="px-3.5 py-2 rounded-xl bg-vice-cyan/20 hover:bg-vice-cyan/35 border border-vice-cyan/50 text-vice-cyan font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                                title="Descargar respaldo de datos JSON">
+                                <i class="fa-solid fa-file-code"></i>
+                                <span>JSON</span>
+                            </button>
+                            <button type="button" id="btn-clear-all"
+                                class="px-3.5 py-2 rounded-xl bg-red-500/20 hover:bg-red-500/35 border border-red-500/50 text-red-300 font-retro text-xs font-bold flex items-center gap-1.5 transition cursor-pointer"
+                                title="Vaciar toda la lista">
+                                <i class="fa-solid fa-trash-can"></i>
+                                <span class="hidden sm:inline">Limpiar</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Barra de Búsqueda y Filtros por Categoría -->
+                    <div class="grid grid-cols-1 sm:grid-cols-12 gap-3 mb-5">
+                        <div class="sm:col-span-7 relative">
+                            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-gray-400">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                            </span>
+                            <input type="text" id="search-input" placeholder="Buscar por nombre, equipo o peso..."
+                                class="vice-input w-full pl-10 pr-4 py-2.5 rounded-xl text-sm placeholder-gray-500">
+                        </div>
+
+                        <div class="sm:col-span-5 relative">
+                            <select id="filter-level"
+                                class="vice-input w-full px-3.5 py-2.5 rounded-xl text-sm font-semibold appearance-none cursor-pointer">
+                                <option value="ALL">⚡ Todas las Categorías</option>
+                                <option value="INICIANTE">🟢 Solo INICIANTE</option>
+                                <option value="INTERMEDIO">🟣 Solo INTERMEDIO</option>
+                                <option value="AVANZADO">🔥 Solo AVANZADO</option>
+                            </select>
+                            <span class="absolute inset-y-0 right-0 pr-3.5 flex items-center pointer-events-none text-gray-400">
+                                <i class="fa-solid fa-filter text-xs"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Contenedor de la Tabla Responsiva -->
+                    <div class="overflow-x-auto rounded-2xl border border-white/10 bg-black/35">
+                        <table class="w-full text-left border-collapse">
+                            <thead>
+                                <tr class="border-b border-vice-purple/40 bg-vice-purple/20 font-retro text-[11px] uppercase tracking-wider text-vice-cyan">
+                                    <th class="py-3.5 px-4">#</th>
+                                    <th class="py-3.5 px-4">Atleta</th>
+                                    <th class="py-3.5 px-4">Categoría</th>
+                                    <th class="py-3.5 px-4">Peso / Cat.</th>
+                                    <th class="py-3.5 px-4">Edad / Div.</th>
+                                    <th class="py-3.5 px-4 text-right">Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody id="athletes-tbody" class="divide-y divide-white/10 text-sm">
+                                <!-- Filas renderizadas dinámicamente por JS -->
+                            </tbody>
+                        </table>
+
+                        <!-- Estado Vacío -->
+                        <div id="empty-state" class="hidden py-12 px-4 text-center">
+                            <div class="w-16 h-16 mx-auto rounded-full bg-vice-purple/20 border border-vice-purple/50 flex items-center justify-center text-vice-pink text-2xl mb-3 shadow-[0_0_20px_rgba(157,0,255,0.3)]">
+                                <i class="fa-solid fa-person-falling-burst"></i>
+                            </div>
+                            <h3 class="font-retro text-base font-bold text-white">TATAMI VACÍO</h3>
+                            <p class="text-xs text-gray-400 max-w-xs mx-auto mt-1">
+                                No hay atletas registrados con los filtros actuales. ¡Inscribe al primer competidor en el formulario!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Pie de Tabla Informativo -->
+                    <div class="mt-4 flex flex-wrap items-center justify-between text-xs text-gray-400 gap-2">
+                        <span id="showing-count">Mostrando 0 atletas</span>
+                        <span class="flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Sincronizado en almacenamiento local
+                        </span>
+                    </div>
                 </div>
             </section>
         </div>
@@ -746,12 +896,13 @@
 
     <!-- FOOTER RETRO -->
     <footer class="mt-16 text-center px-4 text-xs text-gray-400">
-        <div class="max-w-2xl mx-auto border-t border-white/10 pt-6">
+        <div class="max-w-2xl mx-auto">
+            <div class="neon-tube-line mb-6 opacity-60"></div>
             <p class="font-retro tracking-widest text-vice-cyan uppercase">
-                EJJI 4 • TORNEO NO-GI SUBMISSION ONLY • VERANO 2027
+                EJJ 4 INVITATIONAL • NOGI SUBMISSION ONLY • VERANO 2027
             </p>
             <p class="mt-1 text-gray-500">
-                Vice City Grappling Series • Todos los derechos reservados
+                Reglas EBI • Overtime por Puntos • Todos los derechos reservados
             </p>
         </div>
     </footer>
@@ -759,8 +910,8 @@
     <!-- LÓGICA DE LA APLICACIÓN EN JAVASCRIPT -->
     <script>
         (() => {
-            // Clave de almacenamiento persistente
-            const STORAGE_KEY = 'ejji4_nogi_2027_athletes_v1';
+            // Nueva clave de almacenamiento persistente para evitar conflictos con datos anteriores
+            const STORAGE_KEY = 'ejj4_registrations';
 
             // Estado principal de la aplicación
             let athletes = [];
@@ -769,18 +920,19 @@
             const form = document.getElementById('registration-form');
             const nameInput = document.getElementById('athlete-name');
             const teamInput = document.getElementById('athlete-team');
-            const beltInput = document.getElementById('athlete-belt');
+            const levelInput = document.getElementById('athlete-level');
             const weightKgInput = document.getElementById('athlete-weight-kg');
             const weightCatInput = document.getElementById('athlete-weight-cat');
             const ageInput = document.getElementById('athlete-age');
             const divisionInput = document.getElementById('athlete-division');
+            const notesInput = document.getElementById('athlete-notes');
 
             const tbody = document.getElementById('athletes-tbody');
             const emptyState = document.getElementById('empty-state');
             const showingCount = document.getElementById('showing-count');
 
             const searchInput = document.getElementById('search-input');
-            const filterBeltSelect = document.getElementById('filter-belt');
+            const filterLevelSelect = document.getElementById('filter-level');
 
             const btnExportCsv = document.getElementById('btn-export-csv');
             const btnExportJson = document.getElementById('btn-export-json');
@@ -795,27 +947,19 @@
             const confirmOk = document.getElementById('confirm-ok');
             let pendingConfirmCallback = null;
 
-            // Estilos visuales por Faixa / Cinturón
-            const BELT_STYLES = {
-                'Blanca': {
-                    badge: 'bg-white/95 text-gray-900 border-gray-300 shadow-[0_0_10px_rgba(255,255,255,0.4)]',
-                    dot: 'bg-gray-900'
+            // Estilos visuales neón por Categoría (INICIANTE - INTERMEDIO - AVANZADO)
+            const LEVEL_STYLES = {
+                'INICIANTE': {
+                    badge: 'bg-emerald-500/20 text-emerald-300 border-emerald-400 shadow-[0_0_12px_rgba(0,255,157,0.45)]',
+                    dot: 'bg-emerald-400 shadow-[0_0_6px_#00ff9d]'
                 },
-                'Azul': {
-                    badge: 'bg-blue-600/30 text-blue-200 border-blue-400 shadow-[0_0_10px_rgba(59,130,246,0.4)]',
-                    dot: 'bg-blue-400'
+                'INTERMEDIO': {
+                    badge: 'bg-vice-pink/20 text-pink-200 border-vice-pink shadow-[0_0_12px_rgba(255,0,127,0.5)]',
+                    dot: 'bg-vice-pink shadow-[0_0_6px_#ff007f]'
                 },
-                'Violeta': {
-                    badge: 'bg-purple-600/30 text-purple-200 border-purple-400 shadow-[0_0_10px_rgba(168,85,247,0.4)]',
-                    dot: 'bg-purple-400'
-                },
-                'Marrón': {
-                    badge: 'bg-amber-800/40 text-amber-200 border-amber-500 shadow-[0_0_10px_rgba(217,119,6,0.4)]',
-                    dot: 'bg-amber-500'
-                },
-                'Negra': {
-                    badge: 'bg-neutral-900 text-vice-pink border-vice-pink shadow-[0_0_12px_rgba(255,0,127,0.5)]',
-                    dot: 'bg-vice-pink'
+                'AVANZADO': {
+                    badge: 'bg-orange-500/25 text-amber-200 border-vice-orange shadow-[0_0_14px_rgba(255,123,0,0.55)]',
+                    dot: 'bg-vice-orange shadow-[0_0_6px_#ff7b00]'
                 }
             };
 
@@ -846,12 +990,10 @@
 
                 container.appendChild(toast);
 
-                // Animar entrada
                 requestAnimationFrame(() => {
                     toast.classList.remove('translate-x-full', 'opacity-0');
                 });
 
-                // Auto-remover después de 3.2 segundos
                 setTimeout(() => {
                     toast.classList.add('translate-x-full', 'opacity-0');
                     setTimeout(() => toast.remove(), 300);
@@ -881,7 +1023,7 @@
             });
 
             // ==========================================
-            // 2. AUTO-SELECCIÓN INTELIGENTE DE CATEGORÍA Y DIVISIÓN
+            // 2. AUTO-SELECCIÓN INTELIGENTE DE PESO Y DIVISIÓN
             // ==========================================
             weightKgInput.addEventListener('input', () => {
                 const kg = parseFloat(weightKgInput.value);
@@ -939,10 +1081,10 @@
             function updateStats() {
                 document.getElementById('stat-total').textContent = athletes.length;
                 
-                const belts = ['Blanca', 'Azul', 'Violeta', 'Marrón', 'Negra'];
-                belts.forEach(belt => {
-                    const count = athletes.filter(a => a.belt === belt).length;
-                    const el = document.getElementById(`stat-${belt}`);
+                const levels = ['INICIANTE', 'INTERMEDIO', 'AVANZADO'];
+                levels.forEach(lvl => {
+                    const count = athletes.filter(a => a.level === lvl).length;
+                    const el = document.getElementById(`stat-${lvl}`);
                     if (el) el.textContent = count;
                 });
             }
@@ -955,17 +1097,18 @@
 
             function renderTable() {
                 const query = searchInput.value.trim().toLowerCase();
-                const beltFilter = filterBeltSelect.value;
+                const levelFilter = filterLevelSelect.value;
 
                 // Filtrar atletas
                 const filtered = athletes.filter(athlete => {
-                    const matchesBelt = beltFilter === 'ALL' || athlete.belt === beltFilter;
+                    const matchesLevel = levelFilter === 'ALL' || athlete.level === levelFilter;
                     const matchesText = 
                         athlete.name.toLowerCase().includes(query) ||
                         (athlete.team && athlete.team.toLowerCase().includes(query)) ||
                         athlete.weightCategory.toLowerCase().includes(query) ||
-                        athlete.division.toLowerCase().includes(query);
-                    return matchesBelt && matchesText;
+                        athlete.division.toLowerCase().includes(query) ||
+                        (athlete.notes && athlete.notes.toLowerCase().includes(query));
+                    return matchesLevel && matchesText;
                 });
 
                 tbody.innerHTML = '';
@@ -976,7 +1119,7 @@
                     emptyState.classList.add('hidden');
                     
                     filtered.forEach((athlete, index) => {
-                        const style = BELT_STYLES[athlete.belt] || BELT_STYLES['Blanca'];
+                        const style = LEVEL_STYLES[athlete.level] || LEVEL_STYLES['INICIANTE'];
                         const tr = document.createElement('tr');
                         tr.className = 'hover:bg-white/5 transition-colors group';
 
@@ -991,11 +1134,12 @@
                                 <div class="text-xs text-gray-400">
                                     ${athlete.team ? escapeHTML(athlete.team) : '<span class="italic text-gray-500">Independiente</span>'}
                                 </div>
+                                ${athlete.notes ? `<div class="text-[11px] text-vice-cyan/80 mt-0.5"><i class="fa-solid fa-comment-dots mr-1"></i>${escapeHTML(athlete.notes)}</div>` : ''}
                             </td>
                             <td class="py-3.5 px-4">
-                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-retro font-bold border ${style.badge}">
+                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[11px] font-retro font-bold border ${style.badge}">
                                     <span class="w-2 h-2 rounded-full ${style.dot}"></span>
-                                    ${escapeHTML(athlete.belt)}
+                                    ${escapeHTML(athlete.level)}
                                 </span>
                             </td>
                             <td class="py-3.5 px-4">
@@ -1038,11 +1182,12 @@
 
                 const name = nameInput.value.trim();
                 const team = teamInput.value.trim();
-                const belt = beltInput.value;
+                const level = levelInput.value;
                 const weightKg = parseFloat(weightKgInput.value);
                 const weightCategory = weightCatInput.value;
                 const age = parseInt(ageInput.value, 10);
                 const division = divisionInput.value;
+                const notes = notesInput.value.trim();
 
                 if (!name || isNaN(weightKg) || isNaN(age)) {
                     showToast('Por favor completa todos los campos obligatorios.', 'error');
@@ -1053,15 +1198,15 @@
                     id: Date.now().toString(36) + Math.random().toString(36).substring(2, 6),
                     name,
                     team,
-                    belt,
+                    level,
                     weightKg: weightKg.toFixed(1),
                     weightCategory,
                     age,
                     division,
+                    notes,
                     registeredAt: new Date().toISOString()
                 };
 
-                // Agregar al inicio de la lista para verlo al instante
                 athletes.unshift(newAthlete);
                 saveAthletes();
                 renderTable();
@@ -1071,9 +1216,10 @@
                 teamInput.value = '';
                 weightKgInput.value = '';
                 ageInput.value = '';
+                notesInput.value = '';
                 nameInput.focus();
 
-                showToast(`¡${name} pre-inscripto en EJJI 4!`, 'pink');
+                showToast(`¡${name} (${level}) pre-inscripto en EJJ 4!`, 'pink');
             });
 
             // Delegación de evento para eliminar atleta individual
@@ -1087,7 +1233,7 @@
 
                 openConfirmModal(
                     'ELIMINAR ATLETA',
-                    `¿Deseas quitar a "${target.name}" (${target.belt} - ${target.weightCategory}) de la lista de pre-inscriptos?`,
+                    `¿Deseas quitar a "${target.name}" (${target.level} - ${target.weightCategory}) de la lista de pre-inscriptos?`,
                     () => {
                         athletes = athletes.filter(a => a.id !== id);
                         saveAthletes();
@@ -1099,7 +1245,7 @@
 
             // Filtros en tiempo real
             searchInput.addEventListener('input', renderTable);
-            filterBeltSelect.addEventListener('change', renderTable);
+            filterLevelSelect.addEventListener('change', renderTable);
 
             // Vaciar toda la lista
             btnClearAll.addEventListener('click', () => {
@@ -1119,51 +1265,55 @@
                 );
             });
 
-            // Cargar atletas de ejemplo
+            // Cargar 4 atletas de ejemplo con las categorías INICIANTE - INTERMEDIO - AVANZADO
             btnSeedDemo.addEventListener('click', () => {
                 const demoAthletes = [
                     {
                         id: 'demo1-' + Date.now(),
                         name: 'Tommy Vercetti',
-                        team: 'Ocean Beach Jiu-Jitsu',
-                        belt: 'Negra',
+                        team: 'Etakki Jiu-Jitsu',
+                        level: 'AVANZADO',
                         weightKg: '81.5',
                         weightCategory: 'Medio (-82.3 kg)',
                         age: 34,
                         division: 'Master 1 (30-35)',
+                        notes: 'Superfight 82kg',
                         registeredAt: new Date().toISOString()
                     },
                     {
                         id: 'demo2-' + Date.now(),
                         name: 'Lucia Caminos',
-                        team: 'Vice City Top Team',
-                        belt: 'Marrón',
+                        team: 'Miami Top Team',
+                        level: 'AVANZADO',
                         weightKg: '63.2',
                         weightCategory: 'Pluma (-64 kg)',
                         age: 26,
                         division: 'Adulto (18-29)',
+                        notes: '',
                         registeredAt: new Date().toISOString()
                     },
                     {
                         id: 'demo3-' + Date.now(),
                         name: 'Jason Duval',
                         team: 'Leonida Grappling',
-                        belt: 'Violeta',
+                        level: 'INTERMEDIO',
                         weightKg: '87.8',
                         weightCategory: 'Medio-Pesado (-88.3 kg)',
                         age: 28,
                         division: 'Adulto (18-29)',
+                        notes: '',
                         registeredAt: new Date().toISOString()
                     },
                     {
                         id: 'demo4-' + Date.now(),
                         name: 'Lance Vance',
-                        team: 'Starfish Island BJJ',
-                        belt: 'Azul',
+                        team: 'Ocean Drive BJJ',
+                        level: 'INICIANTE',
                         weightKg: '75.4',
                         weightCategory: 'Ligero (-76 kg)',
                         age: 23,
                         division: 'Adulto (18-29)',
+                        notes: 'Primer torneo No-Gi',
                         registeredAt: new Date().toISOString()
                     }
                 ];
@@ -1171,7 +1321,7 @@
                 athletes = [...demoAthletes, ...athletes];
                 saveAthletes();
                 renderTable();
-                showToast('4 atletas de ejemplo cargados al torneo.', 'success');
+                showToast('4 atletas de ejemplo cargados a EJJ 4.', 'success');
             });
 
             // ==========================================
@@ -1196,21 +1346,22 @@
                 }
 
                 // Cabeceras CSV con BOM UTF-8 para compatibilidad total con Excel en español
-                const headers = ['Nro', 'Nombre Completo', 'Academia/Equipo', 'Faixa', 'Peso (kg)', 'Categoria Peso', 'Edad', 'Division', 'Fecha Registro'];
+                const headers = ['Nro', 'Nombre Completo', 'Academia/Equipo', 'Categoria', 'Peso (kg)', 'Categoria Peso', 'Edad', 'Division', 'Notas', 'Fecha Registro'];
                 const rows = athletes.map((a, idx) => [
                     idx + 1,
                     `"${a.name.replace(/"/g, '""')}"`,
                     `"${(a.team || 'Independiente').replace(/"/g, '""')}"`,
-                    `"${a.belt}"`,
+                    `"${a.level}"`,
                     a.weightKg,
                     `"${a.weightCategory}"`,
                     a.age,
                     `"${a.division}"`,
+                    `"${(a.notes || '').replace(/"/g, '""')}"`,
                     `"${new Date(a.registeredAt).toLocaleString('es-AR')}"`
                 ]);
 
                 const csvContent = '\uFEFF' + [headers.join(','), ...rows.map(r => r.join(','))].join('\n');
-                downloadFile(csvContent, 'EJJI4_PreInscriptos_Verano2027.csv', 'text/csv;charset=utf-8;');
+                downloadFile(csvContent, 'EJJ4_Invitational_PreInscriptos_2027.csv', 'text/csv;charset=utf-8;');
                 showToast('Planilla CSV descargada correctamente.', 'success');
             });
 
@@ -1221,7 +1372,8 @@
                 }
 
                 const payload = {
-                    torneo: 'EJJI 4 - Torneo No-Gi Submission Only',
+                    torneo: 'EJJ 4 Invitational - NoGi Submission Only',
+                    reglas: 'Reglas EBI • Overtime por Puntos',
                     edicion: 'Verano 2027',
                     exportadoEl: new Date().toISOString(),
                     totalInscriptos: athletes.length,
@@ -1229,7 +1381,7 @@
                 };
 
                 const jsonContent = JSON.stringify(payload, null, 2);
-                downloadFile(jsonContent, 'EJJI4_Roster_Verano2027.json', 'application/json');
+                downloadFile(jsonContent, 'EJJ4_Invitational_Roster_2027.json', 'application/json');
                 showToast('Archivo JSON descargado correctamente.', 'success');
             });
 
