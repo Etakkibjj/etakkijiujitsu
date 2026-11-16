@@ -244,21 +244,14 @@
         }
 
         /* Badges de Categoría */
-        .badge-iniciante {
+        .badge-iniciantes {
             background: rgba(0, 255, 157, 0.14);
             color: #00ff9d;
             border: 1px solid rgba(0, 255, 157, 0.55);
             box-shadow: 0 0 10px rgba(0, 255, 157, 0.25);
         }
 
-        .badge-intermedio {
-            background: rgba(181, 55, 242, 0.18);
-            color: #e09eff;
-            border: 1px solid rgba(181, 55, 242, 0.65);
-            box-shadow: 0 0 10px rgba(181, 55, 242, 0.3);
-        }
-
-        .badge-avanzado {
+        .badge-avanzados {
             background: rgba(255, 0, 127, 0.18);
             color: #ff66b2;
             border: 1px solid rgba(255, 0, 127, 0.65);
@@ -385,7 +378,7 @@
         <!-- =========================================================
              TARJETAS DE ESTADÍSTICAS EN VIVO
         ========================================================= -->
-        <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-5 mb-8">
+        <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-5 mb-8">
             <div class="neon-border-runner">
                 <div class="neon-card-inner p-4 flex items-center justify-between">
                     <div>
@@ -401,8 +394,8 @@
             <div class="neon-border-runner">
                 <div class="neon-card-inner p-4 flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-orbitron uppercase tracking-wider text-emerald-300">Iniciante</p>
-                        <p id="stat-iniciante" class="text-3xl sm:text-4xl font-orbitron font-black text-emerald-400 mt-1">0</p>
+                        <p class="text-xs font-orbitron uppercase tracking-wider text-emerald-300">Iniciantes (Blanco)</p>
+                        <p id="stat-iniciantes" class="text-3xl sm:text-4xl font-orbitron font-black text-emerald-400 mt-1">0</p>
                     </div>
                     <div class="w-11 h-11 rounded-xl bg-emerald-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 text-xl">
                         <i class="fa-solid fa-seedling"></i>
@@ -413,20 +406,8 @@
             <div class="neon-border-runner">
                 <div class="neon-card-inner p-4 flex items-center justify-between">
                     <div>
-                        <p class="text-xs font-orbitron uppercase tracking-wider text-purple-300">Intermedio</p>
-                        <p id="stat-intermedio" class="text-3xl sm:text-4xl font-orbitron font-black text-purple-300 mt-1">0</p>
-                    </div>
-                    <div class="w-11 h-11 rounded-xl bg-purple-500/20 border border-purple-400/40 flex items-center justify-center text-purple-300 text-xl">
-                        <i class="fa-solid fa-bolt"></i>
-                    </div>
-                </div>
-            </div>
-
-            <div class="neon-border-runner">
-                <div class="neon-card-inner p-4 flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-orbitron uppercase tracking-wider text-pink-300">Avanzado</p>
-                        <p id="stat-avanzado" class="text-3xl sm:text-4xl font-orbitron font-black text-pink-400 mt-1">0</p>
+                        <p class="text-xs font-orbitron uppercase tracking-wider text-pink-300">Avanzados (Azul y Roxa)</p>
+                        <p id="stat-avanzados" class="text-3xl sm:text-4xl font-orbitron font-black text-pink-400 mt-1">0</p>
                     </div>
                     <div class="w-11 h-11 rounded-xl bg-pink-500/20 border border-pink-400/40 flex items-center justify-center text-pink-400 text-xl">
                         <i class="fa-solid fa-crown"></i>
@@ -481,40 +462,40 @@
                         </div>
 
                         <!-- Nivel / Categoría: INICIANTE - INTERMEDIO - AVANZADO -->
+                        <!-- Nivel / Categoría: INICIANTES (BLANCO) - AVANZADOS (AZUL Y ROXA) -->
                         <div>
                             <label for="athlete-level" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
                                 Categoría de Nivel <span class="text-pink-500">*</span>
                             </label>
                             <select id="athlete-level" required class="vice-input">
-                                <option value="INICIANTE">INICIANTE (Hasta 1.5 años / Faixa Blanca)</option>
-                                <option value="INTERMEDIO" selected>INTERMEDIO (1.5 a 4 años / Azul - Violeta)</option>
-                                <option value="AVANZADO">AVANZADO (+4 años / Marrón - Negra / Pro)</option>
+                                <option value="INICIANTES (BLANCO)" selected>INICIANTES (BLANCO)</option>
+                                <option value="AVANZADOS (AZUL Y ROXA)">AVANZADOS (AZUL Y ROXA)</option>
                             </select>
                         </div>
 
-                        <!-- Peso Exacto + Categoría de Peso -->
+                        <!-- Peso Exacto -->
+                        <div>
+                            <label for="athlete-weight-kg" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                Peso Actual (kg) <span class="text-pink-500">*</span>
+                            </label>
+                            <input type="number" id="athlete-weight-kg" step="0.1" min="40" max="180" required placeholder="Ej: 75.5" class="vice-input">
+                        </div>
+
+                        <!-- Edad + División por Edad -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                             <div>
-                                <label for="athlete-weight-kg" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
-                                    Peso Actual (kg) <span class="text-pink-500">*</span>
+                                <label for="athlete-age" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                    Edad (años) <span class="text-pink-500">*</span>
                                 </label>
-                                <input type="number" id="athlete-weight-kg" step="0.1" min="40" max="180" required placeholder="Ej: 75.5" class="vice-input">
+                                <input type="number" id="athlete-age" min="14" max="75" required placeholder="Ej: 27" class="vice-input">
                             </div>
                             <div>
-                                <label for="athlete-weight-cat" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
-                                    División de Peso
+                                <label for="athlete-division" class="block text-xs font-orbitron uppercase tracking-wider text-cyan-200 mb-1">
+                                    Categoría Edad
                                 </label>
-                                <select id="athlete-weight-cat" class="vice-input">
-                                    <option value="Gallo (-57.5 kg)">Gallo (-57.5 kg)</option>
-                                    <option value="Pluma (-64 kg)">Pluma (-64 kg)</option>
-                                    <option value="Pena (-70 kg)">Pena (-70 kg)</option>
-                                    <option value="Ligero (-76 kg)" selected>Ligero (-76 kg)</option>
-                                    <option value="Medio (-82.3 kg)">Medio (-82.3 kg)</option>
-                                    <option value="Medio-Pesado (-88.3 kg)">Medio-Pesado (-88.3 kg)</option>
-                                    <option value="Pesado (-94.3 kg)">Pesado (-94.3 kg)</option>
-                                    <option value="Super-Pesado (-100.5 kg)">Super-Pesado (-100.5 kg)</option>
-                                    <option value="Pesadísimo (+100.5 kg)">Pesadísimo (+100.5 kg)</option>
-                                    <option value="Absoluto (Open Weight)">Absoluto (Open Weight)</option>
+                                <select id="athlete-division" class="vice-input">
+                                    <option value="ADULTO (menos de 30)" selected>ADULTO (menos de 30)</option>
+                                    <option value="MASTER (mas de 30)">MASTER (mas de 30)</option>
                                 </select>
                             </div>
                         </div>
@@ -599,14 +580,11 @@
                             <button type="button" data-filter="ALL" class="filter-btn active px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-cyan-500/25 border border-cyan-400 text-white transition cursor-pointer">
                                 TODOS
                             </button>
-                            <button type="button" data-filter="INICIANTE" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 transition cursor-pointer">
-                                INICIANTE
+                            <button type="button" data-filter="INICIANTES (BLANCO)" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/20 transition cursor-pointer">
+                                INICIANTES (BLANCO)
                             </button>
-                            <button type="button" data-filter="INTERMEDIO" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-purple-500/40 text-purple-300 hover:bg-purple-500/20 transition cursor-pointer">
-                                INTERMEDIO
-                            </button>
-                            <button type="button" data-filter="AVANZADO" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-pink-500/40 text-pink-300 hover:bg-pink-500/20 transition cursor-pointer">
-                                AVANZADO
+                            <button type="button" data-filter="AVANZADOS (AZUL Y ROXA)" class="filter-btn px-3 py-2 rounded-lg text-xs font-orbitron font-bold bg-slate-900/80 border border-pink-500/40 text-pink-300 hover:bg-pink-500/20 transition cursor-pointer">
+                                AVANZADOS (AZUL Y ROXA)
                             </button>
                         </div>
                     </div>
@@ -744,7 +722,6 @@
         const teamInput = document.getElementById('athlete-team');
         const levelInput = document.getElementById('athlete-level');
         const weightKgInput = document.getElementById('athlete-weight-kg');
-        const weightCatInput = document.getElementById('athlete-weight-cat');
         const ageInput = document.getElementById('athlete-age');
         const divisionInput = document.getElementById('athlete-division');
         const notesInput = document.getElementById('athlete-notes');
@@ -923,9 +900,8 @@
         // ==========================================
         function getLevelBadgeClass(level) {
             const norm = (level || '').toUpperCase();
-            if (norm === 'INICIANTE') return 'badge-iniciante';
-            if (norm === 'AVANZADO') return 'badge-avanzado';
-            return 'badge-intermedio';
+            if (norm.includes('INICIANTE')) return 'badge-iniciantes';
+            return 'badge-avanzados';
         }
 
         function renderTable() {
@@ -972,7 +948,6 @@
                     </td>
                     <td class="py-3 px-3 whitespace-nowrap">
                         <div class="font-orbitron font-bold text-white text-xs sm:text-sm">${escapeHtml(athlete.weightKg)} kg</div>
-                        <div class="text-[11px] text-slate-400">${escapeHtml(athlete.weightCategory)}</div>
                     </td>
                     <td class="py-3 px-3 whitespace-nowrap">
                         <div class="font-bold text-slate-200">${escapeHtml(athlete.age)} años</div>
@@ -1015,7 +990,6 @@
                 const team = teamInput.value.trim() || 'Independiente';
                 const level = levelInput.value;
                 const weightKg = parseFloat(weightKgInput.value).toFixed(1);
-                const weightCategory = weightCatInput.value;
                 const age = parseInt(ageInput.value, 10);
                 const division = divisionInput.value;
                 const notes = notesInput.value.trim();
@@ -1030,7 +1004,6 @@
                     team,
                     level,
                     weightKg,
-                    weightCategory,
                     age,
                     division,
                     notes,
@@ -1050,9 +1023,8 @@
                     }
 
                     form.reset();
-                    levelInput.value = 'INTERMEDIO';
-                    divisionInput.value = 'Adulto (18-29)';
-                    weightCatInput.value = 'Ligero (-76 kg)';
+                    levelInput.value = 'INICIANTES (BLANCO)';
+                    divisionInput.value = 'ADULTO (menos de 30)';
                     nameInput.focus();
                 } catch (err) {
                     console.error('Error registrando atleta:', err);
@@ -1123,44 +1095,40 @@
                     {
                         name: 'Tommy Vercetti',
                         team: 'Etakki Jiu-Jitsu',
-                        level: 'AVANZADO',
+                        level: 'AVANZADOS (AZUL Y ROXA)',
                         weightKg: '81.5',
-                        weightCategory: 'Medio (-82.3 kg)',
                         age: 34,
-                        division: 'Master 1 (30-35)',
+                        division: 'MASTER (mas de 30)',
                         notes: 'Superfight 82kg',
                         registeredAt: new Date(now + 400).toISOString()
                     },
                     {
                         name: 'Lucia Caminos',
                         team: 'Miami Top Team',
-                        level: 'AVANZADO',
+                        level: 'AVANZADOS (AZUL Y ROXA)',
                         weightKg: '63.2',
-                        weightCategory: 'Pluma (-64 kg)',
                         age: 26,
-                        division: 'Adulto (18-29)',
+                        division: 'ADULTO (menos de 30)',
                         notes: '',
                         registeredAt: new Date(now + 300).toISOString()
                     },
                     {
                         name: 'Jason Duval',
                         team: 'Leonida Grappling',
-                        level: 'INTERMEDIO',
+                        level: 'AVANZADOS (AZUL Y ROXA)',
                         weightKg: '87.8',
-                        weightCategory: 'Medio-Pesado (-88.3 kg)',
                         age: 28,
-                        division: 'Adulto (18-29)',
+                        division: 'ADULTO (menos de 30)',
                         notes: '',
                         registeredAt: new Date(now + 200).toISOString()
                     },
                     {
                         name: 'Lance Vance',
                         team: 'Ocean Drive BJJ',
-                        level: 'INICIANTE',
+                        level: 'INICIANTES (BLANCO)',
                         weightKg: '75.4',
-                        weightCategory: 'Ligero (-76 kg)',
                         age: 23,
-                        division: 'Adulto (18-29)',
+                        division: 'ADULTO (menos de 30)',
                         notes: 'Primer torneo No-Gi',
                         registeredAt: new Date(now + 100).toISOString()
                     }
@@ -1235,13 +1203,12 @@
                     showToast('No hay atletas para exportar.', 'info');
                     return;
                 }
-                const headers = ['Nombre', 'Academia', 'Categoria', 'Peso_kg', 'Division_Peso', 'Edad', 'Division_Edad', 'Notas', 'Fecha_Registro'];
+                const headers = ['Nombre', 'Academia', 'Categoria', 'Peso_kg', 'Edad', 'Categoria_Edad', 'Notas', 'Fecha_Registro'];
                 const rows = athletes.map(a => [
                     `"${(a.name || '').replace(/"/g, '""')}"`,
                     `"${(a.team || '').replace(/"/g, '""')}"`,
                     `"${(a.level || '').replace(/"/g, '""')}"`,
                     `"${a.weightKg || ''}"`,
-                    `"${(a.weightCategory || '').replace(/"/g, '""')}"`,
                     `"${a.age || ''}"`,
                     `"${(a.division || '').replace(/"/g, '""')}"`,
                     `"${(a.notes || '').replace(/"/g, '""')}"`,
@@ -1297,14 +1264,12 @@
 
         function updateStats() {
             const totalEl = document.getElementById('stat-total');
-            const incEl = document.getElementById('stat-iniciante');
-            const intEl = document.getElementById('stat-intermedio');
-            const avaEl = document.getElementById('stat-avanzado');
+            const incEl = document.getElementById('stat-iniciantes');
+            const avaEl = document.getElementById('stat-avanzados');
 
             if (totalEl) totalEl.textContent = athletes.length;
-            if (incEl) incEl.textContent = athletes.filter(a => a.level === 'INICIANTE').length;
-            if (intEl) intEl.textContent = athletes.filter(a => a.level === 'INTERMEDIO').length;
-            if (avaEl) avaEl.textContent = athletes.filter(a => a.level === 'AVANZADO').length;
+            if (incEl) incEl.textContent = athletes.filter(a => (a.level || '').toUpperCase().includes('INICIANTE')).length;
+            if (avaEl) avaEl.textContent = athletes.filter(a => (a.level || '').toUpperCase().includes('AVANZADO')).length;
         }
 
         // Auto-sugerencia de categoría de peso y división según edad/peso
@@ -1326,13 +1291,13 @@
 
         if (ageInput && divisionInput) {
             ageInput.addEventListener('input', () => {
+        // Auto-selección de categoría de edad según la edad ingresada
+        if (ageInput && divisionInput) {
+            ageInput.addEventListener('input', () => {
                 const age = parseInt(ageInput.value, 10);
                 if (isNaN(age)) return;
-                if (age < 18) divisionInput.value = 'Juvenil (16-17)';
-                else if (age <= 29) divisionInput.value = 'Adulto (18-29)';
-                else if (age <= 35) divisionInput.value = 'Master 1 (30-35)';
-                else if (age <= 40) divisionInput.value = 'Master 2 (36-40)';
-                else divisionInput.value = 'Master 3+ (41+)';
+                if (age >= 30) divisionInput.value = 'MASTER (mas de 30)';
+                else divisionInput.value = 'ADULTO (menos de 30)';
             });
         }
 
